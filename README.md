@@ -1,4 +1,4 @@
-<img src="./documents/img/logo1.png" alt="swime" width="200" height:"70"/>
+<img src="./documents/img/logo1.png" alt="swime" style="zoom:25%;" />
 
 ---
 
