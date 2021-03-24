@@ -1,4 +1,4 @@
-![swime](./documents/img/logo1.png){ width: 200px; }
+![swime](./documents/img/logo1.png){: width: 100px height:70 }
 
 ---
 
