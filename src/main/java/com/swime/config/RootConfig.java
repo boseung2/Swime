@@ -27,11 +27,12 @@ public class RootConfig {
     @Bean
     public DataSource dataSoure() {
         HikariConfig hikariConfig = new HikariConfig();
-        //hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
-        hikariConfig.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        hikariConfig.setJdbcUrl("jdbc:oracle:thin:@aiaclassi1.iptime.org:3000:XE");
+        hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+//        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@aiaclassi1.iptime.org:3000:XE");
+        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:XE");
 
-        hikariConfig.setUsername("swime");
+//        hikariConfig.setUsername("swime");
+        hikariConfig.setUsername("swimeTest");
         hikariConfig.setPassword("1234");
 
         return new HikariDataSource(hikariConfig);
