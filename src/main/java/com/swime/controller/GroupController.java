@@ -1,6 +1,6 @@
 package com.swime.controller;
 
-public class BoardController {
+public class GroupController {
     // 모임찾기 페이지
     // 1. 가장 최근에 생성된 날짜순으로 모임을 정렬해서 뿌려준다.
     // 2. 사용자가 지역, 언어, 모임명으로 검색시 검색조건에 맞는 모임을 최근 생성된 날짜순으로 뿌려준다.
