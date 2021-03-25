@@ -1,5 +1,6 @@
 package com.swime.persistence;
 
+import lombok.extern.log4j.Log4j;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -7,6 +8,7 @@ import java.sql.DriverManager;
 
 import static org.junit.Assert.fail;
 
+@Log4j
 public class JdbcTests {
     static {
         try {
@@ -25,7 +27,7 @@ public class JdbcTests {
 						"jdbc:oracle:thin:@aiaclassi1.iptime.org:3000:XE",
 						"swime",
 						"1234")){
-            System.out.println(con);;
+            log.info(con);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
