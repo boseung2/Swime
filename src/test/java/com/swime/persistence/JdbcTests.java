@@ -11,7 +11,7 @@ public class JdbcTests {
     static {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-
+			//oracle.jdbc.driver.OracleDriver
         }catch(Exception e) {
             e.printStackTrace();
         }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.StudyMapper">
+
+    <resultMap id="StudyVO" type="com.swime.domain.StudyVO">
+        <result property="num" column="std_num"/>
+        <result property="name" column="std_name"/>
+        <result property="startTime" column="std_start_time"/>
+        <result property="endTime" column="std_end_time"/>
+        <result property="exp" column="std_exp"/>
+        <result property="cap" column="std_cap"/>
+        <result property="info" column="std_info"/>
+        <result property="rep" column="std_rep"/>
+        <result property="regdate" column="std_regdate"/>
+        <result property="status" column="std_status"/>
+        <result property="grpNum" column="grp_num"/>
+        <result property="stdPlcNum" column="std_plc_num"/>
+    </resultMap>
+
+    <select id="getList" resultMap="StudyVO">
+        <![CDATA[
+        select * from tstd where std_num > 0
+        ]]>
+    </select>
+
+    <insert id="insert">
+
+        insert into tstd (std_num, std_name, std_start_time, std_end_time,
+                          std_exp, std_cap, std_info, std_rep, grp_num, std_plc_num)
+
+        values(seq_std.nextval, #{name}, #{startTime}, #{endTime}, #{exp},
+                  #{cap}, #{info}, #{rep}, #{grpNum}, #{stdPlcNum})
+    </insert>
+
+    <insert id="insertSelectKey">
+        <selectKey keyProperty="num" order="BEFORE" resultType="Long">
+            select seq_std.nextval from dual
+        </selectKey>
+
+        insert into tstd (std_num, std_name, std_start_time, std_end_time,
+        std_exp, std_cap, std_info, std_rep, grp_num, std_plc_num)
+
+        values(seq_std.nextval, #{name}, #{startTime}, #{endTime}, #{exp},
+        #{cap}, #{info}, #{rep}, #{grpNum}, #{stdPlcNum})
+
+    </insert>
+
+    <select id="read" resultMap="StudyVO">
+        select * from tstd where std_num = #{num}
+    </select>
+
+    <delete id="delete">
+        delete from tstd where std_num = #{num}
+    </delete>
+
+    <update id="update">
+
+    </update>
+
+
+
+
+
+</mapper>
