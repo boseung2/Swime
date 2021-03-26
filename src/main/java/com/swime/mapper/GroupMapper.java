@@ -1,7 +1,6 @@
 package com.swime.mapper;
 
 import com.swime.domain.GroupVO;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

@@ -2,19 +2,18 @@ package com.swime.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
 @Configuration
 @MapperScan(basePackages = {"com.swime.mapper"})
+@ComponentScan(basePackages="com.swime.service")
 public class RootConfig {
 
     @Bean
@@ -28,11 +27,9 @@ public class RootConfig {
     public DataSource dataSoure() {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
-//        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@aiaclassi1.iptime.org:3000:XE");
-        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:XE");
+        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@aiaclassi1.iptime.org:3000:XE");
 
-//        hikariConfig.setUsername("swime");
-        hikariConfig.setUsername("swimeTest");
+        hikariConfig.setUsername("swime");
         hikariConfig.setPassword("1234");
 
         return new HikariDataSource(hikariConfig);
