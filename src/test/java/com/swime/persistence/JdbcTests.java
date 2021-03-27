@@ -24,9 +24,9 @@ public class JdbcTests {
 	public void testConnection() {
 		try(Connection con =
 				DriverManager.getConnection(
-						"jdbc:oracle:thin:@aiaclassi1.iptime.org:3000:XE",
-						"swime",
-						"1234")){
+						"jdbc:oracle:thin:@swime.cuhd6k7lvd6s.us-east-2.rds.amazonaws.com:1521:ORCL",
+						"admin",
+						"1q2w3e4r")){
             log.info(con);
 		}catch(Exception e) {
 			e.printStackTrace();
