@@ -27,10 +27,10 @@ public class RootConfig {
     public DataSource dataSoure() {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
-        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@aiaclassi1.iptime.org:3000:XE");
+        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime.cuhd6k7lvd6s.us-east-2.rds.amazonaws.com:1521:ORCL");
 
-        hikariConfig.setUsername("swime");
-        hikariConfig.setPassword("1234");
+        hikariConfig.setUsername("admin");
+        hikariConfig.setPassword("1q2w3e4r");
 
         return new HikariDataSource(hikariConfig);
     }
