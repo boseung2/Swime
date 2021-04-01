@@ -22,16 +22,17 @@ public class JdbcTests {
 
 	@Test
 	public void testConnection() {
+		System.setProperty("oracle.jdbc.fanEnabled","false");
+		System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
 		try(Connection con =
 				DriverManager.getConnection(
-						"jdbc:oracle:thin:@swime.cuhd6k7lvd6s.us-east-2.rds.amazonaws.com:1521:ORCL",
-						"admin",
-						"1q2w3e4r")){
+						"jdbc:log4jdbc:oracle:thin:@swime_tp",
+						"ADMIN",
+						"1q2w3e4r5t6Y")){
             log.info(con);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 }
 

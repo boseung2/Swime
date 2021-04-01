@@ -25,13 +25,13 @@ public class RootConfig {
 
     @Bean
     public DataSource dataSoure() {
+        System.setProperty("oracle.jdbc.fanEnabled","false");
+        System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
-        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime.cuhd6k7lvd6s.us-east-2.rds.amazonaws.com:1521:ORCL");
-
-        hikariConfig.setUsername("admin");
-        hikariConfig.setPassword("1q2w3e4r");
-
+        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
+        hikariConfig.setUsername("ADMIN");
+        hikariConfig.setPassword("1q2w3e4r5t6Y");
         return new HikariDataSource(hikariConfig);
     }
 
