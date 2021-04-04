@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.GroupMapper">
+    <select id="getList" parameterType="com.swime.domain.GroupVO" resultType="com.swime.domain.GroupVO">
+    <![CDATA[
+        select *
+        from tgrp
+        where sn > 0
+    ]]>
+    </select>
+
+    <insert id="insert">
+        insert into tgrp (sn, category, name, user_id, user_name, picture, description, headcount, rating, sido, sigungu, status, reg_user_id)
+        values(seq_tgrp.nextval, #{category}, #{name}, #{userId}, #{userName}, #{picture}, #{description}, #{headcount}, #{rating},  #{sido}, #{sigungu}, #{status}, #{regUserId})
+    </insert>
+
+    <insert id="insertSelectKey">
+        <selectKey keyProperty="sn" order="BEFORE" resultType="long">
+            select seq_tgrp.nextval from dual
+        </selectKey>
+        insert into tgrp (sn, category, name, user_id, user_name, picture, description, headcount, rating, sido, sigungu, status, reg_user_id)
+        values(#{sn}, #{category}, #{name}, #{userId}, #{userName}, #{picture}, #{description}, #{headcount}, #{rating},  #{sido}, #{sigungu}, #{status}, #{regUserId})
+    </insert>
+
+    <select id="read" resultType="com.swime.domain.GroupVO">
+        select * from tgrp where sn = #{sn}
+    </select>
+
+    <update id="delete">
+        update tgrp
+        set status = 'GRST03',
+        upd_date = current_date,
+        upd_user_id = #{updUserId}
+        where sn = #{sn}
+    </update>
+
+    <update id="update">
+        update tgrp
+        set category=#{category},
+            name = #{name},
+            user_id = #{userId},
+            user_name = #{userName},
+            picture = #{picture},
+            description = #{description},
+            headcount = #{headcount},
+            rating = #{rating},
+            sido = #{sido},
+            sigungu = #{sigungu},
+            status = #{status},
+            upd_date = current_date,
+            upd_user_id = #{updUserId}
+        where sn = #{sn}
+    </update>
+
+    
+</mapper>
