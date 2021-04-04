@@ -54,5 +54,17 @@
         where sn = #{sn}
     </update>
 
-    
+    <select id="getListWithPaging" resultType="com.swime.domain.GroupVO">
+        <![CDATA[
+        select sn, category, name, user_id, user_name, picture, description, headcount, rating, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
+        from (
+             select /* +INDEX_DESC(tgrp pk_tgrp) */
+             rownum rn, sn, category, name, user_id, user_name, picture, description, headcount, rating, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
+             from tgrp
+             where rownum <=  #{pageNum} * #{amount}
+            )
+        where rn > (#{pageNum} - 1) * #{amount}
+        ]]>
+    </select>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.swime.Service;
 
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 import com.swime.service.GroupService;
 import lombok.Setter;
@@ -48,11 +49,6 @@ public class GroupServiceTests {
     }
 
     @Test
-    public void testGetList() {
-        service.getList().forEach(group -> log.info(group));
-    }
-
-    @Test
     public void testGet() {
         log.info(service.get(22L));
     }
@@ -79,6 +75,10 @@ public class GroupServiceTests {
         log.info("MODIFY RESULT: " + service.modify(group));
     }
 
+    @Test
+    public void testGetList() {
+        service.getList(new GroupCriteria(1, 6)).forEach(group -> log.info(group));
+    }
 
 
 

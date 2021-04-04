@@ -1,5 +1,6 @@
 package com.swime.mapper;
 
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -8,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class})
@@ -99,5 +102,23 @@ public class GroupMapperTests {
 
         int count = mapper.update(group);
         log.info("UPDATE COUNT: " + count);
+    }
+
+    @Test
+    public void testPaging() {
+        GroupCriteria cri = new GroupCriteria();
+        List<GroupVO> list = mapper.getListWithPaging(cri);
+        list.forEach(group -> log.info(group));
+
+    }
+
+    @Test
+    public void testPaging2() {
+        GroupCriteria cri = new GroupCriteria();
+        cri.setPageNum(1);
+        cri.setAmount(6);
+        List<GroupVO> list = mapper.getListWithPaging(cri);
+        list.forEach(group -> log.info(group.getSn()));
+
     }
 }
