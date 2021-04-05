@@ -16,7 +16,6 @@ public class GroupServiceImpl implements GroupService{
 
     private GroupMapper mapper;
 
-
     @Override
     public int register(GroupVO group) {
         return mapper.insertSelectKey(group);
@@ -25,6 +24,11 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public GroupVO get(Long sn) {
         return mapper.read(sn);
+    }
+
+    @Override
+    public List<GroupVO> getList(GroupCriteria cri) {
+        return mapper.getListWithPaging(cri);
     }
 
     @Override
@@ -37,8 +41,5 @@ public class GroupServiceImpl implements GroupService{
         return mapper.delete(group) == 1;
     }
 
-    @Override
-    public List<GroupVO> getList(GroupCriteria cri) {
-        return mapper.getListWithPaging(cri);
-    }
+
 }

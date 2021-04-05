@@ -21,11 +21,6 @@ public class GroupMapperTests {
     private GroupMapper mapper;
 
     @Test
-    public void testGetList() {
-        mapper.getList().forEach(group -> log.info(group));
-    }
-
-    @Test
     public void testInsert() {
         GroupVO group = new GroupVO();
 
@@ -35,11 +30,9 @@ public class GroupMapperTests {
         group.setUserName("테스트 name");
         group.setPicture("테스트 picture");
         group.setDescription("테스트 description");
-        group.setHeadcount(5L);
-        group.setRating(5.0D);
+        group.setInfo("테스트 모임정보");
         group.setSido("LODO01");
         group.setSigungu("LOGU02");
-        group.setStatus("GRST01");
         group.setRegUserId("테스트 id");
 
         mapper.insert(group);
@@ -56,11 +49,9 @@ public class GroupMapperTests {
         group.setUserName("테스트 name");
         group.setPicture("테스트 picture");
         group.setDescription("테스트 description");
-        group.setHeadcount(5L);
-        group.setRating(5.0D);
+        group.setInfo("테스트 모임정보");
         group.setSido("LODO01");
         group.setSigungu("LOGU02");
-        group.setStatus("GRST01");
         group.setRegUserId("테스트 id");
 
         mapper.insertSelectKey(group);
@@ -69,18 +60,29 @@ public class GroupMapperTests {
 
     @Test
     public void testRead() {
-        GroupVO group = mapper.read(22L);
+        GroupVO group = mapper.read(70L);
         log.info(group);
     }
 
     @Test
-    public void testDelete() {
-        GroupVO group = new GroupVO();
-        group.setSn(23L);
-        group.setUpdUserId("삭제 id");
+    public void testGetList() {
+        mapper.getList().forEach(group -> log.info(group));
+    }
 
-        int count = mapper.delete(group);
-        log.info("DELETE COUNT: " + count);
+    @Test
+    public void testPaging() {
+        GroupCriteria cri = new GroupCriteria();
+        List<GroupVO> list = mapper.getListWithPaging(cri);
+        list.forEach(group -> log.info(group));
+    }
+
+    @Test
+    public void testPaging2() {
+        GroupCriteria cri = new GroupCriteria();
+        cri.setPageNum(1);
+        cri.setAmount(6);
+        List<GroupVO> list = mapper.getListWithPaging(cri);
+        list.forEach(group -> log.info(group.getSn()));
     }
 
     @Test
@@ -105,20 +107,14 @@ public class GroupMapperTests {
     }
 
     @Test
-    public void testPaging() {
-        GroupCriteria cri = new GroupCriteria();
-        List<GroupVO> list = mapper.getListWithPaging(cri);
-        list.forEach(group -> log.info(group));
+    public void testDelete() {
+        GroupVO group = new GroupVO();
+        group.setSn(23L);
+        group.setUpdUserId("삭제 id");
 
+        int count = mapper.delete(group);
+        log.info("DELETE COUNT: " + count);
     }
 
-    @Test
-    public void testPaging2() {
-        GroupCriteria cri = new GroupCriteria();
-        cri.setPageNum(1);
-        cri.setAmount(6);
-        List<GroupVO> list = mapper.getListWithPaging(cri);
-        list.forEach(group -> log.info(group.getSn()));
 
-    }
 }

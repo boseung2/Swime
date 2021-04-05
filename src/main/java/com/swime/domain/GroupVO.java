@@ -13,6 +13,7 @@ public class GroupVO {
     private String userName;
     private String picture;
     private String description;
+    private String info;
     private Long headcount;
     private Double rating;
     private String sido;
