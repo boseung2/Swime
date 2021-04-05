@@ -3,6 +3,8 @@ package com.swime.mapper;
 
 import com.swime.domain.MemberVO;
 
+import java.util.List;
+
 public interface MemberMapper {
 
     MemberVO read(String id);
@@ -13,6 +15,6 @@ public interface MemberMapper {
 
     int delete(String id);
 
-    MemberVO readwithdate(String id);
+    List<MemberVO> getlist();
 
 }
