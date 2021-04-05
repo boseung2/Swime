@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 
 import java.util.List;
@@ -14,6 +15,6 @@ public interface GroupService {
 
     public boolean remove(GroupVO group);
 
-    public List<GroupVO> getList();
+    public List<GroupVO> getList(GroupCriteria cri);
 
 }

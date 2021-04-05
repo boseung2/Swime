@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 import com.swime.mapper.GroupMapper;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public List<GroupVO> getList() {
-        return mapper.getList();
+    public List<GroupVO> getList(GroupCriteria cri) {
+        return mapper.getListWithPaging(cri);
     }
 }

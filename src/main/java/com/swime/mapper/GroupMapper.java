@@ -19,6 +19,6 @@ public interface GroupMapper {
 
     public int update(GroupVO group);
 
-    public List<GroupVO> getListWithPagin(GroupCriteria cri);
+    public List<GroupVO> getListWithPaging(GroupCriteria cri);
 
 }

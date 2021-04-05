@@ -1,5 +1,6 @@
 package com.swime.controller;
 
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 import com.swime.service.GroupService;
 import lombok.AllArgsConstructor;
@@ -33,8 +34,8 @@ public class GroupController {
     }
 
     @GetMapping(value = "/list")
-    public ResponseEntity<List<GroupVO>> getList() {
-        return new ResponseEntity<>(service.getList(), HttpStatus.OK);
+    public ResponseEntity<List<GroupVO>> getList(@RequestBody GroupCriteria cri) {
+        return new ResponseEntity<>(service.getList(cri), HttpStatus.OK);
     }
 
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
