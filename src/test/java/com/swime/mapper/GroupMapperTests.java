@@ -18,6 +18,11 @@ public class GroupMapperTests {
     private GroupMapper mapper;
 
     @Test
+    public void getMapper(){
+        log.info(mapper);
+    }
+
+    @Test
     public void testGetList() {
         mapper.getList().forEach(group -> log.info(group));
     }
