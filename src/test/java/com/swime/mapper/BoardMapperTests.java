@@ -27,11 +27,11 @@ public class BoardMapperTests {
     public void testInsert(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(5L);
+        board.setGrpSn(8L);
         board.setUserId("테스트2:minjae@naver.com");
         board.setUserName("테스트:이민재");
         board.setTitle("테스트 : 자바 초보만 오세용~~!!");
-        board.setLikeCnt(500);
+        //board.setLikeCnt(500);
         board.setTopFix("BOFI01");
         board.setStatus("BOST01");
 
@@ -48,7 +48,7 @@ public class BoardMapperTests {
         board.setUserId("selectKeyTest : minjae@naver.com");
         board.setUserName("selectKeyTest:minjae");
         board.setTitle("selectKeyTest : 자바 초보만 오세용~~!!");
-        board.setLikeCnt(500);
+        //board.setLikeCnt(500);
         board.setTopFix("BOFI01");
         board.setStatus("BOST01");
 

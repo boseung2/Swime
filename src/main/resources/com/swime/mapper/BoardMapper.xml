@@ -13,8 +13,8 @@
     </select>
 
     <insert id="insert">
-        insert into tbrd(sn, grp_sn, user_id, user_name, title, like_cnt, top_fix, status)
-        values(seq_tbrd.nextval, #{grpSn}, #{userId}, #{userName}, #{title},#{likeCnt}, #{topFix}, #{status})
+        insert into tbrd(sn, grp_sn, user_id, user_name, title, top_fix, status)
+        values(seq_tbrd.nextval, #{grpSn}, #{userId}, #{userName}, #{title}, #{topFix}, #{status})
     </insert>
 
     <insert id="insertSelectKey">
@@ -22,8 +22,8 @@
         <selectKey resultType="long" order="BEFORE" keyProperty="sn">
             select seq_tbrd.nextval from dual
         </selectKey>
-        insert into tbrd(sn, grp_sn, user_id, user_name, title, like_cnt, top_fix, status)
-        values(seq_tbrd.nextval, #{grpSn}, #{userId}, #{userName}, #{title},#{likeCnt}, #{topFix}, #{status})
+        insert into tbrd(sn, grp_sn, user_id, user_name, title, top_fix, status)
+        values(seq_tbrd.nextval, #{grpSn}, #{userId}, #{userName}, #{title}, #{topFix}, #{status})
     </insert>
 
     <select resultType="com.swime.domain.BoardVO" id="read">
