@@ -42,4 +42,10 @@ public class MemberServiceImpl implements MemberService{
     public List<MemberVO> getlist() {
         return mapper.getlist();
     }
+
+    @Override
+    public boolean checkIdPw(MemberVO vo) {
+        MemberVO memberVO = mapper.read(vo.getId());
+        return memberVO != null ? memberVO.getPassword().equals(vo.getPassword()) : false;
+    }
 }
