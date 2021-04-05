@@ -29,8 +29,12 @@ public class DataSourceTests {
 
     @Test
     public void testConnection() {
-
+        long start = System.currentTimeMillis();
+        long stop;
         try(Connection con = dataSource.getConnection()) {
+            System.out.println("Connected..");
+            stop = System.currentTimeMillis();
+            System.out.println("connected Time " + (stop - start) + " ms.");
             log.info(con);
         }catch(Exception e) {
             fail(e.getMessage());

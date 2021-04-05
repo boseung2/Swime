@@ -17,4 +17,6 @@ public interface MemberService {
 
     List<MemberVO> getlist();
 
+    boolean checkIdPw(MemberVO vo);
+
 }
