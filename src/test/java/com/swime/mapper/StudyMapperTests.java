@@ -22,8 +22,92 @@ public class StudyMapperTests {
 
     @Test
     public void testGetList() {
-        mapper.getList().forEach(std -> log.info(std));
+        mapper.getList().forEach(study -> log.info(study));
     }
+
+    @Test
+    public void testInsert() {
+        StudyVO study = new StudyVO();
+        study.setGrpSn(7);
+        study.setName("스터디 만들기 테스트");
+        study.setStartDate("2021-04-06");
+        study.setEndDate("2021-04-06");
+        study.setStartTime("14:00:00");
+        study.setEndTime("16:00:00");
+        study.setRepeatCycle("");
+        study.setRepeatDay("");
+        study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
+        study.setOnOff("STOF02");
+        study.setOnUrl("");
+        study.setPlaceId("구글 place id");
+        study.setExpense("5000원");
+        study.setCapacity(20);
+        study.setParticipants(0);
+        study.setStatus("STST01");
+
+        mapper.insert(study);
+
+        log.info(study);
+    }
+
+    @Test
+    public void testInsertSelectKey() {
+        StudyVO study = new StudyVO();
+        study.setGrpSn(7);
+        study.setName("스터디 만들기 테스트2");
+        study.setStartDate("2021-04-06");
+        study.setEndDate("2021-04-06");
+        study.setStartTime("14:00:00");
+        study.setEndTime("16:00:00");
+        study.setRepeatCycle("");
+        study.setRepeatDay("");
+        study.setInformation("스터디 만들기 테스트2입니다.스터디 만들기 테스트2입니다.스터디 만들기 테스트2입니다.");
+        study.setOnOff("STOF02");
+        study.setOnUrl("");
+        study.setPlaceId("구글 place id");
+        study.setExpense("5000원");
+        study.setCapacity(20);
+        study.setParticipants(0);
+        study.setStatus("STST01");
+
+        mapper.insertSelectKey(study);
+
+        log.info(study);
+    }
+
+    @Test
+    public void testRead() {
+        StudyVO study = mapper.read(41L);
+
+        log.info(study);
+    }
+
+    @Test
+    public void testDelete(){
+        log.info("DELETE COUNT: " + mapper.delete(42L));
+    }
+
+    @Test
+    public void testUpdate() {
+        StudyVO study = new StudyVO();
+        study.setSn(41L);
+        study.setName("스터디 수정 테스트");
+        study.setStartDate("2021-04-07");
+        study.setEndDate("2021-04-07");
+        study.setStartTime("14:00:00");
+        study.setEndTime("17:00:00");
+        study.setRepeatCycle("");
+        study.setRepeatDay("");
+        study.setInformation("스터디 수정 테스트");
+        study.setOnOff("STOF01");
+        study.setOnUrl("http://www.zoom.meeting/1");
+        study.setPlaceId("");
+        study.setExpense("");
+        study.setCapacity(10);
+
+        log.info("UPDATE COUNT: " + mapper.update(study));
+    }
+
 
 //    @Test
 //    public void testGetListWithPaging() {

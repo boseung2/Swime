@@ -25,9 +25,4 @@ public class StudyVO {
     private String status;
     private Date regDate;
     private Date updDate;
-    private Date sysRegDate;
-    private String sysRegDbId;
-    private Date sysUpdDate;
-    private String sysUpdDbId;
-    private String sysUpdReason;
 }

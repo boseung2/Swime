@@ -4,13 +4,61 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.StudyMapper">
 
-    <select id="getList" resultType="com.swime.domain.StudyVO">
+    <select id="getList" parameterType="com.swime.domain.StudyVO" resultType="com.swime.domain.StudyVO">
     <![CDATA[
         select *
         from tstd
-        where sn > 0
+        where sn > 0 and (status = 'STST01' or status = 'STST03')
         ]]>
     </select>
+
+    <insert id="insert">
+        insert into tstd (sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date)
+        values(seq_std.nextval, #{grpSn}, #{name}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, #{participants}, #{status}, current_date, current_date)
+    </insert>
+
+    <insert id="insertSelectKey">
+        <selectKey keyProperty="sn" order="BEFORE" resultType="long">
+            select seq_std.nextval from dual
+        </selectKey>
+
+        insert into tstd (sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date)
+        values(#{sn}, #{grpSn}, #{name}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, #{participants}, #{status}, current_date, current_date)
+    </insert>
+
+    <select id="read" parameterType="com.swime.domain.StudyVO" resultType="com.swime.domain.StudyVO">
+        select *
+        from tstd
+        where sn = #{sn}
+    </select>
+
+    <update id="update">
+        update tstd
+        set name = #{name},
+        start_date = #{startDate},
+        end_date = #{endDate},
+        start_time = #{startTime},
+        end_time = #{endTime},
+        repeat_cycle = #{repeatCycle, jdbcType=VARCHAR},
+        repeat_day = #{repeatDay, jdbcType=VARCHAR},
+        information = #{information},
+        on_off = #{onOff, jdbcType=VARCHAR},
+        on_url = #{onUrl, jdbcType=VARCHAR},
+        place_id = #{placeId, jdbcType=VARCHAR},
+        expense = #{expense, jdbcType=VARCHAR},
+        capacity = #{capacity},
+        upd_date = current_date
+        where sn = #{sn}
+    </update>
+
+    <update id="delete">
+        update tstd
+        set status = 'STST02',
+        upd_date = current_date
+        where sn = #{sn}
+    </update>
+
+
 
 
 </mapper>
