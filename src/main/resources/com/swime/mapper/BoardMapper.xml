@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.BoardMapper">
+
+    <select id="getList" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
+    <![CDATA[
+        select *
+        from tbrd
+        where sn > 0
+        ]]>
+    </select>
+
+    <insert id="insert">
+        insert into tbrd(sn, grp_sn, user_id, user_name, title, like_cnt, top_fix, status)
+        values(seq_tbrd.nextval, #{grpSn}, #{userId}, #{userName}, #{title},#{likeCnt}, #{topFix}, #{status})
+    </insert>
+
+    <insert id="insertSelectKey">
+
+        <selectKey resultType="long" order="BEFORE" keyProperty="sn">
+            select seq_tbrd.nextval from dual
+        </selectKey>
+        insert into tbrd(sn, grp_sn, user_id, user_name, title, like_cnt, top_fix, status)
+        values(seq_tbrd.nextval, #{grpSn}, #{userId}, #{userName}, #{title},#{likeCnt}, #{topFix}, #{status})
+    </insert>
+
+    <select resultType="com.swime.domain.BoardVO" id="read">
+        select * from tbrd where sn = #{sn}
+    </select>
+
+    <delete id="delete">
+        delete from tbrd where sn = #{sn} </delete>
+
+    <update id="update">
+        update tbrdset
+            user_id = #{userId},
+            user_name = #{userName},
+            title = #{title},
+            like_cnt = #{likeCnt},
+            top_fix = #{topFix},
+            status = #{status},
+            upd_date = current_date
+        where sn = #{sn}
+    </update>
+
+</mapper>

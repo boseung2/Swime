@@ -17,10 +17,4 @@ public class BoardVO {
     private String status;
     private Date regDate;
     private Date updDate;
-
-
-
-
-
-
 }
