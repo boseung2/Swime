@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.GroupRatingMapper">
+
+    <insert id="insert">
+        insert into tgrp_rating(sn, grp_sn, std_sn, user_id, rating, review)
+        values(seq_grp_rating.nextval, #{grpSn}, #{stdSn}, #{userId}, #{rating}, #{review})
+    </insert>
+
+    <insert id="insertSelectKey">
+        <selectKey keyProperty="sn" order="BEFORE" resultType="long">
+            select seq_tgrp_rating.nextval from dual
+        </selectKey>
+        insert into tgrp_rating(sn, grp_sn, std_sn, user_id, rating, review)
+        values(#{sn}, #{grpSn}, #{stdSn}, #{userId}, #{rating}, #{review})
+    </insert>
+
+    <select id="read" resultType="com.swime.domain.GroupRatingVO">
+        select sn, grp_sn, std_sn, user_id, rating, review, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+        from tgrp_rating
+        where sn = #{sn}
+    </select>
+
+    <select id="getList" resultType="com.swime.domain.GroupRatingVO">
+        select sn, grp_sn, std_sn, user_id, rating, review, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+        from tgrp_rating
+        where grp_sn = #{grpSn}
+    </select>
+
+    <select id="getListWithPaging" resultType="com.swime.domain.GroupRatingVO">
+        <![CDATA[
+        select sn, grp_sn, std_sn, user_id, rating, review, reg_date
+        from (  select rownum rn, sn, grp_sn, std_sn, user_id, rating, review, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+                from tgrp_rating
+                where (grp_sn = #{grpSn})
+                and (rownum <=  #{cri.pageNum} * #{cri.amount})
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <update id="update">
+        update tgrp_rating
+        set rating = #{rating},
+        review = #{review}
+        where sn = #{sn}
+    </update>
+
+    <delete id="delete">
+        delete tgrp_rating
+        where sn = #{sn}
+    </delete>
+
+
+
+</mapper>
