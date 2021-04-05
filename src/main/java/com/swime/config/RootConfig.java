@@ -22,7 +22,7 @@ public class RootConfig {
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
-        sqlSessionFactory.setDataSource(dataSoure());
+        sqlSessionFactory.setDataSource(dataSource());
 
         Resource myBatisConfig = new PathMatchingResourcePatternResolver().getResource("classpath:mybatis-config.xml");
         sqlSessionFactory.setConfigLocation(myBatisConfig);
@@ -30,7 +30,7 @@ public class RootConfig {
     }
 
     @Bean
-    public DataSource dataSoure() {
+    public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
         System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         HikariConfig hikariConfig = new HikariConfig();
