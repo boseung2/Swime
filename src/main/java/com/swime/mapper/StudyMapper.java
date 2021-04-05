@@ -8,9 +8,9 @@ import java.util.List;
 public interface StudyMapper {
     public List<StudyVO> getList();
 
-    public void insert(StudyVO study);
+    public int insert(StudyVO study);
 
-    public void insertSelectKey(StudyVO study);
+    public int insertSelectKey(StudyVO study);
 
     public StudyVO read(Long sn);
 

@@ -17,11 +17,11 @@ public class StudyServiceImpl implements StudyService{
     private StudyMapper mapper;
 
     @Override
-    public void register(StudyVO study) {
+    public int register(StudyVO study) {
 
         log.info("register........." + study);
 
-        mapper.insertSelectKey(study);
+        return mapper.insertSelectKey(study);
     }
 
     @Override
@@ -32,19 +32,19 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public boolean modify(StudyVO study) {
+    public int modify(StudyVO study) {
 
         log.info("modify.................." + study);
 
-        return mapper.update(study) == 1;
+        return mapper.update(study);
     }
 
     @Override
-    public boolean remove(Long sn) {
+    public int remove(Long sn) {
 
         log.info("remove...................." + sn);
 
-        return mapper.delete(sn) == 1;
+        return mapper.delete(sn);
     }
 
     @Override

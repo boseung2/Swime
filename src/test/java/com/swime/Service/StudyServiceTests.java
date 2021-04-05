@@ -69,11 +69,11 @@ public class StudyServiceTests {
         }
 
         study.setName("제목 수정수정합니다.");
-        log.info("MODIFY RESULT: " + service.modify(study));
+        log.info("MODIFY COUNT: " + service.modify(study));
     }
 
     @Test
     public void testRemove() {
-        log.info("DELETE RESULT: " + service.remove(61L));
+        log.info("DELETE COUNT: " + service.remove(61L));
     }
 }
