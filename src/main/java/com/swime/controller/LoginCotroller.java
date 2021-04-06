@@ -70,4 +70,5 @@ public class LoginCotroller {
     public List<MemberVO> getlist(){
         return service.getlist();
     }
+
 }
