@@ -32,8 +32,8 @@ public class MemberMapperTests {
     @Test
     public void readTest(){
 //        MemberVO memberVO = mapper.read("asd123@naver.com");
-        MemberVO memberVO = mapper.read("qwer7521@naver.com");
-        log.info(memberVO);
+        MemberVO memberVO = mapper.read("qwer3871@naver.com");
+        Assert.assertNotNull(memberVO);
     }
 
     @Test
@@ -49,12 +49,24 @@ public class MemberMapperTests {
     @Test
     public void updateTest(){
         int random = (int)(Math.random()*10000);
-        MemberVO memberVO = mapper.read("qwer7521@naver.com");
+        MemberVO memberVO = mapper.read("qwer2392@naver.com");
         memberVO.setPassword("updatepassword" + random);
         memberVO.setName("이름변경" + random);
         memberVO.setBirth("2010312");
         memberVO.setLastLoginDate(new Date());
         memberVO.setEmailAuth(new Date());
+        Assert.assertEquals(mapper.update(memberVO),1);
+        log.info(memberVO.getEmailAuth());
+    }
+
+    @Test
+    public void updateTest2(){
+        int random = (int)(Math.random()*10000);
+        MemberVO memberVO = mapper.read("qwer9017@naver.com");
+        memberVO.setPassword("updatepassword" + random);
+        memberVO.setName("이름변경" + random);
+        if(memberVO.getLastLoginDate() == null) memberVO.setLastLoginDate(null);
+        if(memberVO.getEmailAuth() == null) memberVO.setLastLoginDate(null);
         Assert.assertEquals(mapper.update(memberVO),1);
         log.info(memberVO.getEmailAuth());
     }
@@ -74,6 +86,7 @@ public class MemberMapperTests {
     @Test
     public void getList(){
         mapper.getlist().forEach(log::info);
+        Assert.assertNotNull(mapper.getlist());
     }
 
 
