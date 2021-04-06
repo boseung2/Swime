@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.ReplyMapper">
+
+    <insert id="insert">
+        insert into trpl(sn, brd_sn, user_id, user_name, content, status)
+        values(seq_trpl.nextval, #{brdSn}, #{userId}, #{userName}, #{content}, #{status})
+    </insert>
+
+    <select id="read" resultType="com.swime.domain.ReplyVO">
+        select * from trpl where sn = #{sn}
+    </select>
+
+    <delete id="delete">
+        delete from trpl where sn = #{sn}
+    </delete>
+
+    <update id="update">
+        update trpl
+        set user_id = #{userId},
+        user_name = #{userName},
+        content = #{content},
+        cnt = #{cnt},
+        status = #{status},
+        upd_date = current_date
+        where sn = #{sn}
+    </update>
+
+</mapper>
