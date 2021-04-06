@@ -7,7 +7,7 @@
         select id, password, name, picture, birth, reg_path, to_char(last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
                to_char(email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth, status, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
         from TUSER
-        where id = #{id} and status != 'USST03'
+        where id = #{id}
     </select>
 
     <insert id="insert">
@@ -39,5 +39,12 @@
         from TUSER
     </select>
 
+    <insert id="insert">
+        <selectKey keyProperty="sn" order="BEFORE" resultType="long">
+            select SEQ_TUSER_UPD_HIST.nextval from dual
+        </selectKey>
+        insert into TUSER_UPD_HIST (SN, EMAIL, UPD_MTR, BEF_VAL, AFT_VAL, REASON, DESCRIPTION ,UPD_USER_ID)
+        VALUES(#{sn}, #{email}, #{updMtr}, #{befVal}, #{aftVal}, #{reason}, #{description}, #{updUserId})
+    </insert>
     
 </mapper>

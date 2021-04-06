@@ -10,5 +10,6 @@ public class MemberHistoryVO {
     private String befVal;
     private String aftVal;
     private String reason;
-    private String descrition;
+    private String description;
+    private String updUserId;
 }

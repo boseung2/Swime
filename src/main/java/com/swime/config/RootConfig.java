@@ -36,7 +36,7 @@ public class RootConfig {
         System.setProperty("java.security.egd", "file:///dev/urandom");
 
         HikariConfig hikariConfig = new HikariConfig();
-        if(false){
+        if(true){
             hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");
