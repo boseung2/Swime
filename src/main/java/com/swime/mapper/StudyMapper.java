@@ -20,6 +20,6 @@ public interface StudyMapper {
 
     public int delete(Long sn);
 
-
+    public List<StudyVO> getWishListWithPaging(StudyCriteria cri);
 
 }

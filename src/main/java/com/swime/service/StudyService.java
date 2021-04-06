@@ -17,4 +17,6 @@ public interface StudyService {
     public List<StudyVO> getList();
 
     public List<StudyVO> getList(StudyCriteria cri);
+
+    public List<StudyVO> getWishList(StudyCriteria cri);
 }

@@ -86,4 +86,17 @@ public class StudyController {
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    //
+    @GetMapping(value="/wishList/{userId}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudyVO>> getWishListwithPaging(
+            @PathVariable("userId") String userId,
+            @PathVariable("page") long page) {
+
+        log.info("get list with paging .........................");
+        StudyCriteria cri = new StudyCriteria(page, 3, userId);
+        log.info(cri);
+
+        return new ResponseEntity<>(service.getList(cri), HttpStatus.OK);
+    }
 }

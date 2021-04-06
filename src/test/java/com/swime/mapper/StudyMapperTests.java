@@ -119,14 +119,10 @@ public class StudyMapperTests {
         log.info("UPDATE COUNT: " + mapper.update(study));
     }
 
+    @Test
+    public void testGetWishListWithPaging() {
+        StudyCriteria cri = new StudyCriteria(1, 3, "jiho@naver.com");
 
-//    @Test
-//    public void testGetListWithPaging() {
-//
-//        StudyCriteria cri = new StudyCriteria();
-//
-//        List<StudyVO> list = mapper.getListWithPaging(cri);
-//
-//        list.forEach(std -> log.info(std));
-//    }
+        mapper.getWishListWithPaging(cri).forEach(study -> log.info(study));
+    }
 }

@@ -63,4 +63,9 @@ public class StudyServiceImpl implements StudyService{
         
         return mapper.getListWithPaging(cri);
     }
+
+    @Override
+    public List<StudyVO> getWishList(StudyCriteria cri) {
+        return mapper.getWishListWithPaging(cri);
+    }
 }

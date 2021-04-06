@@ -12,6 +12,7 @@ public class StudyCriteria {
 
     private long pageNum;
     private int amount;
+    private String userId;
 
     public StudyCriteria(){
         this(1, 3);
@@ -20,5 +21,11 @@ public class StudyCriteria {
     public StudyCriteria(long pageNum, int amount) {
         this.pageNum = pageNum;
         this.amount = amount;
+    }
+
+    public StudyCriteria(long pageNum, int amount, String userId) {
+        this.pageNum = pageNum;
+        this.amount = amount;
+        this.userId = userId;
     }
 }
