@@ -32,9 +32,10 @@ public class BoardServiceTests {
         BoardVO board = new BoardVO();
 
         board.setGrpSn(10L);
-        board.setUserId("새로운 id");
-        board.setUserName("새로운 name");
-        board.setTitle("새로운 제목");
+        board.setUserId("Last 새로운 id");
+        //board.setUserName("새로운 name");
+        board.setTitle("Last 새로운 제목");
+        board.setContent("Last Test content2");
         //board.setLikeCnt(500);
         board.setTopFix("BOFI01");
         board.setStatus("BOST01");
@@ -51,13 +52,13 @@ public class BoardServiceTests {
 
     @Test
     public void testGet(){
-        log.info(service.get(1L));
+        log.info(service.get(5L));
     }
 
     @Test
     public void testDelete(){
 
-        log.info("REMOVE RESULT: " + service.remove(9L));
+        log.info("REMOVE RESULT: " + service.remove(5L));
     }
 
     @Test
@@ -67,7 +68,7 @@ public class BoardServiceTests {
 
         if(board == null) return;
 
-        board.setTitle("제목 수정 : 파이썬 게임 만들기");
+        board.setTitle("Last Test 제목 수정 : Spring 게임 만들기");
 
         log.info("MODIFY RESULT: " + service.modify(board));
     }

@@ -27,10 +27,11 @@ public class BoardMapperTests {
     public void testInsert(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(8L);
+        board.setGrpSn(1L);
         board.setUserId("테스트2:minjae@naver.com");
-        board.setUserName("테스트:이민재");
-        board.setTitle("테스트 : 자바 초보만 오세용~~!!");
+        //board.setUserName("테스트:이민재");
+        board.setTitle("Last Test : 자바 초보만 오세용~~!!");
+        board.setContent("들어가라 제발..");
         //board.setLikeCnt(500);
         board.setTopFix("BOFI01");
         board.setStatus("BOST01");
@@ -45,9 +46,10 @@ public class BoardMapperTests {
         BoardVO board = new BoardVO();
 
         board.setGrpSn(3L);
-        board.setUserId("selectKeyTest : minjae@naver.com");
-        board.setUserName("selectKeyTest:minjae");
-        board.setTitle("selectKeyTest : 자바 초보만 오세용~~!!");
+        board.setUserId("Last Test selectKeyTest : minjae@naver.com");
+        //board.setUserName("selectKeyTest:minjae");
+        board.setTitle("Last Test selectKeyTest : 자바 초보만 오세용~~!!");
+        board.setContent("TCP/IP가 뭔가요?");
         //board.setLikeCnt(500);
         board.setTopFix("BOFI01");
         board.setStatus("BOST01");
@@ -60,23 +62,29 @@ public class BoardMapperTests {
 
     @Test
     public void testRead(){
-        BoardVO board = mapper.read(15L);
+        BoardVO board = mapper.read(5L);
+        log.info(board);
+    }
+    @Test
+    public void testRead2(){
+        BoardVO board = mapper.read(10L);
         log.info(board);
     }
 
     @Test
     public void testDelete(){
 
-        log.info("DELETE COUNT : " + mapper.delete(1L));
+        log.info("DELETE COUNT : " + mapper.delete(7L));
 
     }
-
+    //아직 테스트 통과 x
     @Test
     public void testUpdate(){
         BoardVO board = new BoardVO();
-        board.setSn(7L);
+        board.setSn(11L);
         board.setUserId("수정된 이름");
-        board.setUserName("수정된 이메일");
+        //board.setUserName("수정된 이메일");
+        board.setContent("성공하면 난 집 간다...");
         board.setTitle("수정된 제목");
         board.setLikeCnt(20);
         board.setTopFix("BOFI02");

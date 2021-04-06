@@ -6,15 +6,46 @@
 
     <select id="getList" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
     <![CDATA[
-        select *
-        from tbrd
-        where sn > 0
+        select b.sn,
+               b.grp_sn,
+               b.user_id,
+               --b.user_name,
+               b.title,
+               d.content,
+               b.like_cnt,
+               b.top_fix,
+               b.status,
+               b.reg_date,
+               b.upd_date
+        from
+             tbrd b, tbrd_det d
+        where
+              b.sn = d.sn
+          and
+              b.sn > 0
         ]]>
     </select>
 
     <insert id="insert">
-        insert into tbrd(sn, grp_sn, user_id, user_name, title, top_fix, status)
-        values(seq_tbrd.nextval, #{grpSn}, #{userId}, #{userName}, #{title}, #{topFix}, #{status})
+        insert ALL
+        into
+        tbrd
+            (
+            sn,
+            grp_sn,
+            user_id,
+            --user_name,
+            title,
+            top_fix,
+            status
+            )
+        values
+        (seq_tbrd.nextval, #{grpSn}, #{userId}, #{title}, #{topFix}, #{status})
+        into
+        tbrd_det(sn, content)
+        values
+        (seq_tbrd.nextval, #{content})
+        select * from dual
     </insert>
 
     <insert id="insertSelectKey">
@@ -22,12 +53,46 @@
         <selectKey resultType="long" order="BEFORE" keyProperty="sn">
             select seq_tbrd.nextval from dual
         </selectKey>
-        insert into tbrd(sn, grp_sn, user_id, user_name, title, top_fix, status)
-        values(seq_tbrd.nextval, #{grpSn}, #{userId}, #{userName}, #{title}, #{topFix}, #{status})
+        insert ALL
+        into
+            tbrd(
+                 sn,
+                 grp_sn,
+                 user_id,
+                 --user_name,
+                 title,
+                 top_fix,
+                 status
+                 )
+        values
+            (seq_tbrd.nextval, #{grpSn}, #{userId}, #{title}, #{topFix}, #{status})
+        into
+            tbrd_det(sn, content)
+        values
+            (seq_tbrd.nextval, #{content})
+        select * from dual
     </insert>
 
-    <select resultType="com.swime.domain.BoardVO" id="read">
-        select * from tbrd where sn = #{sn}
+    <select id="read" resultType="com.swime.domain.BoardVO">
+        <![CDATA[
+        select b.sn,
+               b.grp_sn,
+               b.user_id,
+               --b.user_name,
+               b.title,
+               d.content,
+               b.like_cnt,
+               b.top_fix,
+               b.status,
+               b.reg_date,
+               b.upd_date
+        from
+            tbrd b, tbrd_det d
+        where
+            b.sn = d.sn
+        and
+            b.sn = #{sn}
+        ]]>
     </select>
 
     <delete id="delete">
@@ -36,7 +101,7 @@
     <update id="update">
         update tbrdset
             user_id = #{userId},
-            user_name = #{userName},
+            --user_name = #{userName},
             title = #{title},
             like_cnt = #{likeCnt},
             top_fix = #{topFix},
