@@ -22,6 +22,5 @@ public class MemberVOTests {
         MemberVO memberVO = new MemberVO();
         memberVO.setLastLoginDate(new Date());
         log.info(memberVO.getLastLoginDate());
-
     }
 }

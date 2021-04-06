@@ -30,6 +30,16 @@ public class LoginCotroller {
     @PostMapping("/login")
     public ResponseEntity<String> login(MemberVO vo){
         boolean isIdPw = service.checkIdPw(vo);
-        return isIdPw ? new ResponseEntity<>("success", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return isIdPw ? new ResponseEntity<>("Login Success", HttpStatus.OK) : new ResponseEntity<>("Login Denied",HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/register")
+    public void register(){
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(MemberVO vo){
+        boolean isRegister = service.register(vo);
+        return isRegister ? new ResponseEntity<>("Resister Success", HttpStatus.OK) : new ResponseEntity<>("Resister Fail",HttpStatus.BAD_REQUEST);
     }
 }
