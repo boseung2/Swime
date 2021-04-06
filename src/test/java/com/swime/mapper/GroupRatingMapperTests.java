@@ -1,9 +1,7 @@
 package com.swime.mapper;
 
-import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupRatingCriteria;
 import com.swime.domain.GroupRatingVO;
-import com.swime.domain.GroupVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Test;
@@ -81,6 +79,18 @@ public class GroupRatingMapperTests {
     public void testDelete() {
         int count = mapper.delete(10L);
         log.info("DELETE COUNT : " + count);
+    }
+
+    @Test
+    public void testGetRatingByGrpSn() {
+        double rating = mapper.getRatingByGrpSn(1L);
+        log.info("rating : " + rating);
+    }
+
+    @Test
+    public void testGetRatingCountByGrpSn() {
+        int ratingCount = mapper.getRatingCountByGrpSn(1L);
+        log.info("ratingCount: " + ratingCount);
     }
 
 

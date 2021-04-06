@@ -11,10 +11,10 @@ public interface GroupService {
 
     public GroupVO get(Long sn);
 
+    public List<GroupVO> getListWithPaging(GroupCriteria cri);
+
     public boolean modify(GroupVO group);
 
     public boolean remove(GroupVO group);
-
-    public List<GroupVO> getList(GroupCriteria cri);
 
 }

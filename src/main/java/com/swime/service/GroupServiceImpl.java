@@ -27,8 +27,8 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public List<GroupVO> getList(GroupCriteria cri) {
-        return mapper.getListWithPaging(cri);
+    public List<GroupVO> getListWithPaging(GroupCriteria cri) {
+        return null;
     }
 
     @Override

@@ -53,6 +53,16 @@
         where sn = #{sn}
     </delete>
 
+    <select id="getRatingByGrpSn" resultType="double">
+        select round(avg(rating),1)
+        from tgrp_rating
+        where grp_sn = #{grp_sn}
+    </select>
 
+    <select id="getRatingCountByGrpSn" resultType="int">
+        select count(*)
+        from tgrp_rating
+        where grp_sn = #{grpSn}
+    </select>
 
 </mapper>

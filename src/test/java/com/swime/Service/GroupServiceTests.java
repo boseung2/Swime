@@ -77,7 +77,7 @@ public class GroupServiceTests {
 
     @Test
     public void testGetList() {
-        service.getList(new GroupCriteria(1, 6)).forEach(group -> log.info(group));
+        service.getListWithPaging(new GroupCriteria(1, 6)).forEach(group -> log.info(group));
     }
 
 

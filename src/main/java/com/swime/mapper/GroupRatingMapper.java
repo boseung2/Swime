@@ -22,6 +22,10 @@ public interface GroupRatingMapper {
 
     public int delete(Long sn);
 
+    // 그룹번호로 해당 그룹 평균 평점을 구한다.
+    public double getRatingByGrpSn(Long grpSn);
 
+    // 그룹 번호로 해당 그룹 평점 개수를 센다.
+    public int getRatingCountByGrpSn(Long grpSn);
 
 }

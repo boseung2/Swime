@@ -35,7 +35,7 @@ public class GroupController {
 
     @GetMapping(value = "/list")
     public ResponseEntity<List<GroupVO>> getList(@RequestBody GroupCriteria cri) {
-        return new ResponseEntity<>(service.getList(cri), HttpStatus.OK);
+        return new ResponseEntity<>(service.getListWithPaging(cri), HttpStatus.OK);
     }
 
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},

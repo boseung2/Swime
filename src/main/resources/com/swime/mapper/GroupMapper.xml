@@ -55,34 +55,30 @@
         ]]>
     </select>
 
-    <update id="update">
-        update tgrp
-        set category=#{category},
-            name = #{name},
-            user_id = #{userId},
-            user_name = #{userName},
-            picture = #{picture},
-            description = #{description},
-            headcount = #{headcount},
-            rating = #{rating},
-            sido = #{sido},
-            sigungu = #{sigungu},
-            status = #{status},
-            upd_date = current_date,
-            upd_user_id = #{updUserId}
-        where sn = #{sn}
-    </update>
+<!--    <update id="update">-->
+<!--        update tgrp-->
+<!--        set category=#{category},-->
+<!--            name = #{name},-->
+<!--            user_id = #{userId},-->
+<!--            user_name = #{userName},-->
+<!--            picture = #{picture},-->
+<!--            description = #{description},-->
+<!--            headcount = #{headcount},-->
+<!--            rating = #{rating},-->
+<!--            sido = #{sido},-->
+<!--            sigungu = #{sigungu},-->
+<!--            status = #{status},-->
+<!--            upd_date = current_date,-->
+<!--            upd_user_id = #{updUserId}-->
+<!--        where sn = #{sn}-->
+<!--    </update>-->
 
-    <update id="delete">
-        update tgrp
-        set status = 'GRST03',
-        upd_date = current_date,
-        upd_user_id = #{updUserId}
-        where sn = #{sn}
-    </update>
-
-
-
-
+<!--    <update id="delete">-->
+<!--        update tgrp-->
+<!--        set status = 'GRST03',-->
+<!--        upd_date = current_date,-->
+<!--        upd_user_id = #{updUserId}-->
+<!--        where sn = #{sn}-->
+<!--    </update>-->
 
 </mapper>
