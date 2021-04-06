@@ -19,4 +19,6 @@ public interface MemberService {
 
     boolean checkIdPw(MemberVO vo);
 
+    boolean registerHistory(MemberVO vo, String updUserId, String description);
+
 }

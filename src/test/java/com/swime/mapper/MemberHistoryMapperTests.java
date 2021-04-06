@@ -33,6 +33,15 @@ public class MemberHistoryMapperTests {
     public void insert(){
         MemberHistoryVO vo = new MemberHistoryVO();
         MemberVO memberVO = memberMapper.read("qwer7044@naver.com");
+        vo.setBefVal(memberVO.getName());
+        memberVO.setName("이력asd");
+        vo.setAftVal(memberVO.getName());
+        vo.setEmail(memberVO.getId());
+        vo.setUpdMtr("name");
+        vo.setReason("test01");
+        vo.setDescription("이력테스트중");
+        vo.setUpdUserId("qwer7044@naver.com");
+        mapper.insert(vo);
     }
 
 }

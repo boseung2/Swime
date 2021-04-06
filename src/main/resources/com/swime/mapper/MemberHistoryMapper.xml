@@ -8,8 +8,8 @@
         <selectKey keyProperty="sn" order="BEFORE" resultType="long">
             select SEQ_TUSER_UPD_HIST.nextval from dual
         </selectKey>
-        insert into TUSER_UPD_HIST (SN, EMAIL, UPD_MTR, BEF_VAL, AFT_VAL, REASON, DESCRIPTION)
-        VALUES(#{sn}, #{email}, #{updMtr}, #{befVal}, #{aftVal}, #{reason}, #{description})
+        insert into TUSER_UPD_HIST (SN, EMAIL, UPD_MTR, BEF_VAL, AFT_VAL, REASON, DESCRIPTION ,UPD_USER_ID)
+        VALUES(#{sn}, #{email}, #{updMtr}, #{befVal}, #{aftVal}, #{reason}, #{description}, #{updUserId})
     </insert>
     
 </mapper>
