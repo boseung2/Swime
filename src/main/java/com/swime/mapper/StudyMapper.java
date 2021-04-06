@@ -8,6 +8,8 @@ import java.util.List;
 public interface StudyMapper {
     public List<StudyVO> getList();
 
+    public List<StudyVO> getListWithPaging(StudyCriteria cri);
+
     public int insert(StudyVO study);
 
     public int insertSelectKey(StudyVO study);
@@ -18,7 +20,6 @@ public interface StudyMapper {
 
     public int delete(Long sn);
 
-    //public List<StudyVO> getListWithPaging(StudyCriteria cri);
 
 
 }

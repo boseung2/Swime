@@ -1,5 +1,6 @@
 package com.swime.Service;
 
+import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyVO;
 import com.swime.service.StudyService;
 import lombok.Setter;
@@ -53,6 +54,15 @@ public class StudyServiceTests {
     @Test
     public void testGetList() {
         service.getList().forEach(study -> log.info(study));
+    }
+
+    @Test
+    public void testGetListWithPaging() {
+        StudyCriteria cri = new StudyCriteria();
+        cri.setPageNum(3);
+        cri.setAmount(3);
+
+        service.getList(cri).forEach(study -> log.info(study));
     }
 
     @Test

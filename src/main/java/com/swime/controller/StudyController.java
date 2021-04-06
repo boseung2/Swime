@@ -1,5 +1,6 @@
 package com.swime.controller;
 
+import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyVO;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,18 @@ public class StudyController {
 
         log.info("get List ....................");
         return new ResponseEntity<>(service.getList(), HttpStatus.OK);
+    }
+
+    @GetMapping(value="/list/{grpSn}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudyVO>> getListwithPaging(
+            @PathVariable("grpSn") long grpSn,
+            @PathVariable("page") long page) {
+
+        log.info("get list with paging .........................");
+        StudyCriteria cri = new StudyCriteria(page, 3);
+        log.info(cri);
+
+        return new ResponseEntity<>(service.getList(cri), HttpStatus.OK);
     }
 
     @PostMapping(value="/new", consumes = "application/json",

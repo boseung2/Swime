@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyVO;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface StudyService {
     public int remove(Long sn);
 
     public List<StudyVO> getList();
+
+    public List<StudyVO> getList(StudyCriteria cri);
 }

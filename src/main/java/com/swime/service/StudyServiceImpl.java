@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyVO;
 import com.swime.mapper.StudyMapper;
 import lombok.Setter;
@@ -53,5 +54,13 @@ public class StudyServiceImpl implements StudyService{
         log.info("getList....................");
 
         return mapper.getList();
+    }
+
+    @Override
+    public List<StudyVO> getList(StudyCriteria cri) {
+
+        log.info("get List with criteria : " + cri);
+        
+        return mapper.getListWithPaging(cri);
     }
 }

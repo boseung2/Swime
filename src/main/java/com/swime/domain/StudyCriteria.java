@@ -10,14 +10,14 @@ import lombok.ToString;
 @ToString
 public class StudyCriteria {
 
-    private int pageNum;
+    private long pageNum;
     private int amount;
 
     public StudyCriteria(){
         this(1, 3);
     }
 
-    public StudyCriteria(int pageNum, int amount) {
+    public StudyCriteria(long pageNum, int amount) {
         this.pageNum = pageNum;
         this.amount = amount;
     }

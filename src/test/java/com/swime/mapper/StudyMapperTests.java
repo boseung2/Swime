@@ -26,6 +26,17 @@ public class StudyMapperTests {
     }
 
     @Test
+    public void testGetListWithPaging() {
+        StudyCriteria cri = new StudyCriteria();
+        cri.setPageNum(3);
+        cri.setAmount(3);
+
+        List<StudyVO> list = mapper.getListWithPaging(cri);
+
+        list.forEach(study -> log.info(study.getSn()));
+    }
+
+    @Test
     public void testInsert() {
         StudyVO study = new StudyVO();
         study.setGrpSn(7);

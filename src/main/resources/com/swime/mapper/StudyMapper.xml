@@ -12,6 +12,19 @@
         ]]>
     </select>
 
+    <select id="getListWithPaging" parameterType="com.swime.domain.StudyVO" resultType="com.swime.domain.StudyVO">
+    <![CDATA[
+        select *
+        from (
+             select /*+ index_desc(tstd pk_tstd)*/
+                rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date
+             from tstd
+             where sn > 0 and (status = 'STST01' or status = 'STST03') and rownum <= #{pageNum} * #{amount}
+             )
+        where rn > (#{pageNum} - 1) * #{amount}
+    ]]>
+    </select>
+
     <insert id="insert">
         insert into tstd (sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date)
         values(seq_std.nextval, #{grpSn}, #{name}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, #{participants}, #{status}, current_date, current_date)
