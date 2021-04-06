@@ -1,5 +1,6 @@
 package com.swime.mapper;
 
+import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 public interface BoardMapper {
 
     public List<BoardVO> getList();
+
+    public List<BoardVO> getListWithPaging(BoardCriteria cri);
 
     public int insert(BoardVO board);
 

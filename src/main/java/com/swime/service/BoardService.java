@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 
 import java.util.List;
@@ -14,6 +15,6 @@ public interface BoardService {
 
     public boolean remove(Long sn);
 
-    public List<BoardVO> getList();
+    public List<BoardVO> getListWithPaging(BoardCriteria cri);
 
 }

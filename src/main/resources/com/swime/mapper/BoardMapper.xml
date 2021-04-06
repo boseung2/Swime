@@ -25,6 +25,44 @@
               b.sn > 0
         ]]>
     </select>
+    <select id="getListWithPaging" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
+    <![CDATA[
+        select
+            sn,
+            grp_sn,
+            user_id,
+            title,
+            content,
+            like_cnt,
+            top_fix,
+            status,
+            reg_date,
+            upd_date
+        from
+            (
+            select /*+INDEX_DESC(tbrd pk_tbrd) */
+                rownum rn, b.sn,
+                b.grp_sn,
+                b.user_id,
+                b.title,
+                d.content,
+                b.like_cnt,
+                b.top_fix,
+                b.status,
+                b.reg_date,
+                b.upd_date
+            from
+                tbrd b,
+                tbrd_det d
+            where
+                b.sn = d.sn
+            and
+                rownum <= #{pageNum} * #{amount}
+            )
+            where rn > (#{pageNum} - 1) * #{amount}
+
+        ]]>
+    </select>
 
     <insert id="insert">
         insert ALL

@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 import com.swime.mapper.BoardMapper;
 import lombok.AllArgsConstructor;
@@ -43,7 +44,14 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<BoardVO> getList() {
-        return mapper.getList();
+    public List<BoardVO> getListWithPaging(BoardCriteria cri) {
+
+        log.info("get List with BoardCri: " + cri);
+        return mapper.getListWithPaging(cri);
     }
+
+//    @Override
+//    public List<BoardVO> getList() {
+//        return mapper.getList();
+//    }
 }

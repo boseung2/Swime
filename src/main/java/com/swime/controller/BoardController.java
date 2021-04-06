@@ -1,5 +1,6 @@
 package com.swime.controller;
 
+import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 import com.swime.domain.GroupVO;
 import com.swime.service.BoardService;
@@ -35,8 +36,8 @@ public class BoardController {
     }
 
     @GetMapping(value = "/list")
-    public ResponseEntity<List<BoardVO>> getList() {
-        return new ResponseEntity<>(service.getList(), HttpStatus.OK);
+    public ResponseEntity<List<BoardVO>> getList(@RequestBody BoardCriteria cri) {
+        return new ResponseEntity<>(service.getListWithPaging(cri), HttpStatus.OK);
     }
 
 

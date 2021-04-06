@@ -1,5 +1,6 @@
 package com.swime.Service;
 
+import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 import com.swime.service.BoardService;
 import lombok.Setter;
@@ -47,7 +48,7 @@ public class BoardServiceTests {
 
     @Test
     public void testGetList(){
-        service.getList().forEach(board -> log.info(board));
+        service.getListWithPaging(new BoardCriteria(1,10)).forEach(board -> log.info(board));
     }
 
     @Test
