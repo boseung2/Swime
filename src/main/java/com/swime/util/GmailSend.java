@@ -31,13 +31,13 @@ public class GmailSend {
             message.setFrom(new InternetAddress(user));
 
             //수신자메일주소
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("ktko@naver.com"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress("tht1234551@naver.com"));
 
             // Subject
-            message.setSubject("제목을 입력하세요"); //메일 제목을 입력
+            message.setSubject("제목 테스트중입니다"); //메일 제목을 입력
 
             // Text
-            message.setText("내용을 입력하세요");    //메일 내용을 입력
+            message.setText("내용 테스트중입니다");    //메일 내용을 입력
 
             // send the message
             Transport.send(message); ////전송
