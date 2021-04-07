@@ -10,8 +10,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Log4j
 @Service
@@ -30,6 +29,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean register(MemberVO vo) {
+//        mapper.registerHistory();
         return mapper.insert(vo) == 1;
     }
 
@@ -55,30 +55,56 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public boolean registerHistory(MemberVO vo, String updUserId, String description) {
-        return false;
+    public boolean registerHistory(MemberVO vo) {
+        MemberHistoryVO hvo = new MemberHistoryVO();
+        hvo.setUpdMtr("register");
+        hvo.setBefVal("");
+        hvo.setAftVal("");
+        return mapper.registerHistory(hvo) == 1;
     }
 
-    void change(MemberHistoryVO vo, String mtr, Object o1, Object o2){
-        String s1 = "", s2 = "";
 
-        if(o1 instanceof String && o2 instanceof String){
-            s1 = (String)o1;
-            s2 = (String)o2;
-        }
 
-        if(o1 instanceof Date && o2 instanceof Date){
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
-            s1 = simpleDateFormat.format(o1);
-            s2 = simpleDateFormat.format(o2);
-        }
+    @Override
+    public boolean registerHistory(MemberVO afterData, MemberHistoryVO hvo) { //변경하려는 데이터가 들어와야함
 
-        if(!s1.equals(s2)){
-            vo.setBefVal(s1);
-            vo.setAftVal(s2);
-            vo.setUpdMtr(mtr);
-//            memberHistoryMapper.insert(vo);
-        }
+//        // 1. memberVO로 바뀐데이터를 받아온다.
+//        파라미터 afterData
 
+//        // 2. 원래 데이터 read한다.
+        MemberVO beforeData = mapper.read(afterData.getId());
+
+//        // 3. 두개를 비교한다.
+        Map diff = compare(beforeData, afterData);
+
+        // 4. 다른부분들을 history테이블에 insert한다.
+        diff.forEach((k,v) -> {
+            hvo.setUpdMtr((String) k);
+            hvo.setBefVal(((String[])v)[0]);
+            hvo.setAftVal(((String[])v)[1]);
+            mapper.registerHistory(hvo);
+//            if(mapper.registerHistory(hvo) == 1) return false;
+        });
+
+        return true;
     }
+
+    public Map compare(MemberVO vo1, MemberVO vo2){
+        String[] mtr = {"name", "password", "birth", "status", "picture", "emailAuth"};
+        String[] beforeVal = makeList(vo1);
+        String[] afterVal = makeList(vo2);
+        Map<String, String[]> compareResult = new HashMap<>();
+        for (int i = 0; i < mtr.length; i++)
+            if((beforeVal[i] != null && afterVal[i] != null) && !beforeVal[i].equals(afterVal[i]))
+                compareResult.put(mtr[i], new String[]{beforeVal[i], afterVal[i]});
+        return compareResult;
+    }
+
+    String[] makeList(MemberVO vo){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
+        String[] list = new String[]{vo.getName(), vo.getPassword(), vo.getBirth(), vo.getStatus(), vo.getPicture(), ""};
+        if(vo.getEmailAuth() != null) list[5] = simpleDateFormat.format(vo.getEmailAuth());
+        return list;
+    }
+
 }

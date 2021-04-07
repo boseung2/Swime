@@ -10,8 +10,8 @@ public class MemberVO {
     private String id;
     private String password;
     private String name;
-    private String picture;
-    private String birth;
+    private String picture = "";
+    private String birth = "";
     private String regPath;
     private Date lastLoginDate;
     private Date emailAuth;
