@@ -23,7 +23,6 @@ public class StudyVO {
     private String placeId;
     private String expense;
     private int capacity;
-    private int participants;
     private String status;
     private Date regDate;
     private Date updDate;

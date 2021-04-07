@@ -45,7 +45,6 @@ public class StudyServiceTests {
         study.setPlaceId("구글 place id");
         study.setExpense("5000원");
         study.setCapacity(20);
-        study.setParticipants(0);
         study.setStatus("STST01");
 
         service.register(study);

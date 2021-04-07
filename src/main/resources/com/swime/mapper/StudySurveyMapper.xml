@@ -4,33 +4,21 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.StudySurveyMapper">
 
-    <select id="getList" resultType="com.swime.domain.StudyListVO">
-        select sl.sn, sl.std_sn, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
-        from tstd_list sl, tuser u, tgrp_list gl
-        where sl.user_id = u.id and u.id = gl.user_id
-    </select>
-
-    <select id="getListWithPaging" resultType="com.swime.domain.StudyListVO">
-    <![CDATA[
-        select *
-        from (
-                 select rownum rn, sl.sn, sl.std_sn, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
-                 from tstd_list sl, tuser u, tgrp_list gl
-                 where sl.user_id = u.id and u.id = gl.user_id and rownum <= #{pageNum} * #{amount}
-             )
-        where rn > (#{pageNum} - 1) * #{amount}
-        ]]>
+    <select id="getList" resultType="com.swime.domain.StudySurveyVO">
+        select sn, std_sn, question_sn, question
+        from tstd_survey
+        where std_sn = #{stdSn}
     </select>
 
     <insert id="insert">
-        insert into tstd_list (sn, std_sn, user_id, status, reg_date)
-        values(seq_std_list.nextval, #{stdSn}, #{userId}, #{status}, current_date)
+        insert into tstd_survey (sn, std_sn, question_sn, question)
+        values(seq_std_survey.nextval, #{stdSn}, #{questionSn}, #{question})
     </insert>
 
-    <update id="update">
-        update tstd_list
-        set status = #{status}
-        where std_sn = #{stdSn} and user_id = #{userId}
-    </update>
+    <delete id="delete">
+        delete
+        from tstd_survey
+        where std_sn = #{stdSn}
+    </delete>
 
 </mapper>
