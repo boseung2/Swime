@@ -109,10 +109,22 @@ public class BoardMapperTests {
     }
 
     @Test
-    public void testGetBoardCnt(){
+    public void testUpdateContent(){
+        BoardVO board = new BoardVO();
 
-        int boardCnt = mapper.getBoardCnt(3L);
+        board.setSn(42L);
+        board.setContent("UpdateContentTest: ....");
 
-        log.info("boardCnt" + boardCnt);
+        int count = mapper.updateContent(board);
+
+        log.info(count);
     }
+
+//    @Test
+//    public void testGetBoardCnt(){
+//
+//        int boardCnt = mapper.getBoardCnt(3L);
+//
+//        log.info("boardCnt" + boardCnt);
+//    }
 }

@@ -54,7 +54,7 @@ public class BoardLikeMapperTests {
     @Test
     public void testGetBoardLikeCnt(){
 
-        int board = mapper.getBoardLikeCnt(1L);
+        int board = mapper.getBoardLikeCnt(3L);
 
         log.info(board);
     }

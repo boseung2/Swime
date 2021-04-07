@@ -147,8 +147,15 @@
         where sn = #{sn}
     </update>
 
-    <select id="getBoardCnt" resultType="int">
-        select like_cnt from tbrd where sn = #{sn}
-    </select>
+    <update id="updateContent">
+        update tbrd_det
+        set content = #{content}
+        where brd_sn = #{sn}
+    </update>
+
+<!--    <select id="getBoardCnt" resultType="int">-->
+<!--        select like_cnt from tbrd where sn = #{sn}-->
+<!--    </select>-->
+
 
 </mapper>
