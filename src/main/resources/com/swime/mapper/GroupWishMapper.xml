@@ -28,7 +28,7 @@
 
     <delete id="delete">
         delete from TGRP_WISH
-        where user_id = #{id}
+        where user_id = #{id} and GRP_SN = #{grpSn}
     </delete>
 
     <select id="getList" resultType="com.swime.domain.GroupWishVO">
