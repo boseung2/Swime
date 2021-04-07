@@ -46,4 +46,9 @@ public class StudyListMapperTests {
     public void testUpdate() {
         log.info("UPDATE COUNT : " + mapper.update(82L, "aaa@naver.com", "STST04"));
     }
+
+    @Test
+    public void testCount() {
+        log.info("ATTEND COUNT : " + mapper.count(82L));
+    }
 }

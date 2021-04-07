@@ -106,5 +106,10 @@ public class StudyServiceImpl implements StudyService{
         return listMapper.update(stdSn, userId, status);
     }
 
+    @Override
+    public int count(long stdSn) {
+        return listMapper.count(stdSn);
+    }
+
 
 }

@@ -36,4 +36,6 @@ public interface StudyService {
     public int registerAttend(StudyListVO list);
 
     public int modifyAttend(long stdSn, String userId, String status);
+
+    public int count(long stdSn);
 }

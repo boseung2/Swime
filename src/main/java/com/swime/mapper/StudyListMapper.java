@@ -15,4 +15,6 @@ public interface StudyListMapper {
 
     public int update(@Param("stdSn") long stdSn, @Param("userId") String userId, @Param("status") String status);
 
+    // 참여인원 세기
+    public int count(long stdSn);
 }

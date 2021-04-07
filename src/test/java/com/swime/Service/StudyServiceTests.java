@@ -119,4 +119,9 @@ public class StudyServiceTests {
     public void testModifyAttend() {
         log.info("UPDATE COUNT : " + service.modifyAttend(82L, "aaa@naver.com", "STST04"));
     }
+
+    @Test
+    public void testCount() {
+        log.info("ATTEND COUNT : " + service.count(82L));
+    }
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.swime.mapper.StudyListMapper">
+<mapper namespace="com.swime.mapper.StudySurveyMapper">
 
     <select id="getList" resultType="com.swime.domain.StudyListVO">
         select sl.sn, sl.std_sn, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
@@ -32,11 +32,5 @@
         set status = #{status}
         where std_sn = #{stdSn} and user_id = #{userId}
     </update>
-
-    <select id="count" resultType="int">
-        select count(*)
-        from tstd_list
-        where std_sn = #{stdSn} and status='STUS01'
-    </select>
 
 </mapper>
