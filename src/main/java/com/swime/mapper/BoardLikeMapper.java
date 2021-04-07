@@ -15,6 +15,7 @@ public interface BoardLikeMapper {
     public int delete(@Param("brdSn")Long brdSn,
                       @Param("userId")String userId);
 
-    //public BoardLikeVO read(Long sn);
+    //게시판 좋아요 번호를 센다.
+    public int getBoardLikeCnt(Long brdSn);
 
 }

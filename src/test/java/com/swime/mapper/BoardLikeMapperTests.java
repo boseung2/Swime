@@ -50,4 +50,12 @@ public class BoardLikeMapperTests {
         log.info("DELETE COUNT: " +
                 mapper.delete(1L,"toytoy@naver.com"));
     }
+
+    @Test
+    public void testGetBoardLikeCnt(){
+
+        int board = mapper.getBoardLikeCnt(1L);
+
+        log.info(board);
+    }
 }

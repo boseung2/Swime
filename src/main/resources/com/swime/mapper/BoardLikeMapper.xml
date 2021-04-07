@@ -17,5 +17,9 @@
                                     user_id = #{userId}
     </delete>
 
+    <select id="getBoardLikeCnt" resultType="int">
+        select count(brd_sn) from tbrd_like where brd_sn = #{brdSn}
+    </select>
+
 
 </mapper>
