@@ -1,9 +1,6 @@
 package com.swime.service;
 
-import com.swime.domain.StudyCriteria;
-import com.swime.domain.StudyListVO;
-import com.swime.domain.StudyVO;
-import com.swime.domain.WishStudyVO;
+import com.swime.domain.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -38,4 +35,11 @@ public interface StudyService {
     public int modifyAttend(long stdSn, String userId, String status);
 
     public int count(long stdSn);
+
+    //StudySurvey
+    public List<StudySurveyVO> getSurveyList(long stdSn);
+
+    public int registerSurvey(StudySurveyVO survey);
+
+    public int removeSurvey(long stdSn);
 }

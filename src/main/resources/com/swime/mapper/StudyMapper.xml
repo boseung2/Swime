@@ -80,7 +80,7 @@
                           select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
                                ,w.reg_date wish_reg
                           from tstd s, tstd_wish w
-                          where s.sn = w.std_sn and s.status in ('STST01', 'STST03') and w.user_id = #{userId} --'jiho@naver.com'
+                          where s.sn = w.std_sn and s.status in ('STST01', 'STST03') and w.user_id = #{userId}
                           order by w.reg_date desc
                       )
                  where rownum <= #{pageNum} * #{amount}

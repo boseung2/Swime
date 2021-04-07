@@ -1,11 +1,9 @@
 package com.swime.service;
 
-import com.swime.domain.StudyCriteria;
-import com.swime.domain.StudyListVO;
-import com.swime.domain.StudyVO;
-import com.swime.domain.WishStudyVO;
+import com.swime.domain.*;
 import com.swime.mapper.StudyListMapper;
 import com.swime.mapper.StudyMapper;
+import com.swime.mapper.StudySurveyMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,9 @@ public class StudyServiceImpl implements StudyService{
 
     @Setter(onMethod_ = @Autowired)
     private StudyListMapper listMapper;
+
+    @Setter(onMethod_ = @Autowired)
+    private StudySurveyMapper surveyMapper;
 
     @Override
     public int register(StudyVO study) {
@@ -70,6 +71,7 @@ public class StudyServiceImpl implements StudyService{
         return mapper.getListWithPaging(cri);
     }
 
+    //WishStudy
     @Override
     public List<StudyVO> getWishList(StudyCriteria cri) {
         return mapper.getWishListWithPaging(cri);
@@ -109,6 +111,22 @@ public class StudyServiceImpl implements StudyService{
     @Override
     public int count(long stdSn) {
         return listMapper.count(stdSn);
+    }
+
+    //StudySurvey
+    @Override
+    public List<StudySurveyVO> getSurveyList(long stdSn) {
+        return surveyMapper.getList(stdSn);
+    }
+
+    @Override
+    public int registerSurvey(StudySurveyVO survey) {
+        return surveyMapper.insert(survey);
+    }
+
+    @Override
+    public int removeSurvey(long stdSn) {
+        return surveyMapper.delete(stdSn);
     }
 
 

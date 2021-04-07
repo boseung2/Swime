@@ -1,9 +1,6 @@
 package com.swime.Service;
 
-import com.swime.domain.StudyCriteria;
-import com.swime.domain.StudyListVO;
-import com.swime.domain.StudyVO;
-import com.swime.domain.WishStudyVO;
+import com.swime.domain.*;
 import com.swime.service.StudyService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -88,6 +85,18 @@ public class StudyServiceTests {
         log.info("DELETE COUNT: " + service.remove(61L));
     }
 
+
+    // WishStudy
+    @Test
+    public void testGetWishList() {
+        StudyCriteria cri = new StudyCriteria();
+        cri.setPageNum(1);
+        cri.setAmount(3);
+        cri.setUserId("asdf@naver.com");
+
+        service.getWishList(cri).forEach(wish -> log.info(wish));
+    }
+
     @Test
     public void testWish() {
         WishStudyVO wish = new WishStudyVO();
@@ -103,6 +112,20 @@ public class StudyServiceTests {
     }
 
     //StudyList
+
+    @Test
+    public void testGetAttendList() {
+        service.getAttendList().forEach(list -> log.info(list));
+    }
+
+    @Test
+    public void testGetAttendListWithPaging() {
+        StudyCriteria cri = new StudyCriteria();
+        cri.setPageNum(1);
+        cri.setAmount(3);
+
+        service.getAttendList(cri).forEach(list -> log.info(list));
+    }
 
     @Test
     public void testRegisterAttend() {
@@ -122,5 +145,26 @@ public class StudyServiceTests {
     @Test
     public void testCount() {
         log.info("ATTEND COUNT : " + service.count(82L));
+    }
+
+    //StudySurvey
+    @Test
+    public void testGetSurveyList() {
+        service.getSurveyList(82L).forEach(survey -> log.info(survey));
+    }
+
+    @Test
+    public void testRegisterSurvey() {
+        StudySurveyVO survey = new StudySurveyVO();
+        survey.setStdSn(84);
+        survey.setQuestionSn(1);
+        survey.setQuestion("각오한마디 부탁드립니다.");
+
+        log.info("INSERT COUNT : " + service.registerSurvey(survey));
+    }
+
+    @Test
+    public void testRemoveSurvey() {
+        log.info("DELETE COUNT : " + service.removeSurvey(84L));
     }
 }
