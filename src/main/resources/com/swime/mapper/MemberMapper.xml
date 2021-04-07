@@ -53,5 +53,10 @@
         where email = #{email}
         order by sn desc
     </select>
+
+    <insert id="insertKey">
+        insert into tuser_auth(id, key)
+        values(#{id}, #{key})
+    </insert>
     
 </mapper>

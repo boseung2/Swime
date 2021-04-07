@@ -74,4 +74,12 @@ public class UserCotroller {
         return service.getlist();
     }
 
+    @GetMapping("/auth")
+    public ResponseEntity<String> auth(){
+//        return service.remove(id, hvo) ?
+//                new ResponseEntity<>("Remove Success", HttpStatus.OK) :
+//                new ResponseEntity<>("Remove Fail", HttpStatus.BAD_REQUEST);
+        return null;
+    }
+
 }

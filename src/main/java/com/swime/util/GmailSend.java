@@ -17,7 +17,7 @@ public class GmailSend {
     // SMTP 서버 정보를 설정한다.
     Properties prop;
 
-    boolean sendAuthMail(MailVO vo) {
+    public boolean sendAuthMail(MailVO vo) {
         prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", 465);
