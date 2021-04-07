@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface GroupWishMapper {
 
-    List<GroupWishVO> getList();
+    List<GroupWishVO> readByGroupSn(long grpSn);
 
-    GroupWishVO read(String id);
+    List<GroupWishVO> readByid(String id);
 
     int insert(GroupWishVO vo);
 
