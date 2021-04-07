@@ -10,10 +10,10 @@ public interface GroupWishMapper {
 
     List<GroupWishVO> getList();
 
+    GroupWishVO read(String id);
+
     int insert(GroupWishVO vo);
 
-    int insertSelectKey(GroupWishVO vo);
-
-    int update(GroupWishVO vo);
+    int delete(String id);
 
 }

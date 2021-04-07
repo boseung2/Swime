@@ -34,4 +34,14 @@ public class GroupWishMapperTests {
         Assert.assertEquals(mapper.insert(vo), 1);
     }
 
+    @Test
+    public void delete(){
+        int random = ((int)Math.random() * 10) + 1;
+        GroupWishVO vo = new GroupWishVO();
+        vo.setGrpSn((long)random);
+        vo.setUserId(random + "rla123@naver.com");
+        Assert.assertEquals(mapper.insert(vo), 1);
+        Assert.assertEquals(mapper.delete(random + "rla123@naver.com"),1);
+    }
+
 }
