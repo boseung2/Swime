@@ -31,6 +31,18 @@ public class BoardLikeMapperTests {
         log.info(boardLike);
 
     }
+    @Test
+    public void testInsert2(){
+        BoardLikeVO boardLike = new BoardLikeVO();
+
+        boardLike.setBrdSn(3L);
+        boardLike.setUserId("to13@naver.com");
+
+        mapper.insert(boardLike);
+
+        log.info(boardLike);
+
+    }
 
     @Test
     public void testDelete(){

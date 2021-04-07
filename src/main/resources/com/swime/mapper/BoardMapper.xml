@@ -139,7 +139,6 @@
     <update id="update">
         update tbrdset
             user_id = #{userId},
-            --user_name = #{userName},
             title = #{title},
             like_cnt = #{likeCnt},
             top_fix = #{topFix},
@@ -147,5 +146,9 @@
             upd_date = current_date
         where sn = #{sn}
     </update>
+
+    <select id="getBoardCnt" resultType="int">
+        select like_cnt from tbrd where sn = #{sn}
+    </select>
 
 </mapper>

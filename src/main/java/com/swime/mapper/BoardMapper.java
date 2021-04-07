@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.BoardLikeVO;
 import com.swime.domain.BoardVO;
 
 import java.util.List;
@@ -20,5 +21,11 @@ public interface BoardMapper {
     public int delete(Long sn);
 
     public int update(BoardVO board);
+
+    //게시판 좋아요 개수를 센다.
+    public int getBoardCnt(Long sn);
+
+
+
 
 }

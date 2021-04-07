@@ -3,6 +3,7 @@ package com.swime.domain;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class BoardVO {
@@ -18,4 +19,7 @@ public class BoardVO {
     private String status;
     private Date regDate;
     private Date updDate;
+
+    //게시글 등록 시 첨부까지 처리할 수 있게 BoardAtchVO추가
+    private List<BoardAttachVO> attachList;
 }

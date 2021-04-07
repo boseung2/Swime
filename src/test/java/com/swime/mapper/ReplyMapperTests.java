@@ -31,10 +31,10 @@ public class ReplyMapperTests {
 
         ReplyVO vo = new ReplyVO();
 
-        vo.setBrdSn(3L);
+        vo.setBrdSn(2L);
         vo.setUserId("toywar94@naver.com");
-        vo.setUserName("이민재");
-        vo.setContent("배열 설명 해주세요");
+        //vo.setUserName("이민재");
+        vo.setContent("AOP 설명 해주세요");
         vo.setStatus("RPST01");
 
         mapper.insert(vo);
@@ -81,5 +81,14 @@ public class ReplyMapperTests {
 
         int count = mapper.update(vo);
         log.info("COUNT: " + count);
+    }
+
+    @Test
+    public void testGetBoardCnt(){
+
+        int replyCnt = mapper.getReplyCnt(1L);
+
+        log.info("replyCnt: " + replyCnt);
+
     }
 }

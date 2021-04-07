@@ -9,13 +9,12 @@ import java.util.List;
 
 public interface BoardLikeMapper {
 
+    // 좋아요 누를 시 유저 등록
     public int insert(BoardLikeVO board);
-
-    //public int insertSelectKey(BoardLikeVO board);
-
-    //public BoardLikeVO read(Long sn);
-
+    // 좋아요 취소 시 유저 삭제
     public int delete(@Param("brdSn")Long brdSn,
                       @Param("userId")String userId);
+
+    //public BoardLikeVO read(Long sn);
 
 }

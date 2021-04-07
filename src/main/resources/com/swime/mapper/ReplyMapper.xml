@@ -5,8 +5,14 @@
 <mapper namespace="com.swime.mapper.ReplyMapper">
 
     <insert id="insert">
-        insert into trpl(sn, brd_sn, user_id, user_name, content, status)
-        values(seq_trpl.nextval, #{brdSn}, #{userId}, #{userName}, #{content}, #{status})
+        insert into trpl
+            (sn,
+             brd_sn,
+             user_id,
+             --user_name,
+             content,
+             status)
+        values(seq_trpl.nextval, #{brdSn}, #{userId}, #{content}, #{status})
     </insert>
 
     <select id="read" resultType="com.swime.domain.ReplyVO">
@@ -19,13 +25,19 @@
 
     <update id="update">
         update trpl
-        set user_id = #{userId},
-        user_name = #{userName},
-        content = #{content},
-        cnt = #{cnt},
-        status = #{status},
-        upd_date = current_date
+        set
+            user_id = #{userId},
+            content = #{content},
+            cnt = #{cnt},
+            status = #{status},
+            upd_date = current_date
         where sn = #{sn}
     </update>
+
+
+
+    <select id="getReplyCnt" resultType="int">
+        select count(cnt) from trpl where brd_sn = #{brd_sn}
+    </select>
 
 </mapper>
