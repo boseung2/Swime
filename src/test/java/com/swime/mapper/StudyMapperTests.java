@@ -2,6 +2,7 @@ package com.swime.mapper;
 
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyVO;
+import com.swime.domain.WishStudyVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class StudyMapperTests {
     @Test
     public void testGetListWithPaging() {
         StudyCriteria cri = new StudyCriteria();
-        cri.setPageNum(3);
+        cri.setPageNum(1);
         cri.setAmount(3);
 
         List<StudyVO> list = mapper.getListWithPaging(cri);
@@ -40,6 +41,7 @@ public class StudyMapperTests {
     public void testInsert() {
         StudyVO study = new StudyVO();
         study.setGrpSn(7);
+        study.setRepresentation("jiho@gmail.com");
         study.setName("스터디 만들기 테스트");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-06");
@@ -65,6 +67,7 @@ public class StudyMapperTests {
     public void testInsertSelectKey() {
         StudyVO study = new StudyVO();
         study.setGrpSn(7);
+        study.setRepresentation("jiho@gmail.com");
         study.setName("스터디 만들기 테스트2");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-06");
@@ -124,5 +127,21 @@ public class StudyMapperTests {
         StudyCriteria cri = new StudyCriteria(1, 3, "jiho@naver.com");
 
         mapper.getWishListWithPaging(cri).forEach(study -> log.info(study));
+    }
+
+    @Test
+    public void testInsertWishStudy() {
+        WishStudyVO wish = new WishStudyVO();
+        wish.setStdSn(82L);
+        wish.setUserId("jiho@naver.com");
+
+        mapper.insertWishStudy(wish);
+
+        log.info(wish);
+    }
+
+    @Test
+    public void testDeleteWishStudy() {
+        mapper.deleteWishStudy(82L, "jiho@naver.com");
     }
 }

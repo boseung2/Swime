@@ -87,7 +87,6 @@ public class StudyController {
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    //
     @GetMapping(value="/wishList/{userId}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StudyVO>> getWishListwithPaging(
             @PathVariable("userId") String userId,

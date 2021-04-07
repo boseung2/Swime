@@ -2,6 +2,7 @@ package com.swime.service;
 
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyVO;
+import com.swime.domain.WishStudyVO;
 import com.swime.mapper.StudyMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -68,4 +69,16 @@ public class StudyServiceImpl implements StudyService{
     public List<StudyVO> getWishList(StudyCriteria cri) {
         return mapper.getWishListWithPaging(cri);
     }
+
+    @Override
+    public int wish(WishStudyVO wish) {
+        return mapper.insertWishStudy(wish);
+    }
+
+    @Override
+    public int cancelWish(Long stdSn, String userId) {
+        return mapper.deleteWishStudy(stdSn, userId);
+    }
+
+
 }

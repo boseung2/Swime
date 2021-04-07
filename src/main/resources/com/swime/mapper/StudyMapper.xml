@@ -4,30 +4,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.StudyMapper">
 
-    <select id="getList" parameterType="com.swime.domain.StudyVO" resultType="com.swime.domain.StudyVO">
+    <select id="getList" resultType="com.swime.domain.StudyVO">
     <![CDATA[
-        select *
-        from tstd
-        where sn > 0 and (status = 'STST01' or status = 'STST03')
+         select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.participants, s.status, s.reg_date, s.upd_date
+         from tstd s, tuser u
+         where s.representation = u.id and s.status in ('STST01', 'STST03')
         ]]>
     </select>
 
-    <select id="getListWithPaging" parameterType="com.swime.domain.StudyVO" resultType="com.swime.domain.StudyVO">
+    <select id="getListWithPaging" resultType="com.swime.domain.StudyVO">
     <![CDATA[
         select *
         from (
-             select /*+ index_desc(tstd pk_tstd)*/
-                rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date
-             from tstd
-             where sn > 0 and (status = 'STST01' or status = 'STST03') and rownum <= #{pageNum} * #{amount}
+                 select /*+ index_desc(tstd pk_tstd)*/
+                     rownum rn, s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.participants, s.status, s.reg_date, s.upd_date
+                 from tstd s, tuser u
+                 where s.representation = u.id and s.status in ('STST01', 'STST03') and rownum <= #{pageNum} * #{amount}
              )
         where rn > (#{pageNum} - 1) * #{amount}
     ]]>
     </select>
 
     <insert id="insert">
-        insert into tstd (sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date)
-        values(seq_std.nextval, #{grpSn}, #{name}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, #{participants}, #{status}, current_date, current_date)
+        insert into tstd (sn, grp_sn, representation, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date)
+        values(seq_std.nextval, #{grpSn}, #{representation}, #{name}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, #{participants}, #{status}, current_date, current_date)
     </insert>
 
     <insert id="insertSelectKey">
@@ -35,14 +35,14 @@
             select seq_std.nextval from dual
         </selectKey>
 
-        insert into tstd (sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date)
-        values(#{sn}, #{grpSn}, #{name}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, #{participants}, #{status}, current_date, current_date)
+        insert into tstd (sn, grp_sn, representation, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date)
+        values(#{sn}, #{grpSn}, #{representation}, #{name}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, #{participants}, #{status}, current_date, current_date)
     </insert>
 
-    <select id="read" parameterType="com.swime.domain.StudyVO" resultType="com.swime.domain.StudyVO">
-        select *
-        from tstd
-        where sn = #{sn}
+    <select id="read" resultType="com.swime.domain.StudyVO">
+        select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.participants, s.status, s.reg_date, s.upd_date
+        from tstd s, tuser u
+        where s.representation = u.id and s.status in ('STST01', 'STST03') and s.sn = #{sn}
     </select>
 
     <update id="update">
@@ -75,7 +75,7 @@
     <![CDATA[
         select *
         from (
-                 select rownum rn, sn, grp_sn, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date
+                 select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, participants, status, reg_date, upd_date
                  from (
                           select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.participants, s.status, s.reg_date, s.upd_date
                                ,w.reg_date wish_reg
@@ -89,5 +89,14 @@
         ]]>
     </select>
 
+    <insert id="insertWishStudy">
+        insert into tstd_wish (sn, std_sn, user_id, reg_date)
+        values(seq_std_wish.nextVal, #{stdSn}, #{userId}, current_date)
+    </insert>
+
+    <delete id="deleteWishStudy">
+        delete from tstd_wish
+        where std_sn = #{stdSn} and user_id = #{userId}
+    </delete>
 
 </mapper>

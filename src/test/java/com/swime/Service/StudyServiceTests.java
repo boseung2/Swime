@@ -2,6 +2,7 @@ package com.swime.Service;
 
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyVO;
+import com.swime.domain.WishStudyVO;
 import com.swime.service.StudyService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -85,5 +86,19 @@ public class StudyServiceTests {
     @Test
     public void testRemove() {
         log.info("DELETE COUNT: " + service.remove(61L));
+    }
+
+    @Test
+    public void testWish() {
+        WishStudyVO wish = new WishStudyVO();
+        wish.setStdSn(82L);
+        wish.setUserId("aaa@naver.com");
+
+        log.info("INSERT COUNT : " + service.wish(wish));
+    }
+
+    @Test
+    public void testCancelWish() {
+        log.info("DELETE COUNT : " + service.cancelWish(82L, "aaa@naver.com"));
     }
 }

@@ -8,6 +8,8 @@ import java.util.Date;
 public class StudyVO {
     private long sn;
     private long grpSn;
+    private String representation;
+    private String representationName;
     private String name;
     private String startDate;
     private String endDate;
