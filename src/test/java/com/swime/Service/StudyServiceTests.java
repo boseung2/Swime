@@ -143,8 +143,8 @@ public class StudyServiceTests {
     }
 
     @Test
-    public void testCount() {
-        log.info("ATTEND COUNT : " + service.count(82L));
+    public void testAttendCount() {
+        log.info("ATTEND COUNT : " + service.AttendCount(82L));
     }
 
     //StudySurvey
@@ -166,5 +166,27 @@ public class StudyServiceTests {
     @Test
     public void testRemoveSurvey() {
         log.info("DELETE COUNT : " + service.removeSurvey(84L));
+    }
+
+    @Test
+    public void testGetAnswer() {
+        service.getAnswer(82L, "aaa@naver.com").forEach(answer -> log.info(answer));
+    }
+
+    @Test
+    public void testRegisterAnswer() {
+        StudyAnswerVO answer = new StudyAnswerVO();
+        answer.setStdSn(84L);
+        answer.setUserId("ffff@naver.com");
+        answer.setQuestionSn(1);
+        answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
+        answer.setAnswer("네. 괜찮습니다.");
+
+        service.registerAnswer(answer);
+    }
+
+    @Test
+    public void testRemoveAnswer() {
+        log.info("DELETE COUNT : " + service.removeAnswer(84L, "ffff@naver.com"));
     }
 }

@@ -34,7 +34,7 @@ public interface StudyService {
 
     public int modifyAttend(long stdSn, String userId, String status);
 
-    public int count(long stdSn);
+    public int AttendCount(long stdSn);
 
     //StudySurvey
     public List<StudySurveyVO> getSurveyList(long stdSn);
@@ -42,4 +42,11 @@ public interface StudyService {
     public int registerSurvey(StudySurveyVO survey);
 
     public int removeSurvey(long stdSn);
+
+    //StudyAnswer
+    public List<StudyAnswerVO> getAnswer(long stdSn, String userId);
+
+    public int registerAnswer(StudyAnswerVO answer);
+
+    public int removeAnswer(long stdSn, String userId);
 }

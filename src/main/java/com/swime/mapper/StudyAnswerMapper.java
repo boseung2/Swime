@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface StudyAnswerMapper {
+
     public List<StudyAnswerVO> get(@Param("stdSn") long stdSn, @Param("userId") String userId);
 
     public int insert(StudyAnswerVO answer);

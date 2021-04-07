@@ -1,6 +1,7 @@
 package com.swime.service;
 
 import com.swime.domain.*;
+import com.swime.mapper.StudyAnswerMapper;
 import com.swime.mapper.StudyListMapper;
 import com.swime.mapper.StudyMapper;
 import com.swime.mapper.StudySurveyMapper;
@@ -23,6 +24,9 @@ public class StudyServiceImpl implements StudyService{
 
     @Setter(onMethod_ = @Autowired)
     private StudySurveyMapper surveyMapper;
+
+    @Setter(onMethod_ = @Autowired)
+    private StudyAnswerMapper answerMapper;
 
     @Override
     public int register(StudyVO study) {
@@ -109,7 +113,7 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public int count(long stdSn) {
+    public int AttendCount(long stdSn) {
         return listMapper.count(stdSn);
     }
 
@@ -127,6 +131,21 @@ public class StudyServiceImpl implements StudyService{
     @Override
     public int removeSurvey(long stdSn) {
         return surveyMapper.delete(stdSn);
+    }
+
+    @Override
+    public List<StudyAnswerVO> getAnswer(long stdSn, String userId) {
+        return answerMapper.get(stdSn, userId);
+    }
+
+    @Override
+    public int registerAnswer(StudyAnswerVO answer) {
+        return answerMapper.insert(answer);
+    }
+
+    @Override
+    public int removeAnswer(long stdSn, String userId) {
+        return answerMapper.delete(stdSn, userId);
     }
 
 
