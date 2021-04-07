@@ -57,12 +57,15 @@ public class MemberServiceTests {
 
     @Test
     public void testModify(){
-        MemberVO memberVO = service.get("qwer852@naver.com");
+        MemberVO memberVO = service.get("hong5584@service.com");
         memberVO.setPassword("modifypassword");
         memberVO.setBirth("2010312");
         memberVO.setLastLoginDate(new Date());
         memberVO.setEmailAuth(new Date());
-        Assert.assertTrue(service.modify(memberVO));
+
+        MemberHistoryVO hvo = new MemberHistoryVO();
+
+        Assert.assertTrue(service.modify(memberVO, hvo));
     }
     
     @Test
@@ -74,7 +77,10 @@ public class MemberServiceTests {
         memberVO.setName("삭제테스트" + random);
         memberVO.setPassword("service" + random);
         service.register(memberVO);
-        Assert.assertTrue(service.remove("hong"+ random+"@service.com"));
+        memberVO.setStatus("USST03");
+        MemberHistoryVO hvo = new MemberHistoryVO();
+        hvo.setEmail("hong"+ random+"@service.com");
+        Assert.assertTrue(service.remove("hong"+ random+"@service.com", hvo));
     }
 
     @Test
