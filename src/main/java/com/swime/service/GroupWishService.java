@@ -10,12 +10,12 @@ import java.util.List;
 
 public interface GroupWishService {
 
-    List<GroupWishVO> readByGroupSn(long grpSn);
+    List<GroupWishVO> getByGroupSn(long grpSn);
 
-    List<GroupWishVO> readByid(String id);
+    List<GroupWishVO> getByid(String id);
 
-    boolean insert(GroupWishVO vo);
+    boolean register(GroupWishVO vo);
 
-    boolean delete(@Param("id") String id, @Param("grpSn") long grpSn);
+    boolean remove(@Param("id") String id, @Param("grpSn") long grpSn);
 
 }
