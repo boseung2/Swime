@@ -1,11 +1,15 @@
 package com.swime.util;
 
+import com.swime.domain.MailVO;
+import lombok.extern.log4j.Log4j;
+
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@Log4j
 public class GmailSend {
     private final String user = "studywithmeauth@gmail.com"; // 네이버일 경우 네이버 계정, gmail경우 gmail 계정
     private final String password = "1q2w3e4r5t6Y";   // 패스워드
@@ -13,7 +17,7 @@ public class GmailSend {
     // SMTP 서버 정보를 설정한다.
     Properties prop;
 
-    boolean sendAuthMail() {
+    boolean sendAuthMail(MailVO vo) {
         prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", 465);
@@ -33,26 +37,25 @@ public class GmailSend {
             message.setFrom(new InternetAddress(user));
 
             //수신자메일주소
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress("tht1234551@gmail.com"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(vo.getReceiver()));
 
             // Subject
-            message.setSubject("Swime 아이디 "); //메일 제목을 입력
+            message.setSubject(vo.getSubject());
 
             // Text
-            message.setText("내용 테스트중입니다");    //메일 내용을 입력
+            message.setText(vo.getText());
 
             // send the message
-            Transport.send(message); ////전송
-            System.out.println("message sent successfully...");
+            Transport.send(message);
+            log.info("message sent successfully...");
             return true;
-        } catch (
-        AddressException ae) {
+        } catch (AddressException ae) {
             ae.printStackTrace();
-        } catch (
-        MessagingException me) {
+            return false;
+        } catch (MessagingException me) {
             me.printStackTrace();
+            return false;
         }
-        return false;
     }
 
 

@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
-public class LoginCotroller {
+public class UserCotroller {
 
     @Getter(onMethod_ = @Autowired)
     MemberService service;
