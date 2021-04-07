@@ -108,8 +108,10 @@ public class MemberServiceTests {
         service.registerHistory(after,vo);
     }
 
-
-
-
+    @Test
+    public void getHistList(){
+        List<MemberHistoryVO> list = service.getHistList("qwer7044@naver.com");
+        list.forEach(log::info);
+    }
 
 }
