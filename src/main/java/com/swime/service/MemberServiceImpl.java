@@ -22,24 +22,23 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public MemberVO get(String id) {
-        MemberVO memberVO = mapper.read(id);
-        if(memberVO.getStatus().equals("USST03")) return null;
-        return memberVO;
+        return mapper.read(id);
     }
 
     @Override
     public boolean register(MemberVO vo) {
-//        mapper.registerHistory();
+        registerHistory(vo);
         return mapper.insert(vo) == 1;
     }
 
     @Override
-    public boolean modify(MemberVO vo) {
+    public boolean modify(MemberVO vo, MemberHistoryVO hvo) {
+        registerHistory(vo);
         return mapper.update(vo) == 1;
     }
 
     @Override
-    public boolean remove(String id) {
+    public boolean remove(String id, MemberHistoryVO hvo) {
         return mapper.delete(id) == 1;
     }
 
@@ -51,7 +50,8 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public boolean checkIdPw(MemberVO vo) {
         MemberVO memberVO = mapper.read(vo.getId());
-        return memberVO != null ? memberVO.getPassword().equals(vo.getPassword()) : false;
+        return memberVO != null && !memberVO.getStatus().equals("USST03")
+                ? memberVO.getPassword().equals(vo.getPassword()) : false;
     }
 
     @Override
@@ -64,6 +64,10 @@ public class MemberServiceImpl implements MemberService{
     }
 
 
+    @Override
+    public List<MemberHistoryVO> getHistList(String id) {
+        return mapper.getHistory(id);
+    }
 
     @Override
     public boolean registerHistory(MemberVO afterData, MemberHistoryVO hvo) { //변경하려는 데이터가 들어와야함
@@ -88,6 +92,7 @@ public class MemberServiceImpl implements MemberService{
 
         return true;
     }
+
 
     public Map compare(MemberVO vo1, MemberVO vo2){
         String[] mtr = {"name", "password", "birth", "status", "picture", "emailAuth"};

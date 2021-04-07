@@ -13,9 +13,9 @@ public interface MemberService {
 
     boolean register(MemberVO vo);
 
-    boolean modify(MemberVO vo);
+    boolean modify(MemberVO vo, MemberHistoryVO hvo);
 
-    boolean remove(String id);
+    boolean remove(String id, MemberHistoryVO hvo);
 
     List<MemberVO> getlist();
 
@@ -24,4 +24,6 @@ public interface MemberService {
     boolean registerHistory(MemberVO vo);
 
     boolean registerHistory(MemberVO vo, MemberHistoryVO hvo);
+
+    List<MemberHistoryVO> getHistList(String id);
 }
