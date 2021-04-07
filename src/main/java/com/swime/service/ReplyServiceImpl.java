@@ -1,14 +1,18 @@
 package com.swime.service;
 
+import com.swime.domain.BoardCriteria;
+import com.swime.domain.ReplyPageDTO;
 import com.swime.domain.ReplyVO;
 import com.swime.mapper.ReplyMapper;
-import jdk.nashorn.internal.objects.annotations.Setter;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Log4j
+@AllArgsConstructor
 public class ReplyServiceImpl implements ReplyService{
 
     private ReplyMapper mapper;
@@ -41,6 +45,20 @@ public class ReplyServiceImpl implements ReplyService{
         return mapper.delete(sn);
     }
 
-    //*페이징처리*
-    //public List.....
+    @Override
+    public List<ReplyVO> getList(BoardCriteria cri, Long brd_sn) {
+
+        log.info("get Reply List of Board");
+        return mapper.getListWithPaging(cri, brd_sn);
+    }
+
+    @Override
+    public ReplyPageDTO getListPage(BoardCriteria cri, Long sn) {
+
+        return new ReplyPageDTO(
+                mapper.getCountBySn(sn),
+                mapper.getListWithPaging(cri,sn)
+        );
+    }
+
 }

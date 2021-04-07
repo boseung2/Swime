@@ -9,10 +9,10 @@
             (sn,
              brd_sn,
              user_id,
-             --user_name,
              content,
              status)
-        values(seq_trpl.nextval, #{brdSn}, #{userId}, #{content}, #{status})
+        values
+               (seq_trpl.nextval, #{brdSn}, #{userId}, #{content}, #{status})
     </insert>
 
     <select id="read" resultType="com.swime.domain.ReplyVO">
@@ -34,9 +34,26 @@
         where sn = #{sn}
     </update>
 
+    <select id="getListWithPaging" resultType="com.swime.domain.ReplyVO">
+        <![CDATA[
+        select sn, brd_sn, user_id, content, cnt, status, reg_date, upd_date
+        from
+            (
+                select /*+INDEX(trpl idx_reply) */
+                    rownum rn, sn, brd_sn, user_id, content, cnt, status, reg_date, upd_date
+                from trpl
+                where brd_sn = #{brdSn}
+                  and sn > 0
+                  and rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} -1) * #{cri.amount}
+        ]]>
+
+    </select>
 
 
-    <select id="getReplyCnt" resultType="int">
+
+    <select id="getCountBySn" resultType="int">
         select count(cnt) from trpl where brd_sn = #{brd_sn}
     </select>
 

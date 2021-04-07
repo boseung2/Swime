@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 
+import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 import com.swime.domain.ReplyVO;
 import lombok.Setter;
@@ -11,6 +12,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class})
@@ -31,10 +34,9 @@ public class ReplyMapperTests {
 
         ReplyVO vo = new ReplyVO();
 
-        vo.setBrdSn(2L);
+        vo.setBrdSn(4L);
         vo.setUserId("toywar94@naver.com");
-        //vo.setUserName("이민재");
-        vo.setContent("AOP 설명 해주세요");
+        vo.setContent("spring 설명 해주세요");
         vo.setStatus("RPST01");
 
         mapper.insert(vo);
@@ -47,7 +49,7 @@ public class ReplyMapperTests {
 
         //Long targetSn = 1L;
 
-        ReplyVO vo = mapper.read(1L);
+        ReplyVO vo = mapper.read(3L);
 
         log.info(vo);
     }
@@ -63,7 +65,7 @@ public class ReplyMapperTests {
     @Test
     public void testUpdate(){
 
-        Long targetSn = 2L;
+        Long targetSn = 3L;
         ReplyVO vo = mapper.read(targetSn);
         vo.setContent("Update Reply");
 
@@ -84,9 +86,23 @@ public class ReplyMapperTests {
     }
 
     @Test
+    public void testPaging(){
+        BoardCriteria cri = new BoardCriteria(1,1);
+        List<ReplyVO> replies = mapper.getListWithPaging(cri, 2L);
+        replies.forEach(reply -> log.info(reply));
+    }
+
+    @Test
+    public void testPaging2(){
+        BoardCriteria cri = new BoardCriteria(2,10);
+        List<ReplyVO> replies = mapper.getListWithPaging(cri,1L);
+        replies.forEach(reply-> log.info(reply));
+    }
+
+    @Test
     public void testGetBoardCnt(){
 
-        int replyCnt = mapper.getReplyCnt(1L);
+        int replyCnt = mapper.getCountBySn(1L);
 
         log.info("replyCnt: " + replyCnt);
 
