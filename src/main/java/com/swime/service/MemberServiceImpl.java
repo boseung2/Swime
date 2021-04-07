@@ -33,12 +33,15 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean modify(MemberVO vo, MemberHistoryVO hvo) {
-        registerHistory(vo);
+        registerHistory(vo, hvo);
         return mapper.update(vo) == 1;
     }
 
     @Override
     public boolean remove(String id, MemberHistoryVO hvo) {
+        MemberVO vo = mapper.read(id);
+        vo.setStatus("USST03");
+        registerHistory(vo, hvo);
         return mapper.delete(id) == 1;
     }
 
@@ -57,6 +60,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public boolean registerHistory(MemberVO vo) {
         MemberHistoryVO hvo = new MemberHistoryVO();
+        hvo.setEmail(vo.getId());
         hvo.setUpdMtr("register");
         hvo.setBefVal("");
         hvo.setAftVal("");
@@ -100,7 +104,7 @@ public class MemberServiceImpl implements MemberService{
         String[] afterVal = makeList(vo2);
         Map<String, String[]> compareResult = new HashMap<>();
         for (int i = 0; i < mtr.length; i++)
-            if((beforeVal[i] != null && afterVal[i] != null) && !beforeVal[i].equals(afterVal[i]))
+            if((beforeVal[i] != null && afterVal[i] != null) && !(beforeVal[i].equals(afterVal[i])))
                 compareResult.put(mtr[i], new String[]{beforeVal[i], afterVal[i]});
         return compareResult;
     }

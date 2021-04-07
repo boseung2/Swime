@@ -1,5 +1,6 @@
 package com.swime.controller;
 
+import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.MemberMapper;
 import com.swime.service.MemberService;
@@ -49,8 +50,9 @@ public class LoginCotroller {
     }
 
     @PostMapping("/modify")
-    public ResponseEntity<String> modify(@RequestBody MemberVO vo){
-        return service.modify(vo) ?
+    public ResponseEntity<String> modify(@RequestBody MemberVO vo,
+                                         @RequestBody MemberHistoryVO hvo){
+        return service.modify(vo, hvo) ?
                 new ResponseEntity<>("modify Success", HttpStatus.OK) :
                 new ResponseEntity<>("modify Fail", HttpStatus.BAD_REQUEST);
     }
@@ -60,8 +62,9 @@ public class LoginCotroller {
     }
 
     @PostMapping("/remove")
-    public ResponseEntity<String> remove(String id){
-        return service.remove(id) ?
+    public ResponseEntity<String> remove(@RequestBody String id,
+                                         @RequestBody MemberHistoryVO hvo){
+        return service.remove(id, hvo) ?
                 new ResponseEntity<>("Remove Success", HttpStatus.OK) :
                 new ResponseEntity<>("Remove Fail", HttpStatus.BAD_REQUEST);
     }
