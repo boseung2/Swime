@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.StudyListMapper">
+
+    <select id="getList" resultType="com.swime.domain.StudyListVO">
+        select sl.sn, sl.std_sn, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
+        from tstd_list sl, tuser u, tgrp_list gl
+        where sl.user_id = u.id and u.id = gl.user_id
+    </select>
+
+    <select id="getListWithPaging" resultType="com.swime.domain.StudyListVO">
+    <![CDATA[
+        select *
+        from (
+                 select rownum rn, sl.sn, sl.std_sn, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
+                 from tstd_list sl, tuser u, tgrp_list gl
+                 where sl.user_id = u.id and u.id = gl.user_id and rownum <= #{pageNum} * #{amount}
+             )
+        where rn > (#{pageNum} - 1) * #{amount}
+        ]]>
+    </select>
+
+    <insert id="insert">
+        insert into tstd_list (sn, std_sn, user_id, status, reg_date)
+        values(seq_std_list.nextval, #{stdSn}, #{userId}, #{status}, current_date)
+    </insert>
+
+    <update id="update">
+        update tstd_list
+        set status = #{status}
+        where std_sn = #{stdSn} and user_id = #{userId}
+    </update>
+
+</mapper>
