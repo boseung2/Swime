@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface MemberMapper {
 
+    //가입처리
     MemberVO read(String id);
 
     int insert(MemberVO vo);
@@ -19,10 +20,16 @@ public interface MemberMapper {
 
     List<MemberVO> getlist();
 
+    //이력관리
     int registerHistory(MemberHistoryVO vo);
 
     List<MemberHistoryVO> getHistory(String id);
 
-    int insertKey(@Param("id") String id,@Param("key") String key);
+    //인증처리
+    int insertKey(@Param("id") String id, @Param("key") String key);
+
+    String selectKey(@Param("id") String id, @Param("key") String key);
+
+    int deleteKey(String id);
 
 }
