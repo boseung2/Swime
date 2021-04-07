@@ -126,7 +126,20 @@ public class MemberMapperTests {
 
     @Test
     public void insertKey(){
-        mapper.insertKey("junit테스트","sad78ssasd");
+        int random = (int)(Math.random()*10000);
+        Assert.assertEquals(mapper.insertKey("junit테스트" + random, "sad78ssasd" + random), 1);
+    }
+
+    @Test
+    public void selectKey(){
+        Assert.assertNotNull(mapper.selectKey("junit테스트", "sad78ssasd"));
+    }
+
+    @Test
+    public void deleteKey(){
+        int random = (int)(Math.random()*10000);
+        Assert.assertEquals(mapper.insertKey("junit테스트" + random, "sad78ssasd" + random), 1);
+        Assert.assertEquals(mapper.deleteKey("junit테스트" + random), 1);
     }
 
 }
