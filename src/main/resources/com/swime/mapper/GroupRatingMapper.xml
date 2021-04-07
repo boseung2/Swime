@@ -59,7 +59,7 @@
         where grp_sn = #{grp_sn}
     </select>
 
-    <select id="getRatingCountByGrpSn" resultType="int">
+    <select id="getRatingCountByGrpSn" resultType="long">
         select count(*)
         from tgrp_rating
         where grp_sn = #{grpSn}

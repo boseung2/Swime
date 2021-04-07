@@ -14,8 +14,9 @@ public class GroupVO {
     private String picture;
     private String description;
     private String info;
-    private Long headcount;
+    private Long attendCount;
     private Double rating;
+    private Long ratingCount;
     private String sido;
     private String sigungu;
     private String status;

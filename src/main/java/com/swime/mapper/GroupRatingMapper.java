@@ -26,6 +26,6 @@ public interface GroupRatingMapper {
     public double getRatingByGrpSn(Long grpSn);
 
     // 그룹 번호로 해당 그룹 평점 개수를 센다.
-    public int getRatingCountByGrpSn(Long grpSn);
+    public long getRatingCountByGrpSn(Long grpSn);
 
 }

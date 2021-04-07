@@ -23,7 +23,7 @@ public class GroupRatingMapperTests {
     @Test
     public void testInsert() {
         GroupRatingVO groupRating = new GroupRatingVO();
-        groupRating.setGrpSn(5L);
+        groupRating.setGrpSn(100L);
         groupRating.setStdSn(6L);
         groupRating.setUserId("jungbs3726@naver.com");
         groupRating.setRating(4D);
@@ -54,7 +54,7 @@ public class GroupRatingMapperTests {
 
     @Test
     public void testGetList() {
-        mapper.getList(1L).forEach(groupRating -> log.info(groupRating));
+        mapper.getList(5L).forEach(groupRating -> log.info(groupRating));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class GroupRatingMapperTests {
 
     @Test
     public void testGetRatingCountByGrpSn() {
-        int ratingCount = mapper.getRatingCountByGrpSn(1L);
+        long ratingCount = mapper.getRatingCountByGrpSn(1L);
         log.info("ratingCount: " + ratingCount);
     }
 
