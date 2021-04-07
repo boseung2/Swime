@@ -6,6 +6,8 @@ import com.swime.mapper.GroupMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.transaction.AfterTransaction;
+import org.springframework.test.context.transaction.BeforeTransaction;
 
 import java.util.List;
 
@@ -20,14 +22,16 @@ public class GroupServiceImpl implements GroupService{
     public int register(GroupVO group) {
         //모임을 생성한다.
         // 기본정보 세팅 - o
+        groupMapper.insertSelectKey(group);
+        // 모임참여리스트에 모임장을 넣어준다. - controller
+
         // 등록자 id user에서 가져옴
-        return groupMapper.insertSelectKey(group);
+        return 1;
     }
 
     @Override
     public GroupVO get(Long sn) {
         // 해당 모임 모임상세를 불러온다. - o
-        // 해당 모임 참여인원을 불러온다.
         return groupMapper.read(sn);
     }
 
@@ -53,6 +57,4 @@ public class GroupServiceImpl implements GroupService{
         // 모임을 삭제한다.
         return groupMapper.delete(group) == 1;
     }
-
-
 }

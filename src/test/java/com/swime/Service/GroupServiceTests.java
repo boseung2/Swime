@@ -57,13 +57,13 @@ public class GroupServiceTests {
 
     @Test
     public void testModify() {
-        GroupVO group = service.get(102L);
+        GroupVO group = service.get(117L);
 
         if(group == null) {
             return;
         }
 
-        group.setName("모임명만 수정");
+        group.setName("어떻게 수정되는거지?");
         group.setUserId("수정한 유저id");
         log.info("MODIFY RESULT: " + service.modify(group));
     }

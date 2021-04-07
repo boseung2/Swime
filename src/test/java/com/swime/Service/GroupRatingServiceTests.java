@@ -56,4 +56,9 @@ public class GroupRatingServiceTests {
         service.modify(groupRating);
     }
 
+    @Test
+    public void testDelete() {
+        service.delete(7L);
+    }
+
 }
