@@ -124,4 +124,9 @@ public class MemberMapperTests {
         list.forEach(log::info);
     }
 
+    @Test
+    public void insertKey(){
+        mapper.insertKey("junit테스트","sad78ssasd");
+    }
+
 }
