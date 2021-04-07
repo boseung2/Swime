@@ -1,5 +1,6 @@
 package com.swime.Service;
 
+import com.swime.domain.GroupWishVO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.service.GroupWishService;
@@ -33,5 +34,37 @@ public class GroupWishServiceTests {
         assertNotNull(service);
     }
 
+    @Test
+    public void register(){
+        int random = (int)(Math.random() * 10) + 1;
+        GroupWishVO vo = new GroupWishVO();
+        vo.setGrpSn((long)random);
+        vo.setUserId(random + "rla123@naver.com");
+        Assert.assertTrue(service.register(vo));
+    }
 
+    @Test
+    public void delete(){
+        int random = (int)(Math.random() * 10000) + 1;
+        log.info(random);
+        GroupWishVO vo = new GroupWishVO();
+        vo.setGrpSn((long)random);
+        vo.setUserId(random + "rla123@naver.com");
+        Assert.assertTrue(service.register(vo));
+        Assert.assertTrue(service.remove(random + "rla123@naver.com", (long)random));
+    }
+
+    @Test
+    public void readbyid(){
+        List<GroupWishVO> vo = service.getByid("5rla123@naver.com");
+        Assert.assertNotNull(vo);
+        vo.forEach(log::info);
+    }
+
+    @Test
+    public void readbyGroupSn(){
+        List<GroupWishVO> vo = service.getByGroupSn(5L);
+        Assert.assertNotNull(vo);
+        vo.forEach(log::info);
+    }
 }
