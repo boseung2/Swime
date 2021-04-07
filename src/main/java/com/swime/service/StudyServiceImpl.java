@@ -1,8 +1,10 @@
 package com.swime.service;
 
 import com.swime.domain.StudyCriteria;
+import com.swime.domain.StudyListVO;
 import com.swime.domain.StudyVO;
 import com.swime.domain.WishStudyVO;
+import com.swime.mapper.StudyListMapper;
 import com.swime.mapper.StudyMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -17,6 +19,9 @@ public class StudyServiceImpl implements StudyService{
 
     @Setter(onMethod_ = @Autowired)
     private StudyMapper mapper;
+
+    @Setter(onMethod_ = @Autowired)
+    private StudyListMapper listMapper;
 
     @Override
     public int register(StudyVO study) {
@@ -78,6 +83,27 @@ public class StudyServiceImpl implements StudyService{
     @Override
     public int cancelWish(Long stdSn, String userId) {
         return mapper.deleteWishStudy(stdSn, userId);
+    }
+
+    // StudyList
+    @Override
+    public List<StudyListVO> getAttendList() {
+        return listMapper.getList();
+    }
+
+    @Override
+    public List<StudyListVO> getAttendList(StudyCriteria cri) {
+        return listMapper.getListWithPaging(cri);
+    }
+
+    @Override
+    public int registerAttend(StudyListVO list) {
+        return listMapper.insert(list);
+    }
+
+    @Override
+    public int modifyAttend(long stdSn, String userId, String status) {
+        return listMapper.update(stdSn, userId, status);
     }
 
 

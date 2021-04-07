@@ -1,6 +1,7 @@
 package com.swime.Service;
 
 import com.swime.domain.StudyCriteria;
+import com.swime.domain.StudyListVO;
 import com.swime.domain.StudyVO;
 import com.swime.domain.WishStudyVO;
 import com.swime.service.StudyService;
@@ -100,5 +101,22 @@ public class StudyServiceTests {
     @Test
     public void testCancelWish() {
         log.info("DELETE COUNT : " + service.cancelWish(82L, "aaa@naver.com"));
+    }
+
+    //StudyList
+
+    @Test
+    public void testRegisterAttend() {
+        StudyListVO list = new StudyListVO();
+        list.setStdSn(82);
+        list.setUserId("aaa@naver.com");
+        list.setStatus("STST01");
+
+        log.info("INSERT COUNT : " + service.registerAttend(list));
+    }
+
+    @Test
+    public void testModifyAttend() {
+        log.info("UPDATE COUNT : " + service.modifyAttend(82L, "aaa@naver.com", "STST04"));
     }
 }

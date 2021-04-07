@@ -1,6 +1,7 @@
 package com.swime.service;
 
 import com.swime.domain.StudyCriteria;
+import com.swime.domain.StudyListVO;
 import com.swime.domain.StudyVO;
 import com.swime.domain.WishStudyVO;
 import org.apache.ibatis.annotations.Param;
@@ -20,9 +21,19 @@ public interface StudyService {
 
     public List<StudyVO> getList(StudyCriteria cri);
 
+    // WishStudy
     public List<StudyVO> getWishList(StudyCriteria cri);
 
     public int wish(WishStudyVO wish);
 
     public int cancelWish(Long stdSn,String userId);
+
+    // StudyList
+    public List<StudyListVO> getAttendList();
+
+    public List<StudyListVO> getAttendList(StudyCriteria cri);
+
+    public int registerAttend(StudyListVO list);
+
+    public int modifyAttend(long stdSn, String userId, String status);
 }
