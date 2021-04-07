@@ -33,6 +33,5 @@ public class GroupWishServiceTests {
         assertNotNull(service);
     }
 
-    
 
 }

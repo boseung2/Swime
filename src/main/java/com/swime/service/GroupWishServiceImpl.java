@@ -23,22 +23,22 @@ public class GroupWishServiceImpl implements GroupWishService{
 
 
     @Override
-    public List<GroupWishVO> readByGroupSn(long grpSn) {
+    public List<GroupWishVO> getByGroupSn(long grpSn) {
         return mapper.readByGroupSn(grpSn);
     }
 
     @Override
-    public List<GroupWishVO> readByid(String id) {
+    public List<GroupWishVO> getByid(String id) {
         return mapper.readByid(id);
     }
 
     @Override
-    public boolean insert(GroupWishVO vo) {
+    public boolean register(GroupWishVO vo) {
         return mapper.insert(vo) == 1;
     }
 
     @Override
-    public boolean delete(String id, long grpSn) {
+    public boolean remove(String id, long grpSn) {
         return mapper.delete(id, grpSn) == 1;
     }
 }
