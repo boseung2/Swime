@@ -19,10 +19,10 @@
         update TUSER
         set password = #{password},
             name = #{name},
-            picture = NVL(#{picture}, null),
-            birth = NVL(#{birth}, null),
-            last_login_date = NVL(#{lastLoginDate}, null),
-            email_auth = NVL(#{emailAuth}, null),
+            picture = #{picture, jdbcType=VARCHAR},
+            birth = #{birth, jdbcType=VARCHAR},
+            last_login_date = #{lastLoginDate, jdbcType=DATE},
+            email_auth = #{emailAuth, jdbcType=DATE},
             status = #{status}
         where id = #{id}
     </update>
@@ -33,18 +33,25 @@
         where id = #{id}
     </delete>
 
-    <select id="getlist" parameterType="com.swime.domain.MemberVO" resultType="com.swime.domain.MemberVO">
+    <select id="getlist" resultType="com.swime.domain.MemberVO">
         select id, password, name, picture, birth, reg_path, to_char(last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
                to_char(email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth, status, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
         from TUSER
     </select>
 
-    <insert id="insert">
+    <insert id="registerHistory">
         <selectKey keyProperty="sn" order="BEFORE" resultType="long">
             select SEQ_TUSER_UPD_HIST.nextval from dual
         </selectKey>
         insert into TUSER_UPD_HIST (SN, EMAIL, UPD_MTR, BEF_VAL, AFT_VAL, REASON, DESCRIPTION ,UPD_USER_ID)
         VALUES(#{sn}, #{email}, #{updMtr}, #{befVal}, #{aftVal}, #{reason}, #{description}, #{updUserId})
     </insert>
+
+    <select id="getHistory" resultType="com.swime.domain.MemberHistoryVO">
+        select *
+        from TUSER_UPD_HIST
+        where email = #{email}
+        order by sn desc
+    </select>
     
 </mapper>

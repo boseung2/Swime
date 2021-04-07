@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 
+import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 
 import java.util.List;
@@ -16,5 +17,9 @@ public interface MemberMapper {
     int delete(String id);
 
     List<MemberVO> getlist();
+
+    int registerHistory(MemberHistoryVO vo);
+
+    List<MemberHistoryVO> getHistory(String id);
 
 }
