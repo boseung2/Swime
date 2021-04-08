@@ -19,10 +19,6 @@ public class GroupAttendServiceImpl implements GroupAttendService{
 
     @Override
     public int attend(GroupAttendVO groupAttend) {
-        log.info(">>>>>>>>>>>>>>>"+groupAttend.getUserId());
-        log.info(">>>>>>>>>>>>>>>"+groupAttend.getGrpRole());
-        log.info(">>>>>>>>>>>>>>>"+groupAttend.getStatus());
-        log.info(">>>>>>>>>>>>>>>"+groupAttend.getGrpSn());
         //모임에 가입한다.
         return groupAttendMapper.insertSelectKey(groupAttend);
     }

@@ -3,6 +3,7 @@ package com.swime.controller;
 import com.google.gson.Gson;
 import com.swime.domain.GroupAttendVO;
 import com.swime.domain.GroupCriteria;
+import com.swime.domain.GroupRatingVO;
 import com.swime.domain.GroupVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -105,8 +106,8 @@ public class GroupControllerTests {
     @Test
     public void testAttend() throws Exception{
         GroupAttendVO groupAttend = new GroupAttendVO();
-        groupAttend.setGrpSn(196L);
-        groupAttend.setUserId("boseung@naver.com");
+        groupAttend.setGrpSn(176L);
+        groupAttend.setUserId("jungbs3726@naver.com");
         groupAttend.setGrpRole("GRRO02");
         groupAttend.setStatus("GRUS01");
 
@@ -123,6 +124,41 @@ public class GroupControllerTests {
     @Test
     public void testGetAttendList() throws Exception {
         mockMvc.perform(get("/group/userList/196"));
+    }
+
+    @Test
+    public void testRegisterRating() throws Exception {
+        GroupRatingVO groupRating = new GroupRatingVO();
+        groupRating.setGrpSn(176L);
+        groupRating.setStdSn(6L);
+        groupRating.setUserId("jungbs3726@naver.com");
+        groupRating.setRating(1D);
+        groupRating.setReview("여기 별로예요.");
+
+        String jsonStr = new Gson().toJson(groupRating);
+
+        log.info(jsonStr);
+
+        mockMvc.perform(post("/group/rating/new")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonStr))
+                .andExpect(status().is(200));
+
+    }
+
+    @Test
+    public void testDeleteRating() throws Exception {
+        GroupRatingVO groupRating = new GroupRatingVO();
+        groupRating.setSn(30L);
+
+        String jsonStr = new Gson().toJson(groupRating);
+
+        log.info(jsonStr);
+
+        mockMvc.perform(delete("/group/rating/30")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonStr))
+                .andExpect(status().is(200));
     }
 
 }
