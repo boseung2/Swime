@@ -7,7 +7,7 @@ import java.util.List;
 public interface GroupAttendMapper {
 
     // 모임에 참석한다.
-    public int insert(GroupAttendVO groupAttend);
+    public int insertSelectKey(GroupAttendVO groupAttend);
 
     // 모임페이지에서 참여한 인원들을 보여준다.
     public List<GroupAttendVO> getList(Long grpSn);

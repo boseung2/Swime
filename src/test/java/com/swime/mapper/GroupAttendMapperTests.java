@@ -18,14 +18,14 @@ public class GroupAttendMapperTests {
     private GroupAttendMapper mapper;
 
     @Test
-    public void testInsert() {
+    public void testInsertSelectKey() {
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(100L);
         groupAttend.setUserId("boseung@naver.com");
         groupAttend.setGrpRole("GRRO02");
         groupAttend.setStatus("GRUS01");
 
-        mapper.insert(groupAttend);
+        mapper.insertSelectKey(groupAttend);
     }
 
     @Test

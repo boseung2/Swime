@@ -4,9 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.GroupAttendMapper">
 
-    <insert id="insert">
+    <insert id="insertSelectKey">
+        <selectKey keyProperty="sn" order="BEFORE" resultType="long">
+            select seq_tgrp_list.nextval from dual
+        </selectKey>
         insert into tgrp_list(sn, grp_sn, user_id, grp_role, status)
-        values(seq_tgrp_list.nextval, #{grpSn}, #{userId}, #{grpRole}, #{status})
+        values(#{sn}, #{grpSn}, #{userId}, #{grpRole}, #{status})
     </insert>
 
     <select id="getList" resultType="com.swime.domain.GroupAttendVO">

@@ -1,6 +1,7 @@
 package com.swime.controller;
 
 import com.google.gson.Gson;
+import com.swime.domain.GroupAttendVO;
 import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 import lombok.Setter;
@@ -17,8 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         com.swime.config.RootConfig.class,
         com.swime.config.ServletConfig.class })
 @Log4j
-public class SampleControllerTests {
+public class GroupControllerTests {
 
     @Setter(onMethod_ = {@Autowired})
     private WebApplicationContext ctx;
@@ -77,6 +77,52 @@ public class SampleControllerTests {
         .contentType(MediaType.APPLICATION_JSON)
         .content(jsonStr))
         .andExpect(status().is(200));
+    }
+
+    // update는 data를 가져온다음에 일부분만 수정해서 update실행해야한다.
+    @Test
+    public void testModify() throws Exception {
+        GroupVO group = new GroupVO();
+        group.setCategory("GRCA01");
+        group.setName("수정한 모임명");
+        group.setUserId("jungbs3726@naver.com");
+        group.setPicture("controller ");
+        group.setDescription("controller test description");
+        group.setInfo("controller test 모임정보");
+        group.setSido("LODO01");
+        group.setSigungu("LOGU02");
+
+        String jsonStr = new Gson().toJson(group);
+
+        log.info(jsonStr);
+
+        mockMvc.perform(put("/group/217")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonStr))
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void testAttend() throws Exception{
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(196L);
+        groupAttend.setUserId("boseung@naver.com");
+        groupAttend.setGrpRole("GRRO02");
+        groupAttend.setStatus("GRUS01");
+
+        String jsonStr = new Gson().toJson(groupAttend);
+
+        log.info(jsonStr);
+
+        mockMvc.perform(post("/group/attend")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonStr))
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void testGetAttendList() throws Exception {
+        mockMvc.perform(get("/group/userList/196"));
     }
 
 }

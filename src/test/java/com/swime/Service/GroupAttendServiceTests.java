@@ -29,7 +29,7 @@ public class GroupAttendServiceTests {
     @Test
     public void testAttend() {
         GroupAttendVO groupAttend = new GroupAttendVO();
-        groupAttend.setGrpSn(176L);
+        groupAttend.setGrpSn(196L);
         groupAttend.setUserId("boseung@naver.com");
         groupAttend.setGrpRole("GRRO02");
         groupAttend.setStatus("GRUS01");
@@ -51,10 +51,10 @@ public class GroupAttendServiceTests {
         service.modify(groupAttend);
     }
 
-//    @Test
-//    public void testGetAttendCountByGroupSn() {
-//        service.getAttendCountByGroupSn(100L);
-//    }
+    @Test
+    public void testGetAttendCountByGroupSn() {
+        service.getAttendCountByGroupSn(100L);
+    }
 
 
 }

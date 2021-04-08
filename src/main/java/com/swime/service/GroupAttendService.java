@@ -16,6 +16,6 @@ public interface GroupAttendService {
     int modify(GroupAttendVO groupAttend);
 
     // 해당 모임 참가인원을 구한다.
-    //long getAttendCountByGroupSn(Long grpSn);
+    long getAttendCountByGroupSn(Long grpSn);
 
 }
