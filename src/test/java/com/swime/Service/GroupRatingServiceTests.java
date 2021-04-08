@@ -32,10 +32,10 @@ public class GroupRatingServiceTests {
     @Test
     public void testRegister() {
         GroupRatingVO groupRating = new GroupRatingVO();
-        groupRating.setGrpSn(98L);
+        groupRating.setGrpSn(176L);
         groupRating.setStdSn(6L);
         groupRating.setUserId("jungbs3726@naver.com");
-        groupRating.setRating(0D);
+        groupRating.setRating(5D);
         groupRating.setReview("만족스러운 스터디였습니다.");
 
         service.register(groupRating);

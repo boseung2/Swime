@@ -72,8 +72,4 @@ public class GroupController {
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
-
-
-
 }
