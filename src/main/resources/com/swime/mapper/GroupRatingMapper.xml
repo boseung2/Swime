@@ -65,4 +65,10 @@
         where grp_sn = #{grpSn}
     </select>
 
+    <select id="getGrpSnBySn" resultType="long">
+        select grp_sn
+        from tgrp_rating
+        where sn = #{sn}
+    </select>
+
 </mapper>

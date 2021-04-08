@@ -58,7 +58,7 @@ public class GroupRatingServiceTests {
 
     @Test
     public void testDelete() {
-        service.delete(7L);
+        service.delete(32L);
     }
 
 }

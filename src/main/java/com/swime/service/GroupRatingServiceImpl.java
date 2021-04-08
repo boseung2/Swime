@@ -54,7 +54,21 @@ public class GroupRatingServiceImpl implements GroupRatingService{
 
     @Override
     public int delete(Long sn) {
+        Long grpSn = groupRatingMapper.getGrpSnBySn(sn);
+        GroupVO group = groupMapper.read(grpSn);
+        if(group == null) {
+            return -1;
+        }
 
-        return groupRatingMapper.delete(sn);
+        // 해당 후기 삭제
+        int result = groupRatingMapper.delete(sn);
+        // 그 가져온놈의 rating을 평균을 가져와서 set한다.
+        group.setRating(groupRatingMapper.getRatingByGrpSn(grpSn));
+        // 그 가져온놈의 rating의 개수를 가져와서 set한다.
+        group.setRatingCount(groupRatingMapper.getRatingCountByGrpSn(grpSn));
+        // 그 가져온놈들을 update
+        groupMapper.update(group);
+
+        return result;
     }
 }
