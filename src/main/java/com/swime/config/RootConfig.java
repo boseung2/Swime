@@ -38,6 +38,8 @@ public class RootConfig {
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
         System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
+        System.setProperty("java.security.egd", "file:///dev/urandom");
+
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
         hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");

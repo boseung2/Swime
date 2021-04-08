@@ -3,6 +3,7 @@ package com.swime.controller;
 import com.swime.domain.*;
 import com.swime.service.GroupAttendService;
 import com.swime.service.GroupRatingService;
+import com.swime.domain.GroupVO;
 import com.swime.service.GroupService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -34,7 +35,6 @@ public class GroupController {
         groupAttend.setGrpRole("GRRO01"); // "GRRO01" = 모임장
         groupAttend.setStatus("GRUS01"); // "GRUS01" = 정상상태
         groupAttendService.attend(groupAttend);
-
         return insertCount == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
