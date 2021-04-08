@@ -1,7 +1,9 @@
 package com.swime.config;
 
 import com.swime.security.CustomLoginSuccessHandler;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,10 +14,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
 @Log4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Setter(onMethod_ = @Autowired)
+    private DataSource dataSource;
 
     @Override
     public void configure(HttpSecurity http) throws Exception{
@@ -39,7 +46,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception{
-//        auth.
+        String getUserQuery = "";
+        String getUserDetailQuery = "";
+
+        auth
+            .jdbcAuthentication()
+                .dataSource(dataSource)
+                .passwordEncoder(passwordEncoder())
+                .usersByUsernameQuery(getUserQuery)
+                .authoritiesByUsernameQuery(getUserDetailQuery);
     }
 
     @Bean
