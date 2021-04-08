@@ -71,32 +71,4 @@
         where sn = #{sn}
     </update>
 
-    <select id="getWishListWithPaging" parameterType="com.swime.domain.StudyVO" resultType="com.swime.domain.StudyVO">
-    <![CDATA[
-        select *
-        from (
-                 select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
-                 from (
-                          select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
-                               ,w.reg_date wish_reg
-                          from tstd s, tstd_wish w
-                          where s.sn = w.std_sn and s.status in ('STST01', 'STST03') and w.user_id = #{userId}
-                          order by w.reg_date desc
-                      )
-                 where rownum <= #{pageNum} * #{amount}
-             )
-        where rn > (#{pageNum} - 1) * #{amount}
-        ]]>
-    </select>
-
-    <insert id="insertWishStudy">
-        insert into tstd_wish (sn, std_sn, user_id, reg_date)
-        values(seq_std_wish.nextVal, #{stdSn}, #{userId}, current_date)
-    </insert>
-
-    <delete id="deleteWishStudy">
-        delete from tstd_wish
-        where std_sn = #{stdSn} and user_id = #{userId}
-    </delete>
-
 </mapper>

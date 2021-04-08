@@ -1,10 +1,7 @@
 package com.swime.service;
 
 import com.swime.domain.*;
-import com.swime.mapper.StudyAnswerMapper;
-import com.swime.mapper.StudyListMapper;
-import com.swime.mapper.StudyMapper;
-import com.swime.mapper.StudySurveyMapper;
+import com.swime.mapper.*;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +16,9 @@ public class StudyServiceImpl implements StudyService{
 
     @Setter(onMethod_ = @Autowired)
     private StudyMapper mapper;
+
+    @Setter(onMethod_ = @Autowired)
+    private WishStudyMapper WishMapper;
 
     @Setter(onMethod_ = @Autowired)
     private StudyListMapper listMapper;
@@ -92,17 +92,17 @@ public class StudyServiceImpl implements StudyService{
     @Override
     public List<StudyVO> getWishList(StudyCriteria cri) {
 
-        return mapper.getWishListWithPaging(cri);
+        return WishMapper.getWishListWithPaging(cri);
     }
 
     @Override
     public int wish(WishStudyVO wish) {
-        return mapper.insertWishStudy(wish);
+        return WishMapper.insertWishStudy(wish);
     }
 
     @Override
     public int cancelWish(Long stdSn, String userId) {
-        return mapper.deleteWishStudy(stdSn, userId);
+        return WishMapper.deleteWishStudy(stdSn, userId);
     }
 
     // StudyList

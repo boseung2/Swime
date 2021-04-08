@@ -119,27 +119,4 @@ public class StudyMapperTests {
 
         log.info("UPDATE COUNT: " + mapper.update(study));
     }
-
-    @Test
-    public void testGetWishListWithPaging() {
-        StudyCriteria cri = new StudyCriteria(1, 3, "jiho@naver.com");
-
-        mapper.getWishListWithPaging(cri).forEach(study -> log.info(study));
-    }
-
-    @Test
-    public void testInsertWishStudy() {
-        WishStudyVO wish = new WishStudyVO();
-        wish.setStdSn(82L);
-        wish.setUserId("jiho@naver.com");
-
-        mapper.insertWishStudy(wish);
-
-        log.info(wish);
-    }
-
-    @Test
-    public void testDeleteWishStudy() {
-        mapper.deleteWishStudy(82L, "jiho@naver.com");
-    }
 }
