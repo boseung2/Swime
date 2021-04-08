@@ -91,18 +91,17 @@ public class StudyServiceImpl implements StudyService{
     //WishStudy
     @Override
     public List<StudyVO> getWishList(StudyCriteria cri) {
-
-        return WishMapper.getWishListWithPaging(cri);
+        return WishMapper.getList(cri);
     }
 
     @Override
-    public int wish(WishStudyVO wish) {
-        return WishMapper.insertWishStudy(wish);
+    public int registerWish(WishStudyVO wish) {
+        return WishMapper.insert(wish);
     }
 
     @Override
-    public int cancelWish(Long stdSn, String userId) {
-        return WishMapper.deleteWishStudy(stdSn, userId);
+    public int removeWish(Long stdSn, String userId) {
+        return WishMapper.delete(stdSn, userId);
     }
 
     // StudyList
@@ -152,6 +151,7 @@ public class StudyServiceImpl implements StudyService{
         return answerMapper.get(stdSn, userId);
     }
 
+    //StudyAnswer
     // Tx: 설문 답변 후 참가명단에 insert
     @Transactional
     @Override

@@ -122,17 +122,17 @@ public class StudyServiceTests {
     }
 
     @Test
-    public void testWish() {
+    public void testRegisterWish() {
         WishStudyVO wish = new WishStudyVO();
         wish.setStdSn(82L);
         wish.setUserId("aaa@naver.com");
 
-        log.info("INSERT COUNT : " + service.wish(wish));
+        log.info("INSERT COUNT : " + service.registerWish(wish));
     }
 
     @Test
-    public void testCancelWish() {
-        log.info("DELETE COUNT : " + service.cancelWish(82L, "aaa@naver.com"));
+    public void testRemoveWish() {
+        log.info("DELETE COUNT : " + service.removeWish(82L, "aaa@naver.com"));
     }
 
     //StudyList
@@ -192,6 +192,7 @@ public class StudyServiceTests {
         log.info("DELETE COUNT : " + service.removeSurvey(84L));
     }
 
+    //StudyAnswer
     @Test
     public void testGetAnswer() {
         service.getAnswer(82L, "aaa@naver.com").forEach(answer -> log.info(answer));

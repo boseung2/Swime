@@ -16,6 +16,7 @@ public interface StudyListMapper {
 
     public int insert(StudyListVO attendant);
 
+    //삭제도 status update로 처리
     public int update(@Param("stdSn") long stdSn, @Param("userId") String userId, @Param("status") String status);
 
     // 참여인원 세기

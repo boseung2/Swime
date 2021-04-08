@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface WishStudyMapper {
-    public List<StudyVO> getWishListWithPaging(StudyCriteria cri);
+    public List<StudyVO> getList(StudyCriteria cri);
 
-    public int insertWishStudy(WishStudyVO wish);
+    public int insert(WishStudyVO wish);
 
-    public int deleteWishStudy(@Param("stdSn") Long stdSn, @Param("userId") String userId);
+    public int delete(@Param("stdSn") Long stdSn, @Param("userId") String userId);
 }

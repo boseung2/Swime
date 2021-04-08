@@ -23,9 +23,9 @@ public interface StudyService {
     // WishStudy
     public List<StudyVO> getWishList(StudyCriteria cri);
 
-    public int wish(WishStudyVO wish);
+    public int registerWish(WishStudyVO wish);
 
-    public int cancelWish(Long stdSn,String userId);
+    public int removeWish(Long stdSn,String userId);
 
     // StudyList
     public List<StudyListVO> getAttendList();

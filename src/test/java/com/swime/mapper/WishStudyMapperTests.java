@@ -22,25 +22,25 @@ public class WishStudyMapperTests {
     private WishStudyMapper mapper;
 
     @Test
-    public void testGetWishListWithPaging() {
+    public void testGetList() {
         StudyCriteria cri = new StudyCriteria(1, 3, "jiho@naver.com");
 
-        mapper.getWishListWithPaging(cri).forEach(study -> log.info(study));
+        mapper.getList(cri).forEach(study -> log.info(study));
     }
 
     @Test
-    public void testInsertWishStudy() {
+    public void testInsert() {
         WishStudyVO wish = new WishStudyVO();
         wish.setStdSn(82L);
         wish.setUserId("jiho@naver.com");
 
-        mapper.insertWishStudy(wish);
+        mapper.insert(wish);
 
         log.info(wish);
     }
 
     @Test
-    public void testDeleteWishStudy() {
-        mapper.deleteWishStudy(82L, "jiho@naver.com");
+    public void testdelete() {
+        mapper.delete(82L, "jiho@naver.com");
     }
 }
