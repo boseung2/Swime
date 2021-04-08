@@ -16,18 +16,15 @@ import java.util.List;
 public class GroupAttendServiceImpl implements GroupAttendService{
 
     private GroupAttendMapper groupAttendMapper;
-    private GroupMapper groupMapper;
 
     @Override
     public int attend(GroupAttendVO groupAttend) {
+        log.info(">>>>>>>>>>>>>>>"+groupAttend.getUserId());
+        log.info(">>>>>>>>>>>>>>>"+groupAttend.getGrpRole());
+        log.info(">>>>>>>>>>>>>>>"+groupAttend.getStatus());
+        log.info(">>>>>>>>>>>>>>>"+groupAttend.getGrpSn());
         //모임에 가입한다.
-        groupAttendMapper.insert(groupAttend);
-        // 해당 모임 가입자 수를 모임정보에 업데이트한다.
-        Long grpSn = groupAttend.getGrpSn();
-        GroupVO group = groupMapper.read(grpSn);
-        group.setAttendCount(groupAttendMapper.getAttendCountByGroupSn(grpSn));
-        groupMapper.update(group);
-        return 1;
+        return groupAttendMapper.insertSelectKey(groupAttend);
     }
 
     @Override
@@ -41,9 +38,9 @@ public class GroupAttendServiceImpl implements GroupAttendService{
         return groupAttendMapper.update(groupAttend);
     }
 
-//    @Override
-//    public long getAttendCountByGroupSn(Long grpSn) {
-//        return groupAttendMapper.getAttendCountByGroupSn(grpSn);
-//    }
+    @Override
+    public long getAttendCountByGroupSn(Long grpSn) {
+        return groupAttendMapper.getAttendCountByGroupSn(grpSn);
+    }
 
 }

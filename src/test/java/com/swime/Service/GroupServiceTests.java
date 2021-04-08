@@ -57,7 +57,7 @@ public class GroupServiceTests {
 
     @Test
     public void testModify() {
-        GroupVO group = service.get(117L);
+        GroupVO group = service.get(223L);
 
         if(group == null) {
             return;

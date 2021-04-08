@@ -2,6 +2,7 @@ package com.swime.service;
 
 import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
+import com.swime.mapper.GroupAttendMapper;
 import com.swime.mapper.GroupMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -15,6 +16,7 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService{
 
     private GroupMapper groupMapper;
+    private GroupAttendMapper groupAttendMapper;
 
     @Override
     public int register(GroupVO group) {
@@ -55,4 +57,5 @@ public class GroupServiceImpl implements GroupService{
         // 모임을 삭제한다.
         return groupMapper.delete(group) == 1;
     }
+
 }
