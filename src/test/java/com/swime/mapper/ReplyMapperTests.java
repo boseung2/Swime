@@ -65,7 +65,7 @@ public class ReplyMapperTests {
     @Test
     public void testUpdate(){
 
-        Long targetSn = 3L;
+        Long targetSn = 81L;
         ReplyVO vo = mapper.read(targetSn);
         vo.setContent("Update Reply");
 
@@ -76,7 +76,7 @@ public class ReplyMapperTests {
     @Test
     public void testUpdate2(){
 
-        Long targetSn = 3L;
+        Long targetSn = 82L;
         ReplyVO vo = mapper.read(targetSn);
         vo.setContent("Update array");
         vo.setStatus("RPST02");
@@ -87,14 +87,14 @@ public class ReplyMapperTests {
 
     @Test
     public void testPaging(){
-        BoardCriteria cri = new BoardCriteria(1,1);
-        List<ReplyVO> replies = mapper.getListWithPaging(cri, 2L);
+        BoardCriteria cri = new BoardCriteria(1,10);
+        List<ReplyVO> replies = mapper.getListWithPaging(cri, 1L);
         replies.forEach(reply -> log.info(reply));
     }
 
     @Test
     public void testPaging2(){
-        BoardCriteria cri = new BoardCriteria(2,10);
+        BoardCriteria cri = new BoardCriteria(1,10);
         List<ReplyVO> replies = mapper.getListWithPaging(cri,1L);
         replies.forEach(reply-> log.info(reply));
     }

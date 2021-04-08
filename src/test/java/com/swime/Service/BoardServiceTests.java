@@ -53,19 +53,20 @@ public class BoardServiceTests {
 
     @Test
     public void testGet(){
-        log.info(service.get(5L));
+        log.info(service.get(15L));
     }
 
     @Test
     public void testDelete(){
 
-        log.info("REMOVE RESULT: " + service.remove(5L));
+        log.info("REMOVE RESULT: " + service.remove(15L));
     }
 
+    //테스트 아직..
     @Test
     public void testUpdate(){
 
-        BoardVO board = service.get(13L);
+        BoardVO board = service.get(72L);
 
         if(board == null) return;
 

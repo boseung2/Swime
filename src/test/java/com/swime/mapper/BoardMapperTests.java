@@ -65,31 +65,31 @@ public class BoardMapperTests {
 
     @Test
     public void testRead(){
-        BoardVO board = mapper.read(5L);
+        BoardVO board = mapper.read(40L);
         log.info(board);
     }
     @Test
     public void testRead2(){
-        BoardVO board = mapper.read(10L);
+        BoardVO board = mapper.read(41L);
         log.info(board);
     }
 
     @Test
     public void testDelete(){
 
-        log.info("DELETE COUNT : " + mapper.delete(7L));
+        log.info("DELETE COUNT : " + mapper.delete(29L));
 
     }
-    //아직 테스트 통과 x
+
     @Test
     public void testUpdate(){
         BoardVO board = new BoardVO();
-        board.setSn(11L);
+        board.setSn(72L);
         board.setUserId("수정된 이름");
         //board.setUserName("수정된 이메일");
-        board.setContent("성공하면 난 집 간다...");
+        //board.setContent("성공하면 난 집 간다...");
         board.setTitle("수정된 제목");
-        board.setLikeCnt(20);
+        //board.setLikeCnt(20);
         board.setTopFix("BOFI02");
         board.setStatus("BOST02");
 
@@ -112,8 +112,8 @@ public class BoardMapperTests {
     public void testUpdateContent(){
         BoardVO board = new BoardVO();
 
-        board.setSn(42L);
-        board.setContent("UpdateContentTest: ....");
+        board.setSn(50L);
+        board.setContent("UpdateContentTest: 제발...");
 
         int count = mapper.updateContent(board);
 
