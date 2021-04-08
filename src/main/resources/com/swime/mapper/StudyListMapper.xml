@@ -22,6 +22,12 @@
         ]]>
     </select>
 
+    <select id="getAttendant" resultType="com.swime.domain.StudyListVO">
+        select std_sn, user_id, status
+        from tstd_list
+        where std_sn = #{stdSn} and user_id = #{userId}
+    </select>
+
     <insert id="insert">
         insert into tstd_list (sn, std_sn, user_id, status, reg_date)
         values(seq_std_list.nextval, #{stdSn}, #{userId}, #{status}, current_date)

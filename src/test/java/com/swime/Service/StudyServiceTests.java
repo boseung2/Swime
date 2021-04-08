@@ -200,13 +200,13 @@ public class StudyServiceTests {
     @Test
     public void testRegisterAnswer() {
         StudyAnswerVO answer = new StudyAnswerVO();
-        answer.setStdSn(84L);
-        answer.setUserId("ffff@naver.com");
+        answer.setStdSn(165L);
+        answer.setUserId("jiho@naver.com");
         answer.setQuestionSn(1);
         answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
         answer.setAnswer("네. 괜찮습니다.");
 
-        service.registerAnswer(answer);
+        log.info("REGISTER COUNT (가입못하는 경우 -1, 탈퇴에서 가입 1, update 성공 2) : " + service.registerAnswer(answer));
     }
 
     @Test

@@ -153,10 +153,43 @@ public class StudyServiceImpl implements StudyService{
     }
 
     // Tx: 설문 답변 후 참가명단에 insert
+    @Transactional
     @Override
     public int registerAnswer(StudyAnswerVO answer) {
-        return answerMapper.insert(answer);
+        int cnt = 0;
+
+        //1. 답변을 등록한다.
+        cnt += answerMapper.insert(answer);
+
+        long stdSn = answer.getStdSn();
+        String userId = answer.getUserId();
+
+        //2. 참여명단에 해당스터디번호와 해당 user_id를 가진 레코드가 있는지 확인한다.
+        //2-1. 레코드가 존재하며, 가입/탈퇴/검토중/영구강퇴 중에 상태가 탈퇴인 경우만 update가능
+        StudyListVO attendant = listMapper.getAttendant(stdSn, userId);
+
+        if(attendant != null){
+            if(!"STUS02".equals(attendant.getStatus())) return -1;
+
+            return listMapper.update(stdSn, userId, "STUS01");
+        }
+
+        //3. 참여명단에 레코드가 존재하지 않으면
+        // 답변객체로부터 std_sn, user_id 받고 status = STUS03(검토중)으로 설정해서 참여명단에 insert
+        StudyListVO newAttendant = new StudyListVO();
+        newAttendant.setStdSn(stdSn);
+        newAttendant.setUserId(userId);
+        newAttendant.setStatus("STUS03");
+
+        cnt += listMapper.insert(newAttendant);
+        
+        return cnt; // 정상적으로 완료될 경우 결과값이 2여야함
     }
+
+//    @Override
+//    public int registerAnswer(StudyAnswerVO answer) {
+//        return answerMapper.insert(answer);
+//    }
 
     @Override
     public int removeAnswer(long stdSn, String userId) {

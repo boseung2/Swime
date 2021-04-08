@@ -33,6 +33,11 @@ public class StudyListMapperTests {
     }
 
     @Test
+    public void testGetAttendant() {
+        log.info(mapper.getAttendant(82L, "aaa@naver.com"));
+    }
+
+    @Test
     public void testInsert() {
         StudyListVO list = new StudyListVO();
         list.setStdSn(82);
