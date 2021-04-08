@@ -93,6 +93,12 @@ public class GroupRatingMapperTests {
         log.info("ratingCount: " + ratingCount);
     }
 
+    @Test
+    public void testGetGrpSnbySn() {
+        long sn = mapper.getGrpSnBySn(31L);
+        log.info(sn);
+    }
+
 
 
 }
