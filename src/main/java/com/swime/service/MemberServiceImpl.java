@@ -5,6 +5,7 @@ import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.GroupMapper;
 import com.swime.mapper.MemberMapper;
+import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,9 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public boolean register(MemberVO vo) {
         registerHistory(vo);
-        return mapper.insert(vo) == 1;
+        boolean result = mapper.insert(vo) == 1;
+        if(result) registerKey(vo.getId(), new MakeRandomValue().MakeAuthKey());
+        return result;
     }
 
     @Override
@@ -114,6 +117,21 @@ public class MemberServiceImpl implements MemberService{
         String[] list = new String[]{vo.getName(), vo.getPassword(), vo.getBirth(), vo.getStatus(), vo.getPicture(), ""};
         if(vo.getEmailAuth() != null) list[5] = simpleDateFormat.format(vo.getEmailAuth());
         return list;
+    }
+
+    @Override
+    public boolean registerKey(String id, String key) {
+        return mapper.insertKey(id, key) == 1;
+    }
+
+    @Override
+    public boolean isKey(String id, String key) {
+        return mapper.selectKey(id).equals(key);
+    }
+
+    @Override
+    public boolean deleteKey(String id) {
+        return mapper.delete(id) ==1;
     }
 
 }

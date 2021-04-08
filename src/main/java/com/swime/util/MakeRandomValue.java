@@ -3,11 +3,11 @@ package com.swime.util;
 public class MakeRandomValue {
     int length;
 
-    MakeRandomValue(){
+    public MakeRandomValue(){
         this.length = 20;
     }
 
-    String MakeAuthKey(){
+    public String MakeAuthKey(){
         boolean isStr = false;
         int randomValue = 0;
         char str = ' ';
@@ -16,11 +16,10 @@ public class MakeRandomValue {
         for (int i = 0; i < length; i++) {
             isStr = (int)(Math.random()*2) == 0;
             randomValue = (int)(Math.random()*26);
-
             if(isStr) result += (char)('A'+randomValue);
-            if(!isStr) result += randomValue;
-
+            if(!isStr) result += randomValue >= 10 ? randomValue/10 : randomValue;
         }
+
         return result;
     }
 

@@ -28,7 +28,7 @@ public interface MemberMapper {
     //인증처리
     int insertKey(@Param("id") String id, @Param("key") String key);
 
-    String selectKey(@Param("id") String id, @Param("key") String key);
+    String selectKey(@Param("id") String id);
 
     int deleteKey(String id);
 

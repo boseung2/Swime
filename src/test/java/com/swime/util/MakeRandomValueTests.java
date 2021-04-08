@@ -16,6 +16,7 @@ public class MakeRandomValueTests {
     public void test(){
         String key = new MakeRandomValue().MakeAuthKey();
         Assert.assertNotNull(key);
+        Assert.assertEquals(key.length(),20);
         log.info(key);
     }
 }

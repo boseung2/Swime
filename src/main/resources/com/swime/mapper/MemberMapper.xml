@@ -62,7 +62,7 @@
     <select id="selectKey" resultType="String">
         select key
         from tuser_auth
-        where id = #{id} and key = #{key}
+        where id = #{id}
     </select>
 
     <delete id="deleteKey">

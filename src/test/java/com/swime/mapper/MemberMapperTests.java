@@ -132,7 +132,7 @@ public class MemberMapperTests {
 
     @Test
     public void selectKey(){
-        Assert.assertNotNull(mapper.selectKey("junit테스트", "sad78ssasd"));
+        Assert.assertNotNull(mapper.selectKey("junit테스트"));
     }
 
     @Test
