@@ -54,6 +54,7 @@ public class GroupRatingServiceImpl implements GroupRatingService{
 
     @Override
     public int delete(Long sn) {
+
         return groupRatingMapper.delete(sn);
     }
 }

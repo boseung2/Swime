@@ -60,6 +60,7 @@ public class GroupController {
 
     @PostMapping(value = "/list")
     public ResponseEntity<List<GroupVO>> getList(@RequestBody GroupCriteria cri) {
+        // 그룹 리스트 가져온다.
         return new ResponseEntity<>(groupService.getListWithPaging(cri), HttpStatus.OK);
     }
 
@@ -68,6 +69,7 @@ public class GroupController {
     public ResponseEntity<String> modify(
             @RequestBody GroupVO group,
             @PathVariable("sn") Long sn) {
+        // 모임정보 수정한다.
         group.setSn(sn);
         log.info("sn: " + sn);
         log.info("modify: " + group);
@@ -78,6 +80,7 @@ public class GroupController {
 
     @PostMapping(value = "/attend")
     public ResponseEntity<String> attend(@RequestBody GroupAttendVO groupAttend) {
+        // 모임에 참여한다.
         int count = groupAttendService.attend(groupAttend);
 
         // 해당 모임 가입자 수를 모임정보에 업데이트한다.
@@ -92,14 +95,48 @@ public class GroupController {
 
     @GetMapping(value = "/userList/{sn}")
     public ResponseEntity<List<GroupAttendVO>> getAttendList(@PathVariable("sn") Long sn) {
+        // 해당모임 가입유저를 가져온다.
         return new ResponseEntity<>(groupAttendService.getList(sn), HttpStatus.OK);
     }
 
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
                 value = "/user/{sn}")
     public ResponseEntity<String> modifyAttend(@RequestBody GroupAttendVO groupAttend, @PathVariable("sn") Long sn) {
+        // 참석여부를 수정한다
         groupAttend.setSn(sn);
         return groupAttendService.modify(groupAttend) == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping(value = "/rating/new")
+    public ResponseEntity<String> registerRating(@RequestBody GroupRatingVO groupRating) {
+        // 후기 등록
+        int registerCount = groupRatingService.register(groupRating);
+
+        return registerCount == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
+                    value = "/rating/{sn}")
+    public ResponseEntity<String> modifyRating(@RequestBody GroupRatingVO groupRating,
+                                               @PathVariable("sn") Long sn) {
+        // 후기 수정
+        groupRating.setSn(sn);
+        log.info("sn: " + sn);
+        log.info("modify: " + groupRating);
+        return groupRatingService.modify(groupRating) == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @DeleteMapping(value = "/rating/{sn}")
+    public ResponseEntity<String> deleteRating(@PathVariable("sn") Long sn) {
+        // 후기삭제
+        groupRatingService.delete(sn);
+        return groupRatingService.delete(sn) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
