@@ -1,5 +1,6 @@
 package com.swime.Service;
 
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 import com.swime.service.GroupService;
 import lombok.Setter;
@@ -30,56 +31,50 @@ public class GroupServiceTests {
     public void testRegister() {
         GroupVO group = new GroupVO();
 
-        group.setCategory("GRCA03");
+        group.setCategory("GRCA05");
         group.setName("새로운 모임 제목");
-        group.setUserId("새로운 모임 id");
-        group.setUserName("새로운 name");
-        group.setPicture("새로운 모임 picture");
+        group.setUserId("jungbs3726@naver.com");
+        group.setPicture("새로운 모임 picture.png");
         group.setDescription("새로운 모임 description");
-        group.setHeadcount(100L);
-        group.setRating(3.5D);
-        group.setSido("LODO01");
+        group.setInfo("새로운 모임 정보 infoinfofinfonofinfoifnofino");
+        group.setSido("LOSI01");
         group.setSigungu("LOGU15");
-        group.setStatus("GRST01");
-        group.setRegUserId("새로운 모임장 id");
+        group.setRegUserId("jungbs3726@naver.com");
 
         service.register(group);
         log.info("생성된 모임 번호: " + group.getSn());
     }
 
     @Test
-    public void testGetList() {
-        service.getList().forEach(group -> log.info(group));
-    }
-
-    @Test
     public void testGet() {
-        log.info(service.get(22L));
+        log.info(service.get(117L));
     }
 
     @Test
-    public void testDelete() {
-        GroupVO group = new GroupVO();
-        group.setSn(23L);
-        group.setUpdUserId("삭제 id");
-
-        log.info("REMOVE RESULT: " + service.remove(group));
+    public void testGetListWithPaging() {
+        service.getListWithPaging(new GroupCriteria(1, 6)).forEach(group -> log.info(group));
     }
 
     @Test
-    public void testUpdate() {
-        GroupVO group = service.get(22L);
+    public void testModify() {
+        GroupVO group = service.get(117L);
 
         if(group == null) {
             return;
         }
 
-        group.setName("모임명만 수정");
-        group.setUpdUserId("수정한 유저id");
+        group.setName("어떻게 수정되는거지?");
+        group.setUserId("수정한 유저id");
         log.info("MODIFY RESULT: " + service.modify(group));
     }
 
+    @Test
+    public void testRemove() {
+        GroupVO group = new GroupVO();
+        group.setSn(102L);
+        group.setUserId("삭제 id");
 
-
+        log.info("REMOVE RESULT: " + service.remove(group));
+    }
 
 }

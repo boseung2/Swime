@@ -13,8 +13,10 @@ public class GroupVO {
     private String userName;
     private String picture;
     private String description;
-    private Long headcount;
+    private String info;
+    private Long attendCount;
     private Double rating;
+    private Long ratingCount;
     private String sido;
     private String sigungu;
     private String status;
