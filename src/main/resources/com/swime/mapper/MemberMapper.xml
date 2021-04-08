@@ -7,7 +7,7 @@
         select id, password, name, picture, birth, reg_path, to_char(last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
                to_char(email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth, status, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
         from TUSER
-        where id = #{id} and status != 'USST03'
+        where id = #{id}
     </select>
 
     <insert id="insert">
@@ -19,10 +19,10 @@
         update TUSER
         set password = #{password},
             name = #{name},
-            picture = #{picture},
-            birth = #{birth},
-            last_login_date = #{lastLoginDate},
-            email_auth = #{emailAuth},
+            picture = #{picture, jdbcType=VARCHAR},
+            birth = #{birth, jdbcType=VARCHAR},
+            last_login_date = #{lastLoginDate, jdbcType=DATE},
+            email_auth = #{emailAuth, jdbcType=DATE},
             status = #{status}
         where id = #{id}
     </update>
@@ -33,11 +33,41 @@
         where id = #{id}
     </delete>
 
-    <select id="getlist" parameterType="com.swime.domain.MemberVO" resultType="com.swime.domain.MemberVO">
+    <select id="getlist" resultType="com.swime.domain.MemberVO">
         select id, password, name, picture, birth, reg_path, to_char(last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
                to_char(email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth, status, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
         from TUSER
     </select>
 
+    <insert id="registerHistory">
+        <selectKey keyProperty="sn" order="BEFORE" resultType="long">
+            select SEQ_TUSER_UPD_HIST.nextval from dual
+        </selectKey>
+        insert into TUSER_UPD_HIST (SN, EMAIL, UPD_MTR, BEF_VAL, AFT_VAL, REASON, DESCRIPTION ,UPD_USER_ID)
+        VALUES(#{sn}, #{email, jdbcType=VARCHAR}, #{updMtr}, #{befVal, jdbcType=VARCHAR}, #{aftVal, jdbcType=VARCHAR}, #{reason, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, #{updUserId})
+    </insert>
+
+    <select id="getHistory" resultType="com.swime.domain.MemberHistoryVO">
+        select *
+        from TUSER_UPD_HIST
+        where email = #{email}
+        order by sn desc
+    </select>
+
+    <insert id="insertKey">
+        insert into tuser_auth(id, key)
+        values(#{id}, #{key})
+    </insert>
+
+    <select id="selectKey" resultType="String">
+        select key
+        from tuser_auth
+        where id = #{id} and key = #{key}
+    </select>
+
+    <delete id="deleteKey">
+        delete from tuser_auth
+        where id = #{id}
+    </delete>
     
 </mapper>

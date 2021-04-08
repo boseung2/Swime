@@ -1,5 +1,7 @@
 package com.swime.mapper;
 
+import com.swime.domain.MemberHistoryVO;
+import com.swime.domain.MemberHistoryVOTests;
 import com.swime.domain.MemberVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -32,8 +35,19 @@ public class MemberMapperTests {
     @Test
     public void readTest(){
 //        MemberVO memberVO = mapper.read("asd123@naver.com");
-        MemberVO memberVO = mapper.read("qwer7521@naver.com");
-        log.info(memberVO);
+        MemberVO memberVO = mapper.read("qwer3871@naver.com");
+        Assert.assertNotNull(memberVO);
+    }
+
+    @Test
+    public void dateFormat(){
+//        MemberVO memberVO = mapper.read("asd123@naver.com");
+        MemberVO memberVO = mapper.read("qwer2810@naver.com");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
+//        log.info(memberVO.getRegDate());
+        String com = "2021/04/95 19:04:00";
+//        log.info(simpleDateFormat.format(memberVO.getRegDate()));
+        Assert.assertEquals(com, simpleDateFormat.format(memberVO.getRegDate()));
     }
 
     @Test
@@ -49,12 +63,24 @@ public class MemberMapperTests {
     @Test
     public void updateTest(){
         int random = (int)(Math.random()*10000);
-        MemberVO memberVO = mapper.read("qwer7521@naver.com");
+        MemberVO memberVO = mapper.read("qwer2392@naver.com");
         memberVO.setPassword("updatepassword" + random);
         memberVO.setName("이름변경" + random);
         memberVO.setBirth("2010312");
         memberVO.setLastLoginDate(new Date());
         memberVO.setEmailAuth(new Date());
+        Assert.assertEquals(mapper.update(memberVO),1);
+        log.info(memberVO.getEmailAuth());
+    }
+
+    @Test
+    public void updateTest2(){
+        int random = (int)(Math.random()*10000);
+        MemberVO memberVO = mapper.read("qwer3568@naver.com");
+        memberVO.setPassword("updatepassword" + random);
+        memberVO.setName("이름변경" + random);
+        if(memberVO.getLastLoginDate() == null) memberVO.setLastLoginDate(null);
+        if(memberVO.getEmailAuth() == null) memberVO.setLastLoginDate(null);
         Assert.assertEquals(mapper.update(memberVO),1);
         log.info(memberVO.getEmailAuth());
     }
@@ -74,7 +100,46 @@ public class MemberMapperTests {
     @Test
     public void getList(){
         mapper.getlist().forEach(log::info);
+        Assert.assertNotNull(mapper.getlist());
     }
 
+    @Test
+    public void regHist2(){
+        MemberHistoryVO vo = new MemberHistoryVO();
+        MemberVO memberVO = mapper.read("qwer7044@naver.com");
+        vo.setEmail(memberVO.getId());
+        vo.setBefVal("asd");
+        vo.setAftVal("zxc");
+        vo.setUpdMtr("password");
+        vo.setDescription("");
+        vo.setReason("test01");
+        vo.setUpdUserId("qwer7044@naver.com");
+        mapper.registerHistory(vo);
+    }
+
+    @Test
+    public void getHistList(){
+        List<MemberHistoryVO> list = mapper.getHistory("qwer7044@naver.com");
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void insertKey(){
+        int random = (int)(Math.random()*10000);
+        Assert.assertEquals(mapper.insertKey("junit테스트" + random, "sad78ssasd" + random), 1);
+    }
+
+    @Test
+    public void selectKey(){
+        Assert.assertNotNull(mapper.selectKey("junit테스트", "sad78ssasd"));
+    }
+
+    @Test
+    public void deleteKey(){
+        int random = (int)(Math.random()*10000);
+        Assert.assertEquals(mapper.insertKey("junit테스트" + random, "sad78ssasd" + random), 1);
+        Assert.assertEquals(mapper.deleteKey("junit테스트" + random), 1);
+    }
 
 }

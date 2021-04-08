@@ -1,7 +1,11 @@
 package com.swime.Service;
 
+import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
+import com.swime.mapper.MemberMapper;
 import com.swime.service.MemberService;
+import com.swime.service.MemberServiceImpl;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -13,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -21,8 +26,9 @@ import static org.junit.Assert.assertNotNull;
 @Log4j
 public class MemberServiceTests {
 
-    @Setter(onMethod_ = {@Autowired})
+    @Setter(onMethod_ = @Autowired)
     private MemberService service;
+
 
     @Test
     public void getService() {
@@ -51,12 +57,15 @@ public class MemberServiceTests {
 
     @Test
     public void testModify(){
-        MemberVO memberVO = service.get("qwer852@naver.com");
+        MemberVO memberVO = service.get("hong5584@service.com");
         memberVO.setPassword("modifypassword");
         memberVO.setBirth("2010312");
         memberVO.setLastLoginDate(new Date());
         memberVO.setEmailAuth(new Date());
-        Assert.assertTrue(service.modify(memberVO));
+
+        MemberHistoryVO hvo = new MemberHistoryVO();
+
+        Assert.assertTrue(service.modify(memberVO, hvo));
     }
     
     @Test
@@ -68,7 +77,10 @@ public class MemberServiceTests {
         memberVO.setName("삭제테스트" + random);
         memberVO.setPassword("service" + random);
         service.register(memberVO);
-        Assert.assertTrue(service.remove("hong"+ random+"@service.com"));
+        memberVO.setStatus("USST03");
+        MemberHistoryVO hvo = new MemberHistoryVO();
+        hvo.setEmail("hong"+ random+"@service.com");
+        Assert.assertTrue(service.remove("hong"+ random+"@service.com", hvo));
     }
 
     @Test
@@ -78,8 +90,28 @@ public class MemberServiceTests {
         list.forEach(log::info);
     }
 
+    @Test
+    public void histResult(){
+        MemberVO before = service.get("qwer7044@naver.com");
+        MemberVO after = service.get("qwer7044@naver.com");
+        after.setId("qwer7044@naver.com");
+        after.setName("차단된 유저1");
+        after.setPassword("qdfgswe123");
+        after.setStatus("USST05");
 
+        MemberHistoryVO vo = new MemberHistoryVO();
+        vo.setEmail("qwer7044@naver.com");
+        vo.setDescription("서비스테스트중");
+        vo.setReason("test01");
+        vo.setUpdUserId("형진");
 
+        service.registerHistory(after,vo);
+    }
 
+    @Test
+    public void getHistList(){
+        List<MemberHistoryVO> list = service.getHistList("qwer7044@naver.com");
+        list.forEach(log::info);
+    }
 
 }
