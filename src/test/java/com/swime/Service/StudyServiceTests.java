@@ -139,7 +139,7 @@ public class StudyServiceTests {
 
     @Test
     public void testGetAttendList() {
-        service.getAttendList().forEach(list -> log.info(list));
+        service.getAttendantList().forEach(list -> log.info(list));
     }
 
     @Test
@@ -148,14 +148,14 @@ public class StudyServiceTests {
         cri.setPageNum(1);
         cri.setAmount(3);
 
-        service.getAttendList(cri).forEach(list -> log.info(list));
+        service.getAttendantList(cri).forEach(list -> log.info(list));
     }
 
     @Test
     public void testRegisterAttendant() {
         StudyListVO list = new StudyListVO();
         list.setStdSn(82);
-        list.setUserId("aaa@naver.com");
+        list.setUserId("hong2841@service.com");
         list.setStatus("STST01");
 
         log.info("INSERT COUNT : " + service.registerAttendant(list));

@@ -106,12 +106,12 @@ public class StudyServiceImpl implements StudyService{
 
     // StudyList
     @Override
-    public List<StudyListVO> getAttendList() {
+    public List<StudyListVO> getAttendantList() {
         return listMapper.getList();
     }
 
     @Override
-    public List<StudyListVO> getAttendList(StudyCriteria cri) {
+    public List<StudyListVO> getAttendantList(StudyCriteria cri) {
         return listMapper.getListWithPaging(cri);
     }
 
