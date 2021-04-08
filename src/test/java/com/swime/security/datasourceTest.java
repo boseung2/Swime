@@ -12,6 +12,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class datasourceTest {
     @Test
     public void get(){
-
+        System.out.println("asdasdas");
     }
 }

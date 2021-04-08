@@ -4,8 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.AuthMapper">
     <select id="read" resultType="com.swime.domain.AuthVO">
-        select id, password, name, picture, birth, reg_path, to_char(last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
-               to_char(email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth, status, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+        select auth
         from TUSER_AUTH
         where id = #{id}
     </select>
@@ -15,7 +14,7 @@
         values(#{id}, #{auth})
     </insert>
 
-    <delete id="deleteKey">
+    <delete id="delete">
         delete from TUSER_ROLE
         where id = #{id}
     </delete>
