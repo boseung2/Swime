@@ -6,10 +6,10 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface StudyService {
-//    public int register(StudyVO study);
 
     public int register(StudyVO study);
 
+    // 스터디정보와 참여인원 정보 같이 얻어오기
     public StudyVO get(Long sn);
 
     public int modify(StudyVO study);

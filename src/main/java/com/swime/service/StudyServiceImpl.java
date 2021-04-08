@@ -52,39 +52,33 @@ public class StudyServiceImpl implements StudyService{
         return cnt; // 2여야함
     }
 
-//    @Override
-//    public int register(StudyVO study) {
-//        log.info("register........." + study);
-//        return mapper.insertSelectKey(study);
-//    }
-
+    // 스터디정보와 참여인원 정보 같이 얻어오기
     @Override
     public StudyVO get(Long sn) {
 
-        return mapper.read(sn);
+        StudyVO study = mapper.get(sn);
+        study.setAttendants(listMapper.count(sn));
+
+        return study;
     }
 
     @Override
     public int modify(StudyVO study) {
-
         return mapper.update(study);
     }
 
     @Override
     public int remove(Long sn) {
-
         return mapper.delete(sn);
     }
 
     @Override
     public List<StudyVO> getList() {
-
         return mapper.getList();
     }
 
     @Override
     public List<StudyVO> getList(StudyCriteria cri) {
-
         return mapper.getListWithPaging(cri);
     }
 

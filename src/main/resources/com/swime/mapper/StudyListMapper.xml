@@ -5,21 +5,27 @@
 <mapper namespace="com.swime.mapper.StudyListMapper">
 
     <select id="getList" resultType="com.swime.domain.StudyListVO">
-        select sl.sn, sl.std_sn, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
+        select sl.sn, sl.std_sn, u.picture, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
         from tstd_list sl, tuser u, tgrp_list gl
-        where sl.user_id = u.id and u.id = gl.user_id
+        where sl.user_id = u.id and u.id = gl.user_id and sl.status = 'STUS01'
     </select>
 
     <select id="getListWithPaging" resultType="com.swime.domain.StudyListVO">
     <![CDATA[
         select *
         from (
-                 select rownum rn, sl.sn, sl.std_sn, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
+                 select rownum rn, sl.sn, sl.std_sn, u.picture, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
                  from tstd_list sl, tuser u, tgrp_list gl
-                 where sl.user_id = u.id and u.id = gl.user_id and rownum <= #{pageNum} * #{amount}
+                 where sl.user_id = u.id and u.id = gl.user_id and sl.status = 'STUS01' and rownum <= #{pageNum} * #{amount}
              )
         where rn > (#{pageNum} - 1) * #{amount}
         ]]>
+    </select>
+
+    <select id="getWatingList" resultType="com.swime.domain.StudyListVO">
+        select sl.sn, sl.std_sn, u.picture, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
+        from tstd_list sl, tuser u, tgrp_list gl
+        where sl.user_id = u.id and u.id = gl.user_id and sl.status = 'STUS03'
     </select>
 
     <select id="getAttendant" resultType="com.swime.domain.StudyListVO">

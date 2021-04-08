@@ -33,6 +33,11 @@ public class StudyListMapperTests {
     }
 
     @Test
+    public void testGetWaitingList() {
+        mapper.getWatingList().forEach(study -> log.info(study));
+    }
+
+    @Test
     public void testGetAttendant() {
         log.info(mapper.getAttendant(82L, "aaa@naver.com"));
     }

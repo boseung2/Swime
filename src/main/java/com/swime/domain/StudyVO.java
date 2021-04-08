@@ -13,9 +13,9 @@ public class StudyVO {
     private String name;
     private String startDate;
     private String endDate;
+    private String repeatCycle;
     private String startTime;
     private String endTime;
-    private String repeatCycle;
     private String repeatDay;
     private String information;
     private String onOff;
@@ -23,6 +23,7 @@ public class StudyVO {
     private String placeId;
     private String expense;
     private int capacity;
+    private int attendants; // studyService의 get메서드로 받아옴
     private String status;
     private Date regDate;
     private Date updDate;

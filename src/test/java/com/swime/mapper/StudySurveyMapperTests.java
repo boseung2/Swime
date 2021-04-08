@@ -19,13 +19,13 @@ public class StudySurveyMapperTests {
 
     @Test
     public void testGetList() {
-        mapper.getList(82L).forEach(survey -> log.info(survey));
+        mapper.getList(89L).forEach(survey -> log.info(survey));
     }
 
     @Test
     public void testInsert() {
         StudySurveyVO survey = new StudySurveyVO();
-        survey.setStdSn(84);
+        survey.setStdSn(84L);
         survey.setQuestionSn(1);
         survey.setQuestion("매주 나오셔야하는데 각오한마디 부탁드립니다.");
 

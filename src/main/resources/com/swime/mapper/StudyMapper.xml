@@ -39,7 +39,7 @@
         values(#{sn}, #{grpSn}, #{representation}, #{name}, #{startDate}, #{endDate}, #{startTime}, #{endTime}, #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, #{status}, current_date, current_date)
     </insert>
 
-    <select id="read" resultType="com.swime.domain.StudyVO">
+    <select id="get" resultType="com.swime.domain.StudyVO">
         select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
         from tstd s, tuser u
         where s.representation = u.id and s.status in ('STST01', 'STST03') and s.sn = #{sn}
@@ -50,10 +50,10 @@
         set name = #{name},
         start_date = #{startDate},
         end_date = #{endDate},
-        start_time = #{startTime},
-        end_time = #{endTime},
         repeat_cycle = #{repeatCycle, jdbcType=VARCHAR},
         repeat_day = #{repeatDay, jdbcType=VARCHAR},
+        start_time = #{startTime},
+        end_time = #{endTime},
         information = #{information},
         on_off = #{onOff, jdbcType=VARCHAR},
         on_url = #{onUrl, jdbcType=VARCHAR},
@@ -62,6 +62,12 @@
         capacity = #{capacity},
         upd_date = current_date
         where sn = #{sn}
+    </update>
+
+    <update id = "endStudy">
+        update tstd
+        set status= #{status}
+        where sn = #{stdSn}
     </update>
 
     <update id="delete">

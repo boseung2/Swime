@@ -2,6 +2,7 @@ package com.swime.mapper;
 
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,10 +15,15 @@ public interface StudyMapper {
 
     public int insertSelectKey(StudyVO study);
 
-    public StudyVO read(Long sn);
+    public StudyVO get(Long sn);
 
+    //스터디 내용 수정
     public int update(StudyVO study);
 
+    // 스터디 모집 마감
+    public int endStudy(@Param("stdSn") long stdSn, @Param("status") String status);
+
+    //스터디 삭제
     public int delete(Long sn);
 
 }

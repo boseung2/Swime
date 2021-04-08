@@ -89,7 +89,7 @@ public class StudyServiceTests {
 
     @Test
     public void testGet() {
-        log.info(service.get(61L));
+        log.info(service.get(41L));
     }
 
     @Test
@@ -154,9 +154,9 @@ public class StudyServiceTests {
     @Test
     public void testRegisterAttendant() {
         StudyListVO list = new StudyListVO();
-        list.setStdSn(82);
+        list.setStdSn(41L);
         list.setUserId("hong2841@service.com");
-        list.setStatus("STST01");
+        list.setStatus("STUS01");
 
         log.info("INSERT COUNT : " + service.registerAttendant(list));
     }
