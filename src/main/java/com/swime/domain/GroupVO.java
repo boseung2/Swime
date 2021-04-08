@@ -1,6 +1,7 @@
 package com.swime.domain;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -20,8 +21,10 @@ public class GroupVO {
     private String sido;
     private String sigungu;
     private String status;
+    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date regDate;
     private String regUserId;
+    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date updDate;
     private String updUserId;
 }
