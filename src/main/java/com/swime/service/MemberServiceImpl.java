@@ -8,6 +8,7 @@ import com.swime.mapper.MemberMapper;
 import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -19,7 +20,7 @@ import java.util.*;
 public class MemberServiceImpl implements MemberService{
 
     private MemberMapper mapper;
-
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public MemberVO get(String id) {
@@ -29,6 +30,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public boolean register(MemberVO vo) {
         registerHistory(vo);
+        vo.setPassword(passwordEncoder.encode(vo.getPassword()));
         boolean result = mapper.insert(vo) == 1;
         if(result) registerKey(vo.getId(), new MakeRandomValue().MakeAuthKey());
         return result;
