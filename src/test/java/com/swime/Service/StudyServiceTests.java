@@ -152,23 +152,23 @@ public class StudyServiceTests {
     }
 
     @Test
-    public void testRegisterAttend() {
+    public void testRegisterAttendant() {
         StudyListVO list = new StudyListVO();
         list.setStdSn(82);
         list.setUserId("aaa@naver.com");
         list.setStatus("STST01");
 
-        log.info("INSERT COUNT : " + service.registerAttend(list));
+        log.info("INSERT COUNT : " + service.registerAttendant(list));
     }
 
     @Test
-    public void testModifyAttend() {
-        log.info("UPDATE COUNT : " + service.modifyAttend(82L, "aaa@naver.com", "STST04"));
+    public void testModifyAttendant() {
+        log.info("UPDATE COUNT : " + service.modifyAttendant(82L, "aaa@naver.com", "STST04"));
     }
 
     @Test
-    public void testAttendCount() {
-        log.info("ATTEND COUNT : " + service.AttendCount(82L));
+    public void testCountAttendants() {
+        log.info("ATTEND COUNT : " + service.countAttendants(82L));
     }
 
     //StudySurvey

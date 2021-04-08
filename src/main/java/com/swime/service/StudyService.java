@@ -32,11 +32,11 @@ public interface StudyService {
 
     public List<StudyListVO> getAttendList(StudyCriteria cri);
 
-    public int registerAttend(StudyListVO list);
+    public int registerAttendant(StudyListVO attendant);
 
-    public int modifyAttend(long stdSn, String userId, String status);
+    public int modifyAttendant(long stdSn, String userId, String status);
 
-    public int AttendCount(long stdSn);
+    public int countAttendants(long stdSn);
 
     //StudySurvey
     public List<StudySurveyVO> getSurveyList(long stdSn);
@@ -49,6 +49,6 @@ public interface StudyService {
     public List<StudyAnswerVO> getAnswer(long stdSn, String userId);
 
     public int registerAnswer(StudyAnswerVO answer);
-
-    public int removeAnswer(long stdSn, String userId);
+    
+    public int removeAnswer(long stdSn, String userId); //사용 안할지도
 }

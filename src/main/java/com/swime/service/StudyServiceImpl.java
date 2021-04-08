@@ -117,17 +117,17 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public int registerAttend(StudyListVO list) {
-        return listMapper.insert(list);
+    public int registerAttendant(StudyListVO attendant) {
+        return listMapper.insert(attendant);
     }
 
     @Override
-    public int modifyAttend(long stdSn, String userId, String status) {
+    public int modifyAttendant(long stdSn, String userId, String status) {
         return listMapper.update(stdSn, userId, status);
     }
 
     @Override
-    public int AttendCount(long stdSn) {
+    public int countAttendants(long stdSn) {
         return listMapper.count(stdSn);
     }
 

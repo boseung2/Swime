@@ -11,7 +11,7 @@ public interface StudyListMapper {
 
     public List<StudyListVO> getListWithPaging(StudyCriteria cri);
 
-    public int insert(StudyListVO list);
+    public int insert(StudyListVO attendant);
 
     public int update(@Param("stdSn") long stdSn, @Param("userId") String userId, @Param("status") String status);
 
