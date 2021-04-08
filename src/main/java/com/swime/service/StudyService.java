@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface StudyService {
+//    public int register(StudyVO study);
+
     public int register(StudyVO study);
 
     public StudyVO get(Long sn);

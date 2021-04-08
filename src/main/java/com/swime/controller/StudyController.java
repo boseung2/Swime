@@ -42,16 +42,16 @@ public class StudyController {
         return new ResponseEntity<>(service.getList(cri), HttpStatus.OK);
     }
 
-    @PostMapping(value="/new", consumes = "application/json",
-    produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<String> register(@RequestBody StudyVO study) {
-        log.info("insert.................." + study);
-
-        int insertCount = service.register(study);
-        return insertCount == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @PostMapping(value="/new", consumes = "application/json",
+//    produces = {MediaType.TEXT_PLAIN_VALUE})
+//    public ResponseEntity<String> register(@RequestBody StudyVO study) {
+//        log.info("insert.................." + study);
+//
+//        int insertCount = service.register(study);
+//        return insertCount == 1
+//                ? new ResponseEntity<>("success", HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @GetMapping(value="/{sn}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudyVO> get(@PathVariable("sn") long sn) {

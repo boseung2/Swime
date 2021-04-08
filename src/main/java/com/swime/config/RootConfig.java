@@ -8,8 +8,11 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -17,6 +20,9 @@ import java.util.Properties;
 @Configuration
 @MapperScan(basePackages = {"com.swime.mapper"})
 @ComponentScan(basePackages="com.swime.service")
+@EnableAspectJAutoProxy
+
+@EnableTransactionManagement
 public class RootConfig {
 
     @Bean
@@ -27,6 +33,11 @@ public class RootConfig {
         Resource myBatisConfig = new PathMatchingResourcePatternResolver().getResource("classpath:mybatis-config.xml");
         sqlSessionFactory.setConfigLocation(myBatisConfig);
         return sqlSessionFactory.getObject();
+    }
+
+    @Bean
+    public DataSourceTransactionManager txManager() {
+        return new DataSourceTransactionManager(dataSource());
     }
 
     @Bean

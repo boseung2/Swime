@@ -25,11 +25,36 @@ public class StudyServiceTests {
         assertNotNull(service);
     }
 
+//    @Test
+//    public void testRegister() {
+//        StudyVO study = new StudyVO();
+//        study.setGrpSn(7);
+//        study.setName("스터디 만들기 서비스 테스트");
+//        study.setStartDate("2021-04-06");
+//        study.setEndDate("2021-04-06");
+//        study.setStartTime("14:00:00");
+//        study.setEndTime("16:00:00");
+//        study.setRepeatCycle("");
+//        study.setRepeatDay("");
+//        study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
+//        study.setOnOff("STOF02");
+//        study.setOnUrl("");
+//        study.setPlaceId("구글 place id");
+//        study.setExpense("5000원");
+//        study.setCapacity(20);
+//        study.setStatus("STST01");
+//
+//        service.register(study);
+//
+//        log.info("생성된 게시물의 번호: " + study.getSn());
+//    }
+
     @Test
     public void testRegister() {
         StudyVO study = new StudyVO();
         study.setGrpSn(7);
-        study.setName("스터디 만들기 서비스 테스트");
+        study.setRepresentation("txTest@naver.com");
+        study.setName("트랜잭션테스트 참여명단 안만들어지면 스터디도 삭제돼야하는데..");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-06");
         study.setStartTime("14:00:00");
@@ -44,9 +69,8 @@ public class StudyServiceTests {
         study.setCapacity(20);
         study.setStatus("STST01");
 
-        service.register(study);
+        log.info("INSERT COUNT : " + service.register(study));
 
-        log.info("생성된 게시물의 번호: " + study.getSn());
     }
 
     @Test

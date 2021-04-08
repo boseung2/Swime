@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,25 +29,43 @@ public class StudyServiceImpl implements StudyService{
     @Setter(onMethod_ = @Autowired)
     private StudyAnswerMapper answerMapper;
 
+    //Tx : 스터디 생성 -> 참가명단에 스터디장 insert
+    @Transactional
     @Override
     public int register(StudyVO study) {
+        int cnt = 0;
 
-        log.info("register........." + study);
+        //1. 스터디를 insert한다.
+        log.info("register study..................." + study);
+        cnt += mapper.insertSelectKey(study);
 
-        return mapper.insertSelectKey(study);
+        log.info("---------------------------------만들어진 스터디번호 : " + study.getSn());
+
+        // 만들어진 스터디의 번호, 스터디장 id, 가입상태(무조건 STUS01)를 참여명단 객체에 저장
+        StudyListVO attendant = new StudyListVO();
+        attendant.setStdSn(study.getSn());
+        attendant.setUserId(study.getRepresentation());
+        attendant.setStatus("STUS01");
+
+        cnt += listMapper.insert(attendant);
+
+        return cnt; // 2여야함
     }
+
+//    @Override
+//    public int register(StudyVO study) {
+//        log.info("register........." + study);
+//        return mapper.insertSelectKey(study);
+//    }
 
     @Override
     public StudyVO get(Long sn) {
 
-        log.info("get................." + sn);
         return mapper.read(sn);
     }
 
     @Override
     public int modify(StudyVO study) {
-
-        log.info("modify.................." + study);
 
         return mapper.update(study);
     }
@@ -54,15 +73,11 @@ public class StudyServiceImpl implements StudyService{
     @Override
     public int remove(Long sn) {
 
-        log.info("remove...................." + sn);
-
         return mapper.delete(sn);
     }
 
     @Override
     public List<StudyVO> getList() {
-
-        log.info("getList....................");
 
         return mapper.getList();
     }
@@ -70,14 +85,13 @@ public class StudyServiceImpl implements StudyService{
     @Override
     public List<StudyVO> getList(StudyCriteria cri) {
 
-        log.info("get List with criteria : " + cri);
-        
         return mapper.getListWithPaging(cri);
     }
 
     //WishStudy
     @Override
     public List<StudyVO> getWishList(StudyCriteria cri) {
+
         return mapper.getWishListWithPaging(cri);
     }
 
@@ -138,6 +152,7 @@ public class StudyServiceImpl implements StudyService{
         return answerMapper.get(stdSn, userId);
     }
 
+    // Tx: 설문 답변 후 참가명단에 insert
     @Override
     public int registerAnswer(StudyAnswerVO answer) {
         return answerMapper.insert(answer);
