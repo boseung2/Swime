@@ -30,9 +30,9 @@ public class AuthMapperTests {
 
     @Test
     public void insert(){
-        Assert.assertTrue(mapper.insert("asd@naver.com","ADMIN") == 1);
-        Assert.assertTrue(mapper.insert("asd@naver.com","MEMBER") == 1);
-        Assert.assertTrue(mapper.insert("asd22@naver.com","MEMBER") == 1);
+        Assert.assertTrue(mapper.insert(random + "asd@naver.com","ADMIN") == 1);
+        Assert.assertTrue(mapper.insert(random + "asd@naver.com","MEMBER") == 1);
+        Assert.assertTrue(mapper.insert(random + "asd22543@naver.com","MEMBER") == 1);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class AuthMapperTests {
 
     @Test
     public void select(){
-        AuthVO vo = mapper.select("asd@naver.com","ADMIN");
+        AuthVO vo = mapper.select("asd22@naver.com","MEMBER");
         Assert.assertNotNull(vo);
     }
 
@@ -53,4 +53,6 @@ public class AuthMapperTests {
         Assert.assertNotNull(list);
         list.forEach(log::info);
     }
+
+
 }

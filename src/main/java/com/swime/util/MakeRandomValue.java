@@ -9,15 +9,14 @@ public class MakeRandomValue {
 
     public String MakeAuthKey(){
         boolean isStr = false;
-        int randomValue = 0;
-        char str = ' ';
         String result = "";
+        char randomNum = ' ', randomChar = ' ';
 
         for (int i = 0; i < length; i++) {
             isStr = (int)(Math.random()*2) == 0;
-            randomValue = (int)(Math.random()*26);
-            if(isStr) result += (char)('A'+randomValue);
-            if(!isStr) result += randomValue >= 10 ? randomValue/10 : randomValue;
+            randomChar = (char)('A' + (int)(Math.random()*26));
+            randomNum = (char)('0' + (int)(Math.random()*10));
+            result += isStr ? randomChar : randomNum;
         }
 
         return result;

@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {com.swime.config.RootConfig.class})
+@ContextConfiguration(classes = {com.swime.config.RootConfig.class, com.swime.config.SecurityConfig.class})
 @Log4j
 public class MemberMapperTests {
 
@@ -35,7 +35,7 @@ public class MemberMapperTests {
     @Test
     public void readTest(){
 //        MemberVO memberVO = mapper.read("asd123@naver.com");
-        MemberVO memberVO = mapper.read("qwer3871@naver.com");
+        MemberVO memberVO = mapper.read("hong2841@service.com");
         Assert.assertNotNull(memberVO);
     }
 
@@ -63,7 +63,7 @@ public class MemberMapperTests {
     @Test
     public void updateTest(){
         int random = (int)(Math.random()*10000);
-        MemberVO memberVO = mapper.read("qwer2392@naver.com");
+        MemberVO memberVO = mapper.read("qwer3568@naver.com");
         memberVO.setPassword("updatepassword" + random);
         memberVO.setName("이름변경" + random);
         memberVO.setBirth("2010312");
@@ -142,4 +142,9 @@ public class MemberMapperTests {
         Assert.assertEquals(mapper.deleteKey("junit테스트" + random), 1);
     }
 
+    @Test
+    public void selwithauth(){
+        MemberVO memberVO = mapper.readWithAuth("asd123@naver.com");
+        log.info(memberVO);
+    }
 }
