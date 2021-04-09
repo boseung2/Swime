@@ -48,6 +48,7 @@ public class GroupServiceImpl implements GroupService{
         return 1;
     }
 
+    @Transactional
     @Override
     public GroupVO get(Long sn) {
         // 해당 모임 모임상세를 불러온다.
@@ -59,6 +60,7 @@ public class GroupServiceImpl implements GroupService{
         return group;
     }
 
+    @Transactional
     @Override
     public List<GroupVO> getListWithPaging(GroupCriteria cri) {
         // 모임 리스트를 불러온다. - o
@@ -74,6 +76,7 @@ public class GroupServiceImpl implements GroupService{
         return list;
     }
 
+    @Transactional
     @Override
     public int modify(GroupVO group) {
         // 모임 정보를 수정한다.
