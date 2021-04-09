@@ -211,6 +211,13 @@
           <scope>test</scope>
       </dependency>
 
+    <!-- url 유효성 검사-->
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.6</version>
+    </dependency>
+
 
   </dependencies>
   <build>
