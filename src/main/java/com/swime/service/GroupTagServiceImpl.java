@@ -27,9 +27,8 @@ public class GroupTagServiceImpl implements GroupTagService{
     }
 
     @Override
-    public int delete(List<GroupTagVO> list) {
-        list.forEach(mapper::delete);
-        return 1;
+    public int delete(Long grpSn) {
+        return mapper.delete(grpSn);
     }
 
 }

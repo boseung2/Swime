@@ -18,6 +18,5 @@
     <delete id="delete">
         delete from tgrp_tag
         where grp_sn = #{grpSn}
-        and name = #{name}
     </delete>
 </mapper>

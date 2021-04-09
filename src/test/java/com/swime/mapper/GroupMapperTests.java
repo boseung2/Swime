@@ -40,7 +40,7 @@ public class GroupMapperTests {
 
     @Test
     public void testRead() {
-        GroupVO group = mapper.read(98L);
+        GroupVO group = mapper.read(256L);
         log.info(group);
     }
 
@@ -62,16 +62,12 @@ public class GroupMapperTests {
 
     @Test
     public void testUpdate() {
-        GroupVO group = new GroupVO();
-        group.setSn(96L);
+        GroupVO group = mapper.read(98L);
         group.setCategory("GRCA02");
         group.setName("수정된 이름");
         group.setUserId("boseung@naver.com");
         group.setPicture("수정된 picture");
         group.setDescription("수정된 description");
-        group.setAttendCount(10L);
-        group.setRating(4.5D);
-        group.setRatingCount(5L);
         group.setSido("LODO01");
         group.setSigungu("LOGU02");
         group.setStatus("GRST01");

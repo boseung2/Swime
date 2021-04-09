@@ -4,10 +4,12 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class GroupVO {
     private Long sn;
+    private List<String> tags;
     private String category;
     private String name;
     private String userId;

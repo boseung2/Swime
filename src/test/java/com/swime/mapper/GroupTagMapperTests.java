@@ -33,11 +33,7 @@ public class GroupTagMapperTests {
 
     @Test
     public void testDelete() {
-        GroupTagVO groupTag = new GroupTagVO();
-        groupTag.setGrpSn(223L);
-        groupTag.setName("GRTG03");
-
-        mapper.delete(groupTag);
+        mapper.delete(223L);
     }
 
 }

@@ -13,6 +13,6 @@ public interface GroupTagService {
     List<GroupTagVO> getList(Long grpSn);
 
     // 해당 해시태그를 모두 삭제한다.
-    int delete(List<GroupTagVO> list);
+    int delete(Long grpSn);
 
 }

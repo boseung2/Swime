@@ -48,10 +48,7 @@ public class GroupTagServiceTests {
 
     @Test
     public void testDelete() {
-        List<GroupTagVO> list = new ArrayList<>();
-        list.add(new GroupTagVO(224L, "GRTG06"));
-
-        service.delete(list);
+        service.delete(224L);
     }
 
 }

@@ -17,9 +17,9 @@ public interface GroupService {
     public List<GroupVO> getListWithPaging(GroupCriteria cri);
 
     // 모임 정보를 수정한다.
-    public boolean modify(GroupVO group);
+    public int modify(GroupVO group);
 
     // 모임을 삭제한다.
-    public boolean remove(GroupVO group);
+    public int remove(GroupVO group);
 
 }
