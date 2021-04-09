@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.AuthMapper">
-    <select id="read" resultType="com.swime.domain.AuthVO">
-        select auth
-        from TUSER_AUTH
+    <select id="getList" resultType="com.swime.domain.AuthVO">
+        select id, auth
+        from TUSER_ROLE
         where id = #{id}
     </select>
 
@@ -18,5 +18,17 @@
         delete from TUSER_ROLE
         where id = #{id}
     </delete>
+
+    <select id="select" resultType="com.swime.domain.AuthVO">
+        select id, auth
+        from TUSER_ROLE
+        where id = #{id} and auth = #{auth}
+    </select>
+
+    <select id="isAready" resultType="com.swime.domain.AuthVO">
+        select id, auth
+        from TUSER_ROLE
+        where id = #{id} and auth = #{auth}
+    </select>
 
 </mapper>
