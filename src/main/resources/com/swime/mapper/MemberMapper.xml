@@ -10,6 +10,18 @@
         where id = #{id}
     </select>
 
+    <resultMap id="authMap" type="com.swime.domain.AuthVO">
+        <result property="id" column="id"/>
+        <result property="auth" column="auth"/>
+    </resultMap>
+
+    <select id="readWithAuth">
+        select u.id, u.password, u.name, u.picture, u.birth, u.reg_path, to_char(u.last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
+               to_char(u.email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth, u.status, to_char(u.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date, a.auth
+        from TUSER u LEFT OUTER JOIN TUSER_ROLE a on u.id = a.id
+        where id = #{id}
+    </select>
+
     <insert id="insert">
         insert into TUSER(id, password, name)
         values(#{id}, #{password}, #{name})

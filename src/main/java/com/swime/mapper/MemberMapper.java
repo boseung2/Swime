@@ -20,6 +20,8 @@ public interface MemberMapper {
 
     List<MemberVO> getlist();
 
+    MemberVO readWithAuth(String id);
+
     //이력관리
     int registerHistory(MemberHistoryVO vo);
 
