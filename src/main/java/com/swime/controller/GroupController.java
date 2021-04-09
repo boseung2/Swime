@@ -5,6 +5,7 @@ import com.swime.service.GroupAttendService;
 import com.swime.service.GroupRatingService;
 import com.swime.domain.GroupVO;
 import com.swime.service.GroupService;
+import com.swime.service.GroupTagService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
@@ -24,21 +25,13 @@ public class GroupController {
     private GroupService groupService;
     private GroupAttendService groupAttendService;
     private GroupRatingService groupRatingService;
+    private GroupTagService groupTagService;
 
     @PostMapping(value = "/new")
     public ResponseEntity<String> create(@RequestBody GroupVO vo) {
         // 모임을 등록한다.
         int insertCount = groupService.register(vo);
-        log.info("****************************************************" +
-                "INSERT COUNT : " + insertCount);
 
-        // 모임 등록자를 모임리스트에 모임장으로 등록한다.
-        GroupAttendVO groupAttend = new GroupAttendVO();
-        groupAttend.setGrpSn(vo.getSn());
-        groupAttend.setUserId(vo.getUserId());
-        groupAttend.setGrpRole("GRRO01"); // "GRRO01" = 모임장
-        groupAttend.setStatus("GRUS01"); // "GRUS01" = 정상상태
-        groupAttendService.attend(groupAttend);
         return insertCount == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,7 +66,7 @@ public class GroupController {
         group.setSn(sn);
         log.info("sn: " + sn);
         log.info("modify: " + group);
-        return groupService.modify(group)
+        return groupService.modify(group) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -135,7 +128,6 @@ public class GroupController {
     @DeleteMapping(value = "/rating/{sn}")
     public ResponseEntity<String> deleteRating(@PathVariable("sn") Long sn) {
         // 후기삭제
-        groupRatingService.delete(sn);
         return groupRatingService.delete(sn) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
