@@ -25,7 +25,6 @@ public class GroupController {
     private GroupService groupService;
     private GroupAttendService groupAttendService;
     private GroupRatingService groupRatingService;
-    private GroupTagService groupTagService;
 
     @PostMapping(value = "/new")
     public ResponseEntity<String> create(@RequestBody GroupVO vo) {
@@ -76,11 +75,6 @@ public class GroupController {
         // 모임에 참여한다.
         int count = groupAttendService.attend(groupAttend);
 
-        // 해당 모임 가입자 수를 모임정보에 업데이트한다.
-        Long grpSn = groupAttend.getGrpSn();
-        GroupVO group = groupService.get(grpSn);
-        group.setAttendCount(groupAttendService.getAttendCountByGroupSn(grpSn));
-        groupService.modify(group);
         return count == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -97,7 +91,7 @@ public class GroupController {
     public ResponseEntity<String> modifyAttend(@RequestBody GroupAttendVO groupAttend, @PathVariable("sn") Long sn) {
         // 참석여부를 수정한다
         groupAttend.setSn(sn);
-        return groupAttendService.modify(groupAttend) == 1
+        return groupAttendService.ban(groupAttend) == 1 // 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
