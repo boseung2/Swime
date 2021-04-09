@@ -33,7 +33,7 @@ public class BoardServiceTests {
         BoardVO board = new BoardVO();
 
         board.setGrpSn(10L);
-        board.setUserId("Last 새로운 id");
+        board.setUserId("Last 1새로운 id");
         //board.setUserName("새로운 name");
         board.setTitle("Last 새로운 제목");
         board.setContent("Last Test content2");
@@ -62,11 +62,11 @@ public class BoardServiceTests {
         log.info("REMOVE RESULT: " + service.remove(15L));
     }
 
-    //테스트 아직..
+
     @Test
     public void testUpdate(){
 
-        BoardVO board = service.get(72L);
+        BoardVO board = service.get(4L);
 
         if(board == null) return;
 

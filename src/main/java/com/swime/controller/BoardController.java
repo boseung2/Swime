@@ -24,15 +24,24 @@ public class BoardController {
     @PostMapping(value = "/new")
     public ResponseEntity<String> create(@RequestBody BoardVO vo) {
 
+        ResponseEntity<String> entity = null;
         log.info("BoardVO: " + vo);
 
-        int insertCount = service.register(vo);
+        try {
+            int insertCount = service.register(vo);
+            log.info("Board INSERT COUNT: " + insertCount);
+            new ResponseEntity<>("success", HttpStatus.OK);
 
-        log.info("Board INSERT COUNT: " + insertCount);
+        }catch(Exception e){
+            e.printStackTrace();
+            entity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 
-        return insertCount == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return entity;
+
+//        return insertCount == 1
+//                ? new ResponseEntity<>("success", HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping(value = "/list")

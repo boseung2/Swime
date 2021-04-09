@@ -17,7 +17,6 @@ public class ReplyController {
 
     private ReplyService service;
 
-    //테스트 보류 일단 get먼저해보자..
     @PostMapping(value = "/new")
     public ResponseEntity<String> create(@RequestBody ReplyVO vo){
 

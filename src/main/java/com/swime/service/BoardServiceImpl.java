@@ -19,6 +19,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public int register(BoardVO board) {
+
         return mapper.insertSelectKey(board);
     }
 
@@ -33,6 +34,7 @@ public class BoardServiceImpl implements BoardService{
     public boolean modify(BoardVO board) {
 
         log.info("modify: " + board);
+
         return mapper.update(board) == 1;
     }
 

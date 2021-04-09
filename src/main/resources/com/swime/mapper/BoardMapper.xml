@@ -20,8 +20,9 @@
              tbrd b, tbrd_det d
         where
               b.sn = d.brd_sn
-          and
+        and
               b.sn > 0
+        order by top_fix asc
         ]]>
     </select>
     <select id="getListWithPaging" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
