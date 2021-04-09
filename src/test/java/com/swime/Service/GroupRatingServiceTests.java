@@ -50,15 +50,15 @@ public class GroupRatingServiceTests {
     @Test
     public void testUpdate() {
         GroupRatingVO groupRating = new GroupRatingVO();
-        groupRating.setSn(18L);
-        groupRating.setRating(5.0D);
-        groupRating.setReview("수정된 리뷰입니당");
+//        groupRating.setSn(15L);
+//        groupRating.setRating(5.0D);
+//        groupRating.setReview("수정된 리뷰입니당");
         service.modify(groupRating);
     }
 
     @Test
     public void testDelete() {
-        service.delete(32L);
+        service.delete(22L);
     }
 
 }

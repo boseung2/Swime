@@ -8,6 +8,7 @@ import com.swime.mapper.GroupRatingMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,56 +20,62 @@ public class GroupRatingServiceImpl implements GroupRatingService{
     private GroupRatingMapper groupRatingMapper;
     private GroupMapper groupMapper;
 
+    @Transactional
     @Override
     public int register(GroupRatingVO groupRating) {
+        // 해당 후기를 등록한다.
         groupRatingMapper.insert(groupRating);
-        // 해당 그룹 번호를 불러온다.
-        long grpSn = groupRating.getGrpSn();
-        // 그 해당하는 그룹을 mapper로 가져와요
-        GroupVO group = groupMapper.read(grpSn);
-        // 그 가져온놈의 rating을 평균을 가져와서 set한다.
-        group.setRating(groupRatingMapper.getRatingByGrpSn(grpSn));
-        // 그 가져온놈의 rating의 개수를 가져와서 set한다.
-        group.setRatingCount(groupRatingMapper.getRatingCountByGrpSn(grpSn));
-        // 그 가져온놈들을 update
-        groupMapper.update(group);
+
+        // grpSn 구해서 update 한다.
+        updateGroupRating(groupRating.getGrpSn());
 
         return 1;
     }
 
+    @Transactional
     @Override
     public List<GroupRatingVO> getListWithPaging(Long grpSn, GroupRatingCriteria cri) {
         return groupRatingMapper.getListWithPaging(grpSn, cri);
     }
 
+    @Transactional
     @Override
     public int modify(GroupRatingVO groupRating) {
+        // 해당 후기 update
         groupRatingMapper.update(groupRating);
-        long grpSn = groupRating.getGrpSn();
-        GroupVO group = groupMapper.read(grpSn);
-        group.setRating(groupRatingMapper.getRatingByGrpSn(grpSn));
-        groupMapper.update(group);
+
+        // grpSn 구해서 update 한다.
+        updateGroupRating(groupRating.getGrpSn());
 
         return 1;
     }
 
+    @Transactional
     @Override
     public int delete(Long sn) {
         Long grpSn = groupRatingMapper.getGrpSnBySn(sn);
-        GroupVO group = groupMapper.read(grpSn);
-        if(group == null) {
-            return -1;
-        }
 
         // 해당 후기 삭제
         int result = groupRatingMapper.delete(sn);
+
+        // grpSn 구해서 update 한다.
+        updateGroupRating(grpSn);
+
+        return result;
+    }
+
+    private void updateGroupRating(Long grpSn) {
+        GroupVO group = groupMapper.read(grpSn);
+
+        if(group == null) {
+            return;
+        }
+
         // 그 가져온놈의 rating을 평균을 가져와서 set한다.
         group.setRating(groupRatingMapper.getRatingByGrpSn(grpSn));
         // 그 가져온놈의 rating의 개수를 가져와서 set한다.
         group.setRatingCount(groupRatingMapper.getRatingCountByGrpSn(grpSn));
         // 그 가져온놈들을 update
         groupMapper.update(group);
-
-        return result;
     }
 }
