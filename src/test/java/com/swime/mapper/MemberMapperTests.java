@@ -145,6 +145,7 @@ public class MemberMapperTests {
     @Test
     public void selwithauth(){
         MemberVO memberVO = mapper.readWithAuth("asd123@naver.com");
+//        MemberVO memberVO = mapper.readWithAuth("asd123@naver.com");
         log.info(memberVO);
     }
 }
