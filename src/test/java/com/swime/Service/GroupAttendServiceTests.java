@@ -42,18 +42,26 @@ public class GroupAttendServiceTests {
     }
 
     @Test
-    public void testModify() {
-        GroupAttendVO groupAttend = new GroupAttendVO();
-        groupAttend.setSn(6);
-        groupAttend.setGrpRole("GRRO02");
-        groupAttend.setStatus("GRUS03");
-        groupAttend.setUpdUserId("hong2841@service.com");
-        service.modify(groupAttend);
+    public void testGetAttendCountByGroupSn() {
+        service.getAttendCountByGroupSn(100L);
     }
 
     @Test
-    public void testGetAttendCountByGroupSn() {
-        service.getAttendCountByGroupSn(100L);
+    public void testBan() {
+        GroupAttendVO vo = new GroupAttendVO();
+        vo.setGrpSn(316L);
+        vo.setUserId("jungbs3726@naver.com");
+        GroupAttendVO groupAttend = service.get(vo);
+        service.ban(groupAttend);
+    }
+
+    @Test
+    public void testGet() {
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(102L);
+        groupAttend.setUserId("boseung@naver.com");
+
+        service.get(groupAttend);
     }
 
 

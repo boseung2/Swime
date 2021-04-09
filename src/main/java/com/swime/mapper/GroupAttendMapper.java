@@ -9,6 +9,9 @@ public interface GroupAttendMapper {
     // 모임에 참석한다.
     public int insertSelectKey(GroupAttendVO groupAttend);
 
+    // grpSn, userId로 해당 정보를 읽는다.
+    public GroupAttendVO read(GroupAttendVO groupAttend);
+
     // 모임페이지에서 참여한 인원들을 보여준다.
     public List<GroupAttendVO> getList(Long grpSn);
 

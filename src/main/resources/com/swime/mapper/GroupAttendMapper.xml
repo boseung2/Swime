@@ -24,7 +24,7 @@
         set grp_role = #{grpRole},
         status = #{status},
         upd_date = current_date,
-        upd_user_id = #{updUserId}
+        upd_user_id = #{userId}
         where sn = #{sn}
     </update>
 
@@ -34,4 +34,10 @@
         where grp_sn = #{grpSn}
     </select>
 
+    <select id="read" resultType="com.swime.domain.GroupAttendVO">
+        select sn, grp_sn, user_id, grp_role, status
+        from tgrp_list
+        where grp_sn = #{grpSn}
+        and user_id = #{userId}
+    </select>
 </mapper>
