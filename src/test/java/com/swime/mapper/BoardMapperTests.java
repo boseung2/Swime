@@ -31,7 +31,7 @@ public class BoardMapperTests {
         BoardVO board = new BoardVO();
 
         board.setGrpSn(1L);
-        board.setUserId("테스트2:minjae@naver.com");
+        board.setUserId("asd123@naver.com");
         //board.setUserName("테스트:이민재");
         board.setTitle("Last Test : 자바 초보만 오세용~~!!");
         board.setContent("들어가라 제발..");
@@ -48,11 +48,11 @@ public class BoardMapperTests {
     public void testInsertSelectKey(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(3L);
-        board.setUserId("Last Test selectKeyTest : minjae@naver.com");
+        board.setGrpSn(4L);
+        board.setUserId("qwer9827@naver.com");
         //board.setUserName("selectKeyTest:minjae");
         board.setTitle("Last Test selectKeyTest : 자바 초보만 오세용~~!!");
-        board.setContent("TCP/IP가 뭔가요?");
+        board.setContent("IP가 뭔가요?");
         //board.setLikeCnt(500);
         board.setTopFix("BOFI01");
         board.setStatus("BOST01");
@@ -75,7 +75,7 @@ public class BoardMapperTests {
     }
     @Test
     public void testRead3(){
-        BoardVO board = mapper.read(42L);
+        BoardVO board = mapper.read(46L);
         log.info(board);
     }
 

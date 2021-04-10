@@ -53,7 +53,7 @@ public class BoardServiceTests {
 
     @Test
     public void testGet(){
-        log.info(service.get(15L));
+        log.info(service.get(46L));
     }
 
     @Test

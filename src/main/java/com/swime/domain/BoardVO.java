@@ -11,7 +11,7 @@ public class BoardVO {
     private Long sn;
     private Long grpSn;
     private String userId;
-    private String userName;
+    private String name;
     private String title;
     private String content;
     private int likeCnt;

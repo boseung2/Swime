@@ -9,6 +9,7 @@
         select b.sn,
                b.grp_sn,
                b.user_id,
+               u.name,
                b.title,
                d.content,
                b.like_cnt,
@@ -17,9 +18,11 @@
                b.reg_date,
                b.upd_date
         from
-             tbrd b, tbrd_det d
+            tuser u, tbrd b, tbrd_det d
         where
               b.sn = d.brd_sn
+        and
+              u.id = b.user_id
         and
               b.sn > 0
         order by top_fix asc
@@ -31,6 +34,7 @@
             sn,
             grp_sn,
             user_id,
+            name,
             title,
             content,
             like_cnt,
@@ -44,6 +48,7 @@
                 rownum rn, b.sn,
                 b.grp_sn,
                 b.user_id,
+                u.name,
                 b.title,
                 d.content,
                 b.like_cnt,
@@ -52,10 +57,13 @@
                 b.reg_date,
                 b.upd_date
             from
+                tuser u,
                 tbrd b,
                 tbrd_det d
             where
                 b.sn = d.brd_sn
+            and
+                u.id = b.user_id
             and
                 rownum <= #{pageNum} * #{amount}
             )
@@ -114,6 +122,7 @@
         select b.sn,
                b.grp_sn,
                b.user_id,
+               u.name,
                b.title,
                d.content,
                b.like_cnt,
@@ -122,9 +131,11 @@
                b.reg_date,
                b.upd_date
         from
-            tbrd b, tbrd_det d
+            tuser u, tbrd b, tbrd_det d
         where
             b.sn = d.brd_sn
+        and
+            u.id = b.user_id
         and
             b.sn = #{sn}
         ]]>
