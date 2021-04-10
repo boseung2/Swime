@@ -1,5 +1,6 @@
 package com.swime.config;
 
+import com.swime.util.GmailSend;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -50,4 +51,8 @@ public class RootConfig {
         return new HikariDataSource(hikariConfig);
     }
 
+    @Bean
+    public GmailSend gmailSend(){
+        return new GmailSend();
+    }
 }

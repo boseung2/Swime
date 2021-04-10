@@ -14,6 +14,8 @@ public interface MemberMapper {
 
     int insert(MemberVO vo);
 
+    int insertWithAuth(MemberVO vo);
+
     int update(MemberVO vo);
 
     int delete(String id);

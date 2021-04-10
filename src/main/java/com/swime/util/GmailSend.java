@@ -2,6 +2,7 @@ package com.swime.util;
 
 import com.swime.domain.MailVO;
 import lombok.extern.log4j.Log4j;
+import org.springframework.context.annotation.Bean;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;

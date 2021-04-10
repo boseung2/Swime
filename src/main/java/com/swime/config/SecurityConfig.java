@@ -44,20 +44,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("remember-me", "JSESSION_ID")
         ;
+//        http
+//            .authorizeRequests()
+//                .antMatchers("/어떠한 페이지")
+//                    // 모두허용
+//                    .permitAll()
+//                    // 모두거부
+//                    .denyAll()
+//                    // 익명이면
+//                    .access("isAnonymous()")
+//                    // 인증된 사용자면
+//                    .access("isAuthenticated()")
+//                    // 인증된 사용자인데 without remember-me
+//                    .access("isFullyAuthenticated()")
+//        ;
 
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        String getUserQuery = "";
-        String getUserDetailQuery = "";
+        // 디테일서비스로 대신함
+//        String getUserQuery = "";
+//        String getUserDetailQuery = "";
 
         auth
-            .jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery(getUserQuery)
-                .authoritiesByUsernameQuery(getUserDetailQuery);
+             // 디테일서비스로 대신함
+//            .jdbcAuthentication()
+//                .dataSource(dataSource)
+//                .passwordEncoder(passwordEncoder())
+//                .usersByUsernameQuery(getUserQuery)
+//                .authoritiesByUsernameQuery(getUserDetailQuery)
+            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
+        ;
     }
 
     @Bean

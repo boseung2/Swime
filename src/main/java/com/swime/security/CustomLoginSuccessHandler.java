@@ -29,7 +29,8 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         // 대상이 멤버이면
         if(roleNames.contains("MEMBER")){}
 
-//        example - 로그인에 성공했고 그 대상이 어드민이라면 어드민 페이지로 보내준다
+//        example
+//        로그인에 성공했고 그 대상이 어드민이라면 어드민 페이지로 보내준다
 //        if(roleNames.contains("ADMIN")){
 //            response.sendRedirect("/adminPage");
 //            return;
