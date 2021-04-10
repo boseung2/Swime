@@ -8,7 +8,10 @@ import java.util.List;
 
 public interface ReplyMapper {
 
-    public int insert(ReplyVO vo);
+    //댓글 sn을 commentGroup에 넣어주기 위한 seq
+    public int getSequence();
+
+    public int insert(ReplyVO reply);
 
     public ReplyVO read(Long sn);
 
@@ -21,8 +24,7 @@ public interface ReplyMapper {
             @Param("brdSn") Long brdSn);
 
     //댓글의 개수
-    public int getCountBySn(Long sn);
-
+    public int getCountBySn(Long brdSn);
 
 
     //댓글 개수를 센다

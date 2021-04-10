@@ -10,6 +10,7 @@ public class ReplyVO {
     private int sn;
     private Long brdSn;
     private String userId;
+    public int commentGroup;
     private String userName;
     private String content;
     private int cnt;

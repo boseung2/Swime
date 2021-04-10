@@ -4,19 +4,35 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.ReplyMapper">
 
+    <select id="getSequence" resultType="int">
+        select seq_trpl.nextval from dual
+    </select>
+
     <insert id="insert">
         insert into trpl
             (sn,
              brd_sn,
              user_id,
+             comment_group,
              content,
              status)
         values
-               (seq_trpl.nextval, #{brdSn}, #{userId}, #{content}, #{status})
+               (#{sn}, #{brdSn}, #{userId}, #{commentGroup}, #{content}, #{status})
     </insert>
 
     <select id="read" resultType="com.swime.domain.ReplyVO">
-        select * from trpl where sn = #{sn}
+        select r.sn,
+               r.brd_sn,
+               r.user_id,
+               u.name,
+               r.comment_group,
+               r.cnt,
+               r.status,
+               r.reg_date,
+               r.upd_date
+        from trpl r, tuser u
+        where r.user_id = u.id
+        and sn = #{sn}
     </select>
 
     <delete id="delete">
@@ -52,9 +68,8 @@
     </select>
 
 
-
     <select id="getCountBySn" resultType="int">
-        select count(cnt) from trpl where brd_sn = #{brd_sn}
+        select count(*) from trpl where brd_sn = #{brd_sn}
     </select>
 
 </mapper>

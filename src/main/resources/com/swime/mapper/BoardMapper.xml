@@ -45,7 +45,8 @@
         from
             (
             select /*+INDEX_DESC(tbrd pk_tbrd) */
-                rownum rn, b.sn,
+                rownum rn,
+                b.sn,
                 b.grp_sn,
                 b.user_id,
                 u.name,

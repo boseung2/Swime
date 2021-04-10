@@ -18,10 +18,34 @@ public class ReplyServiceImpl implements ReplyService{
     private ReplyMapper mapper;
 
     @Override
-    public int register(ReplyVO vo) {
+    public int register(ReplyVO reply) {
 
-        log.info("register: " + vo);
-        return mapper.insert(vo);
+        /* 1. 대댓글
+        *   1-1 원글의 댓글인 경우 -> 댓글 번호(sn)가 댓글의 그룹번호(groupComment)가 된다.
+        *   1-2 댓글의 댓글인 경우 -> 그룹번호가 댓글의 그룹번호가 된다.
+        * */
+
+        // sequence를 가져온다.
+        int seq = mapper.getSequence();
+        // 가져온 sequence를 sn에 set한다.
+        reply.setSn(seq);
+
+        int commentGroup = reply.getCommentGroup();
+        boolean parentComment = commentGroup == 0;
+
+        log.info("commentGroup : " + commentGroup);
+        log.info("parentComment:" + parentComment);
+
+        //부모(댓글)
+        if(parentComment) {
+            reply.setCommentGroup(reply.getSn());
+        //자식(대댓글)--이게 맞나...생각해보기(프론트가..)
+        }else{
+            reply.setCommentGroup(commentGroup);
+        }
+
+        log.info("register: " + reply);
+        return mapper.insert(reply);
     }
 
     @Override
@@ -32,10 +56,10 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
-    public int modify(ReplyVO vo) {
+    public int modify(ReplyVO reply) {
 
-        log.info("modify" + vo);
-        return mapper.update(vo);
+        log.info("modify" + reply);
+        return mapper.update(reply);
     }
 
     @Override

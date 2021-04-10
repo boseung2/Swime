@@ -34,9 +34,13 @@ public class ReplyMapperTests {
 
         ReplyVO vo = new ReplyVO();
 
-        vo.setBrdSn(4L);
-        vo.setUserId("toywar94@naver.com");
-        vo.setContent("spring 설명 해주세요");
+        int seq = mapper.getSequence();
+
+        vo.setSn(seq);
+        vo.setBrdSn(6L);
+        vo.setUserId("boseung@naver.com");
+        vo.setCommentGroup(seq);
+        vo.setContent("11번 문제 조금 어럅네요..");
         vo.setStatus("RPST01");
 
         mapper.insert(vo);
@@ -49,7 +53,7 @@ public class ReplyMapperTests {
 
         //Long targetSn = 1L;
 
-        ReplyVO vo = mapper.read(3L);
+        ReplyVO vo = mapper.read(30L);
 
         log.info(vo);
     }

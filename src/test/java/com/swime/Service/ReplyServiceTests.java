@@ -29,13 +29,27 @@ public class ReplyServiceTests {
     }
 
     @Test
-    public void testRegister(){
+    public void testRegisterParent(){
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(3L);
-        reply.setUserId("toywar94@naver.com");
-        reply.setContent("토비...일비 o.o");
+        reply.setBrdSn(2L);
+        reply.setUserId("hong2841@service.com");
+        reply.setContent("부모 댓글");
+        reply.setStatus("RPST01");
+
+        service.register(reply);
+    }
+
+    @Test
+    public void testRegisterChild(){
+
+        ReplyVO reply = new ReplyVO();
+
+        reply.setBrdSn(1L);
+        reply.setUserId("qwer937@naver.com");
+        reply.setCommentGroup(49);
+        reply.setContent("자식3");
         reply.setStatus("RPST01");
 
         service.register(reply);
