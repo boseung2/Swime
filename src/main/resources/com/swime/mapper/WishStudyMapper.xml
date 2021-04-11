@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.WishStudyMapper">
 
-    <select id="getList" parameterType="com.swime.domain.StudyVO" resultType="com.swime.domain.StudyVO">
+    <select id="getList" resultType="com.swime.domain.StudyVO">
     <![CDATA[
         select *
         from (
@@ -20,6 +20,12 @@
              )
         where rn > (#{pageNum} - 1) * #{amount}
         ]]>
+    </select>
+
+    <select id="get" resultType="com.swime.domain.WishStudyVO">
+        select sn, std_sn, user_id, reg_date
+        from tstd_wish
+        where std_sn = #{stdSn} and user_id = #{userId}
     </select>
 
     <insert id="insert">

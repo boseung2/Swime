@@ -100,8 +100,8 @@ public class StudyServiceImpl implements StudyService{
 
     // StudyList
     @Override
-    public List<StudyListVO> getAttendantList() {
-        return listMapper.getList();
+    public List<StudyListVO> getAttendantList(long stdSn) {
+        return listMapper.getList(stdSn);
     }
 
     @Override

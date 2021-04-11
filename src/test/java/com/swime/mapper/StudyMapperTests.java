@@ -376,7 +376,7 @@ public class StudyMapperTests {
     }
 
     private boolean isValidUrl(String url) {
-        UrlValidator urlValidator = new UrlValidator();
+        UrlValidator urlValidator = new UrlValidator(); //{"http", "https", "ftp"}로 시작하는지 확인
         log.info("===============================isValid : " + urlValidator.isValid(url));
         return urlValidator.isValid(url);
     }

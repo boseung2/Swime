@@ -93,7 +93,8 @@ public class StudyController {
             @PathVariable("page") long page) {
 
         log.info("get list with paging .........................");
-        StudyCriteria cri = new StudyCriteria(page, 3, userId);
+
+        StudyCriteria cri = new StudyCriteria(1, 3, userId);
         log.info(cri);
 
         return new ResponseEntity<>(service.getList(cri), HttpStatus.OK);

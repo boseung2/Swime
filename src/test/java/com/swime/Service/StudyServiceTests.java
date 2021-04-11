@@ -139,7 +139,7 @@ public class StudyServiceTests {
 
     @Test
     public void testGetAttendList() {
-        service.getAttendantList().forEach(list -> log.info(list));
+        service.getAttendantList(307L).forEach(list -> log.info(list));
     }
 
     @Test

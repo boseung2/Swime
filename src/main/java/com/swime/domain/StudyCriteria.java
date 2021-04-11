@@ -12,6 +12,7 @@ public class StudyCriteria {
 
     private long pageNum;
     private int amount;
+    private long stdSn;
     private String userId;
 
     public StudyCriteria(){
@@ -23,9 +24,27 @@ public class StudyCriteria {
         this.amount = amount;
     }
 
+    public StudyCriteria(long stdSn, String userId) {
+        this.stdSn = stdSn;
+        this.userId = userId;
+    }
+
+    public StudyCriteria(long pageNum, int amount, long stdSn) {
+        this.pageNum = pageNum;
+        this.amount = amount;
+        this.stdSn = stdSn;
+    }
+
     public StudyCriteria(long pageNum, int amount, String userId) {
         this.pageNum = pageNum;
         this.amount = amount;
+        this.userId = userId;
+    }
+
+    public StudyCriteria(long pageNum, int amount, long stdSn, String userId) {
+        this.pageNum = pageNum;
+        this.amount = amount;
+        this.stdSn = stdSn;
         this.userId = userId;
     }
 }
