@@ -15,6 +15,7 @@ public class BoardVO {
     private String title;
     private String content;
     private int likeCnt;
+    private int replyCnt;
     private String topFix;
     private String status;
     private Date regDate;

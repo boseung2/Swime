@@ -11,7 +11,7 @@ public class ReplyVO {
     private Long brdSn;
     private String userId;
     public int commentGroup;
-    private String userName;
+    private String name;
     private String content;
     private int cnt;
     private String status;

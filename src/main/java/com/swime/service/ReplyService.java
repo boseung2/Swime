@@ -16,9 +16,12 @@ public interface ReplyService {
 
     public int remove(Long sn);
 
-    //댓글페이징
-    public List<ReplyVO> getList(BoardCriteria cri, Long brd_sn);
+    //댓글 개수(getCountByBrdSn)
+    public int getReplyCnt(Long brdSn);
 
-    //댓글, 댓글 수 처리
-    public ReplyPageDTO getListPage(BoardCriteria cri, Long brd_sn);
+    //일단 냅두고...해결되면 지우기
+    //public List<ReplyVO> getList(BoardCriteria cri, Long brd_sn);
+
+    //댓글 -> 댓글 수 처리, (페이징)
+    public ReplyPageDTO getListPage(BoardCriteria cri, Long brdSn);
 }

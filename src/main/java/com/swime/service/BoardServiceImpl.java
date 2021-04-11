@@ -45,6 +45,8 @@ public class BoardServiceImpl implements BoardService{
         return mapper.delete(sn) == 1;
     }
 
+
+
     @Override
     public List<BoardVO> getListWithPaging(BoardCriteria cri) {
 

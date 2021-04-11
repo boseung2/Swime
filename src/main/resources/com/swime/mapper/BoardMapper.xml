@@ -13,6 +13,7 @@
                b.title,
                d.content,
                b.like_cnt,
+               b.reply_cnt,
                b.top_fix,
                b.status,
                b.reg_date,
@@ -38,6 +39,7 @@
             title,
             content,
             like_cnt,
+            reply_cnt,
             top_fix,
             status,
             reg_date,
@@ -53,6 +55,7 @@
                 b.title,
                 d.content,
                 b.like_cnt,
+                b.reply_cnt,
                 b.top_fix,
                 b.status,
                 b.reg_date,
@@ -127,6 +130,7 @@
                b.title,
                d.content,
                b.like_cnt,
+               b.reply_cnt,
                b.top_fix,
                b.status,
                b.reg_date,
@@ -151,6 +155,7 @@
             user_id = #{userId},
             title = #{title},
             like_cnt = #{likeCnt},
+            reply_cnt = #{replyCnt},
             top_fix = #{topFix},
             status = #{status},
             upd_date = current_date
@@ -163,9 +168,15 @@
         where brd_sn = #{sn}
     </update>
 
-<!--    <select id="getBoardCnt" resultType="int">-->
-<!--        select like_cnt from tbrd where sn = #{sn}-->
-<!--    </select>-->
+    <update id="updateReplyCnt">
+        update tbrd
+        set reply_cnt = reply_cnt + #{amount}
+        where sn = #{sn}
+    </update>
+
+    <select id="getCountByBrdSn" resultType="int">
+        select like_cnt from tbrd where sn = #{sn}
+    </select>
 
 
 </mapper>

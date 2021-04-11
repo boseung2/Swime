@@ -33,9 +33,9 @@ public class ReplyServiceTests {
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(2L);
-        reply.setUserId("hong2841@service.com");
-        reply.setContent("부모 댓글");
+        reply.setBrdSn(15L);
+        reply.setUserId("hong4258@service222.com");
+        reply.setContent("부모 댓글 카운트 증가3");
         reply.setStatus("RPST01");
 
         service.register(reply);
@@ -46,10 +46,10 @@ public class ReplyServiceTests {
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(1L);
-        reply.setUserId("qwer937@naver.com");
-        reply.setCommentGroup(49);
-        reply.setContent("자식3");
+        reply.setBrdSn(2L);
+        reply.setUserId("hong5517@service.com");
+        reply.setCommentGroup(63);
+        reply.setContent("자식4");
         reply.setStatus("RPST01");
 
         service.register(reply);
@@ -60,10 +60,10 @@ public class ReplyServiceTests {
     public void testUpdate(){
         ReplyVO reply = new ReplyVO();
 
-        reply.setSn(42);
-        reply.setBrdSn(4L);
-        reply.setUserId("toywar94@naver.com");
-        reply.setContent("지금은 10시 04분");
+        reply.setSn(124);
+        //reply.setBrdSn(4L);
+        reply.setUserId("qwer8159@naver.com");
+        reply.setContent("부모 댓글/////");
         reply.setStatus("RPST01");
 
         service.modify(reply);
@@ -72,20 +72,20 @@ public class ReplyServiceTests {
 
     @Test
     public void testGet(){
-        log.info(service.get(3L));
+        log.info(service.get(63L));
 
     }
 
     @Test
     public void testDelete(){
-        service.remove(42L);
+        service.remove(63L);
 
     }
 
     @Test
     public void testGetListPaging(){
         BoardCriteria cri = new BoardCriteria();
-        service.getList(cri, 2L);
+        service.getListPage(cri, 1L);
     }
 
 

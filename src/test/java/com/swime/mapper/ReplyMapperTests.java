@@ -53,7 +53,7 @@ public class ReplyMapperTests {
 
         //Long targetSn = 1L;
 
-        ReplyVO vo = mapper.read(30L);
+        ReplyVO vo = mapper.read(101L);
 
         log.info(vo);
     }
@@ -61,7 +61,7 @@ public class ReplyMapperTests {
     @Test
     public void testDelete(){
 
-        Long targetSn = 1L;
+        Long targetSn = 123L;
         mapper.delete(targetSn);
         //log.info("DELETE COUNT: "+mapper.delete(1L));
     }
@@ -69,7 +69,7 @@ public class ReplyMapperTests {
     @Test
     public void testUpdate(){
 
-        Long targetSn = 81L;
+        Long targetSn = 43L;
         ReplyVO vo = mapper.read(targetSn);
         vo.setContent("Update Reply");
 
@@ -106,7 +106,7 @@ public class ReplyMapperTests {
     @Test
     public void testGetBoardCnt(){
 
-        int replyCnt = mapper.getCountBySn(1L);
+        int replyCnt = mapper.getCountByBrdSn(1L);
 
         log.info("replyCnt: " + replyCnt);
 

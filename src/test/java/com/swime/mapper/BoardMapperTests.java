@@ -48,10 +48,10 @@ public class BoardMapperTests {
     public void testInsertSelectKey(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(4L);
+        board.setGrpSn(6L);
         board.setUserId("qwer9827@naver.com");
         //board.setUserName("selectKeyTest:minjae");
-        board.setTitle("Last Test selectKeyTest : 자바 초보만 오세용~~!!");
+        board.setTitle("댓글 개수 TEST");
         board.setContent("IP가 뭔가요?");
         //board.setLikeCnt(500);
         board.setTopFix("BOFI01");
@@ -65,7 +65,7 @@ public class BoardMapperTests {
 
     @Test
     public void testRead(){
-        BoardVO board = mapper.read(40L);
+        BoardVO board = mapper.read(15L);
         log.info(board);
     }
     @Test

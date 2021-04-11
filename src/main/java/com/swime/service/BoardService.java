@@ -15,6 +15,9 @@ public interface BoardService {
 
     public boolean remove(Long sn);
 
+    //댓글 개수
+    //public int getReplyCnt(Long brdSn);
+
     public List<BoardVO> getListWithPaging(BoardCriteria cri);
 
 }

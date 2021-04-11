@@ -22,10 +22,16 @@ public class BoardLikeServiceImpl implements BoardLikeService{
 
         // 좋아요 누른 회원을 insert한다. 여기까지는 테스트 ok
         boardLikeMapper.insert(boardLike);
+
+        /*
+        1. 좋아요 누를 시 tbrd 테이블 좋아요 개수가 증가한다.
+        */
         // 좋아요 테이블의 게시물 번호를 가져온다.
         Long brnSn = boardLike.getBrdSn();
         // 가져온 번호로 게시물을 읽는다.
         BoardVO board = boardMapper.read(brnSn);
+
+        log.info("board..........."+board);
         // 게시물 좋아요 개수를 넣는다.
         board.setLikeCnt(boardLikeMapper.getBoardLikeCnt(brnSn));
 
