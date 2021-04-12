@@ -6,30 +6,9 @@
 <%@include file="../includes/header.jsp" %>
 
 <!-- Page Content -->
-<div class="container">
-
-    <!-- Heading Row -->
-    <div class="row align-items-center my-5">
-        <div class="col-lg-7">
-            <img class="img-fluid rounded mb-4 mb-lg-0" src="http://placehold.it/900x400" alt="">
-        </div>
-        <!-- /.col-lg-8 -->
-        <div class="col-lg-5">
-            <h1 class="font-weight-light">Business Name or Tagline</h1>
-            <p>This is a template that is great for small businesses. It doesn't have too much fancy flare to it, but it makes a great use of the standard Bootstrap core components. Feel free to use this template for any project you want!</p>
-            <a class="btn btn-primary" href="#">Call to Action!</a>
-        </div>
-        <!-- /.col-md-4 -->
-    </div>
-    <!-- /.row -->
-
-    <!-- Call to Action Well -->
-    <div class="card text-white bg-secondary my-5 py-4 text-center">
-        <div class="card-body">
-            <p class="text-white m-0">This call to action card is a great place to showcase some important information or display a clever tagline!</p>
-        </div>
-    </div>
-
+    <div class="container">
+        <div>모임 찾기</div>
+        <hr/>
     <!-- Content Row -->
     <div class="row">
         <c:forEach items="${list}" var="group">
@@ -51,7 +30,52 @@
     </div>
     <!-- /.row -->
 
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal Header</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>처리가 완료되었습니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- /.container -->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        let result = '<c:out value="${result}"/>';
+
+        checkModal(result);
+
+        function checkModal(result) {
+
+            if(result === '') {
+                return;
+            }
+
+            if(parseInt(result) > 0) {
+                $('.modal-body').html('게시글 ' + parseInt(result) + "번이 등록되었습니다.");
+            }
+
+            $("#myModal").modal("show");
+
+            $("#regBtn").on("click", function() {
+                self.location = "/group/register";
+            })
+        }
+    })
+</script>
 
 <%@include file="../includes/footer.jsp" %>
