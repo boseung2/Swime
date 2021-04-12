@@ -1,27 +1,20 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { Route } from 'react-router-dom';
+import GroupListPage from './pages/GroupListPage';
+import GroupRegisterPage from './pages/GroupRegisterPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import Top from './components/common/Top';
 
 const App = () => {
-  const [data, setData] = useState(null);
-  const onClick = () => {
-    axios.get('/sample/getSample').then((response) => {
-      setData(response.data);
-    });
-  };
-
   return (
-    <div>
-      <div>
-        <button onClick={onClick}>불러오기</button>
-      </div>
-      {data && (
-        <textarea
-          rows={7}
-          value={JSON.stringify(data, null, 2)}
-          readOnly={true}
-        />
-      )}
-    </div>
+    <>
+      <Top></Top>
+      <Route component={GroupListPage} path="/" exact={true} />
+      <Route component={GroupRegisterPage} path="/group/register" />
+      <Route component={LoginPage} path="/login" />
+      <Route component={RegisterPage} path="/register" />
+    </>
   );
 };
 
