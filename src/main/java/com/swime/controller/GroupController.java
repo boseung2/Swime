@@ -10,14 +10,17 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
-@RequestMapping("/group")
+@Controller
+@RequestMapping("/group/*")
 @Log4j
 @AllArgsConstructor
 public class GroupController {
@@ -26,17 +29,43 @@ public class GroupController {
     private GroupAttendService groupAttendService;
     private GroupRatingService groupRatingService;
 
-    @PostMapping(value = "/new")
-    public ResponseEntity<String> create(@RequestBody GroupVO vo) {
-        // 모임을 등록한다.
-        int insertCount = groupService.register(vo);
-
-        return insertCount == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    @GetMapping(value = "/list")
+    public void list(Model model) {
+        // 그룹 리스트 가져온다.
+        log.info("list");
+        model.addAttribute("list", groupService.getListWithPaging(new GroupCriteria(1, 6)));
     }
 
-    @GetMapping(value = "/{sn}")
+    @GetMapping("/register")
+    public void register() {
+
+    }
+
+    @PostMapping(value = "/register")
+    public String register(GroupVO group, RedirectAttributes rttr) {
+        // 모임을 등록한다.
+        groupService.register(group);
+        rttr.addFlashAttribute("result", group.getSn());
+
+        return "redirect:/group/list";
+    }
+
+    @GetMapping(value = "/get")
+    public void get(@RequestParam("sn") Long sn, Model model) {
+        model.addAttribute("group", groupService.get(sn));
+        model.addAttribute("attendList", groupAttendService.getList(sn));
+        model.addAttribute("ratingList", groupRatingService.getListWithPaging(sn, new GroupRatingCriteria(1, 6)));
+    }
+
+    @PostMapping("/modify")
+    public String modify(GroupVO group, RedirectAttributes rttr) {
+        if(groupService.modify(group) == 1) {
+            rttr.addFlashAttribute("result", "success");
+        }
+        return "redirect:/group/list";
+    }
+
+    /*
     public ResponseEntity<Map<String, Object>> get(
             @PathVariable("sn") Long sn) {
 
@@ -48,12 +77,6 @@ public class GroupController {
         // 그룹 후기리스트
         map.put("ratingList", groupRatingService.getListWithPaging(sn, new GroupRatingCriteria(1, 6)));
         return new ResponseEntity<>(map, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/list")
-    public ResponseEntity<List<GroupVO>> getList(@RequestBody GroupCriteria cri) {
-        // 그룹 리스트 가져온다.
-        return new ResponseEntity<>(groupService.getListWithPaging(cri), HttpStatus.OK);
     }
 
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
@@ -126,5 +149,7 @@ public class GroupController {
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+     */
 
 }
