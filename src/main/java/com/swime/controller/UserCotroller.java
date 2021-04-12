@@ -10,11 +10,12 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
@@ -39,10 +40,8 @@ public class UserCotroller {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody MemberVO vo){
-        return service.register(vo) ?
-                new ResponseEntity<>("Resister Success", HttpStatus.OK) :
-                new ResponseEntity<>("Resister Fail", HttpStatus.BAD_REQUEST);
+    public void register(@RequestBody MemberVO vo){
+        service.register(vo);
     }
 
     @GetMapping("/modify")

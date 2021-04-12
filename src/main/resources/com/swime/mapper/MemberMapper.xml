@@ -52,11 +52,11 @@
     </insert>
 
     <insert id="insertWithAuth">
-        insert ALL
-        into TUSER(id, password, name)
-        values(#{id}, #{password}, #{name})
-        into TUSER_ROLE
-        value (<foreach collection="")
+<!--        insert ALL-->
+<!--        into TUSER(id, password, name)-->
+<!--        values(#{id}, #{password}, #{name})-->
+<!--        into TUSER_ROLE-->
+<!--        value (<foreach collection="")-->
     </insert>
 
     <update id="update">

@@ -37,13 +37,14 @@ public class RootConfig {
         System.setProperty("java.security.egd", "file:///dev/urandom");
 
         HikariConfig hikariConfig = new HikariConfig();
-        if(true){
-            hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+        hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+
+        if(false){
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");
             hikariConfig.setPassword("1q2w3e4r5t6Y");
-        }else{
-            hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+        }
+        else{
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:XE");
             hikariConfig.setUsername("student");
             hikariConfig.setPassword("1234");
