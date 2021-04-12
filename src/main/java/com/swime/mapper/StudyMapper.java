@@ -19,6 +19,9 @@ public interface StudyMapper {
 
     //스터디 내용 수정
     public int update(StudyVO study);
+    
+    //스터디 상태 수정
+    public int updateStatus(@Param("sn") Long sn, @Param("status") String status);
 
     // 스터디 모집 마감
     public int endStudy(Long sn);

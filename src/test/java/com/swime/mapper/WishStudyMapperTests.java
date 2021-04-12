@@ -32,13 +32,6 @@ public class WishStudyMapperTests {
     }
 
     @Test
-    public void testGet() { // 사용자가 해당 스터디를 찜했는지 안했는지 확인
-        WishStudyVO wish = mapper.get(368L, "jiho@naver.com");
-
-        Assert.assertNotNull(wish);
-    }
-
-    @Test
     public void testInsert() {
         WishStudyVO wish = new WishStudyVO();
 
@@ -49,14 +42,23 @@ public class WishStudyMapperTests {
         wish.setUserId(userId);
 
         // 이미 명단에 있으면 리턴
-        if(mapper.get(stdSn, userId) != null) return;
+        if(mapper.get(new StudyCriteria(stdSn, userId)) != null) return;
 
         assert (mapper.insert(wish) == 1);
     }
 
     @Test
+    public void testGet() { // 사용자가 해당 스터디를 찜했는지 안했는지 확인
+        WishStudyVO wish = mapper.get(new StudyCriteria(368L, "jiho@naver.com"));
+
+        Assert.assertNotNull(wish);
+    }
+
+
+    @Test
     public void testDelete() {
-        assert (mapper.delete(368L, "jiho@naver.com") == 1);
-        assert (mapper.get(368L, "jiho@naver.com") == null);
+        StudyCriteria cri = new StudyCriteria(368L, "jiho@naver.com");
+        assert (mapper.delete(cri) == 1);
+        assert (mapper.get(cri) == null);
     }
 }

@@ -375,8 +375,8 @@ public class StudyMapperTests {
         return "STOF01".equals(study.getOnOff());
     }
 
-    private boolean isValidUrl(String url) {
-        UrlValidator urlValidator = new UrlValidator(); //{"http", "https", "ftp"}로 시작하는지 확인
+    private boolean isValidUrl(String url) { // 유효한 url인지 확인
+        UrlValidator urlValidator = new UrlValidator(new String[]{"http","https"});
         log.info("===============================isValid : " + urlValidator.isValid(url));
         return urlValidator.isValid(url);
     }
@@ -410,6 +410,7 @@ public class StudyMapperTests {
             if(isOnline(study)) {
                 String url = study.getOnUrl();
 
+                log.info("============================url : " + url);
                 assert (url != null && isValidUrl(url) && study.getPlaceId() == null);
             }else {
                 // 4. 오프라인일 경우 장소id가 null이 아니고, 온라인 링크가 null인지 확인
@@ -444,14 +445,8 @@ public class StudyMapperTests {
     }
 
     @Test
-    public void testDelete(){
-        assert(mapper.delete(307L) == 1);
-        assertNull(mapper.get(307L));
-    }
-
-    @Test
-    public void testEndStudy() {
-        assert (mapper.endStudy(307L) == 1);
+    public void testUpdateStatus(){
+        assert (mapper.updateStatus(307L, "STST03") == 1);
         assert ("STST03".equals(mapper.get(307L).getStatus()));
     }
 }

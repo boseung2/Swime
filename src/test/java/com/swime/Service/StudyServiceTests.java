@@ -25,30 +25,6 @@ public class StudyServiceTests {
         assertNotNull(service);
     }
 
-//    @Test
-//    public void testRegister() {
-//        StudyVO study = new StudyVO();
-//        study.setGrpSn(7);
-//        study.setName("스터디 만들기 서비스 테스트");
-//        study.setStartDate("2021-04-06");
-//        study.setEndDate("2021-04-06");
-//        study.setStartTime("14:00:00");
-//        study.setEndTime("16:00:00");
-//        study.setRepeatCycle("");
-//        study.setRepeatDay("");
-//        study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
-//        study.setOnOff("STOF02");
-//        study.setOnUrl("");
-//        study.setPlaceId("구글 place id");
-//        study.setExpense("5000원");
-//        study.setCapacity(20);
-//        study.setStatus("STST01");
-//
-//        service.register(study);
-//
-//        log.info("생성된 게시물의 번호: " + study.getSn());
-//    }
-
     @Test
     public void testRegister() {
         StudyVO study = new StudyVO();
@@ -132,7 +108,7 @@ public class StudyServiceTests {
 
     @Test
     public void testRemoveWish() {
-        log.info("DELETE COUNT : " + service.removeWish(82L, "aaa@naver.com"));
+        log.info("DELETE COUNT : " + service.removeWish(new StudyCriteria(368L, "jiho@naver.com")));
     }
 
     //StudyList
@@ -195,7 +171,8 @@ public class StudyServiceTests {
     //StudyAnswer
     @Test
     public void testGetAnswer() {
-        service.getAnswer(82L, "aaa@naver.com").forEach(answer -> log.info(answer));
+        StudyCriteria cri = new StudyCriteria(82L, "aaa@naver.com");
+        service.getAnswer(cri).forEach(answer -> log.info(answer));
     }
 
     @Test
@@ -212,6 +189,7 @@ public class StudyServiceTests {
 
     @Test
     public void testRemoveAnswer() {
-        log.info("DELETE COUNT : " + service.removeAnswer(84L, "ffff@naver.com"));
+        StudyCriteria cri = new StudyCriteria(84L, "ffff@naver.com");
+        log.info("DELETE COUNT : " + service.removeAnswer(cri));
     }
 }

@@ -68,6 +68,16 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
+    public int endStudy(Long sn) {
+        return mapper.updateStatus(sn, "STST03");
+    }
+
+    @Override
+    public int delete(Long sn) {
+        return mapper.updateStatus(sn, "STST02");
+    }
+
+    @Override
     public int remove(Long sn) {
         return mapper.delete(sn);
     }
@@ -94,8 +104,8 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public int removeWish(Long stdSn, String userId) {
-        return WishMapper.delete(stdSn, userId);
+    public int removeWish(StudyCriteria cri) {
+        return WishMapper.delete(cri);
     }
 
     // StudyList
@@ -141,8 +151,8 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public List<StudyAnswerVO> getAnswer(long stdSn, String userId) {
-        return answerMapper.get(stdSn, userId);
+    public List<StudyAnswerVO> getAnswer(StudyCriteria cri) {
+        return answerMapper.get(cri);
     }
 
     //StudyAnswer
@@ -186,8 +196,8 @@ public class StudyServiceImpl implements StudyService{
 //    }
 
     @Override
-    public int removeAnswer(long stdSn, String userId) {
-        return answerMapper.delete(stdSn, userId);
+    public int removeAnswer(StudyCriteria cri) {
+        return answerMapper.delete(cri);
     }
 
 

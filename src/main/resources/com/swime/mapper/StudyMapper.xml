@@ -64,17 +64,10 @@
         where sn = #{sn}
     </update>
 
-    <update id = "endStudy">
+    <update id = "updateStatus">
         update tstd
-        set status= 'STST03',
-        upd_date = current_date
-        where sn = #{sn}
-    </update>
-
-    <update id="delete">
-        update tstd
-        set status = 'STST02',
-        upd_date = current_date
+        set status= #{status},
+            upd_date = current_date
         where sn = #{sn}
     </update>
 

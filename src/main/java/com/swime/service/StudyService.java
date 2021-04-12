@@ -14,6 +14,10 @@ public interface StudyService {
 
     public int modify(StudyVO study);
 
+    public int endStudy(Long sn);
+
+    public int delete(Long sn);
+
     public int remove(Long sn);
 
     public List<StudyVO> getList();
@@ -25,7 +29,7 @@ public interface StudyService {
 
     public int registerWish(WishStudyVO wish);
 
-    public int removeWish(Long stdSn,String userId);
+    public int removeWish(StudyCriteria cri);
 
     // StudyList
     public List<StudyListVO> getAttendantList(long stdSn);
@@ -46,9 +50,9 @@ public interface StudyService {
     public int removeSurvey(long stdSn);
 
     //StudyAnswer
-    public List<StudyAnswerVO> getAnswer(long stdSn, String userId);
+    public List<StudyAnswerVO> getAnswer(StudyCriteria cri);
 
     public int registerAnswer(StudyAnswerVO answer);
     
-    public int removeAnswer(long stdSn, String userId); //사용 안할지도
+    public int removeAnswer(StudyCriteria cri);
 }

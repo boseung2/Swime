@@ -8,6 +8,7 @@
         select sn, std_sn, user_id, question_sn, question, answer
         from tstd_answer
         where std_sn = #{stdSn} and user_id = #{userId}
+        order by question_sn
     </select>
 
     <insert id="insert">
