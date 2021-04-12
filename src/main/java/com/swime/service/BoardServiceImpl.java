@@ -18,6 +18,12 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Override
+    //jsp getList test
+    public List<BoardVO> getList() {
+        return mapper.getList();
+    }
+
+    @Override
     public int register(BoardVO board) {
 
         return mapper.insertSelectKey(board);

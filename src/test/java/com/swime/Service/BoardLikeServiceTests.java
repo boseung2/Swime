@@ -34,7 +34,7 @@ public class BoardLikeServiceTests {
         BoardLikeVO boardLike = new BoardLikeVO();
 
         //boardLike.setLikeSn(44L);
-        boardLike.setBrdSn(42L);
+        boardLike.setBrdSn(44L);
         boardLike.setUserId("toy2345@naver.com");
 
         service.register(boardLike);
@@ -48,7 +48,7 @@ public class BoardLikeServiceTests {
     @Test
     public void testRemove(){
 
-        log.info("REMOVE RESULT: " + service.remove(5L,"toy2345@naver.com"));
+        log.info("REMOVE RESULT: " + service.remove(44L,"toy11@naver.com"));
 
     }
 

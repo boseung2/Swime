@@ -20,7 +20,7 @@ public interface BoardMapper {
 
     public int insert(BoardVO board);
 
-    //게시판 상세정보 읽기
+    //게시판 읽기
     public BoardVO read(Long sn);
 
     //게시판 삭제

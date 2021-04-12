@@ -26,7 +26,8 @@
               u.id = b.user_id
         and
               b.sn > 0
-        order by top_fix asc
+        order by top_fix desc,
+                 reg_date desc
         ]]>
     </select>
     <select id="getListWithPaging" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
@@ -72,7 +73,8 @@
                 rownum <= #{pageNum} * #{amount}
             )
             where rn > (#{pageNum} - 1) * #{amount}
-
+            order by top_fix desc,
+                     reg_date desc
         ]]>
     </select>
 
@@ -174,9 +176,10 @@
         where sn = #{sn}
     </update>
 
-    <select id="getCountByBrdSn" resultType="int">
-        select like_cnt from tbrd where sn = #{sn}
-    </select>
+
+<!--    <select id="getCountByBrdSn" resultType="int">-->
+<!--        select like_cnt from tbrd where sn = #{sn}-->
+<!--    </select>-->
 
 
 </mapper>

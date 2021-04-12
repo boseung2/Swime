@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface BoardService {
 
+    //jsp getList test
+    public List<BoardVO> getList();
+
     public int register(BoardVO board);
 
     public BoardVO get(Long sn);

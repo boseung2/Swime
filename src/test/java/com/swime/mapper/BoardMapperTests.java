@@ -118,7 +118,7 @@ public class BoardMapperTests {
         BoardVO board = new BoardVO();
 
         board.setSn(50L);
-        board.setContent("UpdateContentTest: 제발...");
+        board.setContent("contentUpdateTest: spring");
 
         int count = mapper.updateContent(board);
 

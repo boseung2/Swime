@@ -23,7 +23,7 @@ public class BoardLikeMapperTests {
     public void testInsert(){
         BoardLikeVO boardLike = new BoardLikeVO();
 
-        boardLike.setBrdSn(1L);
+        boardLike.setBrdSn(44L);
         boardLike.setUserId("toytoy@naver.com");
 
         mapper.insert(boardLike);
@@ -54,7 +54,7 @@ public class BoardLikeMapperTests {
     @Test
     public void testGetBoardLikeCnt(){
 
-        int board = mapper.getBoardLikeCnt(3L);
+        int board = mapper.getBoardLikeCnt(44L);
 
         log.info(board);
     }
