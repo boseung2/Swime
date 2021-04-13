@@ -11,9 +11,10 @@ public interface AuthMapper {
 
     int insert(@Param("id") String id, @Param("auth") String auth);
 
-    int delete(@Param("id") String id, @Param("auth") String auth);
+    int delete(@Param("id") String id);
+
+    int deleteAuth(@Param("id") String id, @Param("auth") String auth);
 
     AuthVO select(@Param("id") String id, @Param("auth") String auth);
 
-    int isAready(@Param("id") String id, @Param("auth") String auth);
 }

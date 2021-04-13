@@ -38,7 +38,7 @@ public class AuthMapperTests {
     @Test
     public void delete(){
         Assert.assertTrue(mapper.insert(random + "asd@naver.com","ADMIN") == 1);
-        Assert.assertTrue(mapper.delete(random + "asd@naver.com","ADMIN") == 1);
+        Assert.assertTrue(mapper.deleteAuth(random + "asd@naver.com","ADMIN") == 1);
     }
 
     @Test
