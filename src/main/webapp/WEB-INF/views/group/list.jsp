@@ -7,7 +7,7 @@
 
 <!-- Page Content -->
     <div class="container">
-        <div>모임 찾기</div>
+        <h2>모임 찾기</h2>
         <hr/>
     <!-- Content Row -->
     <div class="row">
@@ -22,7 +22,7 @@
                         <p class="card-text"><c:out value="${group.description}"/></p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn btn-primary btn-sm">More Info</a>
+                        <a href="/group/get?sn=<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm">More Info</a>
                     </div>
                 </div>
             </div>
@@ -59,14 +59,16 @@
 
         checkModal(result);
 
+        history.replaceState({}, null, null);
+
         function checkModal(result) {
 
-            if(result === '') {
+            if(result === '' || history.state) {
                 return;
             }
 
             if(parseInt(result) > 0) {
-                $('.modal-body').html('게시글 ' + parseInt(result) + "번이 등록되었습니다.");
+                $('.modal-body').html('모임 ' + parseInt(result) + "번이 등록되었습니다.");
             }
 
             $("#myModal").modal("show");

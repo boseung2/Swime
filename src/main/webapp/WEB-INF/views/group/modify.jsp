@@ -6,12 +6,16 @@
 <%@include file="../includes/header.jsp" %>
 
 <div class="container">
-    <h2>모임 만들기</h2>
+    <h2>모임 정보 수정</h2>
     <hr/>
-    <form role="form" action="/group/register" method="post">
+    <form role="form" action="/group/modify" method="post">
+        <div class="form-group">
+            <label for="sn">모임번호</label>
+            <input type="text" class="form-control" id="sn" name="sn" value="<c:out value="${group.sn}"/>" readonly="readonly">
+        </div>
         <div class="form-group">
             <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="userId">
+            <input type="text" class="form-control" id="userId" name="userId" value="<c:out value="${group.userId}"/>" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="category">카테고리</label>
@@ -32,19 +36,19 @@
         </div>
         <div class="form-group">
             <label for="name">모임이름</label>
-            <input type="text" class="form-control" name="name" id="name">
+            <input type="text" class="form-control" name="name" id="name" value="<c:out value="${group.name}"/>">
         </div>
         <div class="form-group">
             <label for="picture">대표사진</label>
-            <input type="text" class="form-control" id="picture" name="picture">
+            <input type="text" class="form-control" id="picture" name="picture" value="<c:out value="${group.picture}"/>">
         </div>
         <div class="form-group">
             <label for="description">한줄소개</label>
-            <textarea class="form-control" rows="1" id="description" name="description"></textarea>
+            <textarea class="form-control" rows="1" id="description" name="description"><c:out value="${group.description}"/></textarea>
         </div>
         <div class="form-group">
             <label for="info">정보 (모임에 대해 자세히 적어주세요)</label>
-            <textarea class="form-control" rows="5" id="info" name="info"></textarea>
+            <textarea class="form-control" rows="5" id="info" name="info"><c:out value="${group.info}"/></textarea>
         </div>
         <div class="form-row">
             <div class="col">
@@ -68,13 +72,40 @@
         </div>
         <div class="form-group">
             <label for="tags">태그</label>
-            <input type="text" class="form-control" name="tags" id="tags">
+            <input type="text" class="form-control" name="tags" id="tags" value="<c:out value="${group.tags}"/>">
         </div>
-        <button type="submit" class="btn btn-primary">등록</button>
-        <button type="reset" class="btn btn-primary">취소</button>
+        <div class="form-group">
+            <label for="updDate" hidden></label>
+            <input type="date" class="form-control" name="updDate" id="updDate" value="<fmt:formatDate value="${group.updDate}" pattern="yyyy/MM/dd"/>" hidden>
+        </div>
+        <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
+        <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
+        <button type="submit" class="btn btn-secondary" data-oper="list">목록</button>
     </form>
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        let formObj = $('form');
+
+        $('button').on("click", function(e) {
+
+            e.preventDefault();
+
+            let operation = $(this).data('oper');
+
+            console.log(operation);
+
+            if(operation === 'reomve') {
+                formObj.attr('action', '/group/remove');
+            } else if (operation === 'list') {
+                self.location = '/group/list';
+                return;
+            }
+            formObj.submit();
+        })
+    })
+</script>
 
 
 

@@ -43,6 +43,8 @@ public class GroupController {
 
     @PostMapping(value = "/register")
     public String register(GroupVO group, RedirectAttributes rttr) {
+        log.info(">>>>>>>>>>>>>>>>>>>>>");
+        log.info(group);
         // 모임을 등록한다.
         groupService.register(group);
         rttr.addFlashAttribute("result", group.getSn());
@@ -50,7 +52,7 @@ public class GroupController {
         return "redirect:/group/list";
     }
 
-    @GetMapping(value = "/get")
+    @GetMapping({"/get", "modify"})
     public void get(@RequestParam("sn") Long sn, Model model) {
         model.addAttribute("group", groupService.get(sn));
         model.addAttribute("attendList", groupAttendService.getList(sn));
@@ -59,6 +61,8 @@ public class GroupController {
 
     @PostMapping("/modify")
     public String modify(GroupVO group, RedirectAttributes rttr) {
+        log.info(">>>>>>>>>>>>>>>>>");
+        log.info(group);
         if(groupService.modify(group) == 1) {
             rttr.addFlashAttribute("result", "success");
         }
