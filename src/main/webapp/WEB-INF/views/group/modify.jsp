@@ -52,10 +52,8 @@
             <div class="col">
             <label for="sido">시/도</label>
             <select class="form-control" id="sido" name="sido">
-                <option value="LOSI01">1</option>
-                <option value="LOSI02">2</option>
-                <option value="LOSI03">3</option>
-                <option value="LOSI04">4</option>
+                <option value="LOSI01">서울시</option>
+                <option value="LOSI02">경기도</option>
             </select>
             </div>
             <div class="col">

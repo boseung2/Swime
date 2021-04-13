@@ -27,6 +27,7 @@ public class GroupController {
         // 그룹 리스트 가져온다.
         log.info("list: " + cri);
         model.addAttribute("list", groupService.getListWithPaging(cri));
+        model.addAttribute("pageMaker", new GroupPageDTO(cri, 123));
     }
 
     @GetMapping("/register")
