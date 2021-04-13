@@ -50,10 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler())
         .and()
             .logout()
-                .logoutUrl("/logoutPage")
-                .invalidateHttpSession(true)
-                .deleteCookies("remember-me", "JSESSION_ID")
+                .logoutUrl("/user/logout")
 
+                .invalidateHttpSession(true)
+                .deleteCookies("remember-me", "JSESSIONID")
         ;
 //        http
 //            .authorizeRequests()
