@@ -5,19 +5,12 @@ import com.swime.service.GroupAttendService;
 import com.swime.service.GroupRatingService;
 import com.swime.domain.GroupVO;
 import com.swime.service.GroupService;
-import com.swime.service.GroupTagService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/group/*")
@@ -30,10 +23,10 @@ public class GroupController {
     private GroupRatingService groupRatingService;
 
     @GetMapping(value = "/list")
-    public void list(Model model) {
+    public void list(GroupCriteria cri, Model model) {
         // 그룹 리스트 가져온다.
-        log.info("list");
-        model.addAttribute("list", groupService.getListWithPaging(new GroupCriteria(1, 6)));
+        log.info("list: " + cri);
+        model.addAttribute("list", groupService.getListWithPaging(cri));
     }
 
     @GetMapping("/register")
@@ -64,6 +57,15 @@ public class GroupController {
         log.info(">>>>>>>>>>>>>>>>>");
         log.info(group);
         if(groupService.modify(group) == 1) {
+            rttr.addFlashAttribute("result", "success");
+        }
+        return "redirect:/group/list";
+    }
+
+    @PostMapping("/remove")
+    public String remove(@RequestParam("sn") Long sn, RedirectAttributes rttr) {
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>remove>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        if(groupService.remove(groupService.get(sn)) == 1) {
             rttr.addFlashAttribute("result", "success");
         }
         return "redirect:/group/list";

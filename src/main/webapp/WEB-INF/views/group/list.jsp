@@ -16,9 +16,20 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <img class="img-fluid rounded mb-4 mb-lg-0" src="http://placehold.it/900x400" alt="">
-                        <p class="card-text"><c:out value="${group.tags}"/></p>
+                        <div class="flex-container" style="display: flex;">
+                        <c:forEach items="${group.tags}" var="tag">
+                            <div style="background-color: #f1f1f1;
+                                        margin: 2px;
+                                        padding: 2px;
+                                        font-size: 10px;
+                                        border-radius: 0.5rem;">
+                            <c:out value="${tag}"/>
+                            </div>
+                        </c:forEach>
+                        </div>
                         <h2 class="card-title"><c:out value="${group.name}"/></h2>
                         <p class="card-text"><c:out value="${group.sido}"/><c:out value="${group.sigungu}"/></p>
+                        <p class="card-text">평점: <c:out value="${group.rating}"/>(<c:out value="${group.ratingCount}"/>)</p>
                         <p class="card-text"><c:out value="${group.description}"/></p>
                     </div>
                     <div class="card-footer">

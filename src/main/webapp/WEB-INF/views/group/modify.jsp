@@ -100,10 +100,10 @@
 
             console.log(operation);
 
-            if(operation === 'reomve') {
-                formObj.attr('action', '/group/remove');
+            if(operation === 'remove') {
+                formObj.attr("action", "/group/remove");
             } else if (operation === 'list') {
-                formObj.attr("action", 'list').attr("method", "get");
+                formObj.attr("action", '/group/list').attr("method", "get");
                 formObj.empty();
             }
             formObj.submit();
