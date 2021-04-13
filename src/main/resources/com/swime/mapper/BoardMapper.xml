@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.BoardMapper">
+
+    <select id="getList" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
+    <![CDATA[
+        select b.sn,
+               b.grp_sn,
+               b.user_id,
+               u.name,
+               b.title,
+               d.content,
+               b.like_cnt,
+               b.reply_cnt,
+               b.top_fix,
+               b.status,
+               b.reg_date,
+               b.upd_date
+        from
+            tuser u, tbrd b, tbrd_det d
+        where
+              b.sn = d.brd_sn
+        and
+              u.id = b.user_id
+        and
+              b.sn > 0
+        order by top_fix desc,
+                 reg_date desc
+        ]]>
+    </select>
+    <select id="getListWithPaging" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
+    <![CDATA[
+        select
+            sn,
+            grp_sn,
+            user_id,
+            name,
+            title,
+            content,
+            like_cnt,
+            reply_cnt,
+            top_fix,
+            status,
+            reg_date,
+            upd_date
+        from
+            (
+            select /*+INDEX_DESC(tbrd pk_tbrd) */
+                rownum rn,
+                b.sn,
+                b.grp_sn,
+                b.user_id,
+                u.name,
+                b.title,
+                d.content,
+                b.like_cnt,
+                b.reply_cnt,
+                b.top_fix,
+                b.status,
+                b.reg_date,
+                b.upd_date
+            from
+                tuser u,
+                tbrd b,
+                tbrd_det d
+            where
+                b.sn = d.brd_sn
+            and
+                u.id = b.user_id
+            and
+                rownum <= #{pageNum} * #{amount}
+            )
+            where rn > (#{pageNum} - 1) * #{amount}
+            order by top_fix desc,
+                     reg_date desc
+        ]]>
+    </select>
+
+    <insert id="insert">
+        insert ALL
+        into
+        tbrd
+            (
+            sn,
+            grp_sn,
+            user_id,
+            title,
+            top_fix,
+            status
+            )
+        values
+        (seq_tbrd.nextval, #{grpSn}, #{userId}, #{title}, #{topFix}, #{status})
+        into
+        tbrd_det(brd_sn, content)
+        values
+        (seq_tbrd.nextval, #{content})
+        select * from dual
+    </insert>
+
+    <insert id="insertSelectKey">
+
+        <selectKey resultType="long" order="BEFORE" keyProperty="sn">
+            select seq_tbrd.nextval from dual
+        </selectKey>
+        insert ALL
+        into
+        tbrd(
+        sn,
+        grp_sn,
+        user_id,
+        title
+        )
+        values
+        (seq_tbrd.nextval, #{grpSn}, #{userId}, #{title}
+        )
+        into
+        tbrd_det(brd_sn, content)
+        values
+        (seq_tbrd.nextval, #{content})
+        select * from dual
+    </insert>
+
+    <select id="read" resultType="com.swime.domain.BoardVO">
+        <![CDATA[
+        select b.sn,
+               b.grp_sn,
+               b.user_id,
+               u.name,
+               b.title,
+               d.content,
+               b.like_cnt,
+               b.reply_cnt,
+               b.top_fix,
+               b.status,
+               b.reg_date,
+               b.upd_date
+        from
+            tuser u, tbrd b, tbrd_det d
+        where
+            b.sn = d.brd_sn
+        and
+            u.id = b.user_id
+        and
+            b.sn = #{sn}
+        ]]>
+    </select>
+
+    <delete id="delete">
+        delete from tbrd where sn = #{sn} </delete>
+
+    <update id="update">
+        update tbrd
+        set
+            user_id = #{userId},
+            title = #{title},
+            like_cnt = #{likeCnt},
+            reply_cnt = #{replyCnt},
+            top_fix = #{topFix},
+            status = #{status},
+            upd_date = current_date
+        where sn = #{sn}
+    </update>
+
+    <update id="updateContent">
+        update tbrd_det
+        set content = #{content}
+        where brd_sn = #{sn}
+    </update>
+
+    <update id="updateReplyCnt">
+        update tbrd
+        set reply_cnt = reply_cnt + #{amount}
+        where sn = #{sn}
+    </update>
+
+
+<!--    <select id="getCountByBrdSn" resultType="int">-->
+<!--        select like_cnt from tbrd where sn = #{sn}-->
+<!--    </select>-->
+
+
+</mapper>

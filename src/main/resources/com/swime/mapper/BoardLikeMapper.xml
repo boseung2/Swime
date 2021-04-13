@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.BoardLikeMapper">
+
+<insert id="insert">
+        insert into
+            tbrd_like(like_sn, brd_sn, user_id)
+        values
+               (SEQ_TBRD_LIKE.nextval,#{brdSn},#{userId})
+    </insert>
+
+    <delete id="delete">
+        delete from tbrd_like where brd_sn = #{brdSn}
+                                and
+                                    user_id = #{userId}
+    </delete>
+
+    <select id="getBoardLikeCnt" resultType="int">
+        select count(brd_sn) from tbrd_like where brd_sn = #{brdSn}
+    </select>
+
+
+</mapper>

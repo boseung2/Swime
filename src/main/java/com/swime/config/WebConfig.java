@@ -23,21 +23,28 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return new String[]{"/"};
     }
 
+
+    //첨부파일
     @Override
-    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+    public void customizeRegistration(ServletRegistration.Dynamic registration) {
         registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 
-        MultipartConfigElement multipartConfig = new MultipartConfigElement("C:\\upload\\temp", 20971520, 41943040, 20971520);
+        MultipartConfigElement multipartConfig = new MultipartConfigElement
+                ("C://upload//temp", 20971520,
+                        41943040, 20971520);
         registration.setMultipartConfig(multipartConfig);
+
     }
 
     @Override
     protected Filter[] getServletFilters() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        CharacterEncodingFilter characterEncodingFilter =
+                new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
 
-        return new Filter[] {characterEncodingFilter};
+        return new Filter[]{characterEncodingFilter};
     }
-
 }
+
+
