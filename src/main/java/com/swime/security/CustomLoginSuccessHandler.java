@@ -25,9 +25,14 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         });
 
         // 대상이 어드민이면
-        if(roleNames.contains("ADMIN")){}
+        if(roleNames.contains("ADMIN")){
+            log.info("ADMIN LOGIN");
+        }
         // 대상이 멤버이면
-        if(roleNames.contains("MEMBER")){}
+        if(roleNames.contains("MEMBER")){
+            log.info("MEMBER LOGIN");
+            response.sendRedirect("/sample/member");
+        }
 
 //        example
 //        로그인에 성공했고 그 대상이 어드민이라면 어드민 페이지로 보내준다
@@ -36,6 +41,6 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 //            return;
 //        }
 
-        response.sendRedirect("/index");
+//        response.sendRedirect("/index");
     }
 }
