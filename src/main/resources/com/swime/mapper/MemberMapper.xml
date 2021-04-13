@@ -10,9 +10,53 @@
         where id = #{id}
     </select>
 
+    <resultMap id="memberMap" type="com.swime.domain.MemberVO">
+        <id property="id" column="id"/>
+        <result property="id" column="id"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="picture" column="picture"/>
+        <result property="birth" column="birth"/>
+        <result property="regPath" column="reg_path"/>
+        <result property="lastLogin_date" column="last_login_date"/>
+        <result property="emailAuth" column="email_auth"/>
+        <result property="status" column="status"/>
+        <result property="regDate" column="reg_date"/>
+        <collection property="authList" resultMap="authMap"></collection>
+    </resultMap>
+
+    <resultMap id="authMap" type="com.swime.domain.AuthVO">
+        <result property="id" column="id"/>
+        <result property="auth" column="auth"/>
+    </resultMap>
+
+    <select id="readWithAuth" resultMap="memberMap">
+        select u.id as id,
+               u.password as password,
+               u.name as name,
+               u.picture as picture,
+               u.birth as birth,
+               u.reg_path as reg_path,
+               to_char(u.last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
+               to_char(u.email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth,
+               u.status as status,
+               to_char(u.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date,
+               a.auth as auth
+        from TUSER u LEFT OUTER JOIN TUSER_ROLE a on u.id = a.id
+        where u.id = #{id}
+    </select>
+
     <insert id="insert">
         insert into TUSER(id, password, name)
         values(#{id}, #{password}, #{name})
+    </insert>
+
+    <insert id="insertWithAuth">
+<!--        insert ALL-->
+<!--        into TUSER(id, password, name)-->
+<!--        values(#{id}, #{password}, #{name})-->
+<!--        into TUSER_ROLE-->
+<!--        value (<foreach collection="")-->
     </insert>
 
     <update id="update">
@@ -26,6 +70,7 @@
             status = #{status}
         where id = #{id}
     </update>
+
 
     <delete id="delete">
         update TUSER
@@ -55,18 +100,18 @@
     </select>
 
     <insert id="insertKey">
-        insert into tuser_auth(id, key)
+        insert into tuser_auth_key(id, key)
         values(#{id}, #{key})
     </insert>
 
     <select id="selectKey" resultType="String">
         select key
-        from tuser_auth
-        where id = #{id} and key = #{key}
+        from tuser_auth_key
+        where id = #{id}
     </select>
 
     <delete id="deleteKey">
-        delete from tuser_auth
+        delete from tuser_auth_key
         where id = #{id}
     </delete>
     
