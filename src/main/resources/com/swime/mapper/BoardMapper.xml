@@ -106,20 +106,19 @@
         </selectKey>
         insert ALL
         into
-            tbrd(
-                 sn,
-                 grp_sn,
-                 user_id,
-                 title,
-                 top_fix,
-                 status
-                 )
+        tbrd(
+        sn,
+        grp_sn,
+        user_id,
+        title
+        )
         values
-            (seq_tbrd.nextval, #{grpSn}, #{userId}, #{title}, #{topFix}, #{status})
+        (seq_tbrd.nextval, #{grpSn}, #{userId}, #{title}
+        )
         into
-            tbrd_det(brd_sn, content)
+        tbrd_det(brd_sn, content)
         values
-            (seq_tbrd.nextval, #{content})
+        (seq_tbrd.nextval, #{content})
         select * from dual
     </insert>
 

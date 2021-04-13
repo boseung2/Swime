@@ -32,14 +32,14 @@ public class BoardServiceTests {
     public void TestRegister(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(10L);
-        board.setUserId("Last 1새로운 id");
+        board.setGrpSn(1L);
+        board.setUserId("toywar12@naver.com");
         //board.setUserName("새로운 name");
-        board.setTitle("Last 새로운 제목");
-        board.setContent("Last Test content2");
+        board.setTitle("스프링 고수만 오세요");
+        board.setContent("스프링 고수만요~~");
         //board.setLikeCnt(500);
-        board.setTopFix("BOFI01");
-        board.setStatus("BOST01");
+        //board.setTopFix("BOFI01");
+        //board.setStatus("BOST01");
 
         service.register(board);
 
@@ -49,6 +49,11 @@ public class BoardServiceTests {
     @Test
     public void testGetListWithPaging(){
         service.getListWithPaging(new BoardCriteria(1,10)).forEach(board -> log.info(board));
+    }
+
+    @Test
+    public void testGetList(){
+        service.getList().forEach(board -> log.info(board));
     }
 
     @Test

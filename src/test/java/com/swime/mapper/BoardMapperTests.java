@@ -31,13 +31,13 @@ public class BoardMapperTests {
         BoardVO board = new BoardVO();
 
         board.setGrpSn(1L);
-        board.setUserId("asd123@naver.com");
+        board.setUserId("toywar12@naver.com");
         //board.setUserName("테스트:이민재");
         board.setTitle("Last Test : 자바 초보만 오세용~~!!");
         board.setContent("들어가라 제발..");
         //board.setLikeCnt(500);
-        board.setTopFix("BOFI01");
-        board.setStatus("BOST01");
+        //board.setTopFix("BOFI01");
+        //board.setStatus("BOST01");
 
         mapper.insert(board);
 

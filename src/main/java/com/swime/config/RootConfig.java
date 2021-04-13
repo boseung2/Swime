@@ -47,7 +47,7 @@ public class RootConfig {
         System.setProperty("oracle.jdbc.fanEnabled","false");
         System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         HikariConfig hikariConfig = new HikariConfig();
-        if(true) {
+        if(false) {
             hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");

@@ -99,7 +99,6 @@ public class ReplyServiceImpl implements ReplyService{
 
         //댓글 번호를 읽어온다.
         ReplyVO reply = replyMapper.read(sn);
-        log.info("reply....................."+reply+"//sn..."+sn);
 
         boardMapper.updateReplyCnt(reply.getBrdSn(), -1);
 

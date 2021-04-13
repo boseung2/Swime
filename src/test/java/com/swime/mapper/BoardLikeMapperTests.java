@@ -23,8 +23,8 @@ public class BoardLikeMapperTests {
     public void testInsert(){
         BoardLikeVO boardLike = new BoardLikeVO();
 
-        boardLike.setBrdSn(44L);
-        boardLike.setUserId("toytoy@naver.com");
+        boardLike.setBrdSn(1L);
+        boardLike.setUserId("toywar1@naver.com");
 
         mapper.insert(boardLike);
 
