@@ -26,31 +26,31 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public List<AuthVO> getList(String id) {
-        return null;
+        return mapper.getList(id);
     }
 
     @Override
     public boolean register(String id, String auth) {
-        return false;
+        return mapper.insert(id,auth) == 1;
     }
 
     @Override
     public boolean remove(String id) {
-        return false;
+        return mapper.delete(id) > 0;
     }
 
     @Override
     public boolean removeAuth(String id, String auth) {
-        return false;
+        return mapper.deleteAuth(id, auth) == 1;
     }
 
     @Override
     public AuthVO select(String id, String auth) {
-        return null;
+        return mapper.select(id, auth);
     }
 
     @Override
     public boolean isAready(String id, String auth) {
-        return false;
+        return mapper.select(id, auth) != null;
     }
 }
