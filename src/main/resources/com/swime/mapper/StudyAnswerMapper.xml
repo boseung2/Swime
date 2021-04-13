@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.StudyAnswerMapper">
+
+    <select id="get" resultType="com.swime.domain.StudyAnswerVO">
+        select sn, std_sn, user_id, question_sn, question, answer
+        from tstd_answer
+        where std_sn = #{stdSn} and user_id = #{userId}
+        order by question_sn
+    </select>
+
+    <insert id="insert">
+        insert into tstd_answer (sn, std_sn, user_id, question_sn, question, answer)
+        values(seq_std_answer.nextval, #{stdSn}, #{userId}, #{questionSn}, #{question}, #{answer})
+    </insert>
+
+    <delete id="delete">
+        delete
+        from tstd_answer
+        where std_sn = #{stdSn} and user_id = #{userId}
+    </delete>
+
+</mapper>

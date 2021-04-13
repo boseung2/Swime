@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.StudySurveyMapper">
+
+    <select id="getList" resultType="com.swime.domain.StudySurveyVO">
+        select sn, std_sn, question_sn, question
+        from tstd_survey
+        where std_sn = #{stdSn}
+    </select>
+
+    <insert id="insert">
+        insert into tstd_survey (sn, std_sn, question_sn, question)
+        values(seq_std_survey.nextval, #{stdSn}, #{questionSn}, #{question})
+    </insert>
+
+    <delete id="delete">
+        delete
+        from tstd_survey
+        where std_sn = #{stdSn}
+    </delete>
+
+</mapper>
