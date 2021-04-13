@@ -15,13 +15,12 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
 @MapperScan(basePackages = {"com.swime.mapper"})
 @ComponentScan(basePackages="com.swime.service")
+@ComponentScan(basePackages="com.swime.aop")
 @EnableAspectJAutoProxy
-
 @EnableTransactionManagement
 public class RootConfig {
 
@@ -36,20 +35,28 @@ public class RootConfig {
     }
 
     @Bean
-    public DataSourceTransactionManager txManager() {
-        return new DataSourceTransactionManager(dataSource());
-    }
-
-    @Bean
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
         System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
+        System.setProperty("java.security.egd", "file:///dev/urandom");
+
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
-        hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
-        hikariConfig.setUsername("ADMIN");
-        hikariConfig.setPassword("1q2w3e4r5t6Y");
+        if(true){
+            hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+            hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
+            hikariConfig.setUsername("ADMIN");
+            hikariConfig.setPassword("1q2w3e4r5t6Y");
+        }else{
+            hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+            hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:XE");
+            hikariConfig.setUsername("student");
+            hikariConfig.setPassword("1234");
+        }
         return new HikariDataSource(hikariConfig);
     }
 
+    @Bean
+    public DataSourceTransactionManager txManager() {
+        return new DataSourceTransactionManager(dataSource());
+    }
 }

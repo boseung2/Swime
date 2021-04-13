@@ -110,10 +110,23 @@
       <version>5.0.6.RELEASE</version>
     </dependency>
 
+    <!-- Mail https://mvnrepository.com/artifact/javax.mail/mail -->
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4.7</version>
+    </dependency>
+
+
     <!-- AspectJ -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
+      <version>${org.aspectj-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
       <version>${org.aspectj-version}</version>
     </dependency>
 

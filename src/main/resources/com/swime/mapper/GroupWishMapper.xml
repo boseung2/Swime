@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.GroupWishMapper">
+
+
+
+    <insert id="insert">
+        <selectKey keyProperty="sn" order="BEFORE" resultType="long">
+            select SEQ_TGRP_WISH.nextval from dual
+        </selectKey>
+        insert into TGRP_WISH (SN, GRP_SN, USER_ID)
+        VALUES (#{sn}, #{grpSn}, #{userId})
+    </insert>
+
+    <select id="readByid" resultType="com.swime.domain.GroupWishVO">
+        select *
+        from TGRP_WISH
+        where user_id = #{id}
+    </select>
+
+    <select id="readByGroupSn" resultType="com.swime.domain.GroupWishVO">
+        select *
+        from TGRP_WISH
+        where GRP_SN = #{grpSn}
+    </select>
+
+    <delete id="delete">
+        delete from TGRP_WISH
+        where user_id = #{id} and GRP_SN = #{grpSn}
+    </delete>
+
+    <select id="getList" resultType="com.swime.domain.GroupWishVO">
+        select *
+        from TGRP_WISH
+        where user_id = #{id}
+    </select>
+
+
+</mapper>
