@@ -3,6 +3,7 @@ package com.swime.mapper;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberHistoryVOTests;
 import com.swime.domain.MemberVO;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -10,6 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -19,17 +22,29 @@ import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ComponentScan(basePackages={"com.swime.config"})
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class, com.swime.config.SecurityConfig.class})
 @Log4j
 public class MemberMapperTests {
 
     @Setter(onMethod_ = @Autowired)
+//    @Autowired
     MemberMapper mapper;
+
+    @Setter(onMethod_ = @Autowired)
+    PasswordEncoder passwordEncoder;
 
     @Test
     public void getMapper(){
         log.info(mapper);
         Assert.assertNotNull(mapper);
+
+    }
+
+    @Test
+    public void getEncoder(){
+        log.info(passwordEncoder);
+        Assert.assertNotNull(passwordEncoder);
     }
 
     @Test
@@ -144,7 +159,7 @@ public class MemberMapperTests {
 
     @Test
     public void selwithauth(){
-        MemberVO memberVO = mapper.readWithAuth("asd123@naver.com");
+        MemberVO memberVO = mapper.readWithAuth("aaa123@naver.com");
 //        MemberVO memberVO = mapper.readWithAuth("asd123@naver.com");
         log.info(memberVO);
     }

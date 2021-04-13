@@ -26,5 +26,10 @@ public class SampleController {
         log.info("basic get only get...........");
     }
 
+    @GetMapping("/member")
+    public void test(){
+
+    }
+
 
 }

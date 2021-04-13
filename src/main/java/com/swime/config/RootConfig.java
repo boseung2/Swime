@@ -1,5 +1,7 @@
 package com.swime.config;
 
+import com.swime.security.CustomLoginSuccessHandler;
+import com.swime.security.CustomUserDetailsService;
 import com.swime.util.GmailSend;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -11,6 +13,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -39,7 +45,7 @@ public class RootConfig {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
 
-        if(false){
+        if(true){
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");
             hikariConfig.setPassword("1q2w3e4r5t6Y");
@@ -52,8 +58,11 @@ public class RootConfig {
         return new HikariDataSource(hikariConfig);
     }
 
+
     @Bean
     public GmailSend gmailSend(){
         return new GmailSend();
     }
+
+
 }

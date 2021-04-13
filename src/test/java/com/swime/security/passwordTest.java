@@ -19,11 +19,18 @@ public class passwordTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
+    public void get(){
+        Assert.assertNotNull(passwordEncoder);
+    }
+
+    @Test
     public void test(){
-        String password = "123asd456!@";
+        String password = "member";
         String encode = passwordEncoder.encode(password);
         log.info(encode);
         Assert.assertNotNull(encode);
         log.info("$2a$10$3Ni0ql2CQT5/tTV6tyO26eJ32sr/sRSw.8wCiDu/7u0NCEUhO7Zli".length()); // 60
     }
+
+
 }

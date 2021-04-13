@@ -16,14 +16,12 @@ import java.util.*;
 
 @Log4j
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
-//    @Setter(onMethod_ = @Autowired)
+    @Setter(onMethod_ = @Autowired)
     private MemberMapper mapper;
 
-//    @Setter(onMethod_ = @Autowired)
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public MemberVO get(String id) {
@@ -32,10 +30,10 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean register(MemberVO vo) {
-        registerHistory(vo);
-        vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+//        registerHistory(vo);
+//        vo.setPassword(passwordEncoder.encode(vo.getPassword()));
         boolean result = mapper.insert(vo) == 1;
-        if(result) registerKey(vo.getId(), new MakeRandomValue().MakeAuthKey());
+//        if(result) registerKey(vo.getId(), new MakeRandomValue().MakeAuthKey());
         return result;
     }
 

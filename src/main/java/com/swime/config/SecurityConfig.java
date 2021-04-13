@@ -2,6 +2,7 @@ package com.swime.config;
 
 import com.swime.security.CustomLoginSuccessHandler;
 import com.swime.security.CustomUserDetailsService;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 @Log4j
+//@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Setter(onMethod_ = @Autowired)
@@ -32,12 +34,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/**").permitAll()
-                .antMatchers("/member").access("hasRole('MEMBER')")
+//                .antMatchers("/user").permitAll()
+                .antMatchers("/sample/member").access("hasRole('MEMBER')")
                 .antMatchers("/admin").access("hasRole('ADMIN')")
         .and()
             .formLogin()
-                .loginPage("/loginPage")
-                .loginProcessingUrl("/loginProcessPage")
+                .usernameParameter("id")
+                .loginPage("/user/login")
+                .loginProcessingUrl("/user/login")
         .and()
             .logout()
                 .logoutUrl("/logoutPage")
@@ -75,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .usersByUsernameQuery(getUserQuery)
 //                .authoritiesByUsernameQuery(getUserDetailQuery)
             .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
+//            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
         ;
     }
 
@@ -91,5 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService detailsService(){
         return new CustomUserDetailsService();
-    };
+    }
+
+
 }

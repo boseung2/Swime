@@ -51,15 +51,15 @@
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="id">
                 <label for="floatingInput">Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
                 <label for="floatingPassword">Password</label>
             </div>
             <div class="form-floating">
-                <input type="name" class="form-control" id="floatingInput1" placeholder="name">
+                <input type="name" class="form-control" id="floatingInput1" placeholder="name" name="name">
                 <label for="floatingInput1">name</label>
             </div>
 
