@@ -12,33 +12,42 @@ public interface StudyService {
     // 스터디정보와 참여인원 정보 같이 얻어오기
     public StudyVO get(Long sn);
 
+    // 스터디 내용 수정
     public int modify(StudyVO study);
 
-    public int endStudy(Long sn);
+    // 스터디 모집 종료
+    public int endStudy(StudyParamVO param);
 
-    public int delete(Long sn);
-
-    public int remove(Long sn);
+    // 스터디 삭제
+    public int remove(StudyParamVO param);
 
     public List<StudyVO> getList();
 
     public List<StudyVO> getList(StudyCriteria cri);
 
     // WishStudy
-    public List<StudyVO> getWishList(StudyCriteria cri);
+    public List<StudyVO> getWishList(StudyCriteria cri, String userId);
+
+    public WishStudyVO getWish(StudyParamVO param);
 
     public int registerWish(WishStudyVO wish);
 
-    public int removeWish(StudyCriteria cri);
+    public int removeWish(StudyParamVO param);
 
     // StudyList
-    public List<StudyListVO> getAttendantList(long stdSn);
+    public List<StudyListVO> getAttendantList(StudyParamVO param);
 
-    public List<StudyListVO> getAttendantList(StudyCriteria cri);
+    public List<StudyListVO> getAttendantList(StudyCriteria cri, StudyParamVO param);
 
-    public int registerAttendant(StudyListVO attendant);
+    public List<StudyListVO> getWaitingList(StudyParamVO param);
 
-    public int modifyAttendant(long stdSn, String userId, String status);
+    public List<StudyListVO> getWaitingList(StudyCriteria cri, StudyParamVO param);
+
+    public StudyListVO getAttendant(StudyParamVO param);
+
+    public int registerAttendant(StudyParamVO param);
+
+    public int modify(StudyParamVO param);
 
     public int countAttendants(long stdSn);
 
@@ -50,9 +59,9 @@ public interface StudyService {
     public int removeSurvey(long stdSn);
 
     //StudyAnswer
-    public List<StudyAnswerVO> getAnswer(StudyCriteria cri);
+    public List<StudyAnswerVO> getAnswer(StudyParamVO param);
 
     public int registerAnswer(StudyAnswerVO answer);
     
-    public int removeAnswer(StudyCriteria cri);
+    public int removeAnswer(StudyParamVO param);
 }

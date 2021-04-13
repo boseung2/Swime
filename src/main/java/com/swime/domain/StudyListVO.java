@@ -8,7 +8,7 @@ import java.util.Date;
 public class StudyListVO {
     private long sn;
     private long stdSn;
-    private String picture;
+    private String picture; // tuser와 조인
     private String userId;
     private String userName; // tuser와 조인
     private String grpRole; // tgrp_list와 조인

@@ -7,7 +7,7 @@
     <select id="getList" resultType="com.swime.domain.StudyListVO">
         select sl.sn, sl.std_sn, u.picture, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
         from tstd_list sl, tuser u, tgrp_list gl, tstd s
-        where sl.std_sn = s.sn and sl.user_id = u.id and sl.user_id = gl.user_id and sl.std_sn = #{stdSn} and sl.status = 'STUS01'
+        where sl.std_sn = s.sn and sl.user_id = u.id and sl.user_id = gl.user_id and sl.std_sn = #{stdSn} and sl.status = #{status}
           and gl.grp_sn = s.grp_sn
     </select>
 
@@ -17,30 +17,10 @@
         from (
                  select rownum rn, sl.sn, sl.std_sn, u.picture, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
                  from tstd_list sl, tuser u, tgrp_list gl, tstd s
-                 where sl.std_sn = s.sn and sl.user_id = u.id and sl.user_id = gl.user_id and sl.std_sn = #{stdSn} and sl.status = 'STUS01'
-                   and gl.grp_sn = s.grp_sn and rownum <= #{pageNum} * #{amount}
+                 where sl.std_sn = s.sn and sl.user_id = u.id and sl.user_id = gl.user_id and sl.std_sn = #{param.stdSn} and sl.status = #{param.status}
+                   and gl.grp_sn = s.grp_sn and rownum <= #{cri.pageNum} * #{cri.amount}
              )
-        where rn > (#{pageNum} - 1) * #{amount}
-        ]]>
-    </select>
-
-    <select id="getWaitingList" resultType="com.swime.domain.StudyListVO">
-        select sl.sn, sl.std_sn, u.picture, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
-        from tstd_list sl, tuser u, tgrp_list gl, tstd s
-        where sl.std_sn = s.sn and sl.user_id = u.id and sl.user_id = gl.user_id and sl.std_sn = #{stdSn} and sl.status = 'STUS03'
-          and gl.grp_sn = s.grp_sn
-    </select>
-
-    <select id="getWaitingListWithPaging" resultType="com.swime.domain.StudyListVO">
-    <![CDATA[
-        select *
-        from (
-                 select rownum rn, sl.sn, sl.std_sn, u.picture, sl.user_id, u.name as user_name, gl.grp_role, sl.status, sl.reg_date
-                 from tstd_list sl, tuser u, tgrp_list gl, tstd s
-                 where sl.std_sn = s.sn and sl.user_id = u.id and sl.user_id = gl.user_id and sl.std_sn = #{stdSn} and sl.status = 'STUS03'
-                   and gl.grp_sn = s.grp_sn and rownum <= #{pageNum} * #{amount}
-             )
-        where rn > (#{pageNum} - 1) * #{amount}
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
         ]]>
     </select>
 

@@ -16,9 +16,9 @@
                           where s.sn = w.std_sn and s.status in ('STST01', 'STST03') and w.user_id = #{userId}
                           order by w.reg_date desc
                       )
-                 where rownum <= #{pageNum} * #{amount}
+                 where rownum <= #{cri.pageNum} * #{cri.amount}
              )
-        where rn > (#{pageNum} - 1) * #{amount}
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
         ]]>
     </select>
 

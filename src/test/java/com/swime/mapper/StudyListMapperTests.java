@@ -2,6 +2,7 @@ package com.swime.mapper;
 
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyListVO;
+import com.swime.domain.StudyParamVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Test;
@@ -24,7 +25,11 @@ public class StudyListMapperTests {
 
     @Test
     public void testGetList() {
-        List<StudyListVO> list = mapper.getList(307L);
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+        param.setStatus("STUS01");
+
+        List<StudyListVO> list = mapper.getList(param);
 
         for(StudyListVO li : list) {
             assert (li.getStdSn() == 307L);
@@ -33,10 +38,28 @@ public class StudyListMapperTests {
     }
 
     @Test
-    public void testGetListWithPaging() {
-        StudyCriteria cri = new StudyCriteria(1, 3, 307L);
+    public void testGetList2() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(308L);
+        param.setStatus("STUS03");
 
-        List<StudyListVO> list = mapper.getListWithPaging(cri);
+        List<StudyListVO> list = mapper.getList(param);
+
+        for(StudyListVO li : list) {
+            assert (li.getStdSn() == 308L);
+            assert ("STUS03".equals(li.getStatus()));
+        }
+    }
+
+    @Test
+    public void testGetListWithPaging() {
+        StudyCriteria cri = new StudyCriteria(1, 3);
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+        param.setStatus("STUS01");
+
+        List<StudyListVO> list = mapper.getListWithPaging(cri, param);
 
         assert(0 <= list.size() && list.size() <= 3);
         for(StudyListVO li : list) {
@@ -46,20 +69,14 @@ public class StudyListMapperTests {
     }
 
     @Test
-    public void testGetWaitingList() {
-        List<StudyListVO> list = mapper.getWaitingList(308L);
+    public void testGetListWithPaging2() {
+        StudyCriteria cri = new StudyCriteria(1, 3);
 
-        for(StudyListVO li : list) {
-            assert (li.getStdSn() == 308L);
-            assert ("STUS03".equals(li.getStatus()));
-        }
-    }
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(308L);
+        param.setStatus("STUS03");
 
-    @Test
-    public void testGetWaitingListWithPaging() {
-        StudyCriteria cri = new StudyCriteria(1, 3, 308L);
-
-        List<StudyListVO> list = mapper.getWaitingListWithPaging(cri);
+        List<StudyListVO> list = mapper.getListWithPaging(cri, param);
 
         assert(0 <= list.size() && list.size() <= 3);
         for(StudyListVO li : list) {
@@ -70,27 +87,35 @@ public class StudyListMapperTests {
 
     @Test
     public void testGetAttendant() {
-        assertNotNull(mapper.getAttendant(307L, "hong2841@service.com"));
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+        param.setUserId("hong2841@service.com");
+
+        assertNotNull(mapper.getAttendant(param));
     }
 
     @Test
     public void testInsert() {
-        StudyListVO list = new StudyListVO();
-        list.setStdSn(308L);
-        list.setUserId("jungbs3726@naver.com");
-        list.setStatus("STUS01"); // 가입 또는 검토중으로 insert 가능
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(308L);
+        param.setUserId("jungbs3726@naver.com");
+        param.setStatus("STUS01"); // 가입 또는 검토중으로 insert 가능
 
         // 이미 있으면 insert 안함
-        if(mapper.getAttendant(308L, "jungbs3726@naver.com") != null) return;
+        if(mapper.getAttendant(param) != null) return;
 
-        assert(mapper.insert(list) == 1);
-        log.info("insert");
+        assert(mapper.insert(param) == 1);
     }
 
     @Test
     public void testUpdate() {
-        assert (mapper.update(307L, "hong2841@service.com", "STUS03") == 1);
-        assert ("STUS03".equals(mapper.getAttendant(307L, "hong2841@service.com").getStatus()));
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+        param.setUserId("hong2841@service.com");
+        param.setStatus("STUS03");
+
+        assert (mapper.update(param) == 1);
+        assert ("STUS03".equals(mapper.getAttendant(param).getStatus()));
     }
 
     @Test

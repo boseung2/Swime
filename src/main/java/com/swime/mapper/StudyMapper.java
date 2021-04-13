@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 import com.swime.domain.StudyCriteria;
+import com.swime.domain.StudyParamVO;
 import com.swime.domain.StudyVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,12 +22,6 @@ public interface StudyMapper {
     public int update(StudyVO study);
     
     //스터디 상태 수정
-    public int updateStatus(@Param("sn") Long sn, @Param("status") String status);
-
-    // 스터디 모집 마감
-    public int endStudy(Long sn);
-
-    //스터디 삭제
-    public int delete(Long sn);
+    public int updateStatus(StudyParamVO param);
 
 }

@@ -4,11 +4,14 @@ import com.swime.domain.*;
 import com.swime.service.StudyService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.jcp.xml.dsig.internal.dom.DOMSubTreeData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -29,8 +32,8 @@ public class StudyServiceTests {
     public void testRegister() {
         StudyVO study = new StudyVO();
         study.setGrpSn(7);
-        study.setRepresentation("txTest@naver.com");
-        study.setName("트랜잭션테스트 참여명단 안만들어지면 스터디도 삭제돼야하는데..");
+        study.setRepresentation("hong4258@service.com");
+        study.setName("스터디 만들기 테스트");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-06");
         study.setStartTime("14:00:00");
@@ -43,58 +46,90 @@ public class StudyServiceTests {
         study.setPlaceId("구글 place id");
         study.setExpense("5000원");
         study.setCapacity(20);
-        study.setStatus("STST01");
 
-        log.info("INSERT COUNT : " + service.register(study));
-
+        assert (service.register(study) == 2);
     }
 
     @Test
     public void testGetList() {
-        service.getList().forEach(study -> log.info(study));
+        List<StudyVO> list = service.getList();
+
+        for (StudyVO li : list) {
+            assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
+        }
     }
 
     @Test
     public void testGetListWithPaging() {
         StudyCriteria cri = new StudyCriteria();
-        cri.setPageNum(3);
+        cri.setPageNum(1);
         cri.setAmount(3);
 
-        service.getList(cri).forEach(study -> log.info(study));
+        List<StudyVO> list = service.getList(cri);
+
+        for (StudyVO li : list) {
+            assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
+        }
+        assert (0 <= list.size() && list.size() <= 3);
     }
 
     @Test
     public void testGet() {
-        log.info(service.get(41L));
+        StudyVO study = service.get(307L);
+
+        assert (study != null && study.getSn() == 307);
     }
 
     @Test
     public void testModify() {
-        StudyVO study = service.get(61L);
+        StudyVO study = service.get(366L);
 
-        if(study == null) {
-            return;
-        }
+        if (study == null) return;
 
         study.setName("제목 수정수정합니다.");
-        log.info("MODIFY COUNT: " + service.modify(study));
+
+        assert (service.modify(study) == 1);
+        assert ("제목 수정수정합니다.".equals(service.get(366L).getName()));
+    }
+
+    @Test
+    public void testEndStudy() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+
+        assert (service.endStudy(param) == 1);
+        assert ("STST03".equals(service.get(307L).getStatus()));
     }
 
     @Test
     public void testRemove() {
-        log.info("DELETE COUNT: " + service.remove(61L));
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+
+        assert (service.remove(param) == 1);
+        assert (service.get(307L) == null);
     }
 
 
     // WishStudy
     @Test
     public void testGetWishList() {
-        StudyCriteria cri = new StudyCriteria();
-        cri.setPageNum(1);
-        cri.setAmount(3);
-        cri.setUserId("asdf@naver.com");
+        StudyCriteria cri = new StudyCriteria(1, 3);
 
-        service.getWishList(cri).forEach(wish -> log.info(wish));
+        List<StudyVO> list = service.getWishList(cri, "asdf@naver.com");
+
+        assert (0 <= list.size() && list.size() <= 3);
+    }
+
+    @Test
+    public void testGetWish() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(82L);
+        param.setUserId("aaa@naver.com");
+
+        WishStudyVO wish = service.getWish(param);
+
+        assert (wish != null && wish.getSn() == 82L && "jiho@naver.com".equals(wish.getUserId()));
     }
 
     @Test
@@ -103,76 +138,161 @@ public class StudyServiceTests {
         wish.setStdSn(82L);
         wish.setUserId("aaa@naver.com");
 
-        log.info("INSERT COUNT : " + service.registerWish(wish));
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(82L);
+        param.setUserId("aaa@naver.com");
+
+        if(service.getWish(param) != null) return;
+
+        assert (service.registerWish(wish) == 1);
+        assert (service.getWish(param) != null);
     }
 
     @Test
     public void testRemoveWish() {
-        log.info("DELETE COUNT : " + service.removeWish(new StudyCriteria(368L, "jiho@naver.com")));
+        WishStudyVO wish = new WishStudyVO();
+        wish.setStdSn(368L);
+        wish.setUserId("jiho@naver.com");
+        service.registerWish(wish);
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(368L);
+        param.setUserId("jiho@naver.com");
+
+        assert (service.removeWish(param) == 1);
+        assert (service.getWish(param) == null);
     }
 
     //StudyList
-
     @Test
     public void testGetAttendList() {
-        service.getAttendantList(307L).forEach(list -> log.info(list));
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+
+        List<StudyListVO> list = service.getAttendantList(param);
+        if (list.size() == 0) return;
+
+        for(StudyListVO li : list) {
+            assert (li.getStdSn() == 307L);
+        }
     }
 
     @Test
     public void testGetAttendListWithPaging() {
-        StudyCriteria cri = new StudyCriteria();
-        cri.setPageNum(1);
-        cri.setAmount(3);
+        StudyCriteria cri = new StudyCriteria(1, 3);
 
-        service.getAttendantList(cri).forEach(list -> log.info(list));
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+
+        List<StudyListVO> list = service.getAttendantList(cri, param);
+        if (list.size() == 0) return;
+
+        for(StudyListVO li : list) {
+            assert (li.getStdSn() == 307L);
+        }
+        assert (0 <= list.size() && list.size() <= 3);
+    }
+
+    @Test
+    public void testGetWaitingList() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(308L);
+
+        List<StudyListVO> list = service.getWaitingList(param);
+        if (list.size() == 0) return;
+
+        for(StudyListVO li : list) {
+            assert (li.getStdSn() == 308L);
+        }
+    }
+
+    @Test
+    public void testGetWaitingListWithPaging() {
+        StudyCriteria cri = new StudyCriteria(1, 3);
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(308L);
+
+        List<StudyListVO> list = service.getWaitingList(cri, param);
+        if (list.size() == 0) return;
+
+        for(StudyListVO li : list) {
+            assert (li.getStdSn() == 308L);
+        }
+        assert (0 <= list.size() && list.size() <= 3);
     }
 
     @Test
     public void testRegisterAttendant() {
-        StudyListVO list = new StudyListVO();
-        list.setStdSn(41L);
-        list.setUserId("hong2841@service.com");
-        list.setStatus("STUS01");
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(41L);
+        param.setUserId("hong2841@service.com");
+        param.setStatus("STUS01");
 
-        log.info("INSERT COUNT : " + service.registerAttendant(list));
+        if(service.getAnswer(param) != null) return;
+
+        assert (service.registerAttendant(param) == 1);
+        assert (service.getAttendant(param) != null);
     }
 
     @Test
-    public void testModifyAttendant() {
-        log.info("UPDATE COUNT : " + service.modifyAttendant(82L, "aaa@naver.com", "STST04"));
+    public void testGetAttendant() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(41L);
+        param.setUserId("hong2841@service.com");
+
+        StudyListVO list = service.getAttendant(param);
+        assert (list != null && list.getStdSn() == 41L && "hong2841@service.com".equals(list.getUserId()));
+
     }
 
     @Test
     public void testCountAttendants() {
-        log.info("ATTEND COUNT : " + service.countAttendants(82L));
+        assert (service.countAttendants(82L) >= 0);
     }
 
     //StudySurvey
     @Test
     public void testGetSurveyList() {
-        service.getSurveyList(82L).forEach(survey -> log.info(survey));
+        List<StudySurveyVO> list = service.getSurveyList(82L);
+
+        for(StudySurveyVO li : list) {
+            assert(li.getStdSn() == 82L);
+        }
     }
 
     @Test
     public void testRegisterSurvey() {
         StudySurveyVO survey = new StudySurveyVO();
-        survey.setStdSn(84);
+        survey.setStdSn(84L);
         survey.setQuestionSn(1);
         survey.setQuestion("각오한마디 부탁드립니다.");
 
-        log.info("INSERT COUNT : " + service.registerSurvey(survey));
+        assert (service.registerSurvey(survey) == 1);
+        assert (service.getSurveyList(84L).size() > 0);
     }
 
     @Test
     public void testRemoveSurvey() {
-        log.info("DELETE COUNT : " + service.removeSurvey(84L));
+        assert (service.removeSurvey(84L) == 1);
+        assert (service.getSurveyList(84L).size() == 0);
     }
 
     //StudyAnswer
     @Test
     public void testGetAnswer() {
-        StudyCriteria cri = new StudyCriteria(82L, "aaa@naver.com");
-        service.getAnswer(cri).forEach(answer -> log.info(answer));
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(82L);
+        param.setUserId("aaa@naver.com");
+
+        List<StudyAnswerVO> list = service.getAnswer(param);
+
+        for(StudyAnswerVO li : list) {
+            assert (li.getStdSn() == 82L);
+            assert ("aaa@naver.com".equals(li.getUserId()));
+        }
+
+        assert (list.get(list.size()-1).getQuestionSn() == list.size());
     }
 
     @Test
@@ -184,12 +304,31 @@ public class StudyServiceTests {
         answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
         answer.setAnswer("네. 괜찮습니다.");
 
-        log.info("REGISTER COUNT (가입못하는 경우 -1, 탈퇴에서 가입 1, update 성공 2) : " + service.registerAnswer(answer));
+        int result = service.registerAnswer(answer);
+
+        assert(result == 2 || result == -1);
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(165L);
+        param.setUserId("jiho@naver.com");
+        assert(service.getAnswer(param).size() > 0);
     }
 
     @Test
     public void testRemoveAnswer() {
-        StudyCriteria cri = new StudyCriteria(84L, "ffff@naver.com");
-        log.info("DELETE COUNT : " + service.removeAnswer(cri));
+        StudyAnswerVO answer = new StudyAnswerVO();
+        answer.setStdSn(84L);
+        answer.setUserId("ffff@naver.com");
+        answer.setQuestionSn(1);
+        answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
+        answer.setAnswer("네. 괜찮습니다.");
+        service.registerAnswer(answer);
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(84L);
+        param.setUserId("ffff@naver.com");
+
+        assert (service.removeAnswer(param) == 1);
+        assert(service.getAnswer(param).size() == 0);
     }
 }

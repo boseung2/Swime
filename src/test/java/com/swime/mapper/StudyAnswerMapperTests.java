@@ -2,6 +2,7 @@ package com.swime.mapper;
 
 import com.swime.domain.StudyAnswerVO;
 import com.swime.domain.StudyCriteria;
+import com.swime.domain.StudyParamVO;
 import com.swime.domain.StudySurveyVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -23,9 +24,11 @@ public class StudyAnswerMapperTests {
 
     @Test
     public void testGet() {
-        StudyCriteria cri = new StudyCriteria(82L, "aaa@naver.com");
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(82L);
+        param.setUserId("aaa@naver.com");
 
-        List<StudyAnswerVO> list = mapper.get(cri);
+        List<StudyAnswerVO> list = mapper.get(param);
 
         for(StudyAnswerVO li : list) {
             assert (li.getStdSn() == 82L);
@@ -37,7 +40,12 @@ public class StudyAnswerMapperTests {
 
     @Test
     public void testInsert() {
-        List<StudyAnswerVO> list = mapper.get(new StudyCriteria(84L, "jiho@naver.com"));
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(84L);
+        param.setUserId("jiho@naver.com");
+
+        List<StudyAnswerVO> list = mapper.get(param);
+
         for(StudyAnswerVO li : list) {
             if(li.getQuestionSn() == 1L) return; // 해당 질문이 이미 있으면 리턴
         }
@@ -46,7 +54,7 @@ public class StudyAnswerMapperTests {
         answer.setStdSn(84L);
         answer.setUserId("jiho@naver.com");
         answer.setQuestionSn(1L);
-        
+
         // survey에서 가져오기
         answer.setQuestion("이 스터디는 자바 기초지식을 요구합니다. 기초지식이 있나요?");
         answer.setAnswer("네. 학교에서 배웠습니다.");
@@ -56,8 +64,11 @@ public class StudyAnswerMapperTests {
 
     @Test
     public void testDelete() {
-        StudyCriteria cri = new StudyCriteria(84L, "jiho@naver.com");
-        assert (mapper.delete(cri) == 1);
-        assert (mapper.get(new StudyCriteria(84L, "jiho@naver.com")).size() == 0);
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(84L);
+        param.setUserId("jiho@naver.com");
+
+        assert (mapper.delete(param) == 1);
+        assert (mapper.get(param).size() == 0);
     }
 }

@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 import com.swime.domain.StudyCriteria;
+import com.swime.domain.StudyParamVO;
 import com.swime.domain.StudyVO;
 import com.swime.domain.WishStudyVO;
 import lombok.Setter;
@@ -97,8 +98,8 @@ public class StudyMapperTests {
         study.setName("스터디 만들기 테스트");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-06");
-        study.setStartTime("2021-04-06 14:00:00");
-        study.setEndTime("2021-04-06 16:00:00");
+        study.setStartTime("14:00:00");
+        study.setEndTime("16:00:00");
         study.setRepeatCycle("");
         study.setRepeatDay("");
         study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
@@ -193,8 +194,8 @@ public class StudyMapperTests {
         study.setGrpSn(7);
         study.setRepresentation("hong4258@service.com");
         study.setName("스터디 만들기 테스트");
-        study.setStartDate("2021-04-31"); // 날짜형식이 이상하게 들어오는 경우
-        study.setEndDate("2021-04-31");
+        study.setStartDate("2021-04-32"); // 날짜형식이 이상하게 들어오는 경우
+        study.setEndDate("2021-04-32");
         study.setStartTime("14:00:00");
         study.setEndTime("16:00:00");
         study.setRepeatCycle("");
@@ -217,30 +218,8 @@ public class StudyMapperTests {
         study.setName("스터디 만들기 테스트");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-06");
-        study.setStartTime("2021-04-06 14:00:00");
-        study.setEndTime("16:00:00"); // 시간이 이상하게 들어오는 경우
-        study.setRepeatCycle("");
-        study.setRepeatDay("");
-        study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
-        study.setOnOff("STOF02");
-        study.setOnUrl("");
-        study.setPlaceId("구글 place id");
-        study.setExpense("5000원");
-        study.setCapacity(20);
-
-        mapper.insert(study);
-    }
-
-    @Test(expected = Exception.class)
-    public void testInsert5_2() {
-        StudyVO study = new StudyVO();
-        study.setGrpSn(7);
-        study.setRepresentation("hong4258@service.com");
-        study.setName("스터디 만들기 테스트");
-        study.setStartDate("2021-04-06");
-        study.setEndDate("2021-04-06");
-        study.setStartTime("2021-04-06 14:00:00");
-        study.setEndTime("2021-04-06 14:89:00"); // 시간이 이상하게 들어오는 경우
+        study.setStartTime("14:77:77");// 시간이 이상하게 들어오는 경우
+        study.setEndTime("16:00:00");
         study.setRepeatCycle("");
         study.setRepeatDay("");
         study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
@@ -284,8 +263,8 @@ public class StudyMapperTests {
         study.setName("스터디 만들기 테스트");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-30");
-        study.setStartTime("2021-04-06 14:00:00");
-        study.setEndTime("2021-04-06 16:00:00");
+        study.setStartTime("14:00:00");
+        study.setEndTime("16:00:00");
         study.setRepeatCycle("STCY01");
         study.setRepeatDay("월,화,수,목,금,토,일");
         study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
@@ -308,8 +287,8 @@ public class StudyMapperTests {
         study.setName("스터디 만들기 테스트2");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-06");
-        study.setStartTime("2021-04-06 14:00:00");
-        study.setEndTime("2021-04-06 16:00:00");
+        study.setStartTime("14:00:00");
+        study.setEndTime("16:00:00");
         study.setRepeatCycle("");
         study.setRepeatDay("");
         study.setInformation("스터디 만들기 테스트2입니다.스터디 만들기 테스트2입니다.스터디 만들기 테스트2입니다.");
@@ -331,8 +310,8 @@ public class StudyMapperTests {
         study.setName("스터디만들기 테스트");
         study.setStartDate("2021-04-06");
         study.setEndDate("2021-04-30");
-        study.setStartTime("2021-04-06 14:50:00");
-        study.setEndTime("2021-04-06 17:00:00");
+        study.setStartTime("14:50:00");
+        study.setEndTime("17:00:00");
         study.setRepeatCycle("STCY01");
         study.setRepeatDay("월,수,금");
         study.setInformation("스터디 만들기 테스트2입니다.스터디 만들기 테스트2입니다.스터디 만들기 테스트2입니다.");
@@ -430,8 +409,8 @@ public class StudyMapperTests {
         study.setName("스터디 수정 테스트");
         study.setStartDate("2021-04-07");
         study.setEndDate("2021-04-07");
-        study.setStartTime("2021-04-07 14:30:00");
-        study.setEndTime("2021-04-07 18:30:00");
+        study.setStartTime("14:30:00");
+        study.setEndTime("18:30:00");
         study.setRepeatCycle("");
         study.setRepeatDay("");
         study.setInformation("스터디 수정 테스트");
@@ -446,7 +425,19 @@ public class StudyMapperTests {
 
     @Test
     public void testUpdateStatus(){
-        assert (mapper.updateStatus(307L, "STST03") == 1);
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(307L);
+        param.setStatus("STST03");
+
+        assert (mapper.updateStatus(param) == 1);
         assert ("STST03".equals(mapper.get(307L).getStatus()));
+
+        param.setStatus("STST01");
+        assert (mapper.updateStatus(param) == 1);
+        assert ("STST01".equals(mapper.get(307L).getStatus()));
+
+        param.setStatus("STST02");
+        assert (mapper.updateStatus(param) == 1);
+        assert (mapper.get(307L) == null);
     }
 }

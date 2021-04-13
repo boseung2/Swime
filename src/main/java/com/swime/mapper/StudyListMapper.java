@@ -2,26 +2,25 @@ package com.swime.mapper;
 
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyListVO;
+import com.swime.domain.StudyParamVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface StudyListMapper {
-    public List<StudyListVO> getList(long stdSn);
+    // 참여멤버/ 대기멤버 불러오기
+    public List<StudyListVO> getList(StudyParamVO param);
 
-    public List<StudyListVO> getListWithPaging(StudyCriteria cri);
-
-    public List<StudyListVO> getWaitingList(long stdSn);
-
-    public List<StudyListVO> getWaitingListWithPaging(StudyCriteria cri);
+    public List<StudyListVO> getListWithPaging(@Param("cri") StudyCriteria cri, @Param("param") StudyParamVO param);
 
     // 해당 스터디, 해당 회원의 참여 정보를 가져오기
-    public StudyListVO getAttendant(@Param("stdSn") long stdSn, @Param("userId") String userId);
+    public StudyListVO getAttendant(StudyParamVO param);
 
-    public int insert(StudyListVO attendant);
+    // 등록 : 사용자 가입/검토
+    public int insert(StudyParamVO param);
 
-    // status : 가입/탈퇴/검토중/영구강퇴
-    public int update(@Param("stdSn") long stdSn, @Param("userId") String userId, @Param("status") String status);
+    // 수정 : 가입/탈퇴/영구강퇴
+    public int update(StudyParamVO param);
 
     // 스터디 참여인원 세기
     public int count(long stdSn);
