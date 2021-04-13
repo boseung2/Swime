@@ -41,10 +41,7 @@ public class UserCotroller {
     public void login(){
     }
 
-//    @PostMapping("/login")
-//    public void login(MemberVO vo){
-//        service.checkIdPw(vo);
-//    }
+
 
     @GetMapping("/register")
     public void register(){
