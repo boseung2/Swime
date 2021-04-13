@@ -24,4 +24,7 @@ public interface GroupMapper {
 
     // 모임을 삭제한다. - o
     public int delete(GroupVO group);
+
+    // 모든 모임개수를 구한다. - o
+    public int getTotalCount(GroupCriteria cri);
 }

@@ -31,7 +31,7 @@
                         <p class="card-text"><c:out value="${group.description}"/></p>
                     </div>
                     <div class="card-footer">
-                        <a href="/group/get?sn=<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm">More Info</a>
+                        <a href="<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm move">More Info</a>
                     </div>
                 </div>
             </div>
@@ -108,21 +108,28 @@
             $("#myModal").modal("show");
         }
 
-            $("#regBtn").on("click", function() {
-                self.location = "/group/register";
-            })
+        $("#regBtn").on("click", function() {
+            self.location = "/group/register";
+        })
 
-            let actionForm = $("#actionForm");
+        let actionForm = $("#actionForm");
 
-            $(".paginate_button a").on("click", function(e) {
+        $(".paginate_button a").on("click", function(e) {
 
-                e.preventDefault();
+            e.preventDefault();
 
-                console.log('click');
+            console.log('click');
 
-                actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-                actionForm.submit();
-            })
+            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+            actionForm.submit();
+        })
+
+        $('.move').on("click", function(e) {
+            e.preventDefault();
+            actionForm.append("<input type='hidden' name='sn' value='" + $(this).attr("href") + "'>");
+            actionForm.attr("action", "/group/get");
+            actionForm.submit();
+        })
     })
 </script>
 

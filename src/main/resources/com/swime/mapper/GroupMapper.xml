@@ -72,4 +72,10 @@
         where sn = #{sn}
     </update>
 
+    <select id="getTotalCount" resultType="int">
+        select count(*)
+        from tgrp
+        where sn > 0
+    </select>
+
 </mapper>

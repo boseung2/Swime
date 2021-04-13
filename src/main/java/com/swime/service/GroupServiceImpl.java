@@ -95,4 +95,10 @@ public class GroupServiceImpl implements GroupService{
         return groupMapper.delete(group);
     }
 
+    @Override
+    public int getTotal(GroupCriteria cri) {
+        log.info("get total count");
+        return groupMapper.getTotalCount(cri);
+    }
+
 }

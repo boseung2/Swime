@@ -79,6 +79,8 @@
             <input type="text" class="form-control" name="status" id="status" value="<c:out value="${group.status}"/>" hidden>
         </div>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
+        <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
         <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
         <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
         <button type="submit" class="btn btn-secondary" data-oper="list">목록</button>
@@ -101,7 +103,12 @@
                 formObj.attr("action", "/group/remove");
             } else if (operation === 'list') {
                 formObj.attr("action", '/group/list').attr("method", "get");
+                let pageNumTag = $("input[name='pageNum']").clone();
+                let amountTag = $("input[name='amount']").clone();
+
                 formObj.empty();
+                formObj.append(pageNumTag);
+                formObj.append(amountTag);
             }
             formObj.submit();
         })

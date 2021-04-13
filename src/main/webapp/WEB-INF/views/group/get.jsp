@@ -15,6 +15,8 @@
         <div class="col-lg-5">
             <form id="operForm" action="group/modify" method="get">
                 <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">
+                <input type="hidden" id="pageNum" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
+                <input type="hidden" id="amount" name="amount" value="<c:out value="${cri.amount}"/>">
             </form>
             <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
             <div class="flex-container" style="display: flex;">

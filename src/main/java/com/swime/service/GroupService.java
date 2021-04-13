@@ -22,4 +22,6 @@ public interface GroupService {
     // 모임을 삭제한다.
     public int remove(GroupVO group);
 
+    public int getTotal(GroupCriteria cri);
+
 }
