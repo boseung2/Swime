@@ -80,6 +80,7 @@
             <input type="number" class="form-control" name="ratingCount" id="ratingCount" value="<c:out value="${group.ratingCount}"/>" hidden>
             <input type="text" class="form-control" name="status" id="status" value="<c:out value="${group.status}"/>" hidden>
         </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
         <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
         <button type="submit" class="btn btn-secondary" data-oper="list">목록</button>

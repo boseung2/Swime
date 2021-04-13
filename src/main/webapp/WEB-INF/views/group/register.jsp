@@ -68,6 +68,7 @@
             <label for="tags">태그</label>
             <input type="text" class="form-control" name="tags" id="tags">
         </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <button type="submit" class="btn btn-primary">등록</button>
         <button type="reset" class="btn btn-primary">취소</button>
     </form>
