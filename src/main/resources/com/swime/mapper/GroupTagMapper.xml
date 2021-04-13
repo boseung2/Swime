@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.GroupTagMapper">
+
+    <insert id="insert">
+        insert into tgrp_tag(grp_sn, name)
+        values(#{grpSn}, #{name})
+    </insert>
+
+    <select id="getList" resultType="com.swime.domain.GroupTagVO">
+        select grp_sn, name
+        from tgrp_tag
+        where grp_sn = #{grpSn}
+    </select>
+
+    <delete id="delete">
+        delete from tgrp_tag
+        where grp_sn = #{grpSn}
+    </delete>
+</mapper>

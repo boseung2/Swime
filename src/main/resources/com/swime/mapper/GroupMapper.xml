@@ -3,56 +3,72 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.GroupMapper">
-    <select id="getList" parameterType="com.swime.domain.GroupVO" resultType="com.swime.domain.GroupVO">
-    <![CDATA[
-        select *
-        from tgrp
-        where sn > 0
-    ]]>
-    </select>
-
-    <insert id="insert">
-        insert into tgrp (sn, category, name, user_id, user_name, picture, description, headcount, rating, sido, sigungu, status, reg_user_id)
-        values(seq_tgrp.nextval, #{category}, #{name}, #{userId}, #{userName}, #{picture}, #{description}, #{headcount}, #{rating},  #{sido}, #{sigungu}, #{status}, #{regUserId})
-    </insert>
 
     <insert id="insertSelectKey">
         <selectKey keyProperty="sn" order="BEFORE" resultType="long">
             select seq_tgrp.nextval from dual
         </selectKey>
-        insert into tgrp (sn, category, name, user_id, user_name, picture, description, headcount, rating, sido, sigungu, status, reg_user_id)
-        values(#{sn}, #{category}, #{name}, #{userId}, #{userName}, #{picture}, #{description}, #{headcount}, #{rating},  #{sido}, #{sigungu}, #{status}, #{regUserId})
+        insert all
+        into tgrp(sn, category, name, user_id, picture, description, sido, sigungu, reg_user_id)
+        values(#{sn}, #{category}, #{name}, #{userId}, #{picture}, #{description}, #{sido}, #{sigungu}, #{userId})
+        into tgrp_det(grp_sn, info)
+        values(#{sn}, #{info})
+        select * from dual
     </insert>
 
     <select id="read" resultType="com.swime.domain.GroupVO">
-        select * from tgrp where sn = #{sn}
+        select g.sn, g.category, g.name, g.user_id, u.name user_name, g.picture, g.description, i.info, g.attend_count, g.rating, g.rating_count, g.sido, g.sigungu, g.status, g.reg_date, g.reg_user_id, g.upd_date, g.upd_user_id
+        from tgrp g, tgrp_det i, tuser u
+        where g.sn = i.grp_sn
+        and g.user_id = u.id
+        and g.sn = #{sn}
     </select>
+
+    <select id="getListWithPaging" resultType="com.swime.domain.GroupVO">
+        <![CDATA[
+        select sn, category, name, user_id, user_name, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
+        from (
+                 select /* +INDEX_DESC(tgrp pk_tgrp) */
+                 rownum rn, g.sn, g.category, g.name, g.user_id, u.name user_name, g.picture, g.description, g.attend_count, g.rating, g.rating_count, g.sido, g.sigungu, g.status, g.reg_date, g.reg_user_id, g.upd_date, g.upd_user_id
+                 from tgrp g, tuser u
+                 where g.user_id = u.id
+                 and rownum <=  #{pageNum} * #{amount}
+             )
+        where rn > (#{pageNum} - 1) * #{amount}
+        ]]>
+    </select>
+
+    <update id="update">
+        update tgrp
+        set category = #{category},
+        name = #{name},
+        user_id = #{userId},
+        picture = #{picture},
+        description = #{description},
+        attend_count = #{attendCount},
+        rating = #{rating},
+        rating_count = #{ratingCount},
+        sido = #{sido},
+        sigungu = #{sigungu},
+        status = #{status},
+        upd_date = current_date,
+        upd_user_id = #{userId}
+        where sn = #{sn}
+    </update>
+
+    <update id="updateInfo">
+        update tgrp_det
+        set info = #{info}
+        where grp_sn = #{sn}
+    </update>
+
 
     <update id="delete">
         update tgrp
         set status = 'GRST03',
         upd_date = current_date,
-        upd_user_id = #{updUserId}
+        upd_user_id = #{userId}
         where sn = #{sn}
     </update>
 
-    <update id="update">
-        update tgrp
-        set category=#{category},
-            name = #{name},
-            user_id = #{userId},
-            user_name = #{userName},
-            picture = #{picture},
-            description = #{description},
-            headcount = #{headcount},
-            rating = #{rating},
-            sido = #{sido},
-            sigungu = #{sigungu},
-            status = #{status},
-            upd_date = current_date,
-            upd_user_id = #{updUserId}
-        where sn = #{sn}
-    </update>
-
-    
 </mapper>
