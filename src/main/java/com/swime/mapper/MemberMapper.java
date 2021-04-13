@@ -14,11 +14,15 @@ public interface MemberMapper {
 
     int insert(MemberVO vo);
 
+    int insertWithAuth(MemberVO vo);
+
     int update(MemberVO vo);
 
     int delete(String id);
 
     List<MemberVO> getlist();
+
+    MemberVO readWithAuth(String id);
 
     //이력관리
     int registerHistory(MemberHistoryVO vo);
@@ -28,7 +32,7 @@ public interface MemberMapper {
     //인증처리
     int insertKey(@Param("id") String id, @Param("key") String key);
 
-    String selectKey(@Param("id") String id, @Param("key") String key);
+    String selectKey(@Param("id") String id);
 
     int deleteKey(String id);
 

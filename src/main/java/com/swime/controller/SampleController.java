@@ -1,6 +1,5 @@
 package com.swime.controller;
 
-import com.swime.domain.SampleDTO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +26,10 @@ public class SampleController {
         log.info("basic get only get...........");
     }
 
-    @GetMapping("/ex01")
-    public String ex01(SampleDTO dto) {
-        log.info("" + dto);
-        return "ex01";
+    @GetMapping("/member")
+    public void test(){
+
     }
+
+
 }
