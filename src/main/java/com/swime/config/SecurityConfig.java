@@ -2,11 +2,9 @@ package com.swime.config;
 
 import com.swime.security.CustomLoginSuccessHandler;
 import com.swime.security.CustomUserDetailsService;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.sql.DataSource;
 
@@ -31,22 +31,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception{
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        filter.setForceEncoding(true);
+        http.addFilterBefore(filter, CsrfFilter.class);
+
         http
             .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/group","/include","/user").permitAll()
 //                .antMatchers("/user").permitAll()
-                .antMatchers("/sample/member").access("hasRole('MEMBER')")
-                .antMatchers("/admin").access("hasRole('ADMIN')")
+                .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
+                .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
         .and()
             .formLogin()
                 .usernameParameter("id")
                 .loginPage("/user/login")
                 .loginProcessingUrl("/user/login")
+                .successHandler(loginSuccessHandler())
         .and()
             .logout()
-                .logoutUrl("/logoutPage")
+                .logoutUrl("/user/logout")
+
                 .invalidateHttpSession(true)
-                .deleteCookies("remember-me", "JSESSION_ID")
+                .deleteCookies("remember-me", "JSESSIONID")
         ;
 //        http
 //            .authorizeRequests()
@@ -81,6 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
 //            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
         ;
+
     }
 
     @Bean

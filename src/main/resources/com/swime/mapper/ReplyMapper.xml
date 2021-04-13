@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.ReplyMapper">
+
+    <select id="getSequence" resultType="int">
+        select seq_trpl.nextval from dual
+    </select>
+
+    <insert id="insert">
+        insert into trpl
+            (sn,
+             brd_sn,
+             user_id,
+             comment_group,
+             content,
+             status)
+        values
+               (#{sn}, #{brdSn}, #{userId}, #{commentGroup}, #{content}, #{status})
+    </insert>
+
+    <select id="read" resultType="com.swime.domain.ReplyVO">
+        select r.sn,
+               r.brd_sn,
+               r.user_id,
+               r.comment_group,
+               r.content,
+               u.name,
+               r.cnt,
+               r.status,
+               r.reg_date,
+               r.upd_date
+        from trpl r, tuser u
+        where r.user_id = u.id
+        and sn = #{sn}
+    </select>
+
+    <delete id="delete">
+        delete from trpl where sn = #{sn}
+    </delete>
+
+    <update id="update">
+        update trpl
+        set
+            user_id = #{userId},
+            content = #{content},
+            cnt = #{cnt},
+            status = #{status},
+            upd_date = current_date
+        where sn = #{sn}
+    </update>
+
+    <select id="getListWithPaging" resultType="com.swime.domain.ReplyVO">
+        <![CDATA[
+        select sn,
+               brd_sn,
+               comment_group,
+               user_id,
+               name,
+               content,
+               cnt,
+               status,
+               reg_date,
+               upd_date
+        from
+            (
+            select /*+INDEX(trpl idx_reply) */
+                rownum rn,
+                   r.sn,
+                   r.brd_sn,
+                   r.comment_group,
+                   r.user_id,
+                   u.name,
+                   r.content,
+                   r.cnt,
+                   r.status,
+                   r.reg_date,
+                   r.upd_date
+            from trpl r, tuser u
+            where brd_sn = #{brdSn}
+              and r.user_id = u.id
+              and sn > 0
+              and rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} -1) * #{cri.amount}
+        order by comment_group asc, sn asc
+        ]]>
+
+    </select>
+
+    <select id="getCountByBrdSn" resultType="int">
+        select count(*) from trpl where brd_sn = #{brdSn}
+    </select>
+
+    <update id="updateReplyCnt">
+        update
+            tbrd
+        set reply_cnt = reply_cnt + #{amount}
+        where sn = #{sn};
+    </update>
+
+</mapper>
