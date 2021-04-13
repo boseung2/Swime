@@ -45,14 +45,14 @@ public class RootConfig {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
 
-        if(true){
+        if(false){
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");
             hikariConfig.setPassword("1q2w3e4r5t6Y");
         }
         else{
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:XE");
-            hikariConfig.setUsername("student");
+            hikariConfig.setUsername("swime1");
             hikariConfig.setPassword("1234");
         }
         return new HikariDataSource(hikariConfig);
