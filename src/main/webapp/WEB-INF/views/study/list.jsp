@@ -2,9 +2,6 @@
          pageEncoding="UTF-8"%>
 
 <%@include file="../includes/header.jsp" %>
-
-<%--참고 링크 : https://www.w3schools.com/howto/howto_css_column_cards.asp--%>
-
 <style>
     * {
         box-sizing: border-box;
@@ -59,12 +56,13 @@
         <div class="card">
             <h3>${study.name}</h3>
             <p>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</p>
-            <p>${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}<p>
-            <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디 : ${study.onUrl}</p></c:if>
-            <c:if test="${study.onOff eq 'STOF02'}"><p>장소 : ${study.placeId}</p></c:if>
+            <p>${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</p>
+            <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디</p></c:if>
+            <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
             <p>${study.expense}</p>
-            <p>${study.attendants} / ${study.capacity}</p>
-            <button>참석하기</button></p>
+            <c:if test="${study.attendants >= study.capacity}"><p>모집 마감</p></c:if>
+            <c:if test="${study.attendants < study.capacity}"><p>${study.attendants} / ${study.capacity}</p></c:if>
+            <button>더보기</button>
         </div>
     </div>
     </c:forEach>

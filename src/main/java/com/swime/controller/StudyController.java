@@ -35,6 +35,20 @@ public class StudyController {
     public void get(@RequestParam("sn") Long sn, Model model) {
         model.addAttribute("study", service.get(sn));
         model.addAttribute("members", service.getAttendantList(sn));
+
+        // 로그인한 경우
+        // 찜 여부 가져오기
+        StudyParamVO param = new StudyParamVO();
+        param.setUserId("hong7071@service.com"); // 추후 수정 //hong7073@service.com
+        param.setStdSn(sn);
+
+        model.addAttribute("param", param);
+
+        // null이면 찜 아니면 찜취소
+        model.addAttribute("wish", service.getWish(param));
+
+        // 참석 여부 가져오기
+        model.addAttribute("attend", service.getAttendant(param));
     }
 
     // 스터디 생성
@@ -65,8 +79,8 @@ public class StudyController {
     }
     
     // 스터디 멤버 관리 - 참여멤버/ 대기멤버 가져오기
-    @GetMapping("/manage")
-    public void manage(long stdSn, Model model) {
+    @GetMapping("/members")
+    public void members(long stdSn, Model model) {
         model.addAttribute("attendantList", service.getAttendantList(stdSn));
         model.addAttribute("waitingList", service.getWaitingList(stdSn));
     }

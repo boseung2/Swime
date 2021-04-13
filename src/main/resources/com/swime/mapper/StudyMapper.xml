@@ -6,7 +6,8 @@
 
     <select id="getList" resultType="com.swime.domain.StudyVO">
     <![CDATA[
-         select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+         select /*+ index_desc(tstd pk_tstd)*/
+            s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
          from tstd s, tuser u
          where s.representation = u.id and s.status in ('STST01', 'STST03')
         ]]>

@@ -46,14 +46,26 @@
     <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
     <p>${study.expense}</p>
 
-    <button style="display: inline;">찜</button>
-    <button style="display: inline;">참석하기</button>
+    <c:if test="${wish == null}"><button>찜</button></c:if>
+    <c:if test="${wish != null}"><button>찜 취소</button></c:if>
+
+    <c:choose>
+        <c:when test="${study.attendants >= study.capacity}"><button>모집마감</button></c:when>
+        <c:when test="${attend.status eq 'STUS01'}"><button>탈퇴하기</button></c:when>
+        <c:when test="${attend.status eq 'STUS02'}"><button>참석하기</button></c:when>
+        <c:when test="${attend.status eq 'STUS03'}"><button>검토중</button></c:when>
+        <c:when test="${attend.status eq 'STUS04'}"><button>가입불가</button></c:when>
+        <c:otherwise><button>참석하기</button></c:otherwise>
+    </c:choose>
     <br>
+
+    <c:if test="${study.representation eq param.userId}">
     <button>스터디 수정</button>
     <button>스터디 삭제</button>
     <button>참가 신청 마감</button>
     <button>멤버 관리</button>
     <button>참여멤버와 채팅</button>
+    </c:if>
 </div>
 
 <!-- nav -->
