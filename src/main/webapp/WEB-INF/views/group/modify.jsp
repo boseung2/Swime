@@ -77,6 +77,10 @@
         <div class="form-group">
             <label for="updDate" hidden></label>
             <input type="date" class="form-control" name="updDate" id="updDate" value="<fmt:formatDate value="${group.updDate}" pattern="yyyy/MM/dd"/>" hidden>
+            <input type="number" class="form-control" name="attendCount" id="attendCount" value="<c:out value="${group.attendCount}"/>" hidden>
+            <input type="number" class="form-control" name="rating" id="rating" value="<c:out value="${group.rating}"/>" hidden>
+            <input type="number" class="form-control" name="ratingCount" id="ratingCount" value="<c:out value="${group.ratingCount}"/>" hidden>
+            <input type="text" class="form-control" name="status" id="status" value="<c:out value="${group.status}"/>" hidden>
         </div>
         <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
         <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
@@ -96,11 +100,11 @@
 
             console.log(operation);
 
-            if(operation === 'reomve') {
-                formObj.attr('action', '/group/remove');
+            if(operation === 'remove') {
+                formObj.attr("action", "/group/remove");
             } else if (operation === 'list') {
-                self.location = '/group/list';
-                return;
+                formObj.attr("action", '/group/list').attr("method", "get");
+                formObj.empty();
             }
             formObj.submit();
         })

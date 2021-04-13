@@ -37,11 +37,10 @@
     <a href="/group/list">모임찾기</a>
     <a href="/group/register">모임만들기</a>
     <div class="header-right">
-        <a href="/register.jsp">회원가입</a>
-        <a class="active" href="/login.jsp">로그인</a>
+        <a href="/user/register">회원가입</a>
+        <a class="active" href="/user/login">로그인</a>
     </div>
 </div>
 <hr style="
     margin-top: 0px;
-    margin-bottom: 50px;
-">
+    margin-bottom: 50px;">
