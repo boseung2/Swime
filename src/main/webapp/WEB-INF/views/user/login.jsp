@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<%@include file="./WEB-INF/views/includes/header.jsp" %>
+<%@include file="../includes/header.jsp" %>
 
 
 <div>
@@ -15,4 +15,4 @@
 
 
 
-<%@include file="./WEB-INF/views/includes/footer.jsp" %>
+<%@include file="../includes/footer.jsp" %>
