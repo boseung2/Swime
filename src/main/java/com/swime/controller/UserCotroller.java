@@ -3,6 +3,7 @@ package com.swime.controller;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.MemberMapper;
+import com.swime.service.AuthService;
 import com.swime.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.List;
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
+@Transactional
 public class UserCotroller {
 
 
@@ -30,6 +33,8 @@ public class UserCotroller {
     MemberService service;
 //    @Setter(onMethod_ = @Autowired)
     PasswordEncoder passwordEncoder;
+
+    AuthService authService;
 
 
     @GetMapping("/login")
@@ -48,8 +53,10 @@ public class UserCotroller {
     @PostMapping("/register")
     public String register(@Param("vo") MemberVO vo){
         vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+        service.registerHistory(vo);
         service.register(vo);
-        return "redirect:/user/registerSuccess";
+        authService.register(vo.getId(),"MEMBER");
+        return "<h1>가입성공</h1>";
     }
 
     @GetMapping("/registerSuccess")
