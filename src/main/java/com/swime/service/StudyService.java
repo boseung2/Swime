@@ -35,19 +35,19 @@ public interface StudyService {
     public int removeWish(StudyParamVO param);
 
     // StudyList
-    public List<StudyListVO> getAttendantList(StudyParamVO param);
+    public List<StudyListVO> getAttendantList(long stdSn);
 
-    public List<StudyListVO> getAttendantList(StudyCriteria cri, StudyParamVO param);
+    public List<StudyListVO> getAttendantList(StudyCriteria cri, long stdSn);
 
-    public List<StudyListVO> getWaitingList(StudyParamVO param);
+    public List<StudyListVO> getWaitingList(long stdSn);
 
-    public List<StudyListVO> getWaitingList(StudyCriteria cri, StudyParamVO param);
+    public List<StudyListVO> getWaitingList(StudyCriteria cri, long stdSn);
 
     public StudyListVO getAttendant(StudyParamVO param);
 
     public int registerAttendant(StudyParamVO param);
 
-    public int modify(StudyParamVO param);
+    public int modifyAttendant(StudyParamVO param);
 
     public int countAttendants(long stdSn);
 

@@ -116,25 +116,34 @@ public class StudyServiceImpl implements StudyService{
 
     // StudyList
     @Override
-    public List<StudyListVO> getAttendantList(StudyParamVO param) {
+    public List<StudyListVO> getAttendantList(long stdSn) {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(stdSn);
         param.setStatus("STUS01");
+
         return listMapper.getList(param);
     }
 
     @Override
-    public List<StudyListVO> getAttendantList(StudyCriteria cri, StudyParamVO param) {
+    public List<StudyListVO> getAttendantList(StudyCriteria cri, long stdSn) {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(stdSn);
         param.setStatus("STUS01");
         return listMapper.getListWithPaging(cri, param);
     }
 
     @Override
-    public List<StudyListVO> getWaitingList(StudyParamVO param) {
+    public List<StudyListVO> getWaitingList(long stdSn) {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(stdSn);
         param.setStatus("STUS03");
         return listMapper.getList(param);
     }
 
     @Override
-    public List<StudyListVO> getWaitingList(StudyCriteria cri, StudyParamVO param) {
+    public List<StudyListVO> getWaitingList(StudyCriteria cri, long stdSn) {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(stdSn);
         param.setStatus("STUS03");
         return listMapper.getListWithPaging(cri, param);
     }
@@ -150,7 +159,7 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public int modify(StudyParamVO param) {
+    public int modifyAttendant(StudyParamVO param) {
         return listMapper.update(param);
     }
 

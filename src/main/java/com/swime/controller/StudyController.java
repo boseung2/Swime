@@ -1,5 +1,6 @@
 package com.swime.controller;
 
+
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyParamVO;
 import com.swime.domain.StudyVO;
@@ -7,16 +8,15 @@ import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import oracle.ucp.proxy.annotation.Post;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.print.attribute.standard.Media;
-import javax.xml.ws.Response;
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/study")
 @Log4j
 @AllArgsConstructor
@@ -24,83 +24,50 @@ public class StudyController {
 
     private StudyService service;
 
-    @GetMapping(value="/list", produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<StudyVO>> getList() {
-
-        log.info("get List ....................");
-        return new ResponseEntity<>(service.getList(), HttpStatus.OK);
+    // 스터디 리스트 페이징처리
+    @GetMapping("/list")
+    public void getList(StudyCriteria cri, Model model) {
+        model.addAttribute("list", service.getList(cri));
     }
 
-    @GetMapping(value="/list/{grpSn}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<StudyVO>> getListwithPaging(
-            @PathVariable("grpSn") long grpSn,
-            @PathVariable("page") long page) {
-
-        log.info("get list with paging .........................");
-        StudyCriteria cri = new StudyCriteria(page, 3);
-        log.info(cri);
-
-        return new ResponseEntity<>(service.getList(cri), HttpStatus.OK);
+    // 스터디 상세조회
+    @GetMapping("/get")
+    public void get(@RequestParam("sn") Long sn, Model model) {
+        model.addAttribute("study", service.get(sn));
     }
 
-    @PostMapping(value="/new", consumes = "application/json",
-    produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<String> register(@RequestBody StudyVO study) {
-        log.info("insert.................." + study);
+    // 스터디 생성
+    @PostMapping("/register")
+    public String register(StudyVO study) {
+        service.register(study);
 
-        int insertCount = service.register(study);
-        return insertCount == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        // 만들어진 스터디의 상세조회 페이지로 이동한다.
+        return "redirect:/study/get?sn=" + study.getSn();
     }
 
-    @GetMapping(value="/{sn}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StudyVO> get(@PathVariable("sn") long sn) {
+    // 스터디 수정
+    @PostMapping("/modify")
+    public String modify(StudyVO study) {
+        service.modify(study);
 
-        log.info("get ....................." + sn);
-        return new ResponseEntity<>(service.get(sn), HttpStatus.OK);
+        // 수정된 스터디의 상세조회 페이지로 이동한다.
+        return "redirect:/study/get?sn=" + study.getSn();
     }
 
-    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
-    value="/{sn}", consumes="application/json",
-    produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<String> modify(@RequestBody StudyVO study,
-                                         @PathVariable("sn") long sn) {
-        study.setSn(sn);
-
-        log.info("sn: " + sn);
-        log.info("modify: " + study);
-
-        return service.modify(study) == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    // 스터디 삭제
+    @PostMapping("/remove")
+    public String remove(StudyParamVO param, RedirectAttributes rttr) {
+        if(service.remove(param) == 1) {
+            rttr.addFlashAttribute("result", "success");
+        }
+        return "redirect:/group/";  //??
+    }
+    
+    // 스터디 멤버 관리 - 참여멤버/ 대기멤버 가져오기
+    @GetMapping("/manage")
+    public void manage(long stdSn, Model model) {
+        model.addAttribute("attendantList", service.getAttendantList(stdSn));
+        model.addAttribute("waitingList", service.getWaitingList(stdSn));
     }
 
-    @RequestMapping(method = {RequestMethod.DELETE},
-            value="/{sn}",
-            produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<String> remove(@PathVariable("sn") long sn) {
-
-        log.info("remove................." + sn);
-
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(sn);
-        param.setStatus("STUS02");
-
-        return service.remove(param) == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @GetMapping(value="/wishList/{userId}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<StudyVO>> getWishListwithPaging(
-            @PathVariable("userId") String userId,
-            @PathVariable("page") long page) {
-
-        log.info("get list with paging .........................");
-
-        StudyCriteria cri = new StudyCriteria(page, 3);
-
-        return new ResponseEntity<>(service.getWishList(cri, userId), HttpStatus.OK);
-    }
 }

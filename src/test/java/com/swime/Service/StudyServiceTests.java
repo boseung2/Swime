@@ -166,10 +166,7 @@ public class StudyServiceTests {
     //StudyList
     @Test
     public void testGetAttendList() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(307L);
-
-        List<StudyListVO> list = service.getAttendantList(param);
+        List<StudyListVO> list = service.getAttendantList(307L);
         if (list.size() == 0) return;
 
         for(StudyListVO li : list) {
@@ -181,10 +178,7 @@ public class StudyServiceTests {
     public void testGetAttendListWithPaging() {
         StudyCriteria cri = new StudyCriteria(1, 3);
 
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(307L);
-
-        List<StudyListVO> list = service.getAttendantList(cri, param);
+        List<StudyListVO> list = service.getAttendantList(cri, 307L);
         if (list.size() == 0) return;
 
         for(StudyListVO li : list) {
@@ -195,10 +189,7 @@ public class StudyServiceTests {
 
     @Test
     public void testGetWaitingList() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(308L);
-
-        List<StudyListVO> list = service.getWaitingList(param);
+        List<StudyListVO> list = service.getWaitingList(308L);
         if (list.size() == 0) return;
 
         for(StudyListVO li : list) {
@@ -210,10 +201,7 @@ public class StudyServiceTests {
     public void testGetWaitingListWithPaging() {
         StudyCriteria cri = new StudyCriteria(1, 3);
 
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(308L);
-
-        List<StudyListVO> list = service.getWaitingList(cri, param);
+        List<StudyListVO> list = service.getWaitingList(cri, 308L);
         if (list.size() == 0) return;
 
         for(StudyListVO li : list) {
