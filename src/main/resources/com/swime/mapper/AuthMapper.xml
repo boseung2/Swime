@@ -19,13 +19,12 @@
         where id = #{id}
     </delete>
 
-    <select id="select" resultType="com.swime.domain.AuthVO">
-        select id, auth
-        from TUSER_ROLE
+    <delete id="deleteAuth">
+        delete from TUSER_ROLE
         where id = #{id} and auth = #{auth}
-    </select>
+    </delete>
 
-    <select id="isAready" resultType="com.swime.domain.AuthVO">
+    <select id="select" resultType="com.swime.domain.AuthVO">
         select id, auth
         from TUSER_ROLE
         where id = #{id} and auth = #{auth}
