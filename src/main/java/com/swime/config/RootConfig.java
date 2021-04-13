@@ -1,5 +1,8 @@
 package com.swime.config;
 
+import com.swime.security.CustomLoginSuccessHandler;
+import com.swime.security.CustomUserDetailsService;
+import com.swime.util.GmailSend;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -13,6 +16,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -38,6 +47,7 @@ public class RootConfig {
     }
 
     @Bean
+
     public DataSourceTransactionManager txManager(){
         return new DataSourceTransactionManager(dataSource());
     }
@@ -46,7 +56,10 @@ public class RootConfig {
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
         System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
+        System.setProperty("java.security.egd", "file:///dev/urandom");
+
         HikariConfig hikariConfig = new HikariConfig();
+
         if(false) {
             hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
@@ -61,6 +74,13 @@ public class RootConfig {
         }
         return new HikariDataSource(hikariConfig);
     }
+
+    @Bean
+    public GmailSend gmailSend(){
+        return new GmailSend();
+    }
+
+
 }
 
 

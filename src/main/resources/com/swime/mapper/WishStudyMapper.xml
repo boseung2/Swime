@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.WishStudyMapper">
+
+    <select id="getList" resultType="com.swime.domain.StudyVO">
+    <![CDATA[
+        select *
+        from (
+                 select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                 from (
+                          select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                               ,w.reg_date wish_reg
+                          from tstd s, tstd_wish w
+                          where s.sn = w.std_sn and s.status in ('STST01', 'STST03') and w.user_id = #{userId}
+                          order by w.reg_date desc
+                      )
+                 where rownum <= #{cri.pageNum} * #{cri.amount}
+             )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <select id="get" resultType="com.swime.domain.WishStudyVO">
+        select sn, std_sn, user_id, reg_date
+        from tstd_wish
+        where std_sn = #{stdSn} and user_id = #{userId}
+    </select>
+
+    <insert id="insert">
+        insert into tstd_wish (sn, std_sn, user_id, reg_date)
+        values(seq_std_wish.nextVal, #{stdSn}, #{userId}, current_date)
+    </insert>
+
+    <delete id="delete">
+        delete from tstd_wish
+        where std_sn = #{stdSn} and user_id = #{userId}
+    </delete>
+
+</mapper>

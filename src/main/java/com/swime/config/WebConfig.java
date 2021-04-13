@@ -10,7 +10,7 @@ import javax.servlet.ServletRegistration;
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{RootConfig.class};
+        return new Class[]{RootConfig.class, SecurityConfig.class};
     }
 
     @Override
@@ -23,9 +23,10 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return new String[]{"/"};
     }
 
+
     //첨부파일
     @Override
-    public void customizeRegistration(ServletRegistration.Dynamic registration){
+    public void customizeRegistration(ServletRegistration.Dynamic registration) {
         registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 
         MultipartConfigElement multipartConfig = new MultipartConfigElement
@@ -36,13 +37,14 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     }
 
     @Override
-    protected Filter[] getServletFilters(){
+    protected Filter[] getServletFilters() {
         CharacterEncodingFilter characterEncodingFilter =
                 new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
 
-        return new Filter[] { characterEncodingFilter};
+        return new Filter[]{characterEncodingFilter};
     }
-
 }
+
+

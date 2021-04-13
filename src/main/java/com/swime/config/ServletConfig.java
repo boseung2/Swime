@@ -27,9 +27,11 @@ public class ServletConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
-    //첨부파일
+
+
     @Bean
-    public MultipartResolver multipartResolver(){
+    public MultipartResolver multipartResolver() {
+
         StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
         return resolver;
     }

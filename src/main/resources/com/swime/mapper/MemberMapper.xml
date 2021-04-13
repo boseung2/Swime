@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.MemberMapper">
+    <select id="read" resultType="com.swime.domain.MemberVO">
+        select id, password, name, picture, birth, reg_path, to_char(last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
+               to_char(email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth, status, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+        from TUSER
+        where id = #{id}
+    </select>
+
+    <resultMap id="memberMap" type="com.swime.domain.MemberVO">
+        <id property="id" column="id"/>
+        <result property="id" column="id"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="picture" column="picture"/>
+        <result property="birth" column="birth"/>
+        <result property="regPath" column="reg_path"/>
+        <result property="lastLogin_date" column="last_login_date"/>
+        <result property="emailAuth" column="email_auth"/>
+        <result property="status" column="status"/>
+        <result property="regDate" column="reg_date"/>
+        <collection property="authList" resultMap="authMap"></collection>
+    </resultMap>
+
+    <resultMap id="authMap" type="com.swime.domain.AuthVO">
+        <result property="id" column="id"/>
+        <result property="auth" column="auth"/>
+    </resultMap>
+
+    <select id="readWithAuth" resultMap="memberMap">
+        select u.id as id,
+               u.password as password,
+               u.name as name,
+               u.picture as picture,
+               u.birth as birth,
+               u.reg_path as reg_path,
+               to_char(u.last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
+               to_char(u.email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth,
+               u.status as status,
+               to_char(u.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date,
+               a.auth as auth
+        from TUSER u LEFT OUTER JOIN TUSER_ROLE a on u.id = a.id
+        where u.id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into TUSER(id, password, name)
+        values(#{id}, #{password}, #{name})
+    </insert>
+
+    <insert id="insertWithAuth">
+<!--        insert ALL-->
+<!--        into TUSER(id, password, name)-->
+<!--        values(#{id}, #{password}, #{name})-->
+<!--        into TUSER_ROLE-->
+<!--        value (<foreach collection="")-->
+    </insert>
+
+    <update id="update">
+        update TUSER
+        set password = #{password},
+            name = #{name},
+            picture = #{picture, jdbcType=VARCHAR},
+            birth = #{birth, jdbcType=VARCHAR},
+            last_login_date = #{lastLoginDate, jdbcType=DATE},
+            email_auth = #{emailAuth, jdbcType=DATE},
+            status = #{status}
+        where id = #{id}
+    </update>
+
+
+    <delete id="delete">
+        update TUSER
+        set status = 'USST03'
+        where id = #{id}
+    </delete>
+
+    <select id="getlist" resultType="com.swime.domain.MemberVO">
+        select id, password, name, picture, birth, reg_path, to_char(last_login_date, 'yyyy-mm-dd hh24:mi:ss') as last_login_date,
+               to_char(email_auth, 'yyyy-mm-dd hh24:mi:ss') as email_auth, status, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+        from TUSER
+    </select>
+
+    <insert id="registerHistory">
+        <selectKey keyProperty="sn" order="BEFORE" resultType="long">
+            select SEQ_TUSER_UPD_HIST.nextval from dual
+        </selectKey>
+        insert into TUSER_UPD_HIST (SN, EMAIL, UPD_MTR, BEF_VAL, AFT_VAL, REASON, DESCRIPTION ,UPD_USER_ID)
+        VALUES(#{sn}, #{email, jdbcType=VARCHAR}, #{updMtr}, #{befVal, jdbcType=VARCHAR}, #{aftVal, jdbcType=VARCHAR}, #{reason, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, #{updUserId})
+    </insert>
+
+    <select id="getHistory" resultType="com.swime.domain.MemberHistoryVO">
+        select *
+        from TUSER_UPD_HIST
+        where email = #{email}
+        order by sn desc
+    </select>
+
+    <insert id="insertKey">
+        insert into tuser_auth_key(id, key)
+        values(#{id}, #{key})
+    </insert>
+
+    <select id="selectKey" resultType="String">
+        select key
+        from tuser_auth_key
+        where id = #{id}
+    </select>
+
+    <delete id="deleteKey">
+        delete from tuser_auth_key
+        where id = #{id}
+    </delete>
+    
+</mapper>

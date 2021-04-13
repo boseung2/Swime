@@ -10,7 +10,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+
     <title>Small Business - Start Bootstrap Template</title>
+
+    <title>SWIME</title>
+
 
     <!-- Bootstrap core CSS -->
     <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -18,9 +22,20 @@
     <!-- Custom styles for this template -->
     <link href="/resources/css/small-business.css" rel="stylesheet">
 
+    <!-- nav -->
+    <link href="/resources/css/nav.css" rel="stylesheet">
+
+    <!-- avatar -->
+    <link href="/resources/css/avatar.css" rel="stylesheet">
+
+    <!-- jquery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
 </head>
 
 <body>
+
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -49,3 +64,18 @@
         </div>
     </div>
 </nav>
+
+<!-- header -->
+<div class="header">
+    <a href="/" class="logo">Swime</a>
+    <a href="/group/list">모임찾기</a>
+    <a href="/group/register">모임만들기</a>
+    <div class="header-right">
+        <a href="/user/register">회원가입</a>
+        <a class="active" href="/user/login">로그인</a>
+    </div>
+</div>
+<hr style="
+    margin-top: 0px;
+    margin-bottom: 50px;">
+
