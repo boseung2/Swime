@@ -3,6 +3,7 @@ package com.swime.mapper;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberHistoryVOTests;
 import com.swime.domain.MemberVO;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -10,6 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -19,23 +22,35 @@ import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {com.swime.config.RootConfig.class})
+@ComponentScan(basePackages={"com.swime.config"})
+@ContextConfiguration(classes = {com.swime.config.RootConfig.class, com.swime.config.SecurityConfig.class})
 @Log4j
 public class MemberMapperTests {
 
     @Setter(onMethod_ = @Autowired)
+//    @Autowired
     MemberMapper mapper;
+
+    @Setter(onMethod_ = @Autowired)
+    PasswordEncoder passwordEncoder;
 
     @Test
     public void getMapper(){
         log.info(mapper);
         Assert.assertNotNull(mapper);
+
+    }
+
+    @Test
+    public void getEncoder(){
+        log.info(passwordEncoder);
+        Assert.assertNotNull(passwordEncoder);
     }
 
     @Test
     public void readTest(){
 //        MemberVO memberVO = mapper.read("asd123@naver.com");
-        MemberVO memberVO = mapper.read("qwer3871@naver.com");
+        MemberVO memberVO = mapper.read("hong2841@service.com");
         Assert.assertNotNull(memberVO);
     }
 
@@ -63,7 +78,7 @@ public class MemberMapperTests {
     @Test
     public void updateTest(){
         int random = (int)(Math.random()*10000);
-        MemberVO memberVO = mapper.read("qwer2392@naver.com");
+        MemberVO memberVO = mapper.read("qwer3568@naver.com");
         memberVO.setPassword("updatepassword" + random);
         memberVO.setName("이름변경" + random);
         memberVO.setBirth("2010312");
@@ -132,7 +147,7 @@ public class MemberMapperTests {
 
     @Test
     public void selectKey(){
-        Assert.assertNotNull(mapper.selectKey("junit테스트", "sad78ssasd"));
+        Assert.assertNotNull(mapper.selectKey("junit테스트"));
     }
 
     @Test
@@ -142,4 +157,10 @@ public class MemberMapperTests {
         Assert.assertEquals(mapper.deleteKey("junit테스트" + random), 1);
     }
 
+    @Test
+    public void selwithauth(){
+        MemberVO memberVO = mapper.readWithAuth("aaa123@naver.com");
+//        MemberVO memberVO = mapper.readWithAuth("asd123@naver.com");
+        log.info(memberVO);
+    }
 }

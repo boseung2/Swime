@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -22,18 +23,23 @@ import java.util.Map;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {com.swime.config.RootConfig.class})
+@ContextConfiguration(classes = {com.swime.config.RootConfig.class, com.swime.config.SecurityConfig.class})
 @Log4j
 public class MemberServiceTests {
 
     @Setter(onMethod_ = @Autowired)
     private MemberService service;
 
+    @Setter(onMethod_ = @Autowired)
+    private PasswordEncoder passwordEncoder;
+
 
     @Test
     public void getService() {
         log.info(service);
+        log.info(passwordEncoder);
         assertNotNull(service);
+        assertNotNull(passwordEncoder);
     }
 
 
