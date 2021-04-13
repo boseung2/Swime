@@ -51,6 +51,43 @@ public class StudyServiceTests {
     }
 
     @Test
+    public void testRegister2() {
+        int[] grpNum = {222, 437, 98, 157, 221, 438, 256, 439, 457, 156};
+        String[] userEmail = {"qwer8203@naver.com",
+                "qwer9234@naver.com",
+                "qwer6786@naver.com",
+                "qwer7290@naver.com",
+                "qwer3568@naver.com",
+                "qwer5368@naver.com",
+                "qwer5935@naver.com",
+                "qwer2810@naver.com",
+                "qwer4052@naver.com",
+                "hong7073@service.com"};
+
+        for(int i = 0; i < grpNum.length; i++) {
+            StudyVO study = new StudyVO();
+            study.setGrpSn(grpNum[i]);
+            study.setRepresentation(userEmail[i]);
+            study.setName("스터디 만들기 테스트" + i);
+            study.setStartDate("2021-04-01");
+            study.setEndDate("2021-04-" + (10+i));
+            study.setStartTime("14:00:00");
+            study.setEndTime("16:00:00");
+            study.setRepeatCycle("STCY01");
+            study.setRepeatDay("화,수");
+            study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
+            study.setOnOff("STOF02");
+            study.setOnUrl("");
+            study.setPlaceId("신촌 포텐 스터디 카페");
+            study.setExpense("5000원");
+            study.setCapacity(20);
+
+            assert (service.register(study) == 2);
+        }
+
+    }
+
+    @Test
     public void testGetList() {
         List<StudyVO> list = service.getList();
 
@@ -213,11 +250,24 @@ public class StudyServiceTests {
     @Test
     public void testRegisterAttendant() {
         StudyParamVO param = new StudyParamVO();
-        param.setStdSn(41L);
-        param.setUserId("hong2841@service.com");
+        param.setStdSn(561L);
+        param.setUserId("hong7073@service.com");
         param.setStatus("STUS01");
 
-        if(service.getAnswer(param) != null) return;
+        if(service.getAttendant(param) != null) return;
+
+        assert (service.registerAttendant(param) == 1);
+        assert (service.getAttendant(param) != null);
+    }
+
+    @Test
+    public void testRegisterAttendant2() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(561L);
+        param.setUserId("qwer5935@naver.com");
+        param.setStatus("STUS01");
+
+        if(service.getAttendant(param) != null) return;
 
         assert (service.registerAttendant(param) == 1);
         assert (service.getAttendant(param) != null);

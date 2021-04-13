@@ -34,6 +34,7 @@ public class StudyController {
     @GetMapping("/get")
     public void get(@RequestParam("sn") Long sn, Model model) {
         model.addAttribute("study", service.get(sn));
+        model.addAttribute("members", service.getAttendantList(sn));
     }
 
     // 스터디 생성
