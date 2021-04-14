@@ -64,18 +64,19 @@ public class BoardServiceTests {
     @Test
     public void testDelete(){
 
-        log.info("REMOVE RESULT: " + service.remove(15L));
+        log.info("REMOVE RESULT: " + service.remove(9L));
     }
-
 
     @Test
     public void testUpdate(){
 
-        BoardVO board = service.get(4L);
+        BoardVO board = service.get(108L);
+        log.info(board);
 
         if(board == null) return;
 
-        board.setTitle("Last Test 제목 수정 : Spring 게임 만들기");
+        board.setTitle("와 놓치고 지나갈뻔..");
+        board.setContent("바뀌나요?");
 
         log.info("MODIFY RESULT: " + service.modify(board));
     }

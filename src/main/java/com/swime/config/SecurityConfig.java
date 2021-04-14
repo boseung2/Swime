@@ -38,10 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .authorizeRequests()
-                .antMatchers("/group","/include","/user").permitAll()
+                .antMatchers("/**","/*").permitAll()
 //                .antMatchers("/user").permitAll()
-                .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
-                .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
+//                .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
+//                .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
         .and()
             .formLogin()
                 .usernameParameter("id")
@@ -85,8 +85,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .passwordEncoder(passwordEncoder())
 //                .usersByUsernameQuery(getUserQuery)
 //                .authoritiesByUsernameQuery(getUserDetailQuery)
-            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
-//            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
+//            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
+            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
         ;
 
     }

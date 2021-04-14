@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sun.awt.ModalExclude;
 
 import java.util.List;
 
@@ -27,13 +28,20 @@ public class BoardController {
     private BoardService service;
 
 
-    //jsp get List Test
+//    @GetMapping("/list")
+//    public void list(Model model) {
+//
+//        log.info("list");
+//
+//        model.addAttribute("list", service.getList());
+//    }
+
     @GetMapping("/list")
-    public void list(Model model) {
+    public void list(BoardCriteria cri, Model model){
+        log.info("list: " + cri);
 
-        log.info("list");
+        model.addAttribute("list", service.getListWithPaging(cri));
 
-        model.addAttribute("list", service.getList());
     }
 
     @GetMapping("/register")
@@ -41,7 +49,7 @@ public class BoardController {
 
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public String register(BoardVO board, RedirectAttributes rttr) {
 
         log.info("register...." + board);
@@ -63,7 +71,7 @@ public class BoardController {
 
     }
 
-    @PostMapping("modify")
+    @PostMapping("/modify")
     public String modify(BoardVO board, RedirectAttributes rttr) {
 
         log.info("modify: " + board);

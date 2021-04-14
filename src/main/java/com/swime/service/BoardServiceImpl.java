@@ -6,6 +6,7 @@ import com.swime.mapper.BoardMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +16,6 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
 
     private BoardMapper mapper;
-
 
     @Override
     //jsp getList test
@@ -36,14 +36,21 @@ public class BoardServiceImpl implements BoardService{
         return mapper.read(sn);
     }
 
+    @Transactional
     @Override
     public boolean modify(BoardVO board) {
-
         log.info("modify: " + board);
+        //게시판 수정
+        int count1 = mapper.update(board);
+        //게시판 내용(content)수정
+        int count2 = mapper.updateContent(board);
+
+
 
         return mapper.update(board) == 1;
     }
 
+    @Transactional
     @Override
     public boolean remove(Long sn) {
 

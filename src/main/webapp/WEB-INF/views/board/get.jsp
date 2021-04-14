@@ -10,17 +10,33 @@
         <div class="col-lg-12">
             <h1 class="page-header"> 게시판</h1>
             <hr/>
+
             <div id="inline3">
                 <div class="inline" id="img"><img class="profile" src="../../../resources/image/img_avatar2.png" alt="error"></div>
                 <div class="inline" id="name"><c:out value="${board.name}" /></div>
                 <div class="inline" id="role">모임장</div>
             </div>
 
+
             <div id="inline2">
-                <button data-oper='modify' class="btn btn-default"
-                onClick="location.href='/board/modify?sn=<c:out value="${board.sn}"/>'">수정</button>
-                <button data-oper='remove' class="btn btn-default">삭제</button>
+                <a data-oper='modify' class="btn btn-primary"
+                onclick="location.href='/board/modify?sn=<c:out value="${board.sn}"/>'">수정</a>
+
+                <a id="back" class="btn btn-dark">취소</a>
+
+<%--                <button data-oper="modify" class=""--%>
+
+
+<%--                <form id="modifyForm" role="form" action="/board/remove" method="post">--%>
+<%--                    <button type="submit" data-oper='remove' class="btn btn-danger">삭제</button>--%>
+<%--                    <sec:csrfInput/>--%>
+<%--                </form>--%>
+<%--                                    <button data-oper='remove' class="btn btn-default">삭제</button>--%>
             </div>
+            <form id="operForm" action="/board/modify" method="get">
+                <input type="hidden" id="sn" name="sn" value="<c:out value="${board.sn}"/>">
+            </form>
+
 
             <div id="date">
                 <fmt:formatDate pattern="YYYY-MM-dd hh:mm" value="${board.regDate}"/>
@@ -63,6 +79,42 @@
 </div>
 <!--container-->
 
+<script>
+
+    $(document).ready(function(){
+
+        $("button[data-oper='modify']").on("click",function(){
+            operForm.attr("action", "/board/modify").submit();
+
+        })
+        $("#back").on("click", function(){
+            window.history.back();
+        })
+    })
+
+
+    // $(document).ready(function(){
+    //
+    //     let formObj = $("form");
+    //     console.dir(formObj);
+    //
+    //     $('button').on("click", function(e){
+    //
+    //         e.preventDefault();
+    //
+    //         let operation = $(this).data("oper");
+    //
+    //         console.log(operation);
+    //
+    //         if(operation === 'remove'){
+    //             formObj.attr("action", "board/remove")
+    //             self.location = "/board/list";
+    //             return
+    //         }
+    //         formObj.submit();
+    //     });
+    // });
+</script>
 
 
 

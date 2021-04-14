@@ -12,20 +12,27 @@
     <form role="form" action="/board/modify" method="post">
 
         <div class="form-group">
-            <label for="title">제목</label>
-            <input type="text" class="form-control" name="title" id="title"
-                   value="<c:out value="${board.title}"/>">
+            <label for="sn">번호</label>
+            <input type="text" class="form-control" name="sn" id="sn"
+                   value="<c:out value="${board.sn}"/>" readonly="readonly">
         </div>
 
         <div class="form-group">
-            <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="userId"
-            <c:out value="${board.name}" /> readonly="readonly">
+            <!--<label for="name">아이디</label>-->
+            <input type="hidden" class="form-control" id="name" name="name"
+                   value="<c:out value="${board.userId}"/>" readonly="readonly">
         </div>
 
         <div class="form-group">
             <label for="grpSn">모임번호</label>
-            <input type="text" class="form-control" id="grpSn" name="grpSn">
+            <input type="text" class="form-control" id="grpSn" name="grpSn"
+                   value="<c:out value="${board.grpSn}"/>" readonly="readonly">
+        </div>
+
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" class="form-control" name="title" id="title"
+                   value="<c:out value="${board.title}"/>">
         </div>
 
         <div class="form-group">
@@ -58,11 +65,12 @@
             </label>
         </div>
 
-        <button type="submit" data-oper="modify"class="btn btn-primary">수정</button>
+        <button type="submit" data-oper="modify" class="btn btn-primary">수정</button>
         <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
-        <button id="back" type="reset" class="btn btn-dark">취소</button>
+        <a id="back" class="btn btn-dark">취소</a>
 
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+<%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
+        <sec:csrfInput/>
     </form>
 </div>
 
@@ -72,7 +80,7 @@
 
         let formObj = $("form");
 
-        $('button').on("click", function(e){
+        $("button").on("click", function(e){
             e.preventDefault();
 
             let operation = $(this).data("oper");
@@ -85,6 +93,7 @@
             }
             formObj.submit();
         })
+
         $("#back").on("click", function(){
             window.history.back();
         });

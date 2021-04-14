@@ -29,6 +29,7 @@ div #date{
     float: right;
     margin-right: 10px;
 }
+
 #inline2 > div:last-child{
     margin-left: 30px;
 }

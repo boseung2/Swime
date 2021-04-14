@@ -64,7 +64,7 @@
         <c:forEach items="${list}" var="board">
             <div class="board">
                 <div id="notice"><b>[필독]</b></div>
-                <div></div>
+                <div style="display: none"><c:out value="${board.sn}"/>번</div>
                 <div class="inline"><img class="profile" src="../../../resources/image/img_avatar2.png" alt="error"></div>
                 <div class="inline"><c:out value="${board.name}" /></div>
                 <div class="inline" id="role"><c:out value="${board.grpRole}"/></div>

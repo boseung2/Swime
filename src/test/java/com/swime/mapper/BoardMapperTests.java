@@ -82,21 +82,21 @@ public class BoardMapperTests {
     @Test
     public void testDelete(){
 
-        log.info("DELETE COUNT : " + mapper.delete(29L));
+        log.info("DELETE COUNT : " + mapper.delete(10L));
 
     }
 
     @Test
     public void testUpdate(){
         BoardVO board = new BoardVO();
-        board.setSn(22L);
-        board.setUserId("수정된 이름");
+        board.setSn(10L);
+        //board.setUserId("수정된 이름");
         //board.setUserName("수정된 이메일");
-        //board.setContent("성공하면 난 집 간다...");
+        //board.setContent("testUpdate ");
         board.setTitle("수정된 제목");
         //board.setLikeCnt(20);
-        board.setTopFix("BOFI02");
-        board.setStatus("BOST01");
+        //board.setTopFix("BOFI02");
+        //board.setStatus("BOST01");
 
         int count = mapper.update(board);
         log.info("UPDATE COUNT: " + count);
