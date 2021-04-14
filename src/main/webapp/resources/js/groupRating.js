@@ -30,7 +30,7 @@ let groupRatingService = (function(){
         $.getJSON("/rating/pages/" + grpSn + "/" + page + ".json",
             function(data) {
                 if(callback) {
-                    callback(data);
+                    callback(data.ratingCnt, data.list);
                 }
             }).fail(function(xhr, status, err) {
             if(error) {

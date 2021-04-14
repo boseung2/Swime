@@ -88,6 +88,9 @@
         </ul>
     </div>
 
+    <!-- rating paginatino button -->
+    <div class="panel-footer">
+
     </div>
     <!-- container -->
 
@@ -106,7 +109,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">후기 등록</h4>
+                <h4 class="modal-title">후기</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
@@ -126,6 +129,8 @@
                     <label for="stdSn">스터디번호</label>
                     <input type="number" class="form-control" name="stdSn" id="stdSn">
                 </div>
+                <label for="grpSn" hidden>그룹번호</label>
+                <input type="number" class="form-control" name="grpSn" id="grpSn" hidden>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" id="modalModBtn">Modify</button>
@@ -151,7 +156,18 @@
         showList(1);
 
         function showList(page) {
-            groupRatingService.getList({grpSn:grpSnValue, page: page||1}, function(list) {
+            groupRatingService.getList({grpSn:grpSnValue, page: page||1}, function(ratingCnt, list) {
+
+                console.log("ratingCnt : " + ratingCnt);
+                console.log("list : " + list);
+                console.log(list);
+
+                if(page == -1) {
+                    pageNum = 1;
+                    showList(1);
+                    return;
+                }
+
                 let str = "";
                 if(list == null) {
                     ratingUL.html("");
@@ -166,6 +182,8 @@
                 }
 
                 ratingUL.html(str);
+
+                showRatingPage(ratingCnt);
             })
         }
 
@@ -174,6 +192,7 @@
         let modalInputRating = modal.find("input[name='rating']");
         let modalInputReview = modal.find("input[name='review']");
         let modalInputStdSn = modal.find("input[name='stdSn']");
+        let modalInputGrpSn = modal.find("input[name='grpSn']");
 
         let modalModBtn = $('#modalModBtn');
         let modalRemoveBtn = $('#modalRemoveBtn');
@@ -204,7 +223,7 @@
                 modal.find("input").val("");
                 modal.modal("hide");
 
-                showList(1);
+                showList(-1);
             })
         })
 
@@ -219,6 +238,7 @@
                 modalInputRating.val(groupRating.rating);
                 modalInputStdSn.val(groupRating.stdSn);
                 modalInputUserId.val(groupRating.userId);
+                modalInputGrpSn.val(groupRating.grpSn);
                 modal.data("sn", groupRating.sn);
 
                 modal.find("button[id !='modalCloseBtn']").hide();
@@ -230,13 +250,14 @@
         })
 
         modalModBtn.on("click", function(e) {
+
             let groupRating = {sn:modal.data("sn"), userId: modalInputUserId.val(), rating: modalInputRating.val(),
-                                review: modalInputReview.val(), stdSn: modalInputStdSn.val()};
+                                review: modalInputReview.val(), stdSn: modalInputStdSn.val(), grpSn: modalInputGrpSn.val()};
 
             groupRatingService.update(groupRating, function(result) {
                 alert(result);
                 modal.modal("hide");
-                showList(1);
+                showList(pageNum);
             })
         })
 
@@ -247,8 +268,68 @@
             groupRatingService.remove(sn, function(result) {
                 alert(result);
                 modal.modal("hide");
-                showList(1);
+                showList(pageNum);
             })
+
+        })
+
+        let pageNum = 1;
+        let groupRatingPageFooter = $('.panel-footer');
+
+        function showRatingPage(ratingCnt) {
+
+            let endNum = Math.ceil(pageNum / 5.0) * 5;
+            let startNum = endNum - 4;
+
+            let prev = startNum != 1;
+            let next = false;
+
+            if(endNum * 5 >= ratingCnt) {
+                endNum = Math.ceil(ratingCnt / 5.0);
+            }
+
+            if(endNum * 5 < ratingCnt) {
+                next = true;
+            }
+
+            let str = '<ul class="pagination">';
+
+            if(prev) {
+                str += "<li class='page-item'><a class='page-link' href='"+(startNum - 1)+"'>Previous</a></li>"
+            }
+
+            console.log("!!!!!!!!!!!!!!!!!!!!" + pageNum);
+            for(let i= startNum ; i <= endNum; i++) {
+
+                let active = pageNum == i ? "active" : "";
+
+                str += "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+            }
+
+            if(next) {
+                str += "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+            }
+
+            str += "</ul></div>";
+
+            console.log(str);
+
+            groupRatingPageFooter.html(str);
+
+        }
+
+        groupRatingPageFooter.on("click", "li a", function(e) {
+            e.preventDefault();
+
+            console.log("page click");
+
+            let targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            pageNum = targetPageNum;
+
+            showList(pageNum);
 
         })
 
@@ -261,7 +342,7 @@
         //console.log("============");
         //console.log("js test");
 
-        //let snValue = '<c:out value="${group.sn}"/>';
+        let snValue = '<c:out value="${group.sn}"/>';
 
         // groupRatingService.add(
         //     {"grpSn" : snValue, "stdSn" : 1, "userId" : "jungbs3726@naver.com", "rating" : 4.3, "review" : "ajax test리뷰"}
@@ -291,7 +372,6 @@
 
     })
 </script>
-
 
 
 

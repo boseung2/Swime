@@ -1,6 +1,7 @@
 package com.swime.controller;
 
 import com.swime.domain.GroupCriteria;
+import com.swime.domain.GroupRatingPageDTO;
 import com.swime.domain.GroupRatingVO;
 import com.swime.service.GroupRatingService;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,7 @@ public class GroupRatingController {
                 MediaType.APPLICATION_XML_VALUE,
                 MediaType.APPLICATION_JSON_VALUE
             })
-    public ResponseEntity<List<GroupRatingVO>> getList(
+    public ResponseEntity<GroupRatingPageDTO> getList(
             @PathVariable("page") int page,
             @PathVariable("grpSn") Long grpSn) {
 
@@ -47,7 +48,7 @@ public class GroupRatingController {
         GroupCriteria cri = new GroupCriteria(page, 5);
         log.info(cri);
 
-        return new ResponseEntity<>(service.getListWithPaging(grpSn, cri), HttpStatus.OK);
+        return new ResponseEntity<>(service.getListPage(cri, grpSn), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{sn}",
@@ -77,6 +78,7 @@ public class GroupRatingController {
             @RequestBody GroupRatingVO vo,
             @PathVariable("sn") Long sn) {
         vo.setSn(sn);
+        //vo.setGrpSn(service.get(sn).getGrpSn());
         log.info("sn: " + sn);
         log.info("modify: " + vo);
 
