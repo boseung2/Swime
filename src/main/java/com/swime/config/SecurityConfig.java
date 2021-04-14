@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -39,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/group","/include","/user").permitAll()
-//                .antMatchers("/user").permitAll()
+                .antMatchers("/user").permitAll()
                 .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
                 .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
         .and()
@@ -47,13 +48,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("id")
                 .loginPage("/user/login")
                 .loginProcessingUrl("/user/login")
-                .successHandler(loginSuccessHandler())
+//                .successHandler(loginSuccessHandler())
         .and()
             .logout()
                 .logoutUrl("/user/logout")
-
                 .invalidateHttpSession(true)
                 .deleteCookies("remember-me", "JSESSIONID")
+        .and()
+            .csrf()
+//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .disable()
         ;
 //        http
 //            .authorizeRequests()

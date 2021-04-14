@@ -3,6 +3,7 @@ package com.swime.config;
 import com.swime.security.CustomLoginSuccessHandler;
 import com.swime.security.CustomUserDetailsService;
 import com.swime.util.GmailSend;
+import com.swime.util.MakeRandomValue;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -45,7 +46,7 @@ public class RootConfig {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
 
-        if(true) {
+        if(false) {
             hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");
@@ -63,6 +64,11 @@ public class RootConfig {
     @Bean
     public GmailSend gmailSend(){
         return new GmailSend();
+    }
+
+    @Bean
+    public MakeRandomValue makeRandomValue(){
+        return new MakeRandomValue();
     }
 
 

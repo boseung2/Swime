@@ -1,10 +1,13 @@
 package com.swime.controller;
 
+import com.swime.domain.MailVO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.MemberMapper;
 import com.swime.service.AuthService;
 import com.swime.service.MemberService;
+import com.swime.util.GmailSend;
+import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -36,30 +40,33 @@ public class UserCotroller {
 
     AuthService authService;
 
+    GmailSend gmailSend;
+
+    MakeRandomValue makeRandomValue;
 
     @GetMapping("/login")
     public void login(){
     }
-
-
 
     @GetMapping("/register")
     public void register(){
     }
 
     @PostMapping("/register")
-    public String register(@Param("vo") MemberVO vo){
+    public String register(MemberVO vo, RedirectAttributes rttr){
         vo.setPassword(passwordEncoder.encode(vo.getPassword()));
         service.registerHistory(vo);
         service.register(vo);
+        String key = makeRandomValue.MakeAuthKey();
+        service.registerKey(vo.getId(), key);
         authService.register(vo.getId(),"MEMBER");
-        return "<h1>가입성공</h1>";
+        gmailSend.sendAuthMail(new MailVO(vo.getId(), key));
+        rttr.addFlashAttribute("vo", vo);
+        return "redirect:/user/registerSuccess";
     }
 
     @GetMapping("/registerSuccess")
-    public void regSuccess(@Param("vo") MemberVO vo){
-
-    }
+    public void regSuccess(MemberVO vo){}
 
     @GetMapping("/modify")
     public void modify(){
@@ -91,14 +98,19 @@ public class UserCotroller {
     }
 
     @GetMapping("/auth")
-    public ResponseEntity<String> auth(){
-//        return service.remove(id, hvo) ?
-//                new ResponseEntity<>("Remove Success", HttpStatus.OK) :
-//                new ResponseEntity<>("Remove Fail", HttpStatus.BAD_REQUEST);
-        return null;
+    public String auth(String key, String id){
+        if(!service.isKey(id, key)) return null;
+        if(!service.deleteKey(id)) return null;
+        return "redirect:/user/AuthSuccess";
     }
 
+    @GetMapping("/AuthSuccess")
+    public void emailAuth(){
+    }
 
+    @GetMapping("/info")
+    public void info(){
+    }
 
 
 }
