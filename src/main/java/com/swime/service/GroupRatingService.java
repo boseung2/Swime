@@ -1,6 +1,6 @@
 package com.swime.service;
 
-import com.swime.domain.GroupRatingCriteria;
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupRatingVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +10,9 @@ public interface GroupRatingService {
 
     int register(GroupRatingVO groupRating);
 
-    List<GroupRatingVO> getListWithPaging(@Param("grpSn") Long grpSn, @Param("cri") GroupRatingCriteria cri);
+    public GroupRatingVO get(Long sn);
+
+    List<GroupRatingVO> getListWithPaging(@Param("grpSn") Long grpSn, @Param("cri") GroupCriteria cri);
 
     int modify(GroupRatingVO groupRating);
 

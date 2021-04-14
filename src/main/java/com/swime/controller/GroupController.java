@@ -51,7 +51,7 @@ public class GroupController {
     public void get(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, Model model) {
         model.addAttribute("group", groupService.get(sn));
         model.addAttribute("attendList", groupAttendService.getList(sn));
-        model.addAttribute("ratingList", groupRatingService.getListWithPaging(sn, new GroupRatingCriteria(1, 6)));
+        model.addAttribute("ratingList", groupRatingService.getListWithPaging(sn, new GroupCriteria(1, 6)));
     }
 
     @PostMapping("/modify")

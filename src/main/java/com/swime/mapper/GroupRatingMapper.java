@@ -1,6 +1,6 @@
 package com.swime.mapper;
 
-import com.swime.domain.GroupRatingCriteria;
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupRatingVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,7 +16,7 @@ public interface GroupRatingMapper {
 
     public List<GroupRatingVO> getList(Long grp_sn);
 
-    public List<GroupRatingVO> getListWithPaging(@Param("grpSn") Long grpSn, @Param("cri") GroupRatingCriteria cri);
+    public List<GroupRatingVO> getListWithPaging(@Param("grpSn") Long grpSn, @Param("cri") GroupCriteria cri);
 
     public int update(GroupRatingVO groupRating);
 

@@ -1,6 +1,6 @@
 package com.swime.service;
 
-import com.swime.domain.GroupRatingCriteria;
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupRatingVO;
 import com.swime.domain.GroupVO;
 import com.swime.mapper.GroupMapper;
@@ -32,9 +32,14 @@ public class GroupRatingServiceImpl implements GroupRatingService{
         return 1;
     }
 
+    @Override
+    public GroupRatingVO get(Long sn) {
+        return groupRatingMapper.read(sn);
+    }
+
     @Transactional
     @Override
-    public List<GroupRatingVO> getListWithPaging(Long grpSn, GroupRatingCriteria cri) {
+    public List<GroupRatingVO> getListWithPaging(Long grpSn, GroupCriteria cri) {
         return groupRatingMapper.getListWithPaging(grpSn, cri);
     }
 
