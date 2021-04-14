@@ -50,6 +50,15 @@ public class GroupRatingController {
         return new ResponseEntity<>(service.getListWithPaging(grpSn, cri), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{sn}",
+        produces = {MediaType.APPLICATION_XML_VALUE,
+        MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<GroupRatingVO> get(@PathVariable("sn") Long sn) {
+        log.info("get: " + sn);
+
+        return new ResponseEntity<>(service.get(sn), HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/{sn}", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> remove(@PathVariable("sn") Long sn) {
 

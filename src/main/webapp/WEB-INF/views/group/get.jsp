@@ -75,6 +75,34 @@
     </div>
 </div>
 
+<!-- GroupRating Module -->
+<script type="text/javascript" src="/resources/js/groupRating.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        console.log("============");
+        console.log("js test");
+
+        let snValue = '<c:out value="${group.sn}"/>';
+
+        // groupRatingService.add(
+        //     {"grpSn" : snValue, "stdSn" : 1, "userId" : "jungbs3726@naver.com", "rat000ing" : 4.3, "review" : "ajax test리뷰"}
+        //     ,
+        //     function(result) {
+        //         alert("RESULT: " + result);
+        //     }
+        // )
+
+        groupRatingService.getList({sn:snValue, page:1}, function(list) {
+            for(let i=0, len = list.length||0; i<len; i++) {
+                console.log(list[i]);
+            }
+        })
+
+    })
+</script>
+
 <script type="text/javascript">
     $(document).ready(function() {
 
