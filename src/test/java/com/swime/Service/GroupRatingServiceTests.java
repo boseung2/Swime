@@ -30,12 +30,11 @@ public class GroupRatingServiceTests {
     @Test
     public void testRegister() {
         GroupRatingVO groupRating = new GroupRatingVO();
-        groupRating.setGrpSn(176L);
-        groupRating.setStdSn(6L);
+        groupRating.setGrpSn(440L);
+        groupRating.setStdSn(1L);
         groupRating.setUserId("jungbs3726@naver.com");
-        groupRating.setRating(5D);
+        groupRating.setRating(1D);
         groupRating.setReview("만족스러운 스터디였습니다.");
-
         service.register(groupRating);
     }
 
