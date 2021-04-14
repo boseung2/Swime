@@ -32,7 +32,8 @@
     <select id="getListWithPaging" resultType="com.swime.domain.GroupRatingVO">
         <![CDATA[
         select sn, grp_sn, std_sn, user_id, rating, review, reg_date
-        from (  select rownum rn, sn, grp_sn, std_sn, user_id, rating, review, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+        from (  select /*+INDEX_DESC(tgrp_rating pk_tgrp_rating) */
+                rownum rn, sn, grp_sn, std_sn, user_id, rating, review, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
                 from tgrp_rating
                 where (grp_sn = #{grpSn})
                 and (rownum <=  #{cri.pageNum} * #{cri.amount})

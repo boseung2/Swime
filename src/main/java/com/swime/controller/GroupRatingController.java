@@ -44,7 +44,7 @@ public class GroupRatingController {
             @PathVariable("grpSn") Long grpSn) {
 
         log.info("getList.......");
-        GroupCriteria cri = new GroupCriteria(page, 10);
+        GroupCriteria cri = new GroupCriteria(page, 5);
         log.info(cri);
 
         return new ResponseEntity<>(service.getListWithPaging(grpSn, cri), HttpStatus.OK);

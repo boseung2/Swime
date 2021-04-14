@@ -112,3 +112,9 @@ body {
 
 /* Add a grey background color on mouse-over */
 .pagination a:hover:not(.active) {background-color: #ddd;}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}

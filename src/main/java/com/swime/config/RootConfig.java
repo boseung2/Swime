@@ -45,7 +45,7 @@ public class RootConfig {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
 
-        if(false) {
+        if(true) {
             hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");

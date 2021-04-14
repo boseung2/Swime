@@ -17,8 +17,8 @@
         </div>
         <div class="form-group">
             <label for="category">카테고리</label>
-            <select class="form-control" id="category" name="category">
-                <option>------</option>
+            <select class="form-control" id="category" name="category" required>
+                <option >------</option>
                 <option value="GRCA01">프론트엔드</option>
                 <option value="GRCA02">백엔드</option>
                 <option value="GRCA03">앱 개발</option>
@@ -34,7 +34,7 @@
         </div>
         <div class="form-group">
             <label for="name">모임이름</label>
-            <input type="text" class="form-control" name="name" id="name" value="<c:out value="${group.name}"/>">
+            <input type="text" class="form-control" name="name" id="name" value="<c:out value="${group.name}"/>" required>
         </div>
         <div class="form-group">
             <label for="picture">대표사진</label>
@@ -42,11 +42,11 @@
         </div>
         <div class="form-group">
             <label for="description">한줄소개</label>
-            <textarea class="form-control" rows="1" id="description" name="description"><c:out value="${group.description}"/></textarea>
+            <textarea class="form-control" rows="1" id="description" name="description" required><c:out value="${group.description}"/></textarea>
         </div>
         <div class="form-group">
             <label for="info">정보 (모임에 대해 자세히 적어주세요)</label>
-            <textarea class="form-control" rows="5" id="info" name="info"><c:out value="${group.info}"/></textarea>
+            <textarea class="form-control" rows="5" id="info" name="info" required><c:out value="${group.info}"/></textarea>
         </div>
         <div class="form-row">
             <div class="col">
@@ -59,16 +59,22 @@
             <div class="col">
                 <label for="sigungu">시/군/구</label>
                 <select class="form-control" id="sigungu" name="sigungu">
-                    <option value="LOGU01">1</option>
-                    <option value="LOGU01">2</option>
-                    <option value="LOGU01">3</option>
-                    <option value="LOGU01">4</option>
+                    <option value="LOGU01">강남</option>
+                    <option value="LOGU02">명동</option>
+                    <option value="LOGU03">홍대</option>
+                    <option value="LOGU04">오산시</option>
+                    <option value="LOGU05">화성시</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
             <label for="tags">태그</label>
-            <input type="text" class="form-control" name="tags" id="tags" value="<c:out value="${group.tags}"/>">
+            <select class="form-control" id="tags" name="tags">
+                <option value="GRTG01">자바</option>
+                <option value="GRTG02">파이썬</option>
+                <option value="GRTG03">스프링</option>
+                <option value="GRTG04">자바스크립트</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="updDate" hidden></label>

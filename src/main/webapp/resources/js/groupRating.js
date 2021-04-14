@@ -24,10 +24,10 @@ let groupRatingService = (function(){
 
     function getList(param, callback, error) {
 
-        let sn = param.sn;
+        let grpSn = param.grpSn;
         let page = param.page || 1;
 
-        $.getJSON("/rating/pages/" + sn + "/" + page + ".json",
+        $.getJSON("/rating/pages/" + grpSn + "/" + page + ".json",
             function(data) {
                 if(callback) {
                     callback(data);
@@ -45,7 +45,7 @@ let groupRatingService = (function(){
             url : '/rating/' + sn,
             success : function(deleteResult, status, xhr) {
                 if(callback) {
-                    callback(defaultResult);
+                    callback(deleteResult);
                 }
             },
             error : function(xhr, status, er) {
