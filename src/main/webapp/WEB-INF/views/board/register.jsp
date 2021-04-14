@@ -9,9 +9,9 @@
     #topFix{
         width: 15px;
         height: 15px;
-
     }
 </style>
+
 <div class="container">
     <h2>게시글 작성</h2>
     <hr/>
@@ -47,16 +47,30 @@
         </div>
 
 
-        <div class="form-group">
-            <label for="topFix">게시물 상위고정</label>
-            <input type="checkbox" class="form-control" name="topFix" id="topFix">
+<%--        <div class="form-group">--%>
+<%--            <label for="topFix">게시물 상위고정</label>--%>
+<%--            <input type="checkbox" class="form-control" name="topFix" id="topFix">--%>
+<%--        </div>--%>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="BOFI02" id="topFix">
+            <label class="form-check-label" for="topFix">
+                게시물 상위고정
+            </label>
         </div>
 
         <button type="submit" class="btn btn-primary">등록</button>
-        <button type="reset" class="btn btn-primary">취소</button>
+        <button id="back" type="reset" class="btn btn-dark">취소</button>
+
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     </form>
 </div>
 
+<script>
+    $("#back").on("click", function(){
+        window.history.back();
+    });
+</script>
 
 
 <%@include file="../includes/footer.jsp" %>
