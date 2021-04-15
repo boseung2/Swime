@@ -10,22 +10,29 @@
                b.grp_sn,
                b.user_id,
                u.name,
+               u.picture,
                b.title,
                d.content,
                b.like_cnt,
+               gl.grp_role,
                b.reply_cnt,
                b.top_fix,
                b.status,
                b.reg_date,
                b.upd_date
         from
-            tuser u, tbrd b, tbrd_det d
+             tgrp_list gl, tgrp g,
+             tuser u, tbrd b, tbrd_det d
         where
-              b.sn = d.brd_sn
+            b.sn = d.brd_sn
         and
-              u.id = b.user_id
+            u.id = b.user_id
         and
-              b.sn > 0
+            b.grp_sn = g.sn
+        and
+            g.sn = gl.grp_sn
+        and
+            b.sn > 0
         order by top_fix desc,
                  reg_date desc
         ]]>

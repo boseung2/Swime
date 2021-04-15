@@ -10,11 +10,13 @@ public class BoardVO {
 
     private Long sn;
     private Long grpSn;
-    private String userId;
-    private String name;
+    private String userId;//user
+    private String name;//user
+    private String picture;//user
     private String title;
     private String content;
     private int likeCnt;
+    private String grpRole;//모임
     private int replyCnt;
     private String topFix;
     private String status;
