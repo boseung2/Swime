@@ -33,9 +33,9 @@ public class BoardServiceTests {
         BoardVO board = new BoardVO();
 
         board.setGrpSn(1L);
-        board.setUserId("toywar12@naver.com");
+        board.setUserId("hong4258@service222.com");
         //board.setUserName("새로운 name");
-        board.setTitle("스프링 고수만 오세요");
+        board.setTitle("스프링 고수만 오세요333");
         board.setContent("스프링 고수만요~~");
         //board.setLikeCnt(500);
         //board.setTopFix("BOFI01");

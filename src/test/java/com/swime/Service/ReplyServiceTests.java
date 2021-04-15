@@ -33,8 +33,8 @@ public class ReplyServiceTests {
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(15L);
-        reply.setUserId("hong4258@service222.com");
+        reply.setBrdSn(183L);
+        reply.setUserId("qwer9827@naver.com");
         reply.setContent("부모 댓글 카운트 증가3");
         reply.setStatus("RPST01");
 
@@ -46,8 +46,8 @@ public class ReplyServiceTests {
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(2L);
-        reply.setUserId("hong5517@service.com");
+        reply.setBrdSn(62L);
+        reply.setUserId("qwer9827@naver.com");
         reply.setCommentGroup(63);
         reply.setContent("자식4");
         reply.setStatus("RPST01");
@@ -72,13 +72,13 @@ public class ReplyServiceTests {
 
     @Test
     public void testGet(){
-        log.info(service.get(63L));
+        log.info(service.get(1L));
 
     }
 
     @Test
     public void testDelete(){
-        service.remove(63L);
+        service.remove(16L);
 
     }
 

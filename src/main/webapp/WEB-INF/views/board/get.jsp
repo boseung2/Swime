@@ -4,6 +4,7 @@
 
 <%@include file="../includes/header.jsp" %>
 <link rel="stylesheet" href="/resources/css/board-get.css">
+<%@include file="../includes/pictogramLib.jsp" %>
 
 <div class="container">
     <div class="row">
@@ -64,9 +65,26 @@
                 <label>첨부파일</label>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="display: inline-block">
                 <label>댓글</label>
-                <label>5개</label>
+                <label><c:out value="${board.replyCnt}"/> </label>
+            </div>
+
+            <div id="like" class="form-group" style="display: inline-block">
+
+            <c:set var="likeStatus" value="false"></c:set>
+                <c:if test="${likeStatus}">
+                    <i class='fas fa-heart' style='font-size:20px;color:red'></i>
+                </c:if>
+                <c:if test="${!likeStatus}">
+                    <i class='far fa-heart' style='font-size:20px;color:red'></i>
+                </c:if>
+
+
+
+
+                <label>좋아요</label>
+                <label><c:out value="${board.likeCnt}"/> </label>
             </div>
 
 
@@ -78,7 +96,7 @@
 <!-- row -->
 </div>
 <!--container-->
-
+<script type="text/javascript" src="/resources/js/boardReply.js"></script>
 <script>
 
     $(document).ready(function(){
@@ -89,9 +107,10 @@
         })
         $("#back").on("click", function(){
             window.history.back();
-        })
-    })
+        });
 
+
+    });
 
     // $(document).ready(function(){
     //
@@ -115,6 +134,27 @@
     //     });
     // });
 </script>
+
+<script>
+
+    console.log(".......................")
+    console.log("JS TEST")
+
+
+    let snValue = '<c:out value="${board.sn}"/> '
+
+    replyService.add(
+        {sn:snValue, brdSn:"댓글 테스트", userId:"toywar1@naver.com",CommentGroup:snValue
+        ,content:"아아", cnt:0, status:"RPST01"}
+        ,
+        function(result){
+            alert("RESULT: " + result);
+        }
+    )
+
+
+</script>
+
 
 
 

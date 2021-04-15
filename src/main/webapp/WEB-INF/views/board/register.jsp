@@ -26,6 +26,7 @@
             <label for="userId">아이디</label>
             <input type="text" class="form-control" id="userId" name="userId">
         </div>
+
         <div class="form-group">
             <label for="grpSn">모임번호</label>
             <input type="text" class="form-control" id="grpSn" name="grpSn">

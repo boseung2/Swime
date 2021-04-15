@@ -99,7 +99,7 @@ public class ReplyServiceImpl implements ReplyService{
 
         //댓글 번호를 읽어온다.
         ReplyVO reply = replyMapper.read(sn);
-
+        //댓글 개수 감소
         boardMapper.updateReplyCnt(reply.getBrdSn(), -1);
 
         return replyMapper.delete(sn);
@@ -112,13 +112,13 @@ public class ReplyServiceImpl implements ReplyService{
         log.info("getReplyCnt.........."+brdSn);
         return replyMapper.getCountByBrdSn(brdSn);
     }
+    //*주석하기*
+    @Override
+    public List<ReplyVO> getList(BoardCriteria cri, Long brdSn) {
 
-//    @Override
-//    public List<ReplyVO> getList(BoardCriteria cri, Long brd_sn) {
-//
-//        log.info("get Reply List of Board");
-//        return replyMapper.getListWithPaging(cri, brd_sn);
-//    }
+        log.info("get Reply List of Board");
+        return replyMapper.getListWithPaging(cri, brdSn);
+    }
 
     @Override
     public ReplyPageDTO getListPage(BoardCriteria cri, Long brdSn) {

@@ -1,21 +1,15 @@
 package com.swime.controller;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
-import com.swime.domain.GroupVO;
 import com.swime.service.BoardService;
-import com.swime.service.GroupService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sun.awt.ModalExclude;
-
-import java.util.List;
 
 //@RestController
 @Controller
@@ -41,6 +35,10 @@ public class BoardController {
         log.info("list: " + cri);
 
         model.addAttribute("list", service.getListWithPaging(cri));
+        //model.addAttribute("pageMaker", new BoardDTO(cri,123));
+        int total = service.getTotal(cri);
+        log.info("total: " + total);
+        model.addAttribute("pageMaker", new BoardPageDTO(cri, total));
 
     }
 
@@ -62,7 +60,8 @@ public class BoardController {
     }
 
     @GetMapping({"/get","/modify"})
-    public void get(@RequestParam("sn") Long sn, Model model) {
+    public void get(@RequestParam("sn") Long sn, Model model,
+                    @ModelAttribute("cri") BoardCriteria cri) {
 
         log.info("/get or modify");
         model.addAttribute("board", service.get(sn));
@@ -73,6 +72,9 @@ public class BoardController {
 
     @PostMapping("/modify")
     public String modify(BoardVO board, RedirectAttributes rttr) {
+
+        BoardVO boardVO = service.get(board.getSn());
+        if(board.getTopFix().equals("")) board.setTopFix("BOFI02");
 
         log.info("modify: " + board);
 

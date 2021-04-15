@@ -62,6 +62,7 @@
 
 
         <c:forEach items="${list}" var="board">
+
             <div class="board">
                 <div id="notice"><b>[필독]</b></div>
                 <div style="display: none"><c:out value="${board.sn}"/>번</div>
@@ -72,9 +73,14 @@
                 <div class="inline" id="date">
                     <fmt:formatDate pattern="YYYY-MM-dd hh:mm" value="${board.regDate}"/>
                 </div>
+<%--                <c:out value="${board.sn}"/>--%>
+                <div class="width">
+                    <b>
+                        <a class="move" href="/board/get?sn=<c:out value="${board.sn}"/>">
+                    <c:out value="${board.title}"/></a>
+                    </b>
+                </div>
 
-                <div class="width"><b><a href="/board/get?sn=<c:out value="${board.sn}"/> ">
-                    <c:out value="${board.title}"/></a></b></div>
                 <div class="width"><c:out value="${board.content}"/></div>
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-right-text-fill" viewBox="0 0 16 16">
@@ -89,7 +95,33 @@
             </div>
         </c:forEach>
 
+        <div class="pagination">
+
+            <c:if test="${pageMaker.prev}">
+                <li class="pagination_button previous"><a href="${pageMaker.startPage - 1}">이전</a>
+                </li>
+            </c:if>
+
+            <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                <li class="pagination_button" ${pageMaker.cri.pageNum == num? "active" : ""}>
+                    <a href="${num}">${num}</a>
+                </li>
+            </c:forEach>
+
+            <c:if test="${pageMaker.next}">
+                <li class="pagination_button next"><a href="${pagemaker.endPage + 1}">다음</a></li>
+            </c:if>
+
+        </div> <!--end Pagination-->
+
+        <form id="actionForm" action="/board/list" method="get">
+<%--            <input type="hidden" id="sn" name="sn" value="<c:out value="${board.sn}"/> ">--%>
+            <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+            <input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+        </form>
+
     </div> <!-- container -->
+
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -140,6 +172,25 @@
 
             self.location = "/board/register";
         });
+
+        let actionForm = $("#actionForm");
+
+        $(".pagination_button a").on("click", function(e){
+            e.preventDefault();
+            console.log('click');
+            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+            actionForm.submit();
+        });
+        //여기 url에 +붙는데..317
+        // $(".move").on("click", function(e){
+        //     e.preventDefault();
+        //     actionForm.append("<input type='hidden' name='sn' value='"+$(this).attr("href")+"'>");
+        //     actionForm.attr("action", "/board/get");
+        //     actionForm.submit();
+        // });
+
+
+
 
     });
 

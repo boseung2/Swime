@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class BoardDTO {
+public class BoardPageDTO {
 
     private int startPage;
     private int endPage;
@@ -14,7 +14,7 @@ public class BoardDTO {
     private int total;
     private BoardCriteria cri;
 
-    public  BoardDTO(BoardCriteria cri, int total){
+    public BoardPageDTO(BoardCriteria cri, int total){
 
         this.cri = cri;
         this.total = total;

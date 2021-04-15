@@ -9,9 +9,11 @@
 <div class="container">
     <h2>게시글 수정하기</h2>
     <hr/>
-    <form role="form" action="/board/modify" method="post">
+    <form id="modifyForm" role="form" action="/board/modify" method="post">
+
 
         <div class="form-group">
+
             <label for="sn">번호</label>
             <input type="text" class="form-control" name="sn" id="sn"
                    value="<c:out value="${board.sn}"/>" readonly="readonly">
@@ -53,18 +55,14 @@
         </div>
 
 
-        <%--        <div class="form-group">--%>
-        <%--            <label for="topFix">게시물 상위고정</label>--%>
-        <%--            <input type="checkbox" class="form-control" name="topFix" id="topFix">--%>
-        <%--        </div>--%>
-
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="BOFI02" id="topFix">
+            <input class="form-check-input" type="checkbox" ${board.topFix == 'BOFI01' ? 'checked' : ''} value="${board.topFix == null ? 'BOFI01' : board.topFix}" name="topFix" id="topFix">
             <label class="form-check-label" for="topFix">
                 게시물 상위고정
             </label>
         </div>
 
+        <input type="hidden" name="status" value="${board.status}">
         <button type="submit" data-oper="modify" class="btn btn-primary">수정</button>
         <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
         <a id="back" class="btn btn-dark">취소</a>
@@ -78,7 +76,7 @@
 
     $(document).ready(function(){
 
-        let formObj = $("form");
+        let formObj = $("#modifyForm");
 
         $("button").on("click", function(e){
             e.preventDefault();

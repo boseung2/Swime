@@ -35,6 +35,9 @@ public interface BoardMapper {
     // 댓글 개수
     public void updateReplyCnt(@Param("sn") long sn, @Param("amount") int amount);
 
+    //전체 게시물 개수
+    public int getTotalCount(BoardCriteria cri);
+
 
     //댓글 개수 (trpl(댓글테이블)의 개수를 가져옴) - 필요없음
     //public int getReplyCnt(Long brdSn);

@@ -201,8 +201,8 @@
             title = #{title},
             like_cnt = #{likeCnt},
             reply_cnt = #{replyCnt},
-            top_fix = NVL(#{topFix}, null),
-            status = NVL(#{status}, null),
+            top_fix = #{topFix},
+            status = #{status},
             upd_date = current_date
         where sn = #{sn}
     </update>
@@ -218,6 +218,10 @@
         set reply_cnt = reply_cnt + #{amount}
         where sn = #{sn}
     </update>
+
+    <select id="getTotalCount" resultType="int">
+        select count(*) from tbrd where sn > 0
+    </select>
 
 
 <!--    <select id="getCountByBrdSn" resultType="int">-->

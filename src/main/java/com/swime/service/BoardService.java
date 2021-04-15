@@ -23,4 +23,8 @@ public interface BoardService {
 
     public List<BoardVO> getListWithPaging(BoardCriteria cri);
 
+    public int getTotal(BoardCriteria cri);
+
+
+
 }

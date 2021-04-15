@@ -29,9 +29,9 @@ public interface ReplyMapper {
     //댓글 개수를 게시판에 보여주는 메서드 -- 미사용
     //public int getReplyCnt(Long brdSn);
 
-    // 댓글 개수 증가, 감소 업데이트
+    // 댓글 개수 증가, 감소 업데이트 long
     // (댓글개수를 amount로 받아서 증가 감소 시킴)
-    public void updateReplyCnt(@Param("sn") long sn, @Param("amount") int amount);
+    public void updateReplyCnt(@Param("sn") Long sn, @Param("amount") int amount);
 
 
 
