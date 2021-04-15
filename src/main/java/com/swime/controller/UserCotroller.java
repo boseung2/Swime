@@ -23,13 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
-@Transactional
 public class UserCotroller {
 
 
@@ -52,6 +52,7 @@ public class UserCotroller {
     public void register(){
     }
 
+    @Transactional
     @PostMapping("/register")
     public String register(MemberVO vo, RedirectAttributes rttr){
         vo.setPassword(passwordEncoder.encode(vo.getPassword()));
@@ -97,10 +98,17 @@ public class UserCotroller {
         return service.getlist();
     }
 
+    @Transactional
     @GetMapping("/auth")
     public String auth(String key, String id){
+        // 키를 조회하고
         if(!service.isKey(id, key)) return null;
-        if(!service.deleteKey(id)) return null;
+        // 키를 삭제
+        service.deleteKey(id);
+        // 멤버 이력을 수정하고
+//        service.registerHistory(vo);
+        // 멤버 항목중 인증날짜를 수정한다
+        service.updateAuthdate(id);
         return "redirect:/user/AuthSuccess";
     }
 
@@ -112,5 +120,10 @@ public class UserCotroller {
     public void info(){
     }
 
+
+    String dateFormat(Date date){
+
+        return null;
+    }
 
 }

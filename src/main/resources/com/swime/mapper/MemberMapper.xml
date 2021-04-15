@@ -114,5 +114,12 @@
         delete from tuser_auth_key
         where id = #{id}
     </delete>
+
+    <update id="updateAuthdate">
+        update TUSER
+        set email_auth = CURRENT_DATE,
+            status = 'USST01'
+        where id = #{id}
+    </update>
     
 </mapper>

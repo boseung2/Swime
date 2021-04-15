@@ -38,6 +38,12 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public boolean modify(MemberVO vo){
+        registerHistory(vo);
+        return mapper.update(vo) == 1;
+    }
+
+    @Override
     public boolean modify(MemberVO vo, MemberHistoryVO hvo) {
         registerHistory(vo, hvo);
         return mapper.update(vo) == 1;
@@ -65,11 +71,17 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean registerHistory(MemberVO vo) {
+        MemberVO memberVO = mapper.read(vo.getId());
         MemberHistoryVO hvo = new MemberHistoryVO();
         hvo.setEmail(vo.getId());
-        hvo.setUpdMtr("register");
-        hvo.setBefVal("");
-        hvo.setAftVal("");
+        if(memberVO == null){
+            hvo.setUpdMtr("register");
+        }else if(memberVO != null){
+            hvo.setUpdMtr("emailAuth");
+            hvo.setBefVal(new MemberServiceUtil().dateFormat(memberVO.getEmailAuth()));
+            hvo.setAftVal(new MemberServiceUtil().dateFormat(new Date()));
+        }
+
         return mapper.registerHistory(hvo) == 1;
     }
 
@@ -119,6 +131,11 @@ public class MemberServiceImpl implements MemberService{
         return mapper.deleteKey(id) == 1;
     }
 
+    @Override
+    public boolean updateAuthdate(String id){
+        return mapper.updateAuthdate(id) == 1;
+    }
+
 }
 
 
@@ -136,9 +153,13 @@ class MemberServiceUtil{
     }
 
     public String[] makeList(MemberVO vo){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
         String[] list = new String[]{vo.getName(), vo.getPassword(), vo.getBirth(), vo.getStatus(), vo.getPicture(), ""};
-        if(vo.getEmailAuth() != null) list[5] = simpleDateFormat.format(vo.getEmailAuth());
+        if(vo.getEmailAuth() != null) list[5] = dateFormat(vo.getEmailAuth());
         return list;
+    }
+
+    public String dateFormat(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
+        return simpleDateFormat.format(date);
     }
 }
