@@ -11,8 +11,16 @@
     <h2>스터디 만들기</h2>
     <hr/>
     <form role="form" action="/study/register" method="post">
+<%--        <div class="form-group">--%>
+<%--            <label for="sn">스터디번호</label>--%>
+<%--            <input type="text" class="form-control" id="sn" name="sn" value="${study.sn}" readonly="readonly">--%>
+<%--        </div>--%>
         <div class="form-group">
-            <label for="representation">아이디</label>
+            <label for="grpSn">그룹번호</label>
+            <input type="text" class="form-control" id="grpSn" name="grpSn" value="${study.grpSn}">
+        </div>
+        <div class="form-group">
+            <label for="representation">작성자</label>
             <input type="text" class="form-control" id="representation" name="representation">
         </div>
         <div class="form-group">
@@ -37,13 +45,13 @@
             </select>
         </div>
         <div class="form-group">
-            <button id="mon" value="false">월</button>
-            <button id="tue" value="false">화</button>
-            <button id="wed" value="false">수</button>
-            <button id="thu" value="false">목</button>
-            <button id="fri" value="false">금</button>
-            <button id="sat" value="false">토</button>
-            <button id="sun" value="false">일</button>
+            <button id="mon">월</button>
+            <button id="tue">화</button>
+            <button id="wed">수</button>
+            <button id="thu">목</button>
+            <button id="fri">금</button>
+            <button id="sat">토</button>
+            <button id="sun">일</button>
         </div>
         <div class="form-group">
             <label for="startTime">시작시간</label>

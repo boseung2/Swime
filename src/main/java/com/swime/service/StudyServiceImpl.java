@@ -84,18 +84,21 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public List<StudyVO> getList() {
-        return mapper.getList();
+    public List<StudyVO> getList(long grpSn) {
+        return mapper.getList(grpSn);
     }
 
     @Override
-    public List<StudyVO> getList(StudyCriteria cri) {
-//        return mapper.getListWithPaging(cri);
-        List<StudyVO> list = mapper.getListWithPaging(cri);
-
+    public List<StudyVO> getList(StudyCriteria cri, long grpSn) {
+        List<StudyVO> list = mapper.getListWithPaging(cri, grpSn);
         list.forEach(study -> study.setAttendants(listMapper.count(study.getSn())));
 
         return list;
+    }
+
+    @Override
+    public int countStudy(long grpSn) {
+        return mapper.countStudy(grpSn);
     }
 
     //WishStudy

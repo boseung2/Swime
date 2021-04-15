@@ -17,6 +17,7 @@
     <!-- Heading Row -->
     <div class="row align-items-center my-5">
         <div class="col-lg-7">
+
             <h3>${study.name}</h3>
             <c:if test="${study.repeatCycle eq 'STCY01'}"><span>매주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY02'}"><span>격주</span></c:if>
@@ -41,8 +42,10 @@
 
             <c:if test="${wish == null}"><a class="btn btn-primary" href="#">❤</a></c:if>
             <c:if test="${wish != null}"><a class="btn btn-primary" href="#">♡</a></c:if>
+
             <c:choose>
                 <c:when test="${study.attendants >= study.capacity}"><a class="btn btn-primary" href="#">모집마감</a></c:when>
+                <c:when test="${study.representation == studyParam.userId}"></c:when>
                 <c:when test="${attend.status eq 'STUS01'}"><a class="btn btn-primary" href="#">탈퇴하기</a></c:when>
                 <c:when test="${attend.status eq 'STUS02'}"><a class="btn btn-primary" href="#">참석하기</a></c:when>
                 <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
@@ -52,11 +55,13 @@
 
             <br><br>
 <%--            <c:if test="${study.representation eq param.userId}">--%>
-                <a class="btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
-                <a class="btn btn-primary" href="#">스터디 삭제</a>
-                <a class="btn btn-primary" href="#">참가 신청 마감</a>
-                <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>
-<%--                <a class="btn btn-primary" href="#">참여멤버와 채팅</a>--%>
+            <a class="btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
+            <a class="btn btn-primary" href="#">스터디 삭제</a>
+            <a class="btn btn-primary" href="#">참가 신청 마감</a>
+            <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>
+            <br><br>
+            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>
+            <a class="move btn btn-primary" href="">스터디 목록</a>
 <%--            </c:if>--%>
             <br>
         </div>
@@ -93,7 +98,7 @@
     <div id="onOff">
         <c:if test="${study.onOff eq 'STOF01'}">
             <h4>온라인 스터디 링크</h4>
-            <p>${study.onUrl}</p>
+            <p><a href="${study.onUrl}">바로가기</a></p>
         </c:if>
 
         <c:if test="${study.onOff eq 'STOF02'}">
@@ -103,7 +108,65 @@
         </c:if>
     </div>
 
+
+    <!-- 스터디 생성/수정 확인 모달 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">알림</h4>
+                </div>
+                <div class="modal-body">스터디가 생성되었습니다.</div>
+                <div class = "modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="actionForm" action="/study/list" method="get">
+        <input type="hidden" name="pageNum" value="${cri.pageNum}">
+        <input type="hidden" name="amount" value="${cri.amount}">
+        <input type="hidden" name="grpSn" value="${study.grpSn}">
+    </form>
+
 </div>
 
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        <!-- 스터디 생성/수정 후 모달 창-->
+        let result = '<c:out value="${result}"/>';
+        console.log(result);
+
+        checkModal(result);
+
+        function checkModal(result) {
+            if(result === '') {
+                console.log('result = null');
+                return;
+            }
+
+            if(parseInt(result) > 0) {
+                $(".modal-body").html("스터디 " + parseInt(result) + "번이 등록되었습니다.");
+                console.log("스터디 " + parseInt(result) + "번이 등록되었습니다.");
+            }
+
+            $("#myModal").modal("show");
+        }
+
+        <!-- 스터디 목록 버튼 눌렸을 때-->
+        let actionForm = $("#actionForm");
+
+        $(".move").on("click", function(e) {
+            e.preventDefault();
+
+            actionForm.submit();
+        });
+    });
+</script>
 
 <%@include file="../includes/footer.jsp" %>

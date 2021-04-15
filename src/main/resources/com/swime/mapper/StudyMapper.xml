@@ -8,7 +8,7 @@
         select
             s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
         from tstd s, tuser u
-        where s.representation = u.id and s.status in ('STST01', 'STST03')
+        where s.representation = u.id and s.status in ('STST01', 'STST03') and grp_sn = #{grpSn}
         order by reg_date desc
     </select>
 
@@ -22,13 +22,19 @@
                 (
                 select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
                 from tstd s, tuser u
-                where s.representation = u.id and s.status in ('STST01', 'STST03')
+                where s.representation = u.id and s.status in ('STST01', 'STST03') and grp_sn = #{grpSn}
                 order by s.reg_date desc
                 )
-            where rownum <= #{pageNum} * #{amount}
+            where rownum <= #{cri.pageNum} * #{cri.amount}
             )
-        where rn > (#{pageNum} - 1) * #{amount}
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
     ]]>
+    </select>
+
+    <select id="countStudy" resultType="int">
+        select count(*)
+        from tstd
+        where grp_sn = #{grpSn}
     </select>
 
     <insert id="insert">

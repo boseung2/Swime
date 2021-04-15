@@ -21,9 +21,11 @@ public interface StudyService {
     // 스터디 삭제
     public int remove(StudyParamVO param);
 
-    public List<StudyVO> getList();
+    public List<StudyVO> getList(long grpSn);
 
-    public List<StudyVO> getList(StudyCriteria cri);
+    public List<StudyVO> getList(StudyCriteria cri, long grpSn);
+
+    public int countStudy(long grpSn);
 
     // WishStudy
     public List<StudyVO> getWishList(StudyCriteria cri, String userId);

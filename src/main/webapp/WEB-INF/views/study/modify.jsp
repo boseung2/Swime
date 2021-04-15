@@ -12,7 +12,15 @@
     <hr/>
     <form role="form" action="/study/modify" method="post">
         <div class="form-group">
-            <label for="representation">아이디</label>
+            <label for="sn">스터디번호</label>
+            <input type="text" class="form-control" id="sn" name="sn" value="${study.sn}" readonly="readonly">
+        </div>
+        <div class="form-group">
+            <label for="grpSn">그룹번호</label>
+            <input type="text" class="form-control" id="grpSn" name="grpSn" value="${study.grpSn}" readonly="readonly">
+        </div>
+        <div class="form-group">
+            <label for="representation">작성자</label>
             <input type="text" class="form-control" id="representation" name="representation" value="${study.representation}" readonly="readonly">
         </div>
         <div class="form-group">
@@ -81,6 +89,7 @@
         <br>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+
         <button type="submit" class="btn btn-primary">수정</button>
         <button type="submit" class="btn btn-primary">삭제</button>
         <button type="reset" class="btn btn-primary">취소</button>

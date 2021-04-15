@@ -89,7 +89,7 @@ public class StudyServiceTests {
 
     @Test
     public void testGetList() {
-        List<StudyVO> list = service.getList();
+        List<StudyVO> list = service.getList(222);
 
         for (StudyVO li : list) {
             assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
@@ -102,7 +102,7 @@ public class StudyServiceTests {
         cri.setPageNum(1);
         cri.setAmount(3);
 
-        List<StudyVO> list = service.getList(cri);
+        List<StudyVO> list = service.getList(cri, 222);
 
         list.forEach(study -> log.info(study));
 
@@ -110,6 +110,11 @@ public class StudyServiceTests {
             assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
         }
         assert (0 <= list.size() && list.size() <= 3);
+    }
+
+    @Test
+    public void testCountStudy() {
+        assert (service.countStudy(222) == 2);
     }
 
     @Test
