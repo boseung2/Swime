@@ -34,7 +34,7 @@
     <select id="countStudy" resultType="int">
         select count(*)
         from tstd
-        where grp_sn = #{grpSn}
+        where grp_sn = #{grpSn} and status in ('STST01', 'STST03')
     </select>
 
     <insert id="insert">

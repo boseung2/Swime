@@ -56,12 +56,13 @@
             <br><br>
 <%--            <c:if test="${study.representation eq param.userId}">--%>
             <a class="btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
-            <a class="btn btn-primary" href="#">스터디 삭제</a>
+            <a class="remove btn btn-primary" href="#">스터디 삭제</a>
+            <br><br>
             <a class="btn btn-primary" href="#">참가 신청 마감</a>
             <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>
-            <br><br>
             <a class="btn btn-primary" href="#">참여멤버와 채팅</a>
-            <a class="move btn btn-primary" href="">스터디 목록</a>
+            <br><br>
+            <a class="list btn btn-primary" href="">스터디 목록</a>
 <%--            </c:if>--%>
             <br>
         </div>
@@ -114,10 +115,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">알림</h4>
                 </div>
-                <div class="modal-body">스터디가 생성되었습니다.</div>
+                <div class="modal-body">정상적으로 처리되었습니다.</div>
                 <div class = "modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
@@ -130,29 +131,31 @@
         <input type="hidden" name="pageNum" value="${cri.pageNum}">
         <input type="hidden" name="amount" value="${cri.amount}">
         <input type="hidden" name="grpSn" value="${study.grpSn}">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     </form>
+
 
 </div>
 
 <script type="text/javascript">
 
-    $(document).ready(function() {
+    $(document).ready(function(){
 
         <!-- 스터디 생성/수정 후 모달 창-->
         let result = '<c:out value="${result}"/>';
-        console.log(result);
 
         checkModal(result);
 
+        history.replaceState({}, null, null);
+
+
         function checkModal(result) {
-            if(result === '') {
-                console.log('result = null');
+            if(result === '' || history.state) {
                 return;
             }
 
             if(parseInt(result) > 0) {
-                $(".modal-body").html("스터디 " + parseInt(result) + "번이 등록되었습니다.");
-                console.log("스터디 " + parseInt(result) + "번이 등록되었습니다.");
+                $(".modal-body").html("스터디 " + parseInt(result) + "번이 정상적으로 처리되었습니다.");
             }
 
             $("#myModal").modal("show");
@@ -161,9 +164,18 @@
         <!-- 스터디 목록 버튼 눌렸을 때-->
         let actionForm = $("#actionForm");
 
-        $(".move").on("click", function(e) {
+        $(".list").on("click", function(e) {
+            e.preventDefault();
+            actionForm.submit();
+        });
+
+        <!-- 스터디 삭제 버튼 눌렀을 때-->
+        $(".remove").on("click", function(e) {
             e.preventDefault();
 
+            actionForm.append("<input type='hidden' name='sn' value='" + ${study.sn} + "'>");
+            actionForm.attr("action", "/study/remove");
+            actionForm.attr("method", "post");
             actionForm.submit();
         });
     });

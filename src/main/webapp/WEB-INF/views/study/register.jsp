@@ -41,7 +41,7 @@
                 <option>(선택)</option>
                 <option value="GRCA01">매주</option>
                 <option value="GRCA02">격주</option>
-                <option value="GRCA03">매달</option>
+                <option value="GRCA03">매월</option>
             </select>
         </div>
         <div class="form-group">

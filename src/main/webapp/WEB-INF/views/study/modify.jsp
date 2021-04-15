@@ -39,9 +39,9 @@
             <label for="repeatCycle">반복주기</label>
             <select class="form-control" id="repeatCycle" name="repeatCycle" value="${study.repeatCycle}">
                 <option>(선택)</option>
-                <option value="GRCA01">매주</option>
-                <option value="GRCA02">격주</option>
-                <option value="GRCA03">매달</option>
+                <option value="STCY01">매주</option>
+                <option value="STCY02">격주</option>
+                <option value="STCY03">매월</option>
             </select>
         </div>
         <div class="form-group">

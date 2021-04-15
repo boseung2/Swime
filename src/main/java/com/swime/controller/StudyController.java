@@ -78,15 +78,12 @@ public class StudyController {
         }else {
             study.setOnOff("STOF02");
         }
-        
-        //초기값 써서 else문 없앰
-        study.setRepeatCycle("STCY03");
+
+        // 반복 주기 설정
         if("(선택)".equals(study.getRepeatCycle())) {
             study.setRepeatCycle(null);
-        }else if("매주".equals(study.getRepeatCycle())) {
-            study.setRepeatCycle("STCY01");
-        }else if("격주".equals(study.getRepeatCycle())) {
-            study.setRepeatCycle("STCY02");
+        }else {
+            study.setRepeatCycle(study.getRepeatCycle());
         }
 
         service.register(study);
@@ -94,12 +91,10 @@ public class StudyController {
         rttr.addFlashAttribute("result", study.getSn());
 
         // 만들어진 스터디의 상세조회 페이지로 이동한다.
-//        return "redirect:/study/get?sn=" + study.getSn() + "&pageNum=1&amount=3";
         return "redirect:/study/get?sn=" + study.getSn();
     }
 
     // 스터디 수정
-
     @GetMapping("/modify")
     public void modify(long sn, Model model) {
         model.addAttribute("study", service.get(sn));
@@ -114,14 +109,12 @@ public class StudyController {
             study.setOnOff("STOF02");
         }
 
-        //초기값 써서 else문 없앰
-        study.setRepeatCycle("STCY03");
+        // 반복 주기 설정
+        log.info("====================================repeatCycle" + study.getRepeatCycle()); //STCY01
         if("(선택)".equals(study.getRepeatCycle())) {
             study.setRepeatCycle(null);
-        }else if("매주".equals(study.getRepeatCycle())) {
-            study.setRepeatCycle("STCY01");
-        }else if("격주".equals(study.getRepeatCycle())) {
-            study.setRepeatCycle("STCY02");
+        }else {
+            study.setRepeatCycle(study.getRepeatCycle());
         }
 
         service.modify(study);
@@ -129,17 +122,29 @@ public class StudyController {
         rttr.addFlashAttribute("result", study.getSn());
 
         // 수정된 스터디의 상세조회 페이지로 이동한다.
-//        return "redirect:/study/get?sn=" + study.getSn() + "&pageNum=1&amount=3";
         return "redirect:/study/get?sn=" + study.getSn();
     }
 
     // 스터디 삭제
     @PostMapping("/remove")
-    public String remove(StudyParamVO param, RedirectAttributes rttr) {
+    public String remove(long sn, long grpSn, StudyCriteria cri, RedirectAttributes rttr) { // 스터디번호 들어옴
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(sn);
+
+        log.info("============================sn : " + sn);
+
         if(service.remove(param) == 1) {
             rttr.addFlashAttribute("result", "success");
         }
-        return "redirect:/group/";  //??
+
+        log.info("============================결과 : " + grpSn + cri.getPageNum() + cri.getAmount());
+
+        rttr.addAttribute("grpSn", grpSn);
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
+
+        return "redirect:/study/list";
     }
     
     // 스터디 멤버 관리 - 참여멤버/ 대기멤버 가져오기
