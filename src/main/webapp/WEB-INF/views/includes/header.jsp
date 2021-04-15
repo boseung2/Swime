@@ -23,6 +23,8 @@
     <!-- Bootstrap core CSS -->
     <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
     <!-- Custom styles for this template -->
     <link href="/resources/css/small-business.css" rel="stylesheet">
 
@@ -59,10 +61,9 @@
 </div>
 
 <form id="logout" action="/user/logout" method="post">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <sec:csrfInput/>
 </form>
 
 <hr style="
     margin-top: 0px;
     margin-bottom: 50px;">
-

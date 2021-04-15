@@ -90,7 +90,12 @@ public class StudyServiceImpl implements StudyService{
 
     @Override
     public List<StudyVO> getList(StudyCriteria cri) {
-        return mapper.getListWithPaging(cri);
+//        return mapper.getListWithPaging(cri);
+        List<StudyVO> list = mapper.getListWithPaging(cri);
+
+        list.forEach(study -> study.setAttendants(listMapper.count(study.getSn())));
+
+        return list;
     }
 
     //WishStudy

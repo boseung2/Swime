@@ -52,19 +52,23 @@
     <c:set var="endDate" value="${study.endDate}"/>
     <c:set var="startTime" value="${study.startTime}"/>
     <c:set var="endTime" value="${study.endTime}"/>
-    <div class="column">
-        <div class="card">
-            <h3>${study.name}</h3>
-            <p>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</p>
-            <p>${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</p>
-            <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디</p></c:if>
-            <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
-            <p>${study.expense}</p>
-            <c:if test="${study.attendants >= study.capacity}"><p>모집 마감</p></c:if>
-            <c:if test="${study.attendants < study.capacity}"><p>${study.attendants} / ${study.capacity}</p></c:if>
-            <button>더보기</button>
+        <div class="col-md-4 mb-5">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="card-title">${study.name}</h2>
+                    <p class="card-text">${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</p>
+                    <p class="card-text">${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</p>
+                    <c:if test="${study.onOff eq 'STOF01'}"><p class="card-text">온라인 스터디</p></c:if>
+                    <c:if test="${study.onOff eq 'STOF02'}"><p class="card-text">오프라인 스터디</p></c:if>
+                    <p class="card-text">${study.expense}</p>
+                    <c:if test="${study.attendants >= study.capacity}"><p class="card-text">모집 마감</p></c:if>
+                    <c:if test="${study.attendants < study.capacity}"><p class="card-text">${study.attendants} / ${study.capacity}</p></c:if>
+                </div>
+                <div class="card-footer">
+                    <a href="/study/get?sn=${study.sn}" class="btn btn-primary btn-sm">더보기</a>
+                </div>
+            </div>
         </div>
-    </div>
     </c:forEach>
 </div>
 

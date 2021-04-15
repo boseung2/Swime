@@ -104,6 +104,8 @@ public class StudyServiceTests {
 
         List<StudyVO> list = service.getList(cri);
 
+        list.forEach(study -> log.info(study));
+
         for (StudyVO li : list) {
             assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
         }

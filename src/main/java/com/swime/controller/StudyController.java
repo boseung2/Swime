@@ -39,7 +39,11 @@ public class StudyController {
         // 로그인한 경우
         // 찜 여부 가져오기
         StudyParamVO param = new StudyParamVO();
-        param.setUserId("hong7071@service.com"); // 추후 수정 //hong7073@service.com
+
+//        qwer8203@naver.com // 스터디장
+//        boseung@naver.com // 일반 회원
+//        aaa@service.com // 로그인 안한 회원
+        param.setUserId("qwer8203@naver.com");
         param.setStdSn(sn);
 
         model.addAttribute("param", param);
@@ -51,9 +55,28 @@ public class StudyController {
         model.addAttribute("attend", service.getAttendant(param));
     }
 
+    // 스터디 생성 페이지
+    @GetMapping("/register")
+    public void register() {
+        
+    }
+
     // 스터디 생성
     @PostMapping("/register")
     public String register(StudyVO study) {
+        // 임의로 설정
+        study.setRepresentation("qwer8203@naver.com");
+        study.setGrpSn(222);
+
+        if(study.getOnUrl() != null) {
+            study.setOnOff("STOF01");
+        }else {
+            study.setOnOff("STOF02");
+        }
+
+        if("(선택)".equals(study.getRepeatCycle())) {
+            study.setRepeatCycle(null);
+        }
         service.register(study);
 
         // 만들어진 스터디의 상세조회 페이지로 이동한다.
@@ -61,6 +84,12 @@ public class StudyController {
     }
 
     // 스터디 수정
+
+    @GetMapping("/modify")
+    public void modify(@RequestParam("sn") Long sn, Model model) {
+        model.addAttribute("study", service.get(sn));
+    }
+
     @PostMapping("/modify")
     public String modify(StudyVO study) {
         service.modify(study);
@@ -81,6 +110,7 @@ public class StudyController {
     // 스터디 멤버 관리 - 참여멤버/ 대기멤버 가져오기
     @GetMapping("/members")
     public void members(long stdSn, Model model) {
+        model.addAttribute("study", service.get(stdSn));
         model.addAttribute("attendantList", service.getAttendantList(stdSn));
         model.addAttribute("waitingList", service.getWaitingList(stdSn));
     }
