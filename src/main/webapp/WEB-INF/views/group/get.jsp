@@ -45,7 +45,7 @@
     <div class="topnav">
         <a href="#info" class="active">정보</a>
         <a href="#member">모임멤버</a>
-        <a href="#rating">후기</a>
+        <a href="#groupRating">후기</a>
         <a href="#study">스터디</a>
         <a href="#board">게시판</a>
     </div>
