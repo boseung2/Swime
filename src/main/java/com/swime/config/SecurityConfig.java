@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/group","/include","/user").permitAll()
-                .antMatchers("/user").permitAll()
+                .antMatchers("/user/infoDetail").access("isAuthenticated()")
                 .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
                 .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
         .and()
@@ -54,10 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/user/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("remember-me", "JSESSIONID")
-        .and()
-            .csrf()
+//        .and()
+//            .csrf()
 //                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .disable()
+//                .disable()
         ;
 //        http
 //            .authorizeRequests()

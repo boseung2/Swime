@@ -52,7 +52,7 @@
             <a class="active" href="/user/login">로그인</a>
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
-            <a href="/user/info"><sec:authentication property="principal.username"/> 님 안녕하세요</a>
+            <a href="/user/infoDetail"><sec:authentication property="principal.username"/> 님 안녕하세요</a>
             <a href="#" onclick="document.getElementById('logout').submit();">로그아웃</a>
         </sec:authorize>
     </div>

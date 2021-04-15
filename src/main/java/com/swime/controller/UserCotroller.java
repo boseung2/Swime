@@ -74,11 +74,11 @@ public class UserCotroller {
     }
 
     @PostMapping("/modify")
-    public ResponseEntity<String> modify(@RequestBody MemberVO vo,
-                                         @RequestBody MemberHistoryVO hvo){
-        return service.modify(vo, hvo) ?
-                new ResponseEntity<>("modify Success", HttpStatus.OK) :
-                new ResponseEntity<>("modify Fail", HttpStatus.BAD_REQUEST);
+    public void modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
+        log.info(vo);
+        log.info(hvo);
+//        service.modify(vo, hvo);
+        return;
     }
 
     @GetMapping("/remove")
@@ -117,7 +117,31 @@ public class UserCotroller {
     }
 
     @GetMapping("/info")
-    public void info(){
+    public void infotest(){
+    }
+
+    @GetMapping("/infoDetail")
+    public void infoDetail(){
+    }
+
+    @GetMapping("/details/group")
+    public void group(){
+    }
+
+    @GetMapping("/details/study")
+    public void study(){
+    }
+
+    @GetMapping("/details/written")
+    public void written(){
+    }
+
+    @GetMapping("/details/reply")
+    public void reply(){
+    }
+
+    @GetMapping("/details/profile")
+    public void profile(){
     }
 
 
@@ -125,5 +149,7 @@ public class UserCotroller {
 
         return null;
     }
+
+
 
 }
