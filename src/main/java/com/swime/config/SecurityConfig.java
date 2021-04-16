@@ -83,13 +83,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        String getUserDetailQuery = "";
 
         auth
-             // 디테일서비스로 대신함
+            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
+            // 디테일서비스로 대신함
 //            .jdbcAuthentication()
 //                .dataSource(dataSource)
 //                .passwordEncoder(passwordEncoder())
 //                .usersByUsernameQuery(getUserQuery)
 //                .authoritiesByUsernameQuery(getUserDetailQuery)
-            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
 //            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
         ;
 

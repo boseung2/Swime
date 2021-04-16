@@ -32,6 +32,7 @@
             <input type="file" class="form-control" id="picture" name="picture" value="<sec:authentication property="principal.memberVO.picture"/>">
         </div>
 
+        <input type="hidden" name="status" value="<sec:authentication property="principal.memberVO.status"/>">
         <input type="hidden" name="email" value="<sec:authentication property="principal.username"/>">
         <sec:csrfInput/>
         <button type="submit" class="btn btn-primary">정보변경</button>

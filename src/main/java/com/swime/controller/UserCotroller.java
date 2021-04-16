@@ -75,9 +75,8 @@ public class UserCotroller {
 
     @PostMapping("/modify")
     public void modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
-        log.info(vo);
-        log.info(hvo);
-//        service.modify(vo, hvo);
+
+        service.modify(vo, hvo);
         return;
     }
 
