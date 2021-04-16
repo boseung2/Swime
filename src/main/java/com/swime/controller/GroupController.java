@@ -97,8 +97,7 @@ public class GroupController {
         return "redirect:/group/list" + cri.getListLink();
     }
 
-    @GetMapping(value = "/getAttachList",
-    produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<GroupAttachVO>> getAttachList(Long grpSn) {
 

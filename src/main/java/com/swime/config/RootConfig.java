@@ -22,15 +22,12 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages="com.swime.service")
 @ComponentScan(basePackages="com.swime.aop")
 @ComponentScan(basePackages="com.swime.task")
-@EnableAspectJAutoProxy
 @EnableScheduling
-@EnableTransactionManagement
 @MapperScan(basePackages = {"com.swime.mapper"})
 public class RootConfig {
 
