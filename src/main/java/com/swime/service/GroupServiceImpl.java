@@ -1,9 +1,7 @@
 package com.swime.service;
 
-import com.swime.domain.GroupAttendVO;
-import com.swime.domain.GroupCriteria;
-import com.swime.domain.GroupTagVO;
-import com.swime.domain.GroupVO;
+import com.swime.domain.*;
+import com.swime.mapper.GroupAttachMapper;
 import com.swime.mapper.GroupAttendMapper;
 import com.swime.mapper.GroupMapper;
 import com.swime.mapper.GroupTagMapper;
@@ -23,6 +21,7 @@ public class GroupServiceImpl implements GroupService{
     private GroupMapper groupMapper;
     private GroupAttendMapper groupAttendMapper;
     private GroupTagMapper groupTagMapper;
+    private GroupAttachMapper groupAttachMapper;
 
     @Transactional
     @Override
@@ -31,6 +30,16 @@ public class GroupServiceImpl implements GroupService{
 
         // 1. 기본정보 등록
         groupMapper.insertSelectKey(group);
+
+        // 첨부파일등록
+        if(group.getAttachList() == null || group.getAttachList().size() <= 0) {
+            return 0;
+        }
+
+        group.getAttachList().forEach(attach -> {
+            attach.setGrpSn(group.getSn());
+            groupAttachMapper.insert(attach);
+        });
 
         // 2. 모임참여리스트에 모임장등록한다.
         GroupAttendVO groupAttend = new GroupAttendVO();
@@ -79,18 +88,38 @@ public class GroupServiceImpl implements GroupService{
     @Transactional
     @Override
     public int modify(GroupVO group) {
+
+        log.info("modify.........." +group);
+
+        log.info(group.getSn());
+
+        groupAttachMapper.deleteAll(group.getSn());
+
         // 모임 정보를 수정한다.
-        int count1 = groupMapper.update(group);
+        boolean modifyResult = groupMapper.update(group) == 1;
+
+        // 첨부파일을 첨부한다.
+        if(modifyResult && group.getAttachList() != null && group.getAttachList().size() > 0) {
+            group.getAttachList().forEach(attach -> {
+                attach.setGrpSn(group.getSn());
+                groupAttachMapper.insert(attach);
+            });
+        }
+
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>here");
         // 모임 상세페이지 모임정보(info)를 수정한다.
-        int count2 = groupMapper.updateInfo(group);
+        groupMapper.updateInfo(group);
         // 모임 태그를 수정한다.(있던거 모두 삭제하고 다시 생성)
         groupTagMapper.delete(group.getSn());
         group.getTags().forEach(tag -> groupTagMapper.insert(new GroupTagVO(group.getSn(), tag)));
         return 1;
     }
 
+    @Transactional
     @Override
     public int remove(GroupVO group) {
+        // 첨부파일을 삭제한다.
+        groupAttachMapper.deleteAll(group.getSn());
         // 모임을 삭제한다.
         return groupMapper.delete(group);
     }
@@ -99,6 +128,13 @@ public class GroupServiceImpl implements GroupService{
     public int getTotal(GroupCriteria cri) {
         log.info("get total count");
         return groupMapper.getTotalCount(cri);
+    }
+
+    @Override
+    public List<GroupAttachVO> getAttachList(Long grpSn) {
+        log.info("get Attach list by grpSn" + grpSn);
+
+        return groupAttachMapper.findByGrpSn(grpSn);
     }
 
 }

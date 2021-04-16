@@ -92,6 +92,20 @@
     <div class="panel-footer">
 
     </div>
+
+    <!-- 첨부파일 -->
+    <h4>사진</h4>
+    <div class="uploadResult">
+        <ul>
+        </ul>
+    </div>
+
+    <!-- 첨부파일 확대 -->
+    <div class="bigPictureWrapper">
+        <div class="bigPicture">
+        </div>
+    </div>
+
     <!-- container -->
 
     <!-- Call to Action Well -->
@@ -369,6 +383,71 @@
         $("button[data-oper='modify']").on("click", function(e) {
             operForm.attr('action', '/group/modify').submit();
         })
+
+    })
+</script>
+
+<script>
+    $(document).ready(function() {
+        (function() {
+
+            let grpSn = '<c:out value="${group.sn}"/>';
+
+            $.getJSON("/group/getAttachList", {grpSn: grpSn}, function(arr) {
+                console.log(arr);
+
+                let str = "";
+
+                $(arr).each(function(i, attach) {
+
+                    if(attach.fileType) {
+                        let fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
+
+                        str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'><div>";
+                        str += "<img src='/display?fileName="+fileCallPath+"'>";
+                        str += "</div>";
+                        str += "</li>";
+                    } else {
+                        str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'><div>";
+                        str += "<span> "+attach.fileName+"</span><br/>";
+                        str += "<img src='/resources/img/attach.png'>";
+                        str += "</div>";
+                        str += "</li>";
+                    }
+                })
+
+                $(".uploadResult ul").html(str);
+            });
+        })();
+
+        $(".uploadResult").on("click", "li", function(e) {
+            console.log("view image");
+
+            let liObj = $(this);
+
+            let path = encodeURIComponent(liObj.data("path")+ "/" + liObj.data("uuid") + "_" + liObj.data("filename"));
+
+            if(liObj.data("type")) {
+                showImage(path.replace(new RegExp(/\\/g),"/"));
+            } else {
+                self.location = "/download?fileName=" + path
+            }
+        })
+
+        $(".bigPictureWrapper").on("click", function(e) {
+            $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+            setTimeout(function() {
+                $('.bigPictureWrapper').hide();
+            }, 300);
+        })
+
+        function showImage(fileCallPath) {
+            alert(fileCallPath);
+
+            $(".bigPictureWrapper").css("display", "flex").show();
+
+            $(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>").animate({width:'100%', height:'100%'}, 1000);
+        }
 
     })
 </script>

@@ -37,10 +37,6 @@
             <input type="text" class="form-control" name="name" id="name" value="<c:out value="${group.name}"/>" required>
         </div>
         <div class="form-group">
-            <label for="picture">대표사진</label>
-            <input type="text" class="form-control" id="picture" name="picture" value="<c:out value="${group.picture}"/>">
-        </div>
-        <div class="form-group">
             <label for="description">한줄소개</label>
             <textarea class="form-control" rows="1" id="description" name="description" required><c:out value="${group.description}"/></textarea>
         </div>
@@ -76,6 +72,24 @@
                 <option value="GRTG04">자바스크립트</option>
             </select>
         </div>
+
+        <!-- 첨부파일 -->
+        <div class="form-group uploadDiv">
+            <label>사진</label><br>
+            <input type="file" name="uploadFile" multiple="multiple">
+        </div>
+        <div class="form-group">
+            <div class="uploadResult">
+                <ul>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bigPictureWrapper">
+            <div class="bigPicture">
+            </div>
+        </div>
+
         <div class="form-group">
             <label for="updDate" hidden></label>
             <input type="date" class="form-control" name="updDate" id="updDate" value="<fmt:formatDate value="${group.updDate}" pattern="yyyy/MM/dd"/>" hidden>
@@ -106,8 +120,11 @@
             console.log(operation);
 
             if(operation === 'remove') {
+
                 formObj.attr("action", "/group/remove");
+
             } else if (operation === 'list') {
+
                 formObj.attr("action", '/group/list').attr("method", "get");
                 let pageNumTag = $("input[name='pageNum']").clone();
                 let amountTag = $("input[name='amount']").clone();
@@ -115,9 +132,172 @@
                 formObj.empty();
                 formObj.append(pageNumTag);
                 formObj.append(amountTag);
+
+            }else if(operation === 'modify') {
+
+                console.log("submit clicked");
+
+                let str = "";
+
+                $(".uploadResult ul li").each(function(i, obj) {
+
+                    let jobj = $(obj);
+
+                    console.dir(jobj);
+
+                    str += "<input type='hidden' name='attachList[" + i + "].fileName' value='"+jobj.data("filename")+"'>";
+                    str += "<input type='hidden' name='attachList[" + i + "].uuid' value='"+jobj.data("uuid")+"'>";
+                    str += "<input type='hidden' name='attachList[" + i + "].uploadPath' value='"+jobj.data("path")+"'>";
+                    str += "<input type='hidden' name='attachList[" + i + "].fileType' value='"+jobj.data("type")+"'>";
+                })
+
+                formObj.append(str).submit();
             }
+
             formObj.submit();
         })
+    })
+</script>
+
+<script>
+    $(document).ready(function() {
+        let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+        let maxSize = 5242880;
+        let formObj = $("form");
+
+        (function() {
+
+            let grpSn = '<c:out value="${group.sn}"/>';
+
+            $.getJSON("/group/getAttachList", {grpSn: grpSn}, function(arr) {
+                console.log(arr);
+
+                let str = "";
+
+                $(arr).each(function(i, attach) {
+
+                    if(attach.fileType) {
+                        let fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
+                        str += "<li data-path='"+attach.uploadPath+"'";
+                        str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
+                        str += "><div>";
+                        str += "<span> "+attach.fileName+"</span>";
+                        str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
+                        str += "<img src='/display?fileName="+fileCallPath+"'>";
+                        str += "</div>";
+                        str += "</li>";
+                    } else {
+                        let fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
+                        str += "<li";
+                        str += "data-path='" + attach.uploadPath + "' data-uuid='"+attach.uuid+"'data-filename='" + attach.fileName + "'data-type='" + attach.fileType+"'><div>";
+                        str += "<span> " + attach.fileName+"</span>";
+                        str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='file'>X</button><br>";
+                        str += "<img src='/resources/img/attach.png'></a>";
+                        str += "</div>";
+                        str += "</li>";
+                    }
+                })
+
+                $(".uploadResult ul").html(str);
+            });
+        })();
+
+        $(".uploadResult").on("click", "button", function(e) {
+
+            console.log("delete file");
+
+            if(confirm("Remove this file? ")) {
+
+                let targetLi = $(this).closest("li");
+                targetLi.remove();
+            }
+        })
+
+        $("input[type='file']").change(function(e) {
+
+            let formData = new FormData();
+
+            let inputFile = $("input[name='uploadFile']");
+
+            let files = inputFile[0].files;
+
+            for(let i=0; i<files.length; i++) {
+
+                if(!checkExtension(files[i].name, files[i].size)) {
+                    return false;
+                }
+                formData.append("uploadFile", files[i]);
+            }
+
+            $.ajax({
+                url: '/uploadAjaxAction',
+                processData: false,
+                contentType: false,
+                data: formData,
+                type: 'POST',
+                dataType:'json',
+                success: function(result) {
+                    console.log(result);
+                    showUploadResult(result);
+                }
+            })
+
+        })
+
+        function checkExtension(fileName, fileSize) {
+
+            if(fileSize >= maxSize) {
+                alert("파일 사이즈 초과");
+                return false;
+            }
+
+            if(regex.test(fileName)) {
+                alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+                return false;
+            }
+            return true;
+        }
+
+        function showUploadResult(uploadResultArr) {
+
+            if(!uploadResultArr || uploadResultArr.length == 0) {
+                return;
+            }
+
+            let uploadUL = $('.uploadResult ul');
+
+            let str = "";
+
+            $(uploadResultArr).each(function(i, obj) {
+
+                if(obj.image) {
+                    let fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
+                    str += "<li data-path='"+obj.uploadPath+"'";
+                    str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'";
+                    str += "><div>";
+                    str += "<span> "+obj.fileName+"</span>";
+                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
+                    str += "<img src='/display?fileName="+fileCallPath+"'>";
+                    str += "</div>";
+                    str += "</li>";
+
+                } else {
+                    let fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
+                    let fileLink =fileCallPath.replace(new RegExp(/\\/g), "/");
+
+                    str += "<li";
+                    str += "data-path='" + obj.uploadPath + "' data-uuid='"+obj.uuid+"'data-filename='" + obj.fileName + "'data-type='" + obj.image+"'><div>";
+                    str += "<span> " + obj.fileName+"</span>";
+                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='file'>X</button><br>";
+                    str += "<img src='/resources/img/attach.png'></a>";
+                    str += "</div>";
+                    str += "</li>";
+
+                }
+            })
+
+            uploadUL.append(str);
+        }
     })
 </script>
 

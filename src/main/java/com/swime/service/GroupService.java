@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.GroupAttachVO;
 import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 
@@ -23,5 +24,7 @@ public interface GroupService {
     public int remove(GroupVO group);
 
     public int getTotal(GroupCriteria cri);
+
+    List<GroupAttachVO> getAttachList(Long grpSn);
 
 }
