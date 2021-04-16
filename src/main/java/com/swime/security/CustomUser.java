@@ -36,10 +36,13 @@ public class CustomUser extends User {
                 , vo.getAuthList().stream().map( // Collection<? extends GrantedAuthority> authorities
                         auth -> new SimpleGrantedAuthority(auth.getAuth())
                 ).collect(Collectors.toList()));
+
         this.memberVO = vo;
-        vo.getAuthList().stream().map(auth -> { log.info(auth.getAuth());
-            return null;
-        });
+
+        log.info(vo.getAuthList());
+//        vo.getAuthList().stream().map(auth -> { log.info(auth.getAuth());
+//            return null;
+//        });
     }
 
 }

@@ -15,7 +15,7 @@
     <meta name="author" content="">
 
 
-    <title>Small Business - Start Bootstrap Template</title>
+    <title>SWIME</title>
 
     <title>SWIME</title>
 
@@ -52,16 +52,18 @@
             <a class="active" href="/user/login">로그인</a>
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
-            <a href="#"><sec:authentication property="principal.username"/> 님 안녕하세요</a>
+            <a href="/user/info"><sec:authentication property="principal.username"/> 님 안녕하세요</a>
             <a href="#" onclick="document.getElementById('logout').submit();">로그아웃</a>
         </sec:authorize>
     </div>
 </div>
 
 <form id="logout" action="/user/logout" method="post">
+<%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
     <sec:csrfInput/>
 </form>
 
 <hr style="
     margin-top: 0px;
     margin-bottom: 50px;">
+

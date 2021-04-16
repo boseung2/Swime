@@ -89,7 +89,7 @@ public class MemberServiceImpl implements MemberService{
         MemberVO beforeData = mapper.read(afterData.getId());
 
 //        // 3. 두개를 비교한다.
-        Map diff = compare(beforeData, afterData);
+        Map diff = new MemberServiceUtil().compare(beforeData, afterData);
 
         // 4. 다른부분들을 history테이블에 insert한다.
         diff.forEach((k,v) -> {
@@ -104,24 +104,6 @@ public class MemberServiceImpl implements MemberService{
     }
 
 
-    public Map compare(MemberVO vo1, MemberVO vo2){
-        String[] mtr = {"name", "password", "birth", "status", "picture", "emailAuth"};
-        String[] beforeVal = makeList(vo1);
-        String[] afterVal = makeList(vo2);
-        Map<String, String[]> compareResult = new HashMap<>();
-        for (int i = 0; i < mtr.length; i++)
-            if((beforeVal[i] != null && afterVal[i] != null) && !(beforeVal[i].equals(afterVal[i])))
-                compareResult.put(mtr[i], new String[]{beforeVal[i], afterVal[i]});
-        return compareResult;
-    }
-
-    String[] makeList(MemberVO vo){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
-        String[] list = new String[]{vo.getName(), vo.getPassword(), vo.getBirth(), vo.getStatus(), vo.getPicture(), ""};
-        if(vo.getEmailAuth() != null) list[5] = simpleDateFormat.format(vo.getEmailAuth());
-        return list;
-    }
-
     @Override
     public boolean registerKey(String id, String key) {
         return mapper.insertKey(id, key) == 1;
@@ -134,7 +116,29 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean deleteKey(String id) {
-        return mapper.delete(id) ==1;
+        return mapper.deleteKey(id) == 1;
     }
 
+}
+
+
+
+class MemberServiceUtil{
+    public Map compare(MemberVO vo1, MemberVO vo2){
+        String[] mtr = {"name", "password", "birth", "status", "picture", "emailAuth"};
+        String[] beforeVal = makeList(vo1);
+        String[] afterVal = makeList(vo2);
+        Map<String, String[]> compareResult = new HashMap<>();
+        for (int i = 0; i < mtr.length; i++)
+            if((beforeVal[i] != null && afterVal[i] != null) && !(beforeVal[i].equals(afterVal[i])))
+                compareResult.put(mtr[i], new String[]{beforeVal[i], afterVal[i]});
+        return compareResult;
+    }
+
+    public String[] makeList(MemberVO vo){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
+        String[] list = new String[]{vo.getName(), vo.getPassword(), vo.getBirth(), vo.getStatus(), vo.getPicture(), ""};
+        if(vo.getEmailAuth() != null) list[5] = simpleDateFormat.format(vo.getEmailAuth());
+        return list;
+    }
 }

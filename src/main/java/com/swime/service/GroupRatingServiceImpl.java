@@ -1,6 +1,7 @@
 package com.swime.service;
 
-import com.swime.domain.GroupRatingCriteria;
+import com.swime.domain.GroupCriteria;
+import com.swime.domain.GroupRatingPageDTO;
 import com.swime.domain.GroupRatingVO;
 import com.swime.domain.GroupVO;
 import com.swime.mapper.GroupMapper;
@@ -32,15 +33,27 @@ public class GroupRatingServiceImpl implements GroupRatingService{
         return 1;
     }
 
+    @Override
+    public GroupRatingVO get(Long sn) {
+        return groupRatingMapper.read(sn);
+    }
+
     @Transactional
     @Override
-    public List<GroupRatingVO> getListWithPaging(Long grpSn, GroupRatingCriteria cri) {
+    public List<GroupRatingVO> getListWithPaging(Long grpSn, GroupCriteria cri) {
         return groupRatingMapper.getListWithPaging(grpSn, cri);
+    }
+
+    @Override
+    public GroupRatingPageDTO getListPage(GroupCriteria cri, Long grpSn) {
+
+        return new GroupRatingPageDTO(groupRatingMapper.getRatingCountByGrpSn(grpSn), groupRatingMapper.getListWithPaging(grpSn, cri));
     }
 
     @Transactional
     @Override
     public int modify(GroupRatingVO groupRating) {
+
         // 해당 후기 update
         groupRatingMapper.update(groupRating);
 
@@ -65,6 +78,7 @@ public class GroupRatingServiceImpl implements GroupRatingService{
     }
 
     private void updateGroupRating(Long grpSn) {
+
         GroupVO group = groupMapper.read(grpSn);
 
         if(group == null) {

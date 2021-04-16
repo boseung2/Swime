@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.GroupAttachMapper">
+
+   <insert id="insert">
+       insert into tgrp_attach (uuid, uploadpath, filename, filetype, grp_sn)
+       values (#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{grpSn})
+   </insert>
+
+    <delete id="delete">
+        delete from tgrp_attach where uuid = #{uuid}
+    </delete>
+
+    <select id="findByGrpSn" resultType="com.swime.domain.GroupAttachVO">
+        select * from tgrp_attach where grp_sn = #{grpSn}
+    </select>
+
+    <delete id="deleteAll">
+        delete tgrp_attach where grp_sn = #{grpSn}
+    </delete>
+
+    <select id="getOldFiles" resultType="com.swime.domain.GroupAttachVO">
+        select * from tgrp_attach where uploadpath = to_char(current_date - 1, 'yyyy/mm/dd')
+    </select>
+
+</mapper>
