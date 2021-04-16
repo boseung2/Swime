@@ -19,7 +19,8 @@
             <label for="check">Remember me</label>
         </div>
 
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <sec:csrfInput/>
+<%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
 
         <div>
             <input type="submit" value="Login">

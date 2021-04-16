@@ -54,7 +54,7 @@ public class MemberServiceTests {
         MemberVO memberVO = new MemberVO();
         int random = (int)(Math.random() * 10000);
 
-        memberVO.setId("hong"+ random+"@service.com");
+        memberVO.setId("hong" + random + "@service.com");
         memberVO.setName("서비스" + random);
         memberVO.setPassword("service" + random);
 
@@ -71,6 +71,14 @@ public class MemberServiceTests {
 
         MemberHistoryVO hvo = new MemberHistoryVO();
 
+        Assert.assertTrue(service.modify(memberVO, hvo));
+    }
+
+    @Test
+    public void changePw(){
+        MemberVO memberVO = service.get("hong5584@service.com");
+        memberVO.setPassword("modifypassword");
+        MemberHistoryVO hvo = new MemberHistoryVO();
         Assert.assertTrue(service.modify(memberVO, hvo));
     }
     

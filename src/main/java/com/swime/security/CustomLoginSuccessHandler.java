@@ -26,12 +26,12 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         // 대상이 어드민이면
         if(roleNames.contains("ADMIN")){
-            log.info("ADMIN LOGIN");
+//            log.info("ADMIN LOGIN");
         }
         // 대상이 멤버이면
         if(roleNames.contains("MEMBER")){
-            log.info("MEMBER LOGIN");
-            response.sendRedirect("/sample/member");
+//            log.info("MEMBER LOGIN");
+//            response.sendRedirect("/sample/member");
         }
 
 //        example
