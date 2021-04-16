@@ -164,16 +164,20 @@ public class MemberServiceImpl implements MemberService{
         MemberVO memberVO = mapper.read(vo.getId());
         System.out.println("paste!!!!!");
 //        System.out.println(vo.getPassword());
-        if(vo.getPassword().equals("") || vo.getPassword() == null){
-            System.out.println("비밀번호 변경x");
-            vo.setPassword(memberVO.getPassword());
-        }
-        else if(!vo.getPassword().equals("")){
+
+        if(!vo.getPassword().equals("")){
             System.out.println("비밀번호 변경o");
-            vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+            memberVO.setPassword(passwordEncoder.encode(vo.getPassword()));
+        }
+        else if(vo.getPassword().equals("") || vo.getPassword() == null){
+            System.out.println("비밀번호 변경x");
         }
 
-        return vo;
+        memberVO.setBirth(vo.getBirth());
+        memberVO.setName(vo.getName());
+        memberVO.setPicture(vo.getPicture());
+
+        return memberVO;
     }
 }
 

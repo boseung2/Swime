@@ -27,8 +27,8 @@ import javax.sql.DataSource;
 //@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Setter(onMethod_ = @Autowired)
-    private DataSource dataSource;
+//    @Setter(onMethod_ = @Autowired)
+//    private DataSource dataSource;
 
     @Override
     public void configure(HttpSecurity http) throws Exception{
@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/group","/include","/user").permitAll()
-                .antMatchers("/user/infoDetail").access("isAuthenticated()")
+//                .antMatchers("/user/infoDetail").access("isAuthenticated()")
                 .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
                 .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
         .and()

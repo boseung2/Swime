@@ -1,60 +1,129 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@include file="../../includes/tagLib.jsp" %>
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
+${MemberVo}
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal.username" var="userId"/>
+</sec:authorize>
 
 <div class="container">
     <h2>프로필 수정</h2>
     <hr/>
-    <form role="form" action="/user/modify" method="post">
+<%--    action="/user/modify" method="post"--%>
+    <form role="form" id="userInfoForm">
 
         <div class="form-group">
             <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="id" readonly value="<sec:authentication property="principal.username"/>">
+            <input type="text" class="form-control" id="userId" name="id" value="${MemberVo.id}" readonly>
         </div>
-        <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input type="password" class="form-control" name="password" id="password">
-        </div>
-        <div class="form-group">
-            <label for="passwordConfirm">비밀번호 확인</label>
-            <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm">
-        </div>
+
+        <c:if test="${userId == MemberVo.id}">
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" class="form-control" name="password" id="password" readonly>
+            </div>
+            <div class="form-group">
+                <label for="passwordConfirm">비밀번호 확인</label>
+                <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" readonly>
+            </div>
+        </c:if>
+
         <div class="form-group">
             <label for="name">이름</label>
-            <input type="text" class="form-control" id="name" name="name" value="<sec:authentication property="principal.memberVO.name"/>">
+            <input type="text" class="form-control" id="name" name="name" value="${MemberVo.name}" readonly>
         </div>
         <div class="form-group">
             <label for="birth">생일</label>
-            <input type="date" class="form-control" id="birth" name="birth" value="<sec:authentication property="principal.memberVO.birth"/>">
+            <input type="date" class="form-control" id="birth" name="birth" value="${MemberVo.birth}" readonly>
         </div>
-        <div class="form-group">
-            <label for="picture">사진</label>
-            <input type="file" class="form-control" id="picture" name="picture" value="<sec:authentication property="principal.memberVO.picture"/>">
-        </div>
-
-        <input type="hidden" name="status" value="<sec:authentication property="principal.memberVO.status"/>">
-        <input type="hidden" name="email" value="<sec:authentication property="principal.username"/>">
+        <c:if test="${userId == MemberVo.id}">
+            <div class="form-group">
+                <label for="picture">사진</label>
+                <input type="file" class="form-control" id="picture" name="picture" value="${MemberVo.picture}" readonly>
+            </div>
+            <button class="btn btn-primary">정보 수정</button>
+        </c:if>
+        <input type="hidden" name="status" value="${MemberVo.status}">
+        <input type="hidden" name="email" value="${MemberVo.id}">
         <sec:csrfInput/>
-        <button type="submit" class="btn btn-primary">정보변경</button>
     </form>
 </div>
 
+
 <script>
-    function validatePassword(){
-        if(password.value !== confirm_password.value) {
-            confirm_password.setCustomValidity("비밀번호가 일치하지 않습니다");
-        } else {
-            confirm_password.setCustomValidity('');
-        }
+    $(document).ready(function (){
+        let password = $("#password")[0];
+        let confirmPassword = $("#passwordConfirm")[0];
+        let modifyMode = false;
+        let inputs = $("#userInfoForm > .form-group > input");
+
+
+        // 제출 버튼을 누르면
+        $("#userInfoForm > button").click(function (e){
+            if(!compare(password, confirmPassword)) {
+                confirmPassword.setCustomValidity("비밀번호가 일치하지 않습니다");
+                return;
+            }
+
+            e.preventDefault();
+
+            if(modifyMode === true){
+                $.ajax({
+                    url: '/user/modify',
+                    type: 'POST',
+                    data: {
+                        id : $('#userId')[0].value,
+                        password : $('#password')[0].value,
+                        name : $('#name')[0].value,
+                        birth : $('#birth')[0].value,
+                        picture : $('#picture')[0].value,
+                        status : '${MemberVo.status}',
+                        email : '${MemberVo.id}',
+                        _csrf : $("#_csrf")[0].content
+                    },
+                    success: function(msg) {
+                        alert('정보를 수정했습니다');
+                    }
+                });
+            }
+
+            changeModifyStatus(this, inputs, modifyMode);
+            modifyMode = !modifyMode;
+        });
+
+    });
+
+
+    function compare(pwd1, pwd2){
+        return pwd1.value === pwd2.value;
     }
 
-    password = document.getElementById('password');
-    confirm_password = document.getElementById('passwordConfirm');
-    console.log("profile...");
+    function changeModifyStatus(obj, inputs, condition){
+        changeBtn(obj, condition);
+        changeInputs(inputs, condition);
+    }
 
+    function changeInputs(inputs, condition){
+        for(let i = 0; i < inputs.length; i++)
+            if(inputs[i].id !== 'userId')
+                inputs[i].readOnly = condition;
+    }
 
-    password.onchange = validatePassword;
-    confirm_password.onkeyup = validatePassword;
+    function changeBtn(obj, condition){
+        if(condition){
+            $(obj).removeClass('btn btn-warning');
+            $(obj).addClass('btn btn-primary');
+            $(obj).text('정보 수정');
+
+        }
+        else{
+            $(obj).removeClass('btn btn-primary');
+            $(obj).addClass('btn btn-warning');
+            $(obj).text('확인');
+        }
+    }
 </script>
 
 

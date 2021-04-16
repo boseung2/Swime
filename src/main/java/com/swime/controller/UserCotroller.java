@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -74,10 +75,10 @@ public class UserCotroller {
     }
 
     @PostMapping("/modify")
-    public void modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
-
+    public ResponseEntity modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
+        log.info("test_Modify = " + vo.getPassword());
         service.modify(vo, hvo);
-        return;
+        return service.modify(vo, hvo) ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/remove")
@@ -120,7 +121,8 @@ public class UserCotroller {
     }
 
     @GetMapping("/infoDetail")
-    public void infoDetail(){
+    public void infoDetail(Model model, String id){
+        model.addAttribute("MemberVo", service.get(id));
     }
 
     @GetMapping("/details/group")
@@ -140,7 +142,8 @@ public class UserCotroller {
     }
 
     @GetMapping("/details/profile")
-    public void profile(){
+    public void profile(Model model, String id){
+        model.addAttribute("MemberVo", service.get(id));
     }
 
 

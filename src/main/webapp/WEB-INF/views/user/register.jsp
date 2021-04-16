@@ -42,27 +42,31 @@
 
 
 <script>
-    let password;
-    let confirm_password;
-    let submit;
+    $(document).ready(function (){
+        let password;
+        let confirm_password;
+        let submit;
 
-    function validatePassword(){
-        if(password.value !== confirm_password.value) {
-            console.log("not match")
-            confirm_password.setCustomValidity("비밀번호가 일치하지 않습니다");
-        } else {
-            confirm_password.setCustomValidity('');
-        }
-    }
-
-    window.onload = function () {
         password = document.getElementById('floatingPassword');
         confirm_password = document.getElementById('checkPassword');
 
 
         password.onchange = validatePassword;
         confirm_password.onkeyup = validatePassword;
-    }
+
+        function validatePassword(){
+            if(password.value !== confirm_password.value) {
+                console.log("not match")
+                confirm_password.setCustomValidity("비밀번호가 일치하지 않습니다");
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+
+    });
+
+
+
 </script>
 
 
