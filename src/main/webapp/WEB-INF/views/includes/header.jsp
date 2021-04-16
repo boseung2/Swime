@@ -15,7 +15,7 @@
     <meta name="author" content="">
 
 
-    <title>Small Business - Start Bootstrap Template</title>
+    <title>SWIME</title>
 
     <title>SWIME</title>
 

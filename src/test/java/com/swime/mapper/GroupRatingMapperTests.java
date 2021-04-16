@@ -1,6 +1,6 @@
 package com.swime.mapper;
 
-import com.swime.domain.GroupRatingCriteria;
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupRatingVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -23,8 +23,8 @@ public class GroupRatingMapperTests {
     @Test
     public void testInsert() {
         GroupRatingVO groupRating = new GroupRatingVO();
-        groupRating.setGrpSn(100L);
-        groupRating.setStdSn(6L);
+        groupRating.setGrpSn(440L);
+        groupRating.setStdSn(1L);
         groupRating.setUserId("jungbs3726@naver.com");
         groupRating.setRating(4D);
         groupRating.setReview("만족스러운 스터디였습니다.");
@@ -48,26 +48,26 @@ public class GroupRatingMapperTests {
 
     @Test
     public void testRead() {
-        GroupRatingVO groupRating = mapper.read(5L);
+        GroupRatingVO groupRating = mapper.read(71L);
         log.info(groupRating);
     }
 
     @Test
     public void testGetList() {
-        mapper.getList(5L).forEach(groupRating -> log.info(groupRating));
+        mapper.getList(440L).forEach(groupRating -> log.info(groupRating));
     }
 
     @Test
     public void testGetListWithPaging() {
-        GroupRatingCriteria cri = new GroupRatingCriteria(2, 3);
-        List<GroupRatingVO> list = mapper.getListWithPaging(1L, cri);
+        GroupCriteria cri = new GroupCriteria(1, 3);
+        List<GroupRatingVO> list = mapper.getListWithPaging(440L, cri);
         list.forEach(groupRating -> log.info(groupRating));
     }
 
     @Test
     public void testUpdate() {
         GroupRatingVO groupRating = new GroupRatingVO();
-        groupRating.setSn(1L);
+        groupRating.setSn(12L);
         groupRating.setRating(1D);
         groupRating.setReview("수정된 리뷰");
 
@@ -77,7 +77,7 @@ public class GroupRatingMapperTests {
 
     @Test
     public void testDelete() {
-        int count = mapper.delete(10L);
+        int count = mapper.delete(11L);
         log.info("DELETE COUNT : " + count);
     }
 

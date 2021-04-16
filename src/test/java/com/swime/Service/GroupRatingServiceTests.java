@@ -1,6 +1,6 @@
 package com.swime.Service;
 
-import com.swime.domain.GroupRatingCriteria;
+import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupRatingVO;
 import com.swime.service.GroupRatingService;
 import lombok.Setter;
@@ -10,8 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -32,27 +30,25 @@ public class GroupRatingServiceTests {
     @Test
     public void testRegister() {
         GroupRatingVO groupRating = new GroupRatingVO();
-        groupRating.setGrpSn(176L);
-        groupRating.setStdSn(6L);
+        groupRating.setGrpSn(440L);
+        groupRating.setStdSn(1L);
         groupRating.setUserId("jungbs3726@naver.com");
-        groupRating.setRating(5D);
+        groupRating.setRating(1D);
         groupRating.setReview("만족스러운 스터디였습니다.");
-
         service.register(groupRating);
     }
 
     @Test
     public void testGetListWithPaging() {
-        GroupRatingCriteria cri = new GroupRatingCriteria(1, 3);
+        GroupCriteria cri = new GroupCriteria(1, 3);
         service.getListWithPaging(101L, cri);
     }
 
     @Test
     public void testUpdate() {
-        GroupRatingVO groupRating = new GroupRatingVO();
-//        groupRating.setSn(15L);
-//        groupRating.setRating(5.0D);
-//        groupRating.setReview("수정된 리뷰입니당");
+        GroupRatingVO groupRating = service.get(71L);
+        groupRating.setRating(5.0D);
+        groupRating.setReview("수정된 리뷰입니당");
         service.modify(groupRating);
     }
 
