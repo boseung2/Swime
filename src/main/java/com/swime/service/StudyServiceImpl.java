@@ -204,30 +204,57 @@ public class StudyServiceImpl implements StudyService{
     public int registerAnswer(StudyAnswerVO answer) {
         int cnt = 0;
 
-        //1. 답변을 등록한다.
-        cnt += answerMapper.insert(answer);
-
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(answer.getStdSn());
         param.setUserId(answer.getUserId());
-
-        //2. 참여명단에 해당스터디번호와 해당 user_id를 가진 레코드가 있는지 확인한다.
-        //2-1. 레코드가 존재하며, 가입/탈퇴/검토중/영구강퇴 중에 상태가 탈퇴인 경우만 update가능
-        StudyListVO attendant = listMapper.getAttendant(param);
+        
+        // 설문 답변 등록 후에 상태는 검토중이어야하므로
         param.setStatus("STUS03");
 
-        if(attendant != null){
-            if(!"STUS02".equals(attendant.getStatus())) return -1;
+        // 1. 해당유저의 참여상태를 확인
+        int check = checkAttendantForRegister(param);
+        
+        // 가입상태 : 가입/검토중/영구강퇴
+        if (check == -1) return -1;
 
+        //2. 답변을 등록한다.
+        cnt += answerMapper.insert(answer);
+        
+        // 참여명단에 없음
+        if (check == 1) {
+            cnt += listMapper.insert(param);
+        } else {
+            // 가입상태 : 탈퇴
             cnt += listMapper.update(param);
-            return cnt;
         }
 
-        //3. 참여명단에 레코드가 존재하지 않으면
-        // 답변객체로부터 std_sn, user_id 받고 status = STUS03(검토중)으로 설정해서 참여명단에 insert
-        cnt += listMapper.insert(param);
+        return cnt; // 정상적으로 등록될 경우 결과값이 2여야함
+    }
 
-        return cnt; // 정상적으로 완료될 경우 결과값이 2여야함
+    // 등록을 위해 해당 스터디의 유저 가입상태를 확인해주는 함수
+    @Override
+    public int checkAttendantForRegister(StudyParamVO studyParam) {
+        StudyListVO attendant = listMapper.getAttendant(studyParam);
+
+        //참여명단에 레코드가 존재하지 않는 경우 1 반환 -> insert
+        if(attendant == null) return 1;
+
+        // 참여명단에 유저가 존재하며 상태가 탈퇴인 경우 2 반환 -> update
+        // 참여명단에 유저가 존재하며 상태가 가입/검토중/영구탈퇴인 경우  -1 반환 -> 아무일도 안함
+        return ("STUS02".equals(attendant.getStatus()) ? 2 : -1);
+    }
+
+    // 탈퇴를 위해 해당 스터디의 유저 가입상태를 확인해주는 함수
+    @Override
+    public int checkAttendantForRemove(StudyParamVO studyParam) {
+        StudyListVO attendant = listMapper.getAttendant(studyParam);
+
+        if(attendant == null) return -1;
+
+        // 참여명단에 유저가 존재하며 가입상태인 경우 : 1 반환
+        // 참여명단에 유저가 존재하며 검토중인 경우 : 2 반환
+        // 그 외 : -1
+        return ("STUS01".equals(attendant.getStatus()) ? 1 : "STUS03".equals(attendant.getStatus())? 2 : -1);
     }
 
     @Override

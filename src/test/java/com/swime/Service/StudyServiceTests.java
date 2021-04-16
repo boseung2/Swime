@@ -343,20 +343,24 @@ public class StudyServiceTests {
     @Test
     public void testRegisterAnswer() {
         StudyAnswerVO answer = new StudyAnswerVO();
-        answer.setStdSn(165L);
-        answer.setUserId("jiho@naver.com");
+        answer.setStdSn(222L);
+        answer.setUserId("aaa@naver.com");
         answer.setQuestionSn(1);
         answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
         answer.setAnswer("네. 괜찮습니다.");
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(222L);
+        param.setUserId("aaa@naver.com");
+
+        int before=  service.getAnswer(param).size();
 
         int result = service.registerAnswer(answer);
 
         assert(result == 2 || result == -1);
 
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(165L);
-        param.setUserId("jiho@naver.com");
-        assert(service.getAnswer(param).size() > 0);
+        if(result == 2) assert(service.getAnswer(param).size() > before);
+        if(result == -1) assert (service.getAnswer(param).size() == before);
     }
 
     @Test

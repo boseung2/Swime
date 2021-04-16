@@ -53,6 +53,12 @@ public interface StudyService {
 
     public int countAttendants(long stdSn);
 
+    // 등록을 위해 해당 스터디의 유저 가입상태를 확인해주는 함수
+    public int checkAttendantForRegister (StudyParamVO param);
+
+    // 탈퇴를 위해 해당 스터디의 유저 가입상태를 확인해주는 함수
+    public int checkAttendantForRemove (StudyParamVO param);
+
     //StudySurvey
     public List<StudySurveyVO> getSurveyList(long stdSn);
 

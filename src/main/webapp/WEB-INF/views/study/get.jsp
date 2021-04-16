@@ -41,16 +41,15 @@
             <p>${study.expense}</p>
 
             <c:if test="${wish == null}"><a class="wish btn btn-primary" href="#">♡</a></c:if>
-            <c:if test="${wish != null}"><a class="wishCancel btn btn-primary" href="#">❤</a></c:if>
+            <c:if test="${wish != null}"><a class="cancelWish btn btn-primary" href="#">❤</a></c:if>
 
             <c:choose>
-                <c:when test="${study.attendants >= study.capacity}"><a class="btn btn-primary" href="#">모집마감</a></c:when>
+                <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
                 <c:when test="${study.representation == studyParam.userId}"></c:when>
-                <c:when test="${attend.status eq 'STUS01'}"><a class="btn btn-primary" href="#">탈퇴하기</a></c:when>
-                <c:when test="${attend.status eq 'STUS02'}"><a class="btn btn-primary" href="#">참석하기</a></c:when>
+                <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="/study/attendCancel">참석 취소하기</a></c:when>
                 <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
                 <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
-                <c:otherwise><a class="btn btn-primary" href="#">참석하기</a></c:otherwise>
+                <c:otherwise><a class="attend btn btn-primary" href="/study/attend">참석하기</a></c:otherwise>
             </c:choose>
 
             <br><br>
@@ -168,12 +167,6 @@
                     $(".modal-body").html("스터디 찜이 취소되었습니다.");
             }
 
-            // if(result === "register") {
-            //     $(".modal-body").html("스터디가 정상적으로 등록되었습니다.");
-            // }else if(result === "update") {
-            //     $(".modal-body").html("스터디가 정상적으로 수정되었습니다.");
-            // }
-
             $("#myModal").modal("show");
         }
 
@@ -195,8 +188,9 @@
             actionForm.submit();
         });
 
+        // REST로 변경
         <!--찜 버튼 눌렸을 때 -->
-        $(".wish, .wishCancel").on("click", function(e) {
+        $(".wish, .cancelWish").on("click", function(e) {
             e.preventDefault();
 
             actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
@@ -204,7 +198,47 @@
             actionForm.attr("method", "post");
             actionForm.submit();
         });
-    });
+
+        <!-- 참석하기 눌렸을때 -->
+        $(".attend").on("click", function(e) {
+            e.preventDefault();
+
+            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
+            actionForm.attr("action", "/study/attend");
+            actionForm.attr("method", "post");
+            actionForm.submit();
+        });
+
+        $(".cancelAttend").on("click", function(e) {
+            e.preventDefault();
+
+            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
+            actionForm.attr("action", "/study/cancelAttend");
+            actionForm.attr("method", "post");
+            actionForm.submit();
+        });
+
+        let attendService = function() {
+            function attend(studyParam, callback, error) {
+
+                $.ajax({
+                    type: 'post',
+                    url: '/study/attend',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result, status, xhr) {
+                        if (callback) {
+                            callback(result);
+                        }
+                    },
+                    error: function (xhr, status, er) {
+                        if (error) {
+                            error(er);
+                        }
+                    }
+                })
+            }
+        }
+    })();
 </script>
 
 <%@include file="../includes/footer.jsp" %>

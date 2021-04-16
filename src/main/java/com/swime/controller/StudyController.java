@@ -6,12 +6,13 @@ import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import oracle.ucp.proxy.annotation.Post;
+import org.omg.CORBA.INTERNAL;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -179,11 +180,59 @@ public class StudyController {
         // 4. get 페이지에서 하트가 바뀌어있어야함
     }
 
-    // 스터디 참가/탈퇴
-    @GetMapping("attend")
-    public String attend() {
-        return "redirect:/study/get?sn = ";
+    // 스터디 참가
+    @PostMapping(value = "/attend", produces = "text/plain; charset =UTF-8")
+    @ResponseBody
+    public ResponseEntity<String> attend(StudyParamVO studyParam) {
+        //1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+        studyParam.setUserId("boseung@naver.com"); //임의의 유저
+
+        //2. 이미 참가명단에 있는지 확인
+        // 가입한적x : 1/ 탈퇴 : 2/ 가입,검토중,영구탈퇴 : -1
+        int result = service.checkAttendantForRegister(studyParam);
+
+        if (result == -1) return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
+
+        //3. 해당 스터디에 설문이 있는지 확인
+        // 3-1. 설문 없는 경우
+        if(service.getSurveyList(studyParam.getStdSn()).size() == 0) {
+
+            studyParam.setStatus("STUS01");
+
+            // 가입한적 없는 경우
+            if(result == 1) {
+                return service.registerAttendant(studyParam) == 1
+                    ? new ResponseEntity<>("success", HttpStatus.OK)
+                    : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }else {
+                // 전에 탈퇴한 경우
+                return service.modifyAttendant(studyParam) == 1
+                    ? new ResponseEntity<>("success", HttpStatus.OK)
+                    : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        // 3-2. 설문 있는 경우 -> 설문 뿌려주기
+        // 아직 처리 안함
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
+    // 스터디 탈퇴
+    @PostMapping(value = "/cancelAttend", produces = "text/plain; charset =UTF-8")
+    @ResponseBody
+    public ResponseEntity<String> cancelAttend(StudyParamVO studyParam) {
+        //1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+        studyParam.setUserId("boseung@naver.com"); //임의의 유저
 
+        //2. 가입 상태 확인
+        // 가입 : 1/ 검토중 : 2/그 외 : -1
+        int result = service.checkAttendantForRemove(studyParam);
+
+        if(result == -1) return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
+
+        studyParam.setStatus("STUS02");
+
+        return service.modifyAttendant(studyParam) == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
