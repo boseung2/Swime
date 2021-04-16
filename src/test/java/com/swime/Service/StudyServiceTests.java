@@ -51,8 +51,45 @@ public class StudyServiceTests {
     }
 
     @Test
+    public void testRegister2() {
+        int[] grpNum = {222, 437, 98, 157, 221, 438, 256, 439, 457, 156};
+        String[] userEmail = {"qwer8203@naver.com",
+                "qwer9234@naver.com",
+                "qwer6786@naver.com",
+                "qwer7290@naver.com",
+                "qwer3568@naver.com",
+                "qwer5368@naver.com",
+                "qwer5935@naver.com",
+                "qwer2810@naver.com",
+                "qwer4052@naver.com",
+                "hong7073@service.com"};
+
+        for(int i = 0; i < grpNum.length; i++) {
+            StudyVO study = new StudyVO();
+            study.setGrpSn(grpNum[i]);
+            study.setRepresentation(userEmail[i]);
+            study.setName("스터디 만들기 테스트" + i);
+            study.setStartDate("2021-04-01");
+            study.setEndDate("2021-04-" + (10+i));
+            study.setStartTime("14:00:00");
+            study.setEndTime("16:00:00");
+            study.setRepeatCycle("STCY01");
+            study.setRepeatDay("화,수");
+            study.setInformation("스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.스터디 만들기 테스트입니다.");
+            study.setOnOff("STOF02");
+            study.setOnUrl("");
+            study.setPlaceId("신촌 포텐 스터디 카페");
+            study.setExpense("5000원");
+            study.setCapacity(20);
+
+            assert (service.register(study) == 2);
+        }
+
+    }
+
+    @Test
     public void testGetList() {
-        List<StudyVO> list = service.getList();
+        List<StudyVO> list = service.getList(222);
 
         for (StudyVO li : list) {
             assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
@@ -65,12 +102,19 @@ public class StudyServiceTests {
         cri.setPageNum(1);
         cri.setAmount(3);
 
-        List<StudyVO> list = service.getList(cri);
+        List<StudyVO> list = service.getList(cri, 222);
+
+        list.forEach(study -> log.info(study));
 
         for (StudyVO li : list) {
             assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
         }
         assert (0 <= list.size() && list.size() <= 3);
+    }
+
+    @Test
+    public void testCountStudy() {
+        assert (service.countStudy(222) == 2);
     }
 
     @Test
@@ -213,11 +257,24 @@ public class StudyServiceTests {
     @Test
     public void testRegisterAttendant() {
         StudyParamVO param = new StudyParamVO();
-        param.setStdSn(41L);
-        param.setUserId("hong2841@service.com");
+        param.setStdSn(561L);
+        param.setUserId("hong7073@service.com");
         param.setStatus("STUS01");
 
-        if(service.getAnswer(param) != null) return;
+        if(service.getAttendant(param) != null) return;
+
+        assert (service.registerAttendant(param) == 1);
+        assert (service.getAttendant(param) != null);
+    }
+
+    @Test
+    public void testRegisterAttendant2() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(561L);
+        param.setUserId("qwer5935@naver.com");
+        param.setStatus("STUS01");
+
+        if(service.getAttendant(param) != null) return;
 
         assert (service.registerAttendant(param) == 1);
         assert (service.getAttendant(param) != null);
@@ -286,20 +343,24 @@ public class StudyServiceTests {
     @Test
     public void testRegisterAnswer() {
         StudyAnswerVO answer = new StudyAnswerVO();
-        answer.setStdSn(165L);
-        answer.setUserId("jiho@naver.com");
+        answer.setStdSn(222L);
+        answer.setUserId("aaa@naver.com");
         answer.setQuestionSn(1);
         answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
         answer.setAnswer("네. 괜찮습니다.");
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(222L);
+        param.setUserId("aaa@naver.com");
+
+        int before=  service.getAnswer(param).size();
 
         int result = service.registerAnswer(answer);
 
         assert(result == 2 || result == -1);
 
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(165L);
-        param.setUserId("jiho@naver.com");
-        assert(service.getAnswer(param).size() > 0);
+        if(result == 2) assert(service.getAnswer(param).size() > before);
+        if(result == -1) assert (service.getAnswer(param).size() == before);
     }
 
     @Test

@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface StudyMapper {
-    public List<StudyVO> getList();
+    public List<StudyVO> getList(long grpSn);
 
-    public List<StudyVO> getListWithPaging(StudyCriteria cri);
+    public List<StudyVO> getListWithPaging(@Param("cri") StudyCriteria cri, @Param("grpSn") long grpSn);
 
     public int insert(StudyVO study);
 
@@ -23,5 +23,7 @@ public interface StudyMapper {
     
     //스터디 상태 수정
     public int updateStatus(StudyParamVO param);
+
+    public int countStudy(long grpSn);
 
 }

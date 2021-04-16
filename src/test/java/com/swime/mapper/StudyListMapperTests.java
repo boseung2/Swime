@@ -26,13 +26,13 @@ public class StudyListMapperTests {
     @Test
     public void testGetList() {
         StudyParamVO param = new StudyParamVO();
-        param.setStdSn(307L);
+        param.setStdSn(561L);
         param.setStatus("STUS01");
 
         List<StudyListVO> list = mapper.getList(param);
 
         for(StudyListVO li : list) {
-            assert (li.getStdSn() == 307L);
+            assert (li.getStdSn() == 561L);
             assert ("STUS01".equals(li.getStatus()));
         }
     }
@@ -56,14 +56,14 @@ public class StudyListMapperTests {
         StudyCriteria cri = new StudyCriteria(1, 3);
 
         StudyParamVO param = new StudyParamVO();
-        param.setStdSn(307L);
+        param.setStdSn(561L);
         param.setStatus("STUS01");
 
         List<StudyListVO> list = mapper.getListWithPaging(cri, param);
 
         assert(0 <= list.size() && list.size() <= 3);
         for(StudyListVO li : list) {
-            assert (li.getStdSn() == 307L);
+            assert (li.getStdSn() == 561L);
             assert ("STUS01".equals(li.getStatus()));
         }
     }
@@ -97,7 +97,7 @@ public class StudyListMapperTests {
     @Test
     public void testInsert() {
         StudyParamVO param = new StudyParamVO();
-        param.setStdSn(308L);
+        param.setStdSn(366L);
         param.setUserId("jungbs3726@naver.com");
         param.setStatus("STUS01"); // 가입 또는 검토중으로 insert 가능
 
