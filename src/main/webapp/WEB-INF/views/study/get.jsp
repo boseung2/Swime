@@ -40,8 +40,8 @@
             <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
             <p>${study.expense}</p>
 
-            <c:if test="${wish == null}"><a class="btn btn-primary" href="#">❤</a></c:if>
-            <c:if test="${wish != null}"><a class="btn btn-primary" href="#">♡</a></c:if>
+            <c:if test="${wish == null}"><a class="wish btn btn-primary" href="#">♡</a></c:if>
+            <c:if test="${wish != null}"><a class="wishCancel btn btn-primary" href="#">❤</a></c:if>
 
             <c:choose>
                 <c:when test="${study.attendants >= study.capacity}"><a class="btn btn-primary" href="#">모집마감</a></c:when>
@@ -141,7 +141,7 @@
 
     $(document).ready(function(){
 
-        <!-- 스터디 생성/수정 후 모달 창-->
+        <!-- 스터디 생성/수정/찜/찜 삭제 후 모달 창-->
         let result = '<c:out value="${result}"/>';
 
         checkModal(result);
@@ -154,9 +154,25 @@
                 return;
             }
 
-            if(parseInt(result) > 0) {
-                $(".modal-body").html("스터디 " + parseInt(result) + "번이 정상적으로 처리되었습니다.");
+            switch (result) {
+                case "register" :
+                    $(".modal-body").html("스터디가 정상적으로 등록되었습니다.");
+                    break;
+                case "update" :
+                    $(".modal-body").html("스터디가 정상적으로 수정되었습니다.");
+                    break;
+                case "wish" :
+                    $(".modal-body").html("스터디를 찜했습니다.");
+                    break;
+                case "cancel" :
+                    $(".modal-body").html("스터디 찜이 취소되었습니다.");
             }
+
+            // if(result === "register") {
+            //     $(".modal-body").html("스터디가 정상적으로 등록되었습니다.");
+            // }else if(result === "update") {
+            //     $(".modal-body").html("스터디가 정상적으로 수정되었습니다.");
+            // }
 
             $("#myModal").modal("show");
         }
@@ -175,6 +191,16 @@
 
             actionForm.append("<input type='hidden' name='sn' value='" + ${study.sn} + "'>");
             actionForm.attr("action", "/study/remove");
+            actionForm.attr("method", "post");
+            actionForm.submit();
+        });
+
+        <!--찜 버튼 눌렸을 때 -->
+        $(".wish, .wishCancel").on("click", function(e) {
+            e.preventDefault();
+
+            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
+            actionForm.attr("action", "/study/wish");
             actionForm.attr("method", "post");
             actionForm.submit();
         });

@@ -1,10 +1,7 @@
 package com.swime.controller;
 
 
-import com.swime.domain.StudyCriteria;
-import com.swime.domain.StudyPageDTO;
-import com.swime.domain.StudyParamVO;
-import com.swime.domain.StudyVO;
+import com.swime.domain.*;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -47,12 +44,13 @@ public class StudyController {
 //        qwer8203@naver.com // 스터디장
 //        boseung@naver.com // 일반 회원
 //        aaa@service.com // 로그인 안한 회원
-        studyParam.setUserId("qwer8203@naver.com");
+        studyParam.setUserId("boseung@naver.com");
         studyParam.setStdSn(sn);
 
         model.addAttribute("studyParam", studyParam);
 
-        // null이면 찜 아니면 찜취소
+        // 찜 여부 : null이면 찜 아니면 찜취소
+        log.info("=============================찜 여부 : " + service.getWish(studyParam));
         model.addAttribute("wish", service.getWish(studyParam));
 
         // 참석 여부 가져오기
@@ -88,7 +86,7 @@ public class StudyController {
 
         service.register(study);
 
-        rttr.addFlashAttribute("result", study.getSn());
+        rttr.addFlashAttribute("result", "register");
 
         // 만들어진 스터디의 상세조회 페이지로 이동한다.
         return "redirect:/study/get?sn=" + study.getSn();
@@ -119,7 +117,7 @@ public class StudyController {
 
         service.modify(study);
 
-        rttr.addFlashAttribute("result", study.getSn());
+        rttr.addFlashAttribute("result", "update");
 
         // 수정된 스터디의 상세조회 페이지로 이동한다.
         return "redirect:/study/get?sn=" + study.getSn();
@@ -132,13 +130,9 @@ public class StudyController {
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(sn);
 
-        log.info("============================sn : " + sn);
-
         if(service.remove(param) == 1) {
             rttr.addFlashAttribute("result", "success");
         }
-
-        log.info("============================결과 : " + grpSn + cri.getPageNum() + cri.getAmount());
 
         rttr.addAttribute("grpSn", grpSn);
         rttr.addAttribute("pageNum", cri.getPageNum());
@@ -154,5 +148,42 @@ public class StudyController {
         model.addAttribute("attendantList", service.getAttendantList(stdSn));
         model.addAttribute("waitingList", service.getWaitingList(stdSn));
     }
+
+    // 스터디 찜하기
+    @PostMapping("/wish")
+    public String wish(WishStudyVO wish, RedirectAttributes rttr) {
+        // 1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+
+        //임의로 설정
+        wish.setUserId("boseung@naver.com");
+
+        StudyParamVO studyParam = new StudyParamVO();
+        studyParam.setStdSn(wish.getStdSn());
+        studyParam.setUserId(wish.getUserId());
+        
+        // 2. 해당 wish가 존재하면 삭제
+        if(service.getWish(studyParam) != null) {
+            if(service.removeWish(studyParam) == 1) {
+                rttr.addFlashAttribute("result", "cancel");
+            }
+        }else {
+            // 3. 해당 wish가 없으면 등록
+            if(service.registerWish(wish) == 1) {
+                rttr.addFlashAttribute("result", "wish");
+            };
+        }
+
+        //3. 다시 get 페이지로 가서 결과 모달창 띄우기
+        return "redirect:/study/get?sn=" + wish.getStdSn();
+        
+        // 4. get 페이지에서 하트가 바뀌어있어야함
+    }
+
+    // 스터디 참가/탈퇴
+    @GetMapping("attend")
+    public String attend() {
+        return "redirect:/study/get?sn = ";
+    }
+
 
 }

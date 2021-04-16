@@ -43,6 +43,23 @@
         </c:if>
     </div>
 
+    <!-- 스터디 삭제 확인 모달 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">정상적으로 처리되었습니다.</div>
+                <div class = "modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form id="actionForm" action="/study/list" method="get">
         <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
         <input type="hidden" name="amount" value="${pageMaker.cri.amount}">
@@ -52,6 +69,26 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+
+        <!-- 스터디 삭제 후 모달 창-->
+        let result = '<c:out value="${result}"/>';
+
+        checkModal(result);
+
+        history.replaceState({}, null, null);
+
+
+        function checkModal(result) {
+            if(result === '' || history.state) {
+                return;
+            }
+
+            if("success" === result) {
+                $(".modal-body").html("스터디가 정상적으로 삭제되었습니다.");
+            }
+
+            $("#myModal").modal("show");
+        }
 
         let actionForm = $("#actionForm");
 
