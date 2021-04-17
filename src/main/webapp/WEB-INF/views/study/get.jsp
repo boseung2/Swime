@@ -49,7 +49,7 @@
                 <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="/study/attendCancel">참석 취소하기</a></c:when>
                 <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
                 <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
-                <c:otherwise><a class="attend btn btn-primary" href="/study/attend">참석하기</a></c:otherwise>
+                <c:otherwise><a class="attend btn btn-primary" href="javascript:attendService.attend(); return false;">참석하기</a></c:otherwise>
             </c:choose>
 
             <br><br>
@@ -126,7 +126,7 @@
         </div>
     </div>
 
-    <form id="actionForm" action="/study/list" method="get">
+    <form id="actionForm" action="" method="get">
         <input type="hidden" name="pageNum" value="${cri.pageNum}">
         <input type="hidden" name="amount" value="${cri.amount}">
         <input type="hidden" name="grpSn" value="${study.grpSn}">
@@ -138,6 +138,32 @@
 
 <script type="text/javascript">
 
+    let attendService = (function() {
+
+        //즉시실행함수 생성
+        function attend(studyParam, callback, error) {
+            $.ajax({
+                type: 'post',
+                url: '/study/attend',
+                data : JSON.stringify(studyParam),
+                contentType: "application/json; charset=utf-8",
+                success : function (result, status, xhr) {
+                    if (callback) {
+                        callback(result);
+                    }
+                },
+                error: function (xhr, status, er) {
+                    if (error) {
+                        error(er);
+                    }
+                }
+            })
+        }
+        return {
+            attend : attend
+        };
+    })();
+
     $(document).ready(function(){
 
         <!-- 스터디 생성/수정/찜/찜 삭제 후 모달 창-->
@@ -145,12 +171,17 @@
 
         checkModal(result);
 
-        history.replaceState({}, null, null);
-
-
         function checkModal(result) {
-            if(result === '' || history.state) {
+
+            console.log("checkModal")
+            console.log("checkModal result= " + result);
+
+            if(result === '') {
                 return;
+            }
+
+            if(result === 'success') {
+
             }
 
             switch (result) {
@@ -163,8 +194,19 @@
                 case "wish" :
                     $(".modal-body").html("스터디를 찜했습니다.");
                     break;
-                case "cancel" :
+                case "cancelWish" :
                     $(".modal-body").html("스터디 찜이 취소되었습니다.");
+                    break;
+                case "attend" :
+                    $(".modal-body").html("참석 완료되었습니다.");
+                    //참석 버튼을 탈퇴버튼으로 바꾸기
+
+                    break;
+                case "failAttend" :
+                    $(".modal-body").html("참석 실패하였습니다.");
+                    break;
+                case "cancelAttend" :
+                    $(".modal-body").html("참석 취소되었습니다.");
             }
 
             $("#myModal").modal("show");
@@ -175,6 +217,9 @@
 
         $(".list").on("click", function(e) {
             e.preventDefault();
+            actionForm.attr("action", "/group/get")
+            actionForm.find("input[name='grpSn']").remove();
+            actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.grpSn} + "'>");
             actionForm.submit();
         });
 
@@ -182,7 +227,7 @@
         $(".remove").on("click", function(e) {
             e.preventDefault();
 
-            actionForm.append("<input type='hidden' name='sn' value='" + ${study.sn} + "'>");
+            actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
             actionForm.attr("action", "/study/remove");
             actionForm.attr("method", "post");
             actionForm.submit();
@@ -199,46 +244,26 @@
             actionForm.submit();
         });
 
-        <!-- 참석하기 눌렸을때 -->
-        $(".attend").on("click", function(e) {
+        // 임의의 유저 설정함
+        $('.attend').on("click", function (e) {
+
             e.preventDefault();
 
-            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
-            actionForm.attr("action", "/study/attend");
-            actionForm.attr("method", "post");
-            actionForm.submit();
-        });
+            attendService.attend(
+                {stdSn : ${study.sn}, userId : "boseung@naver.com"},
+                function(result) {
+                    console.log(result);
+                    checkModal(result);
+                },
+                function(err) {
+                    console.log('failAttend');
+                    checkModal("failAttend");
+                }
+            );
+        })
 
-        $(".cancelAttend").on("click", function(e) {
-            e.preventDefault();
+    });
 
-            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
-            actionForm.attr("action", "/study/cancelAttend");
-            actionForm.attr("method", "post");
-            actionForm.submit();
-        });
-
-        let attendService = function() {
-            function attend(studyParam, callback, error) {
-
-                $.ajax({
-                    type: 'post',
-                    url: '/study/attend',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (result, status, xhr) {
-                        if (callback) {
-                            callback(result);
-                        }
-                    },
-                    error: function (xhr, status, er) {
-                        if (error) {
-                            error(er);
-                        }
-                    }
-                })
-            }
-        }
-    })();
 </script>
 
 <%@include file="../includes/footer.jsp" %>

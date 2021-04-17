@@ -5,8 +5,6 @@ import com.swime.domain.*;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import oracle.ucp.proxy.annotation.Post;
-import org.omg.CORBA.INTERNAL;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +22,14 @@ public class StudyController {
     private StudyService service;
 
     // 스터디 리스트 페이징처리
-    @GetMapping("/list")
-    public void getList(long grpSn, StudyCriteria cri, Model model) {
-        model.addAttribute("grpSn", grpSn);
-        model.addAttribute("list", service.getList(cri, grpSn));
-        model.addAttribute("pageMaker", new StudyPageDTO(cri, service.countStudy(grpSn)));
+    @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<GroupStudyListDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
+
+        StudyCriteria cri = new StudyCriteria(page, 3);
+        GroupStudyListDTO list = service.getList(cri, grpSn);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     // 스터디 상세조회
@@ -69,7 +70,7 @@ public class StudyController {
     public String register(StudyVO study, RedirectAttributes rttr) {
         // 임의로 설정
         study.setRepresentation("qwer8203@naver.com");
-        study.setGrpSn(222);
+        study.setGrpSn(617);
 
         // 함수로 빼기
         if(study.getOnUrl() != null) {
@@ -139,7 +140,7 @@ public class StudyController {
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 
-        return "redirect:/study/list";
+        return "redirect:/group/get?sn=" + grpSn;
     }
     
     // 스터디 멤버 관리 - 참여멤버/ 대기멤버 가져오기
@@ -165,7 +166,7 @@ public class StudyController {
         // 2. 해당 wish가 존재하면 삭제
         if(service.getWish(studyParam) != null) {
             if(service.removeWish(studyParam) == 1) {
-                rttr.addFlashAttribute("result", "cancel");
+                rttr.addFlashAttribute("result", "cancelWish");
             }
         }else {
             // 3. 해당 wish가 없으면 등록
@@ -181,17 +182,19 @@ public class StudyController {
     }
 
     // 스터디 참가
-    @PostMapping(value = "/attend", produces = "text/plain; charset =UTF-8")
+    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     @ResponseBody
-    public ResponseEntity<String> attend(StudyParamVO studyParam) {
+    public ResponseEntity<String> attend(@RequestBody StudyParamVO studyParam) {
         //1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-        studyParam.setUserId("boseung@naver.com"); //임의의 유저
+        log.info("======================================stdSn = " + studyParam.getStdSn());
+        log.info("======================================UserId = " + studyParam.getUserId());
 
         //2. 이미 참가명단에 있는지 확인
         // 가입한적x : 1/ 탈퇴 : 2/ 가입,검토중,영구탈퇴 : -1
         int result = service.checkAttendantForRegister(studyParam);
+        log.info("======================================result = " + result);
 
-        if (result == -1) return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
+        if (result == -1) return new ResponseEntity<>("failAttend", HttpStatus.BAD_GATEWAY);
 
         //3. 해당 스터디에 설문이 있는지 확인
         // 3-1. 설문 없는 경우
@@ -202,14 +205,14 @@ public class StudyController {
             // 가입한적 없는 경우
             if(result == 1) {
                 return service.registerAttendant(studyParam) == 1
-                    ? new ResponseEntity<>("success", HttpStatus.OK)
-                    : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                    ? new ResponseEntity<>("attend", HttpStatus.OK)
+                    : new ResponseEntity<>("failAttend", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }else {
                 // 전에 탈퇴한 경우
                 return service.modifyAttendant(studyParam) == 1
-                    ? new ResponseEntity<>("success", HttpStatus.OK)
-                    : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                    ? new ResponseEntity<>("attend", HttpStatus.OK)
+                    : new ResponseEntity<>("failAttend", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         // 3-2. 설문 있는 경우 -> 설문 뿌려주기
         // 아직 처리 안함
