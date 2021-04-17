@@ -32,8 +32,8 @@ public class GroupAttendServiceImpl implements GroupAttendService{
     }
 
     @Override
-    public GroupAttendVO get(GroupAttendVO groupAttend) {
-        GroupAttendVO returnVO = groupAttendMapper.read(groupAttend);
+    public GroupAttendVO get(Long sn) {
+        GroupAttendVO returnVO = groupAttendMapper.read(sn);
         return returnVO;
     }
 
@@ -46,6 +46,13 @@ public class GroupAttendServiceImpl implements GroupAttendService{
     @Transactional
     @Override
     public int withdraw(GroupAttendVO groupAttend) {
+
+        GroupAttendVO vo = groupAttendMapper.read(groupAttend.getSn());
+
+        if(vo == null) {
+            return 0;
+        }
+
         groupAttend.setStatus("GRUS02"); // GRUS02 탈퇴
         int result = groupAttendMapper.update(groupAttend);
         // 해당 모임 가입자 수를 모임정보에 업데이트한다.

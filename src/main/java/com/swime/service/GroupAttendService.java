@@ -9,7 +9,7 @@ public interface GroupAttendService {
     //모임에 가입한다.
     int attend(GroupAttendVO groupAttend);
 
-    GroupAttendVO get(GroupAttendVO groupAttend);
+    GroupAttendVO get(Long sn);
 
     // 해당 모임 가입인원들을 보여준다.
     List<GroupAttendVO> getList(Long grpSn);
