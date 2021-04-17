@@ -2,6 +2,7 @@
         pageEncoding="UTF-8"%>
 
 <%@include file="../includes/header.jsp" %>
+<c:set var="defaultImg" value="https://streamyard.com/resources/assets/images/docs/connect-a-facebook-group/connect-a-facebook-group.jpg"/>
 
 <!-- Page Content -->
     <div class="container">
@@ -13,7 +14,9 @@
             <div class="col-md-4 mb-5">
                 <div class="card h-100">
                     <div class="card-body">
-                        <img class="img-fluid rounded mb-4 mb-lg-0" src="http://placehold.it/900x400" alt="">
+                        <div class="uploadResult">
+                            <img class="img-fluid rounded mb-4 mb-lg-0" src="${!empty group.picture ? '/display?fileName=' += group.picture : defaultImg}" alt="">
+                        </div>
                         <div class="flex-container" style="display: flex;">
                         <c:forEach items="${group.tags}" var="tag">
                             <div style="background-color: #f1f1f1;

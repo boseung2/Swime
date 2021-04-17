@@ -120,11 +120,13 @@ ul {
 }
 
 /* 첨부파일 */
-.uploadResult {
-    width: 100%;
-    background-color: gray;
+
+.uploadResult image{
+    width: 500px;
+    height: 300px;
 }
 
+/*
 .uploadResult ul{
     display:flex;
     flex-flow: row;
@@ -146,6 +148,8 @@ ul {
 .uploadResult ul li span {
     color: white;
 }
+
+ */
 
 .bigPictureWrapper {
     position: absolute;
