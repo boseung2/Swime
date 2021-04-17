@@ -25,7 +25,7 @@ public class passwordTest {
 
     @Test
     public void test(){
-        String password = "member";
+        String password = "1";
         String encode = passwordEncoder.encode(password);
         log.info(encode);
         Assert.assertNotNull(encode);

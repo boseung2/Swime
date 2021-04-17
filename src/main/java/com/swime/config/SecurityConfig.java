@@ -27,8 +27,8 @@ import javax.sql.DataSource;
 //@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Setter(onMethod_ = @Autowired)
-    private DataSource dataSource;
+//    @Setter(onMethod_ = @Autowired)
+//    private DataSource dataSource;
 
     @Override
     public void configure(HttpSecurity http) throws Exception{
@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/group","/include","/user").permitAll()
-                .antMatchers("/user").permitAll()
+//                .antMatchers("/user/infoDetail").access("isAuthenticated()")
                 .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
                 .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
         .and()
@@ -54,10 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/user/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("remember-me", "JSESSIONID")
-                .and()
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .disable();
+//        .and()
+//            .csrf()
+//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .disable()
         ;
 //        http
 //            .authorizeRequests()
@@ -83,13 +83,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        String getUserDetailQuery = "";
 
         auth
-             // 디테일서비스로 대신함
+            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
+            // 디테일서비스로 대신함
 //            .jdbcAuthentication()
 //                .dataSource(dataSource)
 //                .passwordEncoder(passwordEncoder())
 //                .usersByUsernameQuery(getUserQuery)
 //                .authoritiesByUsernameQuery(getUserDetailQuery)
-            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
 //            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
         ;
 

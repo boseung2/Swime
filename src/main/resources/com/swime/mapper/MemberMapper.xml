@@ -63,11 +63,11 @@
         update TUSER
         set password = #{password},
             name = #{name},
-            picture = #{picture, jdbcType=VARCHAR},
-            birth = #{birth, jdbcType=VARCHAR},
-            last_login_date = #{lastLoginDate, jdbcType=DATE},
+            picture = NVL(#{picture, jdbcType=VARCHAR}, null),
+            birth = NVL(#{birth, jdbcType=VARCHAR}, null),
+            last_login_date = NVL(#{lastLoginDate, jdbcType=DATE}, null),
             email_auth = #{emailAuth, jdbcType=DATE},
-            status = #{status}
+            status = #{status, jdbcType=VARCHAR}
         where id = #{id}
     </update>
 
@@ -114,5 +114,12 @@
         delete from tuser_auth_key
         where id = #{id}
     </delete>
+
+    <update id="updateAuthdate">
+        update TUSER
+        set email_auth = CURRENT_DATE,
+            status = 'USST01'
+        where id = #{id}
+    </update>
     
 </mapper>

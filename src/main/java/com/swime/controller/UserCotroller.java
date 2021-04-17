@@ -20,16 +20,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
-@Transactional
 public class UserCotroller {
 
 
@@ -52,6 +53,7 @@ public class UserCotroller {
     public void register(){
     }
 
+    @Transactional
     @PostMapping("/register")
     public String register(MemberVO vo, RedirectAttributes rttr){
         vo.setPassword(passwordEncoder.encode(vo.getPassword()));
@@ -73,11 +75,10 @@ public class UserCotroller {
     }
 
     @PostMapping("/modify")
-    public ResponseEntity<String> modify(@RequestBody MemberVO vo,
-                                         @RequestBody MemberHistoryVO hvo){
-        return service.modify(vo, hvo) ?
-                new ResponseEntity<>("modify Success", HttpStatus.OK) :
-                new ResponseEntity<>("modify Fail", HttpStatus.BAD_REQUEST);
+    public ResponseEntity modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
+        log.info("test_Modify = " + vo.getPassword());
+        service.modify(vo, hvo);
+        return service.modify(vo, hvo) ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/remove")
@@ -97,10 +98,17 @@ public class UserCotroller {
         return service.getlist();
     }
 
+    @Transactional
     @GetMapping("/auth")
     public String auth(String key, String id){
+        // 키를 조회하고
         if(!service.isKey(id, key)) return null;
-        if(!service.deleteKey(id)) return null;
+        // 키를 삭제
+        service.deleteKey(id);
+        // 멤버 이력을 수정하고
+//        service.registerHistory(vo);
+        // 멤버 항목중 인증날짜를 수정한다
+        service.updateAuthdate(id);
         return "redirect:/user/AuthSuccess";
     }
 
@@ -109,8 +117,41 @@ public class UserCotroller {
     }
 
     @GetMapping("/info")
-    public void info(){
+    public void infotest(){
     }
+
+    @GetMapping("/infoDetail")
+    public void infoDetail(Model model, String id){
+        model.addAttribute("MemberVo", service.get(id));
+    }
+
+    @GetMapping("/details/group")
+    public void group(){
+    }
+
+    @GetMapping("/details/study")
+    public void study(){
+    }
+
+    @GetMapping("/details/written")
+    public void written(){
+    }
+
+    @GetMapping("/details/reply")
+    public void reply(){
+    }
+
+    @GetMapping("/details/profile")
+    public void profile(Model model, String id){
+        model.addAttribute("MemberVo", service.get(id));
+    }
+
+
+    String dateFormat(Date date){
+
+        return null;
+    }
+
 
 
 }

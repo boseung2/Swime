@@ -5,6 +5,9 @@
 
 
 <div>
+    <div>
+        ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"] != null ? '유효하지 않은 접근입니다<br>아이디와 비밀번호를 확인하세요' : null}
+    </div>
     <form action="/user/login" method="post">
         <div>
             <input type="email" id="email" name="id" placeholder="name@example.com">
