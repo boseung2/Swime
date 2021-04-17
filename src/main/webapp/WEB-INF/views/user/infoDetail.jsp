@@ -34,13 +34,14 @@
         </div>
     </c:if>
     <c:if test="${empty MemberVo}">
-        <h1>그런 사용자는 존재하지 않습니다!.</h1>
+        <h1>그런 사용자는 존재하지 않습니다!!!</h1>
     </c:if>
 
 </div>
 
 <script>
     $(".topnav > a").click(function() {
+
         $(".topnav > a").removeClass('active');
         $(this).addClass('active')
         console.log(this.id +" click!!")
