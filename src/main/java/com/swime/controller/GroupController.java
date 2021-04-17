@@ -50,8 +50,8 @@ public class GroupController {
         log.info(">>>>>>>>>>>>>>>>>>>>>");
         log.info(group);
 
-        if (group.getAttachList()  != null) {
-            group.getAttachList().forEach(attach -> log.info(attach));
+        if (group.getAttach()  != null) {
+            log.info(group.getAttach());
         }
 
         // 모임을 등록한다.
@@ -83,11 +83,11 @@ public class GroupController {
     @PostMapping("/remove")
     public String remove(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr) {
 
-        List<GroupAttachVO> attachList = groupService.getAttachList(sn);
+        GroupAttachVO attach = groupService.getAttach(sn);
 
         if(groupService.remove(groupService.get(sn)) == 1) {
 
-            deleteFiles(attachList);
+            deleteFile(attach);
 
             rttr.addFlashAttribute("result", "success");
 
@@ -98,36 +98,36 @@ public class GroupController {
         return "redirect:/group/list" + cri.getListLink();
     }
 
-    @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/getAttach", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<GroupAttachVO>> getAttachList(Long grpSn) {
+    public ResponseEntity<GroupAttachVO> getAttach(Long grpSn) {
 
         log.info("getAttachList" + grpSn);
 
-        return new ResponseEntity<>(groupService.getAttachList(grpSn), HttpStatus.OK);
+        return new ResponseEntity<>(groupService.getAttach(grpSn), HttpStatus.OK);
     }
 
-    private void deleteFiles(List<GroupAttachVO> attachList) {
+    private void deleteFile(GroupAttachVO attach) {
 
-        if(attachList == null || attachList.size() == 0) {
+        if(attach == null) {
             return;
         }
 
-        log.info("delete attach files..........");
-        log.info(attachList);
+        log.info("delete attach file..........");
+        log.info(attach);
 
-        attachList.forEach(attach -> {
-            try {
-                Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
-                Files.deleteIfExists(file);
-                if(Files.probeContentType(file).startsWith("image")) {
-                    Path thumbNail = Paths.get("C:\\upload||"+attach.getUploadPath()+"\\s_"+attach.getUuid()+"_"+attach.getFileName());
-                    Files.delete(thumbNail);
-                }
-            } catch(Exception e) {
-                log.error("delete file error" + e.getMessage());
+
+        try {
+            Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
+            Files.deleteIfExists(file);
+            if(Files.probeContentType(file).startsWith("image")) {
+                Path thumbNail = Paths.get("C:\\upload||"+attach.getUploadPath()+"\\s_"+attach.getUuid()+"_"+attach.getFileName());
+                Files.delete(thumbNail);
             }
-        });
+        } catch(Exception e) {
+            log.error("delete file error" + e.getMessage());
+        };
+
     }
 
     /*

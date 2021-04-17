@@ -8,8 +8,8 @@
 
     <!-- Heading Row -->
     <div class="row align-items-center my-5">
-        <div class="col-lg-7">
-            <img class="img-fluid rounded mb-4 mb-lg-0" src="http://placehold.it/900x400" alt="">
+        <div class="uploadResult">
+
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
@@ -60,7 +60,7 @@
     <div id="member">
         <h4>모임멤버</h4>
         <c:forEach items="${attendList}" var="member" varStatus="status">
-            <img src="../../../resources/image/img_avatar2.png" alt="Avatar" class="avatar">
+            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
             <span><c:out value="${member.name}"/></span>
             <span><c:out value="${member.grpRole}"/></span>
             <c:if test="${status.count % 3 == 0}">
@@ -94,17 +94,17 @@
     </div>
 
     <!-- 첨부파일 -->
-    <h4>사진</h4>
-    <div class="uploadResult">
-        <ul>
-        </ul>
-    </div>
+<%--    <h4>사진</h4>--%>
+<%--    <div class="uploadResult">--%>
+<%--        <ul>--%>
+<%--        </ul>--%>
+<%--    </div>--%>
 
     <!-- 첨부파일 확대 -->
-    <div class="bigPictureWrapper">
-        <div class="bigPicture">
-        </div>
-    </div>
+<%--    <div class="bigPictureWrapper">--%>
+<%--        <div class="bigPicture">--%>
+<%--        </div>--%>
+<%--    </div>--%>
 
     <!-- container -->
 
@@ -393,30 +393,19 @@
 
             let grpSn = '<c:out value="${group.sn}"/>';
 
-            $.getJSON("/group/getAttachList", {grpSn: grpSn}, function(arr) {
-                console.log(arr);
-
-                let str = "";
+            $.getJSON("/group/getAttach", {grpSn: grpSn}, function(arr) {
 
                 $(arr).each(function(i, attach) {
 
                     if(attach.fileType) {
-                        let fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
-
-                        str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'><div>";
-                        str += "<img src='/display?fileName="+fileCallPath+"'>";
-                        str += "</div>";
-                        str += "</li>";
+                        let fileCallPath = encodeURIComponent(attach.uploadPath+"/"+attach.uuid+"_"+attach.fileName);
+                        str = "<img src='/display?fileName="+fileCallPath+"' style='width:500px; height:300px;'>";
                     } else {
-                        str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'><div>";
-                        str += "<span> "+attach.fileName+"</span><br/>";
-                        str += "<img src='/resources/img/attach.png'>";
-                        str += "</div>";
-                        str += "</li>";
+                        str = "<img src='/resources/img/attach.png'>";
                     }
                 })
 
-                $(".uploadResult ul").html(str);
+                $(".uploadResult").html(str);
             });
         })();
 

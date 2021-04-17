@@ -25,6 +25,6 @@ public interface GroupService {
 
     public int getTotal(GroupCriteria cri);
 
-    List<GroupAttachVO> getAttachList(Long grpSn);
+    GroupAttachVO getAttach(Long grpSn);
 
 }

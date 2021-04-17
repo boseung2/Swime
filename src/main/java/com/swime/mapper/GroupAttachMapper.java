@@ -10,7 +10,7 @@ public interface GroupAttachMapper {
 
     void delete(String uuid);
 
-    List<GroupAttachVO> findByGrpSn(Long grpSn);
+    GroupAttachVO findByGrpSn(Long grpSn);
 
     void deleteAll(Long grpSn);
 
