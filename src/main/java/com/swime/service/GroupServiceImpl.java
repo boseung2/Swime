@@ -31,16 +31,6 @@ public class GroupServiceImpl implements GroupService{
         // 1. 기본정보 등록
         groupMapper.insertSelectKey(group);
 
-        // 첨부파일등록
-        if(group.getAttachList() == null || group.getAttachList().size() <= 0) {
-            return 0;
-        }
-
-        group.getAttachList().forEach(attach -> {
-            attach.setGrpSn(group.getSn());
-            groupAttachMapper.insert(attach);
-        });
-
         // 2. 모임참여리스트에 모임장등록한다.
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(group.getSn());
@@ -53,6 +43,16 @@ public class GroupServiceImpl implements GroupService{
         group.getTags().forEach(tag -> groupTagMapper.insert(new GroupTagVO(group.getSn(), tag)));
 
         // ***** 등록자 id 세션에서 가져와야함 *****
+
+        // 첨부파일등록
+        if(group.getAttachList() == null || group.getAttachList().size() <= 0) {
+            return 0;
+        }
+
+        group.getAttachList().forEach(attach -> {
+            attach.setGrpSn(group.getSn());
+            groupAttachMapper.insert(attach);
+        });
 
         return 1;
     }
