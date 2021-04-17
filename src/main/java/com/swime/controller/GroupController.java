@@ -36,6 +36,7 @@ public class GroupController {
         log.info("list: " + cri);
         model.addAttribute("list", groupService.getListWithPaging(cri));
         int total = groupService.getTotal(cri);
+        log.info(">>>>>>>>>>>>>>>total" + total);
         model.addAttribute("pageMaker", new GroupPageDTO(cri, total));
     }
 
