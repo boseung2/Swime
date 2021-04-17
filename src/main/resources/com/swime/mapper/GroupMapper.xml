@@ -75,6 +75,7 @@
         select count(*)
         from tgrp
         where sn > 0
+        and status != 'GRST03'
     </select>
 
 </mapper>
