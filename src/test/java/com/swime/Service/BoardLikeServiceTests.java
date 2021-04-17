@@ -34,7 +34,7 @@ public class BoardLikeServiceTests {
         BoardLikeVO boardLike = new BoardLikeVO();
 
         //boardLike.setLikeSn(44L);
-        boardLike.setBrdSn(1L);
+        boardLike.setBrdSn(199L);
         boardLike.setUserId("toywar1@naver.com");
 
         service.register(boardLike);

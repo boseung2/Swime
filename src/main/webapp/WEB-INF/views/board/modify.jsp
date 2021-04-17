@@ -13,7 +13,6 @@
 
 
         <div class="form-group">
-
             <label for="sn">번호</label>
             <input type="text" class="form-control" name="sn" id="sn"
                    value="<c:out value="${board.sn}"/>" readonly="readonly">
@@ -63,11 +62,15 @@
         </div>
 
         <input type="hidden" name="status" value="${board.status}">
+        <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
+        <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
+
         <button type="submit" data-oper="modify" class="btn btn-primary">수정</button>
         <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
-        <a id="back" class="btn btn-dark">취소</a>
+        <button type="submit" data-oper="list" class="btn btn-dark">목록</button>
+<%--        <a id="back" class="btn btn-dark">취소</a>--%>
 
-<%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
+        <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
         <sec:csrfInput/>
     </form>
 </div>
@@ -81,20 +84,26 @@
         $("button").on("click", function(e){
             e.preventDefault();
 
-            let operation = $(this).data("oper");
+            let operation = $(this).data('oper');
 
             console.log(operation);
 
-            if(operation === 'remove'){
+            if(operation === 'remove') {
                 formObj.attr("action", "/board/remove");
-
+            } else if (operation === 'list') {
+                formObj.attr("action", '/board/list').attr("method", "get");
+                let pageNumTag = $("input[name='pageNum']").clone();
+                let amountTag = $("input[name='amount']").clone();
+                formObj.empty();
+                formObj.append(pageNumTag);
+                formObj.append(amountTag);
             }
             formObj.submit();
-        })
-
-        $("#back").on("click", function(){
-            window.history.back();
         });
+
+        // $("#back").on("click", function(){
+        //     window.history.back();
+        // });
     });
 
 </script>

@@ -54,6 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .invalidateHttpSession(true)
                 .deleteCookies("remember-me", "JSESSIONID")
+        .and()
+            .csrf()
+                .disable()
         ;
 //        http
 //            .authorizeRequests()
@@ -85,8 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .passwordEncoder(passwordEncoder())
 //                .usersByUsernameQuery(getUserQuery)
 //                .authoritiesByUsernameQuery(getUserDetailQuery)
-//            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
-            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
+            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
+//            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
         ;
 
     }

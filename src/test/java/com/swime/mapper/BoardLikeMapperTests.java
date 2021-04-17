@@ -48,7 +48,7 @@ public class BoardLikeMapperTests {
     public void testDelete(){
 
         log.info("DELETE COUNT: " +
-                mapper.delete(1L,"toytoy@naver.com"));
+                mapper.delete(1L,"toywar1@naver.com"));
     }
 
     @Test

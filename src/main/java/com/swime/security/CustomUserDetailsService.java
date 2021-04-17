@@ -19,8 +19,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberVO vo = mapper.readWithAuth(username);
-        vo.getAuthList().stream().forEach(auth -> { log.info(auth.getAuth());});
+        log.info(vo);
         if(vo == null) throw new UsernameNotFoundException(username);
+        vo.getAuthList().stream().forEach(auth -> { log.info(auth.getAuth());});
         return new CustomUser(vo);
     }
 }

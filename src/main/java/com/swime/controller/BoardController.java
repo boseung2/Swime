@@ -1,9 +1,12 @@
 package com.swime.controller;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.BoardLikeVO;
 import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
+import com.swime.service.BoardLikeService;
 import com.swime.service.BoardService;
+import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class BoardController {
 
     private BoardService service;
+    private BoardLikeService boardLikeService;
+    private ReplyService replyService;
 
 
 //    @GetMapping("/list")
@@ -65,14 +70,20 @@ public class BoardController {
 
         log.info("/get or modify");
         model.addAttribute("board", service.get(sn));
+        model.addAttribute("reply", replyService.get(sn));
+        //좋아요 처리 나중에 다시 하기----------
+        model.addAttribute("isLike", true);
+        model.addAttribute("count", boardLikeService.getBoardLikeCnt(1L));
 
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
 
     }
 
     @PostMapping("/modify")
-    public String modify(BoardVO board, RedirectAttributes rttr) {
+    public String modify(BoardVO board, @ModelAttribute("cri") BoardCriteria cri,
+                         RedirectAttributes rttr) {
 
+        //상위 고정도 나중에하기.
         BoardVO boardVO = service.get(board.getSn());
         if(board.getTopFix().equals("")) board.setTopFix("BOFI02");
 
@@ -81,18 +92,39 @@ public class BoardController {
         if (service.modify(board)) {
             rttr.addFlashAttribute("result", "success");
         }
+
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
+
         return "redirect:/board/list";
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam("sn") Long sn, RedirectAttributes rttr) {
+    public String remove(@RequestParam("sn") Long sn, @ModelAttribute("cri") BoardCriteria cri,
+                         RedirectAttributes rttr) {
 
         log.info("remove: " + sn);
         if (service.remove(sn)) {
             rttr.addFlashAttribute("result", "success");
         }
 
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
+
         return "redirect:/board/list";
+
+    }
+
+    //좋아요 기능 구현
+    @PostMapping("/clickLike")
+    public int like(@RequestParam("brdSn") Long brdSn, @RequestParam("userId") String userId){
+
+        BoardLikeVO boardLike = new BoardLikeVO();
+
+        boardLike.setBrdSn(brdSn);
+        boardLike.setUserId(userId);
+
+        return boardLikeService.register(boardLike);
 
     }
 }

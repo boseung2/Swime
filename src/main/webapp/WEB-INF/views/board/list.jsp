@@ -71,12 +71,13 @@
                 <div class="inline" id="role"><c:out value="${board.grpRole}"/></div>
 
                 <div class="inline" id="date">
-                    <fmt:formatDate pattern="YYYY-MM-dd hh:mm" value="${board.regDate}"/>
+                    <fmt:formatDate pattern="YYYY-MM-dd HH:mm" value="${board.regDate}"/>
                 </div>
 <%--                <c:out value="${board.sn}"/>--%>
+<%--                "/board/get?sn=<c:out value="${board.sn}"/>"--%>
                 <div class="width">
                     <b>
-                        <a class="move" href="/board/get?sn=<c:out value="${board.sn}"/>">
+                        <a class="move" href='<c:out value="${board.sn}"/>'>
                     <c:out value="${board.title}"/></a>
                     </b>
                 </div>
@@ -181,13 +182,13 @@
             actionForm.find("input[name='pageNum']").val($(this).attr("href"));
             actionForm.submit();
         });
-        //여기 url에 +붙는데..317
-        // $(".move").on("click", function(e){
-        //     e.preventDefault();
-        //     actionForm.append("<input type='hidden' name='sn' value='"+$(this).attr("href")+"'>");
-        //     actionForm.attr("action", "/board/get");
-        //     actionForm.submit();
-        // });
+
+        $('.move').on("click", function(e) {
+            e.preventDefault();
+            actionForm.append("<input type='hidden' name='sn' value='" + $(this).attr("href") + "'>");
+            actionForm.attr("action", "/board/get");
+            actionForm.submit();
+        })
 
 
 

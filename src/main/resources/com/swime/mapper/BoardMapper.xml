@@ -72,54 +72,34 @@
     <select id="getListWithPaging" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
     <![CDATA[
         select
-            sn,
-            grp_sn,
-            user_id,
-            name,
-            picture,
-            title,
-            content,
-            like_cnt,
-            reply_cnt,
-            top_fix,
-            status,
-            reg_date,
-            upd_date
+            sn,grp_sn,user_id,name,picture,title,content,
+            like_cnt,reply_cnt, top_fix,status,reg_date,upd_date
         from
             (
-            select /*+INDEX_DESC(tbrd pk_tbrd) */
-                rownum rn,
-                b.sn,
-                b.grp_sn,
-                b.user_id,
-                u.name,
-                u.picture,
-                b.title,
-                d.content,
-                b.like_cnt,
-                b.reply_cnt,
-                b.top_fix,
-                b.status,
-                b.reg_date,
-                b.upd_date
-            from
-                tuser u,
-                tbrd b,
-                tbrd_det d
-            where
-                b.status != 'BOST02'
-            and
+                select /*+INDEX_DESC(tbrd pk_tbrd) */
+                    rownum rn,b.sn,b.grp_sn,b.user_id,u.name,u.picture,b.title,d.content,
+                    b.like_cnt,b.reply_cnt,b.status,b.reg_date,b.upd_date, substr(top_fix, 6, 1) top_fix
+                from
+                    tuser u,
+                    tbrd b,
+                    tbrd_det d,
+                    tgrp g
+                where
+                    b.status != 'BOST02'
+                and
                 b.sn = d.brd_sn
-            and
+                and
                 u.id = b.user_id
-            and
+                and
+                    b.grp_sn = g.sn
+                and
                 rownum <= #{pageNum} * #{amount}
+                order by
+                    top_fix desc,
+                    reg_date desc
             )
-            where rn > (#{pageNum} - 1) * #{amount}
-            order by
-                     top_fix desc,
-                     reg_date desc
-        ]]>
+        where rn > (#{pageNum} - 1) * #{amount}
+    ]]>
     </select>
 
     <insert id="insert">
@@ -157,12 +137,12 @@
         title
         )
         values
-        (seq_tbrd.nextval, #{grpSn}, #{userId}, #{title}
+        (#{sn}, #{grpSn}, #{userId}, #{title}
         )
         into
         tbrd_det(brd_sn, content)
         values
-        (seq_tbrd.nextval, #{content})
+        (#{sn}, #{content})
         select * from dual
     </insert>
 

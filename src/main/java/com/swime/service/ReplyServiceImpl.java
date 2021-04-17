@@ -30,7 +30,6 @@ public class ReplyServiceImpl implements ReplyService{
         *   1-2 댓글의 댓글인 경우 -> 그룹번호가 댓글의 그룹번호가 된다.
         * */
 
-
         int seq = replyMapper.getSequence(); // sequence를 가져온다.
         reply.setSn(seq); // 가져온 sequence를 sn에 set한다.
 

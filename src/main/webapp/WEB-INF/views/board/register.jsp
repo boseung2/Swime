@@ -24,7 +24,11 @@
 
         <div class="form-group">
             <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="userId">
+            <input type="text" class="form-control" id="userId" name="userId" value="
+                <sec:authorize access="isAuthenticated()">
+                   <sec:authentication property="principal.username"/>
+                </sec:authorize>
+">
         </div>
 
         <div class="form-group">
@@ -62,6 +66,7 @@
 
         <button type="submit" class="btn btn-primary">등록</button>
         <button id="back" type="reset" class="btn btn-dark">취소</button>
+
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     </form>

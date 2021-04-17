@@ -33,7 +33,7 @@ public class ReplyServiceTests {
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(183L);
+        reply.setBrdSn(197L);
         reply.setUserId("qwer9827@naver.com");
         reply.setContent("부모 댓글 카운트 증가3");
         reply.setStatus("RPST01");
@@ -60,11 +60,11 @@ public class ReplyServiceTests {
     public void testUpdate(){
         ReplyVO reply = new ReplyVO();
 
-        reply.setSn(124);
+        reply.setSn(47);
         //reply.setBrdSn(4L);
-        reply.setUserId("qwer8159@naver.com");
+        //reply.setUserId("toywar1@naver.com");
         reply.setContent("부모 댓글/////");
-        reply.setStatus("RPST01");
+        reply.setStatus("RPST02");
 
         service.modify(reply);
 
