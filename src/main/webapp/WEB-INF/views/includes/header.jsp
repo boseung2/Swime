@@ -36,6 +36,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
+
 </head>
 
 <body>
@@ -59,7 +60,7 @@
 </div>
 
 <form id="logout" action="/user/logout" method="post">
-<%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
+    <%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
     <sec:csrfInput/>
 </form>
 

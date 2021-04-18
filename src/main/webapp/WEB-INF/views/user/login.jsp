@@ -18,12 +18,12 @@
             <label for="password">Password</label>
         </div>
         <div>
-            <input type="checkbox" id="check" name="remember-me" value="remember-me">
-            <label for="check">Remember me</label>
+            <input type="checkbox" id="check" name="remember-me">
+            <label for="check">자동로그인</label>
         </div>
 
         <sec:csrfInput/>
-<%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
+        <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
 
         <div>
             <input type="submit" value="Login">
