@@ -3,8 +3,6 @@ package com.swime.service;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.MemberMapper;
-import com.swime.util.MakeRandomValue;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,9 @@ public class MemberServiceImpl implements MemberService{
     @Setter(onMethod_ = @Autowired)
     private MemberMapper mapper;
 
+    @Setter(onMethod_ = @Autowired)
+    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public MemberVO get(String id) {
@@ -38,9 +39,15 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public boolean modify(MemberVO vo){
+        registerHistory(vo);
+        return mapper.update(vo) == 1;
+    }
+
+    @Override
     public boolean modify(MemberVO vo, MemberHistoryVO hvo) {
         registerHistory(vo, hvo);
-        return mapper.update(vo) == 1;
+        return mapper.update(paste(vo)) == 1;
     }
 
     @Override
@@ -65,11 +72,17 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean registerHistory(MemberVO vo) {
+        MemberVO memberVO = mapper.read(vo.getId());
         MemberHistoryVO hvo = new MemberHistoryVO();
         hvo.setEmail(vo.getId());
-        hvo.setUpdMtr("register");
-        hvo.setBefVal("");
-        hvo.setAftVal("");
+        if(memberVO == null){
+            hvo.setUpdMtr("register");
+        }else if(memberVO != null){
+            hvo.setUpdMtr("emailAuth");
+            hvo.setBefVal("");
+            hvo.setAftVal(dateFormat(new Date()));
+        }
+
         return mapper.registerHistory(hvo) == 1;
     }
 
@@ -89,7 +102,7 @@ public class MemberServiceImpl implements MemberService{
         MemberVO beforeData = mapper.read(afterData.getId());
 
 //        // 3. 두개를 비교한다.
-        Map diff = new MemberServiceUtil().compare(beforeData, afterData);
+        Map diff = compare(beforeData, afterData);
 
         // 4. 다른부분들을 history테이블에 insert한다.
         diff.forEach((k,v) -> {
@@ -119,11 +132,12 @@ public class MemberServiceImpl implements MemberService{
         return mapper.deleteKey(id) == 1;
     }
 
-}
+    @Override
+    public boolean updateAuthdate(String id){
+        return mapper.updateAuthdate(id) == 1;
+    }
 
 
-
-class MemberServiceUtil{
     public Map compare(MemberVO vo1, MemberVO vo2){
         String[] mtr = {"name", "password", "birth", "status", "picture", "emailAuth"};
         String[] beforeVal = makeList(vo1);
@@ -135,10 +149,35 @@ class MemberServiceUtil{
         return compareResult;
     }
 
-    public String[] makeList(MemberVO vo){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
+    private String[] makeList(MemberVO vo){
         String[] list = new String[]{vo.getName(), vo.getPassword(), vo.getBirth(), vo.getStatus(), vo.getPicture(), ""};
-        if(vo.getEmailAuth() != null) list[5] = simpleDateFormat.format(vo.getEmailAuth());
+        if(vo.getEmailAuth() != null) list[5] = dateFormat(vo.getEmailAuth());
         return list;
     }
+
+    private String dateFormat(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY/MM/DD HH:MM:SS");
+        return simpleDateFormat.format(date);
+    }
+
+    private MemberVO paste(MemberVO vo){
+        MemberVO memberVO = mapper.read(vo.getId());
+        System.out.println("paste!!!!!");
+//        System.out.println(vo.getPassword());
+
+        if(!vo.getPassword().equals("")){
+            System.out.println("비밀번호 변경o");
+            memberVO.setPassword(passwordEncoder.encode(vo.getPassword()));
+        }
+        else if(vo.getPassword().equals("") || vo.getPassword() == null){
+            System.out.println("비밀번호 변경x");
+        }
+
+        memberVO.setBirth(vo.getBirth());
+        memberVO.setName(vo.getName());
+        memberVO.setPicture(vo.getPicture());
+
+        return memberVO;
+    }
 }
+

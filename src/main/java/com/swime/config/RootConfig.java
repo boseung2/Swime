@@ -24,9 +24,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages="com.swime.service")
-@ComponentScan(basePackages="com.swime.aop")
-@ComponentScan(basePackages="com.swime.task")
+@ComponentScan(basePackages={"com.swime.task", "com.swime.aop", "com.swime.aop"})
 @EnableScheduling
 @MapperScan(basePackages = {"com.swime.mapper"})
 public class RootConfig {
