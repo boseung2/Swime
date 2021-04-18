@@ -27,11 +27,12 @@ let replyService = (function() {
     function getList(param, callback, error){
         let brdSn = param.brdSn;
         let page = param.page || 1;
-
+        let test = param.test;
         $.getJSON("/replies/pages/" + brdSn + "/" + page + ".json",
             function(data){
             if(callback){
-                callback(data)
+                callback(data);
+                test();
             }
         }).fail(function(xhr, status, err){
             if(error){

@@ -202,99 +202,149 @@
 </script>
 
 <script>
-    console.log(".......................")
-    console.log("JS TEST")
 
-    let snValue = '<c:out value="${board.sn}"/> ';
-    let replyUL = $(".panel-body");
-    let userId = 'toywar1@naver.com'; //일단 이렇게 해야함..
-    let name = '<c:out value="${board.name}"/> ';
-    console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
+    let q1, q2;
+
+    $(document).ready(function(){
 
 
+        console.log(".......................")
+        console.log("JS TEST")
 
-    let replyComment = $('#replyComment'); //댓글
+        let snValue = '<c:out value="${board.sn}"/> ';
+        let replyUL = $(".panel-body");
+        let userId = 'toywar1@naver.com'; //일단 이렇게 해야함..
+        let name = '<c:out value="${board.name}"/> ';
+        console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
 
-    let replyRegisterBtn = $('#replyRegisterBtn'); //댓글 버튼
-    //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
 
-    //댓글 생성
-    replyRegisterBtn.on("click", function(e){
 
-        let reply = {
-            brdSn : snValue,
-            userId : userId,
-            content : replyComment.val(),
-            status  : "RPST01"
+        let replyComment = $('#replyComment'); //댓글 내용
+
+        let replyRegisterBtn = $('#replyRegisterBtn'); //댓글 버튼
+        // let replyDeleteBtn = $("button[id='replyDeleteBtn']");//댓글 삭제 버튼
+        let replyDeleteBtn = $('#replyDeleteBtn');
+        //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
+
+
+        // //댓글 삭제
+        // replyDeleteBtn.on("click", function(e){
+        //     alert('클릭 안되는데');
+        //
+        //     let sn = $("li[id='sn']").data('sn'); //댓글 번호 가져온다.
+        //
+        //     replyService.remove(sn, function(result){
+        //         alert('댓글이 삭제되었습니다.');
+        //         showList(1);
+        //     });
+        //
+        // });
+
+        //댓글 생성
+        replyRegisterBtn.on("click", function(e){
+
+            let reply = {
+                brdSn : snValue,
+                userId : userId,
+                content : replyComment.val(),
+                status  : "RPST01"
+            }
+
+            replyService.add(reply, function(){
+                alert('댓글이 달렸습니다.');
+                $("textarea[id='replyComment']").val('');
+                showList(1);
+            })
+        });
+
+        showList(1);
+
+        function test() {
+            console.log("test");
+            q1 = $('.replyDelete');
+            q2 = q1[0];
+
+
+            q2.onclick = function () {
+                console.log("!!!!!!!!!!!!!!!!!!!");
+            };
+
+            for (let i = 0; i <= q1; i++){
+                q1[i].on("click",function(){
+                    console.log("클릭clickクリック點擊");
+                });
+            }
+
         }
 
-        replyService.add(reply, function(){
-            alert('댓글이 달렸습니다.');
-            $("textarea[id='replyComment']").val('');
-            showList(1);
-        })
+
+
+
+        function showList(page) {
+            replyService.getList({brdSn: snValue, page: page || 1, test}, function(list) {
+                console.log(list);
+                let str = "";
+                if (list == null || list.length == 0) {
+                    replyUL.html("");
+                    return;
+                }
+                for (let i = 0, len = list.length || 0; i < len; i++) {
+                    console.log("show reply!!!!!!!!!!!!!");
+                    // str += "<img class='profile' src='../../../resources/image/img_avatar2.png' data-sn='"+list[i].picture+"'>"
+                    str += "<ul class='chat'><li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
+                    str += "<div><div class='header2'><strong id='userName' class='primary-" +
+                        "font'>"+list[i].name+"</strong>";
+                    str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
+                    str += "<button id='replyDeleteBtn' class='replyDelete'>삭제</button>";
+                    str += "<button id='replyModifyBtn' class='replyModify'>수정</button></div>";
+                    str += "<p id='replyContent'>"+list[i].content+"</p>";
+                    str += "<button class='reply_submit'>답글 쓰기</button></div></li></ul>"
+
+
+                    // str += ("" +
+                    //     "<div class='panel-body' style='margin-bottom: 16px;'>" +
+                    //     "   <table>" +
+                    //     "   <tr>" +
+                    //     "   <td>" +
+                    //     "   <div style='display: inline-block'>" +
+                    //     "   <img class='reply_profile2' src='../../../resources/image/img_avatar2.png' data-sn='" + list[i].picture + "'>" +
+                    //     "   </div>" +
+                    //     "   </td>" +
+                    //     "   <td>" +
+                    //     "   <ul class='chat' style='margin-bottom: 0px;'>" +
+                    //     "       <li class='left clearfix' data-sn='" + list[i].sn + "'>" +
+                    //     "           <div>" +
+                    //     "               <div class='header'>" +
+                    //     "                   <strong class='primary-font'>" + list[i].name + "</strong>"+
+                    //     "                   <small class='pull-right text-muted'>" + list[i].regDate + "</small>"+
+                    //     "                   <button class='reply'>삭제</button>"+
+                    //     "                   <button class='reply'>수정</button>"+
+                    //     "               </div>"+
+                    //     "               <p>good job</p>"+
+                    //     "               <button class='reply_submit' type='submit'>답글쓰기</button>"+
+                    //     "           </div>" +
+                    //     "       </li>" +
+                    //     "   </ul>" +
+                    //     "   </td>" +
+                    //     "</div>"
+                    // );
+                }//end function(list)
+                replyUL.html(str);
+            });
+        } // end showlist
+
+
+
+
     });
 
-    showList(1);
-
-    function showList(page) {
-        replyService.getList({brdSn: snValue, page: page || 1}, function(list) {
-            console.log(list);
-            let str = "";
-            if (list == null || list.length == 0) {
-                replyUL.html("");
-                return;
-            }
-            for (let i = 0, len = list.length || 0; i < len; i++) {
-                // str += "<img class='profile' src='../../../resources/image/img_avatar2.png' data-sn='"+list[i].picture+"'>"
-                str += "<ul class='chat'><li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
-                str += "<div><div class='header2'><strong id='userName' class='primary-" +
-                    "font'>"+list[i].name+"</strong>";
-                str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
-                str += "<button id='replyDeleteBtn' class='replyDelete'>삭제</button>";
-                str += "<button id='replyModifyBtn' class='replyModify'>수정</button></div>";
-                str += "<p id='replyContent'>"+list[i].content+"</p>";
-                str += "<button class='reply_submit'>답글 쓰기</button></div></li></ul>"
-
-
-                // str += ("" +
-                //     "<div class='panel-body' style='margin-bottom: 16px;'>" +
-                //     "   <table>" +
-                //     "   <tr>" +
-                //     "   <td>" +
-                //     "   <div style='display: inline-block'>" +
-                //     "   <img class='reply_profile2' src='../../../resources/image/img_avatar2.png' data-sn='" + list[i].picture + "'>" +
-                //     "   </div>" +
-                //     "   </td>" +
-                //     "   <td>" +
-                //     "   <ul class='chat' style='margin-bottom: 0px;'>" +
-                //     "       <li class='left clearfix' data-sn='" + list[i].sn + "'>" +
-                //     "           <div>" +
-                //     "               <div class='header'>" +
-                //     "                   <strong class='primary-font'>" + list[i].name + "</strong>"+
-                //     "                   <small class='pull-right text-muted'>" + list[i].regDate + "</small>"+
-                //     "                   <button class='reply'>삭제</button>"+
-                //     "                   <button class='reply'>수정</button>"+
-                //     "               </div>"+
-                //     "               <p>good job</p>"+
-                //     "               <button class='reply_submit' type='submit'>답글쓰기</button>"+
-                //     "           </div>" +
-                //     "       </li>" +
-                //     "   </ul>" +
-                //     "   </td>" +
-                //     "</div>"
-                // );
-            }//end function(list)
-            replyUL.html(str);
-        });
-    } // end showlist
 
 
 
 
     //댓글 생성
     // replyService.add(
-    //     {brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
+    //     {brdSn:snValue, userId:"toywar2@naver.com",content:"댓글 테스트2", status:"RPST01"}
     //     ,
     //     function(result){
     //         alert("댓글이 달렸습니다");
