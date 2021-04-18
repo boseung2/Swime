@@ -1,9 +1,6 @@
 package com.swime.controller;
 
 import com.swime.domain.GroupAttendVO;
-import com.swime.domain.GroupCriteria;
-import com.swime.domain.GroupRatingPageDTO;
-import com.swime.domain.GroupRatingVO;
 import com.swime.service.GroupAttendService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -62,13 +59,10 @@ public class GroupAttendController {
             value = "/withdraw/{sn}",
             consumes = "application/json",
             produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<String> modify(
-            @RequestBody GroupAttendVO vo,
+    public ResponseEntity<String> withdraw(
             @PathVariable("sn") Long sn) {
 
-        vo.setSn(sn);
-
-        return service.withdraw(vo) == 1
+        return service.withdraw(sn) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

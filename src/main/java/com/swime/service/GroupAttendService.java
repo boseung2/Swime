@@ -15,7 +15,7 @@ public interface GroupAttendService {
     List<GroupAttendVO> getList(Long grpSn);
 
     // 모임에서 탈퇴한다.
-    int withdraw(GroupAttendVO groupAttend);
+    int withdraw(Long sn);
 
     // 모임에서 영구 추방한다.
     int ban(GroupAttendVO groupAttend);

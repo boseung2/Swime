@@ -9,7 +9,8 @@
     <form role="form" action="/group/register" method="post">
         <div class="form-group">
             <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="userId" required>
+            <input type="text" class="form-control" id="userId" name="userId" required
+            value="<sec:authentication property="principal.username"/>" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="category">카테고리</label>
@@ -89,7 +90,7 @@
 <%--            </div>--%>
 <%--        </div>--%>
 
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <sec:csrfInput/>
         <button type="submit" class="btn btn-primary">등록</button>
         <button type="reset" class="btn btn-primary">취소</button>
     </form>

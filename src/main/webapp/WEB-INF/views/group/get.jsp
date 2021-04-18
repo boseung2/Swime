@@ -33,8 +33,15 @@
             <p>지역 <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
             <p>총인원 <c:out value="${group.attendCount}"/></p>
             <p>모임장 <c:out value="${group.userName}"/></p>
-            <a class="btn btn-primary" href="#">모임 가입</a>
-            <button data-oper="modify" class="btn btn-primary">모임 수정</button>
+            <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
+
+            <sec:authentication property="principal" var="pinfo"/>
+                <sec:authorize access="isAuthenticated()">
+                    <c:if test="${pinfo.username eq group.userId}">
+                        <button data-oper="modify" class="btn btn-primary">모임 수정</button>
+                    </c:if>
+                </sec:authorize>
+
             <a class="btn btn-primary" href="#">❤</a>
         </div>
         <!-- /.col-md-4 -->
@@ -57,22 +64,36 @@
     </div>
     <br>
 
-    <div id="member">
+    <!-- 멤버 리스트 -->
+    <div id="groupAttend">
         <h4>모임멤버</h4>
-        <c:forEach items="${attendList}" var="member" varStatus="status">
-            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
-            <span><c:out value="${member.name}"/></span>
-            <span><c:out value="${member.grpRole}"/></span>
-            <c:if test="${status.count % 3 == 0}">
-                <br>
-            </c:if>
-        </c:forEach>
+        <ul class="attend">
+            <li data-sn="12">
+                <div>
+                    <div class="header">
+                        <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
+                        <span>이름</span>
+                        <span>모임장</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+<%--        <c:forEach items="${attendList}" var="member" varStatus="status">--%>
+<%--            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">--%>
+<%--            <span><c:out value="${member.name}"/></span>--%>
+<%--            <span><c:out value="${member.grpRole}"/></span>--%>
+<%--            <c:if test="${status.count % 3 == 0}">--%>
+<%--                <br>--%>
+<%--            </c:if>--%>
+<%--        </c:forEach>--%>
     </div>
     <br>
 
     <div id="groupRating">
         <h4>후기</h4>
-        <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
+        <sec:authorize access="isAuthenticated()">
+            <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
+        </sec:authorize>
 
         <ul class="rating">
             <li data-sn="12">
@@ -159,6 +180,86 @@
 
 <!-- GroupRating Module -->
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
+<!-- GroupAttend Module -->
+<script type="text/javascript" src="/resources/js/groupAttend.js"></script>
+
+<script>
+
+    $(document).ready(function() {
+
+        let grpSnValue = '<c:out value="${group.sn}"/>';
+        let attendUL = $(".attend");
+
+        showList();
+
+        function showList() {
+            groupAttendService.getList({grpSn:grpSnValue}, function(list) {
+                let str = "";
+                if(list == null || list.length == 0) {
+                    attendUL.html("");
+                    return;
+                }
+
+                for(let i=0, len=list.length || 0; i<len; i++) {
+                    str += "<li data-sn='"+list[i].sn+"'>";
+                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+                    str += "<span>"+list[i].name+"</span>";
+                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";
+                }
+
+                attendUL.html(str);
+
+                //showRatingPage(ratingCnt);
+            })
+        }
+
+        $("#attendBtn").on("click", function(e) {
+            let attend = {
+                grpSn : grpSnValue,
+                userId : 'jungbs3726@naver.com'
+            }
+
+            groupAttendService.add(attend, function(result) {
+                alert("모임에 참여했습니다.");
+                showList();
+                console.log(this);
+            })
+        })
+
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        <%--console.log("============");--%>
+        <%--console.log("js test");--%>
+
+        <%--let snValue = '<c:out value="${group.sn}"/>';--%>
+
+    //     {"grpSn" : snValue, "userId" : "jungbs3726@naver.com", "grpRole" : "GRRO02", "status" : "GRST01"}
+    // ,
+    //     function(result) {
+    //         alert("RESULT: " + result);
+    //     }
+    // )groupAttendService.add(
+
+
+        // groupAttendService.getList({grpSn:snValue}, function(list) {
+        //     for(let i=0, len = list.length||0; i<len; i++) {
+        //         console.log(list[i]);
+        //     }
+        // })
+
+        // groupAttendService.withdraw({
+        //     sn : 493
+        // }, function(result) {
+        //     alert("수정완료");
+        // })
+
+    })
+</script>
+
 
 <script>
 
@@ -346,31 +447,6 @@
             showList(pageNum);
 
         })
-
-    })
-</script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        //console.log("============");
-        //console.log("js test");
-
-        let snValue = '<c:out value="${group.sn}"/>';
-
-        // groupRatingService.add(
-        //     {"grpSn" : snValue, "stdSn" : 1, "userId" : "jungbs3726@naver.com", "rating" : 4.3, "review" : "ajax test리뷰"}
-        //     ,
-        //     function(result) {
-        //         alert("RESULT: " + result);
-        //     }
-        // )
-
-        // groupRatingService.getList({grpSn:snValue, page:1}, function(list) {
-        //     for(let i=0, len = list.length||0; i<len; i++) {
-        //         console.log(list[i]);
-        //     }
-        // })
 
     })
 </script>
