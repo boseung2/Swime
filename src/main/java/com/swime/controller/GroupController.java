@@ -7,10 +7,18 @@ import com.swime.domain.GroupVO;
 import com.swime.service.GroupService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 @Controller
 @RequestMapping("/group/*")
@@ -27,6 +35,9 @@ public class GroupController {
         // 그룹 리스트 가져온다.
         log.info("list: " + cri);
         model.addAttribute("list", groupService.getListWithPaging(cri));
+        int total = groupService.getTotal(cri);
+        log.info(">>>>>>>>>>>>>>>total" + total);
+        model.addAttribute("pageMaker", new GroupPageDTO(cri, total));
     }
 
     @GetMapping("/register")
@@ -38,6 +49,11 @@ public class GroupController {
     public String register(GroupVO group, RedirectAttributes rttr) {
         log.info(">>>>>>>>>>>>>>>>>>>>>");
         log.info(group);
+
+        if (group.getAttach()  != null) {
+            log.info(group.getAttach());
+        }
+
         // 모임을 등록한다.
         groupService.register(group);
         rttr.addFlashAttribute("result", group.getSn());
@@ -46,29 +62,72 @@ public class GroupController {
     }
 
     @GetMapping({"/get", "modify"})
-    public void get(@RequestParam("sn") Long sn, Model model) {
+    public void get(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, Model model) {
         model.addAttribute("group", groupService.get(sn));
         model.addAttribute("attendList", groupAttendService.getList(sn));
-        model.addAttribute("ratingList", groupRatingService.getListWithPaging(sn, new GroupRatingCriteria(1, 6)));
     }
 
     @PostMapping("/modify")
-    public String modify(GroupVO group, RedirectAttributes rttr) {
+    public String modify(GroupVO group, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr) {
         log.info(">>>>>>>>>>>>>>>>>");
         log.info(group);
         if(groupService.modify(group) == 1) {
             rttr.addFlashAttribute("result", "success");
         }
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
+
         return "redirect:/group/list";
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam("sn") Long sn, RedirectAttributes rttr) {
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>remove>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    public String remove(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr) {
+
+        GroupAttachVO attach = groupService.getAttach(sn);
+
         if(groupService.remove(groupService.get(sn)) == 1) {
+
+            deleteFile(attach);
+
             rttr.addFlashAttribute("result", "success");
+
         }
-        return "redirect:/group/list";
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
+
+        return "redirect:/group/list" + cri.getListLink();
+    }
+
+    @GetMapping(value = "/getAttach", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<GroupAttachVO> getAttach(Long grpSn) {
+
+        log.info("getAttachList" + grpSn);
+
+        return new ResponseEntity<>(groupService.getAttach(grpSn), HttpStatus.OK);
+    }
+
+    private void deleteFile(GroupAttachVO attach) {
+
+        if(attach == null) {
+            return;
+        }
+
+        log.info("delete attach file..........");
+        log.info(attach);
+
+
+        try {
+            Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
+            Files.deleteIfExists(file);
+            if(Files.probeContentType(file).startsWith("image")) {
+                Path thumbNail = Paths.get("C:\\upload||"+attach.getUploadPath()+"\\s_"+attach.getUuid()+"_"+attach.getFileName());
+                Files.delete(thumbNail);
+            }
+        } catch(Exception e) {
+            log.error("delete file error" + e.getMessage());
+        };
+
     }
 
     /*

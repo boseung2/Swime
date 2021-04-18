@@ -87,9 +87,9 @@
                 where
                     b.status != 'BOST02'
                 and
-                b.sn = d.brd_sn
+                    b.sn = d.brd_sn
                 and
-                u.id = b.user_id
+                    u.id = b.user_id
                 and
                     b.grp_sn = g.sn
                 and
@@ -101,6 +101,7 @@
         where rn > (#{pageNum} - 1) * #{amount}
     ]]>
     </select>
+
 
     <insert id="insert">
         insert ALL

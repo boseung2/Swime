@@ -29,4 +29,6 @@ public class GroupVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updDate;
     private String updUserId;
+
+    private GroupAttachVO attach;
 }

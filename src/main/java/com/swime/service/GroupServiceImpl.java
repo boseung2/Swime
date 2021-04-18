@@ -1,9 +1,7 @@
 package com.swime.service;
 
-import com.swime.domain.GroupAttendVO;
-import com.swime.domain.GroupCriteria;
-import com.swime.domain.GroupTagVO;
-import com.swime.domain.GroupVO;
+import com.swime.domain.*;
+import com.swime.mapper.GroupAttachMapper;
 import com.swime.mapper.GroupAttendMapper;
 import com.swime.mapper.GroupMapper;
 import com.swime.mapper.GroupTagMapper;
@@ -12,6 +10,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +22,15 @@ public class GroupServiceImpl implements GroupService{
     private GroupMapper groupMapper;
     private GroupAttendMapper groupAttendMapper;
     private GroupTagMapper groupTagMapper;
+    private GroupAttachMapper groupAttachMapper;
 
     @Transactional
     @Override
     public int register(GroupVO group) {
         //모임을 생성한다.
+
+        // 사진 경로 불러옴
+        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
 
         // 1. 기본정보 등록
         groupMapper.insertSelectKey(group);
@@ -44,6 +47,15 @@ public class GroupServiceImpl implements GroupService{
         group.getTags().forEach(tag -> groupTagMapper.insert(new GroupTagVO(group.getSn(), tag)));
 
         // ***** 등록자 id 세션에서 가져와야함 *****
+
+        // 첨부파일등록
+        if(group.getAttach() == null) {
+            return 0;
+        }
+
+        GroupAttachVO attach = group.getAttach();
+        attach.setGrpSn(group.getSn());
+        groupAttachMapper.insert(attach);
 
         return 1;
     }
@@ -79,20 +91,58 @@ public class GroupServiceImpl implements GroupService{
     @Transactional
     @Override
     public int modify(GroupVO group) {
+
+        log.info("modify.........." +group);
+
+        log.info(group.getSn());
+
+        groupAttachMapper.deleteAll(group.getSn());
+
+        // 사진 경로 불러옴
+        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+
         // 모임 정보를 수정한다.
-        int count1 = groupMapper.update(group);
+        boolean modifyResult = groupMapper.update(group) == 1;
+
+        // 첨부파일을 첨부한다.
+        if(modifyResult && group.getAttach() != null) {
+            GroupAttachVO attach = group.getAttach();
+            attach.setGrpSn(group.getSn());
+            groupAttachMapper.insert(attach);
+        }
+
         // 모임 상세페이지 모임정보(info)를 수정한다.
-        int count2 = groupMapper.updateInfo(group);
+        groupMapper.updateInfo(group);
         // 모임 태그를 수정한다.(있던거 모두 삭제하고 다시 생성)
         groupTagMapper.delete(group.getSn());
         group.getTags().forEach(tag -> groupTagMapper.insert(new GroupTagVO(group.getSn(), tag)));
         return 1;
     }
 
+    @Transactional
     @Override
     public int remove(GroupVO group) {
+        // 첨부파일을 삭제한다.
+        groupAttachMapper.deleteAll(group.getSn());
         // 모임을 삭제한다.
         return groupMapper.delete(group);
+    }
+
+    @Override
+    public int getTotal(GroupCriteria cri) {
+        log.info("get total count");
+        return groupMapper.getTotalCount(cri);
+    }
+
+    @Override
+    public GroupAttachVO getAttach(Long grpSn) {
+        log.info("get Attach by grpSn" + grpSn);
+
+        return groupAttachMapper.findByGrpSn(grpSn);
+    }
+
+    private String getPath(GroupAttachVO attach) {
+        return attach.getUploadPath() + "/" + attach.getUuid() + "_" + attach.getFileName();
     }
 
 }

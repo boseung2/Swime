@@ -29,17 +29,20 @@ public class CustomUser extends User {
         super(vo.getId() // String username
                 , vo.getPassword() // String password
 //                , vo.getStatus().equals("USST04") // boolean enabled
-                ,true
+                , vo.getStatus().equals("USST01")
                 , true // boolean accountNonExpired
                 , true // boolean credentialsNonExpired
                 , true // boolean accountNonLocked
                 , vo.getAuthList().stream().map( // Collection<? extends GrantedAuthority> authorities
                         auth -> new SimpleGrantedAuthority(auth.getAuth())
                 ).collect(Collectors.toList()));
+
         this.memberVO = vo;
-        vo.getAuthList().stream().map(auth -> { log.info(auth.getAuth());
-            return null;
-        });
+
+        log.info(vo.getAuthList());
+//        vo.getAuthList().stream().map(auth -> { log.info(auth.getAuth());
+//            return null;
+//        });
     }
 
 }

@@ -82,8 +82,8 @@ public class MemberMapperTests {
         memberVO.setPassword("updatepassword" + random);
         memberVO.setName("이름변경" + random);
         memberVO.setBirth("2010312");
-        memberVO.setLastLoginDate(new Date());
-        memberVO.setEmailAuth(new Date());
+        memberVO.setLastLoginDate(null);
+        memberVO.setEmailAuth(null);
         Assert.assertEquals(mapper.update(memberVO),1);
         log.info(memberVO.getEmailAuth());
     }

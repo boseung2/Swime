@@ -5,6 +5,7 @@ import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +31,18 @@ public class BoardMapperTests {
     public void testInsert(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(1L);
-        board.setUserId("toywar12@naver.com");
+        board.setGrpSn(224L);
+        board.setUserId("boseung@naver.com");
         //board.setUserName("테스트:이민재");
         board.setTitle("Last Test : 자바 초보만 오세용~~!!");
-        board.setContent("들어가라 제발..");
+        board.setContent("testtesttest");
         //board.setLikeCnt(500);
-        //board.setTopFix("BOFI01");
-        //board.setStatus("BOST01");
+        board.setTopFix("BOFI01");
+        board.setStatus("BOST01");
 
-        mapper.insert(board);
+        int result = mapper.insert(board);
+        log.info(result);
+        Assert.assertTrue(result == 2);
 
         log.info(board);
     }

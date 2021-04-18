@@ -2,6 +2,7 @@
         pageEncoding="UTF-8"%>
 
 <%@include file="../includes/header.jsp" %>
+<c:set var="defaultImg" value="https://streamyard.com/resources/assets/images/docs/connect-a-facebook-group/connect-a-facebook-group.jpg"/>
 
 <!-- Page Content -->
     <div class="container">
@@ -13,7 +14,9 @@
             <div class="col-md-4 mb-5">
                 <div class="card h-100">
                     <div class="card-body">
-                        <img class="img-fluid rounded mb-4 mb-lg-0" src="http://placehold.it/900x400" alt="">
+                        <div class="uploadResult">
+                            <img class="img-fluid rounded mb-4 mb-lg-0" src="${!empty group.picture ? '/display?fileName=' += group.picture : defaultImg}" alt="">
+                        </div>
                         <div class="flex-container" style="display: flex;">
                         <c:forEach items="${group.tags}" var="tag">
                             <div style="background-color: #f1f1f1;
@@ -31,13 +34,38 @@
                         <p class="card-text"><c:out value="${group.description}"/></p>
                     </div>
                     <div class="card-footer">
-                        <a href="/group/get?sn=<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm">More Info</a>
+                        <a href="<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm move">More Info</a>
                     </div>
                 </div>
             </div>
         </c:forEach>
     </div>
     <!-- /.row -->
+
+    <!-- pagination -->
+    <div class="pagination">
+        <c:if test="${pageMaker.prev}">
+            <li class="paginate_button previous">
+            <a href="${pageMaker.startPage - 1}">&laquo;</a>
+            </li>
+        </c:if>
+
+        <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+            <li class="paginate_button">
+                <a href="${num}" class="${pageMaker.cri.pageNum == num ? "active" : ""}">${num}</a>
+            </li>
+        </c:forEach>
+
+        <c:if test="${pageMaker.next}">
+            <li class="paginate_button next">
+            <a href="${pageMaker.endPage + 1}">&raquo;</a>
+            </li>
+        </c:if>
+    </div>
+    <form id="actionForm" action="/group/list" method="get">
+        <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+        <input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+    </form>
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -72,20 +100,39 @@
 
         function checkModal(result) {
 
-            if(result === '' || history.state) {
+            if (result === '' || history.state) {
                 return;
             }
 
-            if(parseInt(result) > 0) {
+            if (parseInt(result) > 0) {
                 $('.modal-body').html('모임 ' + parseInt(result) + "번이 등록되었습니다.");
             }
 
             $("#myModal").modal("show");
-
-            $("#regBtn").on("click", function() {
-                self.location = "/group/register";
-            })
         }
+
+        $("#regBtn").on("click", function() {
+            self.location = "/group/register";
+        })
+
+        let actionForm = $("#actionForm");
+
+        $(".paginate_button a").on("click", function(e) {
+
+            e.preventDefault();
+
+            console.log('click');
+
+            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+            actionForm.submit();
+        })
+
+        $('.move').on("click", function(e) {
+            e.preventDefault();
+            actionForm.append("<input type='hidden' name='sn' value='" + $(this).attr("href") + "'>");
+            actionForm.attr("action", "/group/get");
+            actionForm.submit();
+        })
     })
 </script>
 

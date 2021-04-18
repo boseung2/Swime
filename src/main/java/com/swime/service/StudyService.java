@@ -21,9 +21,11 @@ public interface StudyService {
     // 스터디 삭제
     public int remove(StudyParamVO param);
 
-    public List<StudyVO> getList();
+    public List<StudyVO> getList(long grpSn);
 
-    public List<StudyVO> getList(StudyCriteria cri);
+    public List<StudyVO> getList(StudyCriteria cri, long grpSn);
+
+    public int countStudy(long grpSn);
 
     // WishStudy
     public List<StudyVO> getWishList(StudyCriteria cri, String userId);
@@ -50,6 +52,12 @@ public interface StudyService {
     public int modifyAttendant(StudyParamVO param);
 
     public int countAttendants(long stdSn);
+
+    // 등록을 위해 해당 스터디의 유저 가입상태를 확인해주는 함수
+    public int checkAttendantForRegister (StudyParamVO param);
+
+    // 탈퇴를 위해 해당 스터디의 유저 가입상태를 확인해주는 함수
+    public int checkAttendantForRemove (StudyParamVO param);
 
     //StudySurvey
     public List<StudySurveyVO> getSurveyList(long stdSn);

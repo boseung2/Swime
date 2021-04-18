@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,8 +24,11 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@MapperScan(basePackages = {"com.swime.mapper"})
 @ComponentScan(basePackages="com.swime.service")
+@ComponentScan(basePackages="com.swime.aop")
+@ComponentScan(basePackages="com.swime.task")
+@EnableScheduling
+@MapperScan(basePackages = {"com.swime.mapper"})
 public class RootConfig {
 
     @Bean
@@ -46,18 +50,15 @@ public class RootConfig {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
 
-        if(false) {
-            hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+        if(true) {
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");
             hikariConfig.setPassword("1q2w3e4r5t6Y");
         }
         else{
-            hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:XE");
             hikariConfig.setUsername("book_ex");
             hikariConfig.setPassword("book_ex");
-//            hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:XE");
 //            hikariConfig.setUsername("swime1");
 //            hikariConfig.setPassword("1234");
         }
@@ -73,6 +74,11 @@ public class RootConfig {
     @Bean
     public MakeRandomValue makeRandomValue(){
         return new MakeRandomValue();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 

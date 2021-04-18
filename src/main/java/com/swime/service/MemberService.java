@@ -14,6 +14,8 @@ public interface MemberService {
 
     boolean register(MemberVO vo);
 
+    boolean modify(MemberVO vo);
+
     boolean modify(MemberVO vo, MemberHistoryVO hvo);
 
     boolean remove(String id, MemberHistoryVO hvo);
@@ -34,4 +36,6 @@ public interface MemberService {
     boolean isKey(@Param("id") String id, @Param("key") String key);
 
     boolean deleteKey(String id);
+
+    boolean updateAuthdate(String id);
 }

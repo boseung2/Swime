@@ -5,13 +5,14 @@ import com.swime.domain.BoardVO;
 import com.swime.service.BoardService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class})
@@ -25,23 +26,24 @@ public class BoardServiceTests {
     public void testExist(){
 
         log.info(service);
-        assertNotNull(service);
+        Assert.assertNotNull(service);
     }
 
     @Test
     public void TestRegister(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(1L);
-        board.setUserId("hong4258@service222.com");
+        board.setGrpSn(224L);
+        board.setUserId("boseung@naver.com");
         //board.setUserName("새로운 name");
         board.setTitle("스프링 고수만 오세요333");
         board.setContent("스프링 고수만요~~");
         //board.setLikeCnt(500);
-        //board.setTopFix("BOFI01");
-        //board.setStatus("BOST01");
-
-        service.register(board);
+        board.setTopFix("BOFI01");
+        board.setStatus("BOST01");
+        int result = service.register(board);
+        log.info("result" + result);
+        Assert.assertTrue(result == 2);
 
         log.info("생성된 게시물 번호: " + board.getSn());
     }
@@ -53,11 +55,15 @@ public class BoardServiceTests {
 
     @Test
     public void testGetList(){
-        service.getList().forEach(board -> log.info(board));
+        //service.getList().forEach(board -> log.info(board));
+        List<BoardVO> list = service.getList();
+        Assert.assertNotNull(list);
+        list.forEach(board -> log.info(board));
     }
 
     @Test
     public void testGet(){
+
         log.info(service.get(6L));
     }
 

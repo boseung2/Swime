@@ -32,10 +32,10 @@ public class StudyMapperTests {
 
     @Test
     public void testGetList() {
-        mapper.getList().forEach(study -> log.info(study));
+        mapper.getList(222).forEach(study -> log.info(study));
 
-        assertNotNull(mapper.getList());
-        log.info(mapper.getList()); // 비어있으면 []
+        assertNotNull(mapper.getList(222));
+        log.info(mapper.getList(222)); // 비어있으면 []
     }
 
     @Test
@@ -44,7 +44,7 @@ public class StudyMapperTests {
         cri.setPageNum(1);
         cri.setAmount(3);
 
-        List<StudyVO> list = mapper.getListWithPaging(cri);
+        List<StudyVO> list = mapper.getListWithPaging(cri, 222);
 
         list.forEach(study -> log.info(study.getSn()));
 
@@ -57,7 +57,7 @@ public class StudyMapperTests {
         cri.setPageNum(30);
         cri.setAmount(3);
 
-        List<StudyVO> list = mapper.getListWithPaging(cri);
+        List<StudyVO> list = mapper.getListWithPaging(cri, 222);
 
         list.forEach(study -> log.info(study.getSn()));
 
@@ -70,7 +70,7 @@ public class StudyMapperTests {
         cri.setPageNum(-1);
         cri.setAmount(3);
 
-        List<StudyVO> list = mapper.getListWithPaging(cri);
+        List<StudyVO> list = mapper.getListWithPaging(cri, 222);
 
         list.forEach(study -> log.info(study.getSn()));
 
@@ -83,11 +83,16 @@ public class StudyMapperTests {
         cri.setPageNum(0);
         cri.setAmount(0);
 
-        List<StudyVO> list = mapper.getListWithPaging(cri);
+        List<StudyVO> list = mapper.getListWithPaging(cri, 222);
 
         list.forEach(study -> log.info(study.getSn()));
 
         assert(list.size() == 0);
+    }
+
+    @Test
+    public void testCountStudy() {
+        assert (mapper.countStudy(222) == 2);
     }
 
     @Test

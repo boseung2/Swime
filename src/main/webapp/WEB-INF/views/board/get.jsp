@@ -13,7 +13,7 @@
             <hr/>
 
             <div id="inline3">
-                <div class="inline" id="img"><img class="profile" src="../../../resources/image/img_avatar2.png" alt="error"></div>
+                <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>
                 <div class="inline" id="name"><c:out value="${board.name}" /></div>
                 <div class="inline" id="role">모임장</div>
             </div>
@@ -213,7 +213,7 @@
 
         let snValue = '<c:out value="${board.sn}"/> ';
         let replyUL = $(".panel-body");
-        let userId = 'toywar1@naver.com'; //일단 이렇게 해야함..
+        let userId = 'boseung@naver.com'; //일단 이렇게 해야함..
         let name = '<c:out value="${board.name}"/> ';
         console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
 
@@ -222,8 +222,8 @@
         let replyComment = $('#replyComment'); //댓글 내용
 
         let replyRegisterBtn = $('#replyRegisterBtn'); //댓글 버튼
-        // let replyDeleteBtn = $("button[id='replyDeleteBtn']");//댓글 삭제 버튼
-        let replyDeleteBtn = $('#replyDeleteBtn');
+
+        let replyDeleteBtn = $('#replyDeleteBtn');//댓글 삭제 버튼
         //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
 
 
@@ -258,7 +258,7 @@
         });
 
         showList(1);
-
+        //삭제 버튼 테스트중...
         function test() {
             console.log("test");
             q1 = $('.replyDelete');
@@ -300,34 +300,6 @@
                     str += "<p id='replyContent'>"+list[i].content+"</p>";
                     str += "<button class='reply_submit'>답글 쓰기</button></div></li></ul>"
 
-
-                    // str += ("" +
-                    //     "<div class='panel-body' style='margin-bottom: 16px;'>" +
-                    //     "   <table>" +
-                    //     "   <tr>" +
-                    //     "   <td>" +
-                    //     "   <div style='display: inline-block'>" +
-                    //     "   <img class='reply_profile2' src='../../../resources/image/img_avatar2.png' data-sn='" + list[i].picture + "'>" +
-                    //     "   </div>" +
-                    //     "   </td>" +
-                    //     "   <td>" +
-                    //     "   <ul class='chat' style='margin-bottom: 0px;'>" +
-                    //     "       <li class='left clearfix' data-sn='" + list[i].sn + "'>" +
-                    //     "           <div>" +
-                    //     "               <div class='header'>" +
-                    //     "                   <strong class='primary-font'>" + list[i].name + "</strong>"+
-                    //     "                   <small class='pull-right text-muted'>" + list[i].regDate + "</small>"+
-                    //     "                   <button class='reply'>삭제</button>"+
-                    //     "                   <button class='reply'>수정</button>"+
-                    //     "               </div>"+
-                    //     "               <p>good job</p>"+
-                    //     "               <button class='reply_submit' type='submit'>답글쓰기</button>"+
-                    //     "           </div>" +
-                    //     "       </li>" +
-                    //     "   </ul>" +
-                    //     "   </td>" +
-                    //     "</div>"
-                    // );
                 }//end function(list)
                 replyUL.html(str);
             });

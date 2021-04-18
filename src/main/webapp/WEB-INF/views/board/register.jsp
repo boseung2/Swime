@@ -5,6 +5,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@include file="../includes/header.jsp" %>
+
+<sec:authorize access="isAuthenticated()">
+    <c:set value="${principal.username}" var="userId"/>
+</sec:authorize>
 <style>
     #topFix{
         width: 15px;
@@ -19,26 +23,22 @@
 
         <div class="form-group">
             <label for="title">제목</label>
-            <input type="text" class="form-control" name="title" id="title">
+            <input type="text" class="form-control" name="title" id="title" required>
         </div>
 
         <div class="form-group">
             <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="userId" value="
-                <sec:authorize access="isAuthenticated()">
-                   <sec:authentication property="principal.username"/>
-                </sec:authorize>
-">
+            <input type="text" class="form-control" id="userId" name="userId" value="${userId}" required>
         </div>
 
         <div class="form-group">
             <label for="grpSn">모임번호</label>
-            <input type="text" class="form-control" id="grpSn" name="grpSn">
+            <input type="text" class="form-control" id="grpSn" name="grpSn" required>
         </div>
 
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea class="form-control" rows="5" id="content" name="content"></textarea>
+            <textarea class="form-control" rows="5" id="content" name="content" required></textarea>
         </div>
 
         <div class="form-group">

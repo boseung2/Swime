@@ -15,18 +15,20 @@ public class GmailSend {
     private final String password = "1q2w3e4r5t6Y";   // 패스워드
 
     // SMTP 서버 정보를 설정한다.
-    Properties prop;
+    private Properties prop = new Properties();
+    private Session session;
 
-    public boolean sendAuthMail(MailVO vo) {
-        prop = new Properties();
+    public GmailSend(){
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", 465);
         prop.put("mail.smtp.auth", "true");
         prop.put("mail.smtp.ssl.enable", "true");
         prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+    }
 
+    public boolean sendAuthMail(MailVO vo) {
 
-        Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
+        session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(user, password);
             }
