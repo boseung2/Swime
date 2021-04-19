@@ -20,7 +20,7 @@ public class GroupAttendMapperTests {
     @Test
     public void testInsertSelectKey() {
         GroupAttendVO groupAttend = new GroupAttendVO();
-        groupAttend.setGrpSn(100L);
+        groupAttend.setGrpSn(630L);
         groupAttend.setUserId("boseung@naver.com");
         groupAttend.setGrpRole("GRRO02");
         groupAttend.setStatus("GRUS01");
@@ -30,7 +30,7 @@ public class GroupAttendMapperTests {
 
     @Test
     public void testGetList() {
-        mapper.getList(100L).forEach(groupAttend -> log.info(groupAttend));
+        mapper.getList(630L).forEach(groupAttend -> log.info(groupAttend));
     }
 
     @Test

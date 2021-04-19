@@ -85,6 +85,8 @@ public class GroupRatingServiceImpl implements GroupRatingService{
             return;
         }
 
+        log.info(">>>>>>>>>>>>>>>>>group: " + group);
+
         // 그 가져온놈의 rating을 평균을 가져와서 set한다.
         group.setRating(groupRatingMapper.getRatingByGrpSn(grpSn));
         // 그 가져온놈의 rating의 개수를 가져와서 set한다.

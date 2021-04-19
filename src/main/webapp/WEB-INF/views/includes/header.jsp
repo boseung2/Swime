@@ -4,6 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal" var="pinfo"/>
+</sec:authorize>
 <!DOCTYPE html>
 <html lang="en">
 

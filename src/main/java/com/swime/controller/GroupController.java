@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,11 +42,13 @@ public class GroupController {
     }
 
     @GetMapping("/register")
+    @PreAuthorize("isAuthenticated()")
     public void register() {
 
     }
 
     @PostMapping(value = "/register")
+    @PreAuthorize("isAuthenticated()")
     public String register(GroupVO group, RedirectAttributes rttr) {
         log.info(">>>>>>>>>>>>>>>>>>>>>");
         log.info(group);
@@ -67,6 +70,7 @@ public class GroupController {
         model.addAttribute("attendList", groupAttendService.getList(sn));
     }
 
+    @PreAuthorize("principal.username == #userId")
     @PostMapping("/modify")
     public String modify(GroupVO group, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr) {
         log.info(">>>>>>>>>>>>>>>>>");
@@ -80,8 +84,9 @@ public class GroupController {
         return "redirect:/group/list";
     }
 
+    @PreAuthorize("principal.username == #userId")
     @PostMapping("/remove")
-    public String remove(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr) {
+    public String remove(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr, String userId) {
 
         GroupAttachVO attach = groupService.getAttach(sn);
 
