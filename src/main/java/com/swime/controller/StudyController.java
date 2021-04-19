@@ -65,8 +65,8 @@ public class StudyController {
     // 스터디 생성 페이지
     @GetMapping("/register")
     @PreAuthorize("isAuthenticated()")
-    public void register() {
-        
+    public void register(@RequestParam("grpSn") long grpSn, Model model) {
+        model.addAttribute("grpSn", grpSn);
     }
 
     // 스터디 생성
@@ -74,8 +74,8 @@ public class StudyController {
     @PreAuthorize("isAuthenticated()")
     public String register(StudyVO study, RedirectAttributes rttr) {
         // 임의로 설정
-        study.setRepresentation("qwer8203@naver.com");
-        study.setGrpSn(617);
+//        study.setRepresentation("qwer8203@naver.com");
+//        study.setGrpSn(617);
 
         // 함수로 빼기
         if(study.getOnUrl() != null) {

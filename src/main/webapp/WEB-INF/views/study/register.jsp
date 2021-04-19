@@ -15,11 +15,11 @@
     <form role="form" action="/study/register" method="post">
         <div class="form-group">
             <label for="grpSn">그룹번호</label>
-            <input type="text" class="form-control" id="grpSn" name="grpSn" value="${study.grpSn}">
+            <input type="text" class="form-control" id="grpSn" name="grpSn" value="${grpSn}" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="representation">작성자</label>
-            <input type="text" class="form-control" id="representation" name="representation" value="<sec:authentication property='principal.username'/>" readonly="readonly">
+            <input type="text" class="form-control" id="representation" name="representation" value="${pinfo.username}" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="name">스터디명</label>

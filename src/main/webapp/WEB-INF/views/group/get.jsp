@@ -115,7 +115,7 @@
 
 
     <!-- 스터디 만들기 버튼-->
-    <a href="/study/register" class='btn btn-primary btn-sm'>스터디 만들기</a>
+    <a href='/study/register?grpSn=${group.sn}' class='btn btn-primary btn-sm'>스터디 만들기</a>
 
     <!-- 스터디 리스트 -->
     <div class="studyList row">
@@ -237,6 +237,7 @@
 </script>
 <!-- GroupAttend Module -->
 <script type="text/javascript" src="/resources/js/groupAttend.js"></script>
+<script type="text/javascript" src="/resources/js/studyList.js"></script>
 
 <script>
 

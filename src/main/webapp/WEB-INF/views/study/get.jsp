@@ -34,7 +34,7 @@
                 <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">
             </form>
             <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
-            <p>모임장 : ${study.representationName}</p>
+            <p>스터디장 : ${study.representationName}</p>
             <p>${study.attendants} / ${study.capacity}</p>
             <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디</p></c:if>
             <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
@@ -181,7 +181,7 @@
                 }
 
                 wishUL.html(str);
-            }))
+            })
 
             <%--actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");--%>
             <%--actionForm.attr("action", "/study/wish");--%>
@@ -267,8 +267,8 @@
                     console.log('failAttend');
                     checkModal("failAttend");
                 }
-            );
-        })
+            )
+        });
 
     });
 
