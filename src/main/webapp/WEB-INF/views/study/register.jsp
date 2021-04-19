@@ -5,23 +5,21 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
 <%@include file="../includes/header.jsp" %>
 
 <div class="container">
     <h2>스터디 만들기</h2>
     <hr/>
     <form role="form" action="/study/register" method="post">
-<%--        <div class="form-group">--%>
-<%--            <label for="sn">스터디번호</label>--%>
-<%--            <input type="text" class="form-control" id="sn" name="sn" value="${study.sn}" readonly="readonly">--%>
-<%--        </div>--%>
         <div class="form-group">
             <label for="grpSn">그룹번호</label>
             <input type="text" class="form-control" id="grpSn" name="grpSn" value="${study.grpSn}">
         </div>
         <div class="form-group">
             <label for="representation">작성자</label>
-            <input type="text" class="form-control" id="representation" name="representation">
+            <input type="text" class="form-control" id="representation" name="representation" value="<sec:authentication property='principal.username'/>" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="name">스터디명</label>

@@ -40,8 +40,7 @@
             <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
             <p>${study.expense}</p>
 
-            <c:if test="${wish == null}"><a class="wish btn btn-primary" href="#">♡</a></c:if>
-            <c:if test="${wish != null}"><a class="cancelWish btn btn-primary" href="#">❤</a></c:if>
+            <div class="wishButton"></div>
 
             <c:choose>
                 <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
@@ -49,7 +48,7 @@
                 <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="/study/attendCancel">참석 취소하기</a></c:when>
                 <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
                 <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
-                <c:otherwise><a class="attend btn btn-primary" href="javascript:attendService.attend(); return false;">참석하기</a></c:otherwise>
+                <c:otherwise><a class="attend btn btn-primary" href="javascript:studyAttendService.attend(); return false;">참석하기</a></c:otherwise>
             </c:choose>
 
             <br><br>
@@ -136,35 +135,59 @@
 
 </div>
 
+<script type="text/javascript" src="/resources/js/studyWish.js"></script>
+<script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript">
 
-    let attendService = (function() {
+    $(document).ready(function(){
 
-        //즉시실행함수 생성
-        function attend(studyParam, callback, error) {
-            $.ajax({
-                type: 'post',
-                url: '/study/attend',
-                data : JSON.stringify(studyParam),
-                contentType: "application/json; charset=utf-8",
-                success : function (result, status, xhr) {
-                    if (callback) {
-                        callback(result);
-                    }
-                },
-                error: function (xhr, status, er) {
-                    if (error) {
-                        error(er);
-                    }
+        let stdSn = ${study.sn};
+        let userId = "boseung@naver.com"; // 임의의 사용자 설정
+        let wishUL = $('.wishButton');
+
+        getStudyWish();
+
+        // 찜 버튼 출력
+        function getStudyWish() {
+
+            studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
+                console.log("get > getWish > result = " + result);
+
+                let str = "";
+
+                if(result === "not exist") {
+                    str += "<a class='wish btn btn-primary' href=''>♡</a>";
+                }else {
+                    str += "<a class='wish btn btn-primary' href=''>❤</a>";
                 }
+
+                wishUL.html(str);
             })
         }
-        return {
-            attend : attend
-        };
-    })();
 
-    $(document).ready(function(){
+        <!--찜 버튼 눌렸을 때 -->
+        $(".wish").on("click", function(e) {
+            e.preventDefault();
+
+            studyWishService.wish({stdSn : stdSn, userId : userId}, function(result) {
+                console.log("get > wish > result = " + result);
+
+                let str = "";
+
+                if(result === "not exist") {
+                    str += "<a class='wish btn btn-primary' href=''>♡</a>";
+                }else {
+                    str += "<a class='wish btn btn-primary' href=''>❤</a>";
+                }
+
+                wishUL.html(str);
+            }))
+
+            <%--actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");--%>
+            <%--actionForm.attr("action", "/study/wish");--%>
+            <%--actionForm.attr("method", "post");--%>
+            <%--actionForm.submit();--%>
+        });
 
         <!-- 스터디 생성/수정/찜/찜 삭제 후 모달 창-->
         let result = '<c:out value="${result}"/>';
@@ -178,10 +201,6 @@
 
             if(result === '') {
                 return;
-            }
-
-            if(result === 'success') {
-
             }
 
             switch (result) {
@@ -233,23 +252,12 @@
             actionForm.submit();
         });
 
-        // REST로 변경
-        <!--찜 버튼 눌렸을 때 -->
-        $(".wish, .cancelWish").on("click", function(e) {
-            e.preventDefault();
-
-            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
-            actionForm.attr("action", "/study/wish");
-            actionForm.attr("method", "post");
-            actionForm.submit();
-        });
-
-        // 임의의 유저 설정함
+        // 참석하기 버튼 눌렸을 때
         $('.attend').on("click", function (e) {
 
             e.preventDefault();
 
-            attendService.attend(
+            studyAttendService.attend(
                 {stdSn : ${study.sn}, userId : "boseung@naver.com"},
                 function(result) {
                     console.log(result);

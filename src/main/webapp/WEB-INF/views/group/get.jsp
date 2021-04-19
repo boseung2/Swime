@@ -94,6 +94,9 @@
     </div>
 
 
+    <!-- 스터디 만들기 버튼-->
+    <a href="/study/register" class='btn btn-primary btn-sm'>스터디 만들기</a>
+
     <!-- 스터디 리스트 -->
     <div class="studyList row">
     </div>
