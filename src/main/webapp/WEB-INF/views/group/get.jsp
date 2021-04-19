@@ -242,54 +242,67 @@
     });
 </script>
 <!-- GroupAttend Module -->
-<%--<script type="text/javascript" src="/resources/js/groupAttend.js"></script>--%>
+<script type="text/javascript" src="/resources/js/groupAttend.js"></script>
 
 
-<%--<script>--%>
+<script>
 
-<%--    $(document).ready(function() {--%>
+    $(document).ready(function() {
 
-<%--        let grpSnValue = '<c:out value="${group.sn}"/>';--%>
-<%--        let attendUL = $(".attend");--%>
+        let grpSnValue = '<c:out value="${group.sn}"/>';
+        let attendUL = $(".attend");
 
-<%--        showList();--%>
+        let userId = null;
+        <sec:authorize access="isAuthenticated()">
+        userId = "${pinfo.username}";
+        </sec:authorize>
 
-<%--        function showList() {--%>
-<%--            groupAttendService.getList({grpSn:grpSnValue}, function(list) {--%>
-<%--                let str = "";--%>
-<%--                if(list == null || list.length == 0) {--%>
-<%--                    attendUL.html("");--%>
-<%--                    return;--%>
-<%--                }--%>
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
 
-<%--                for(let i=0, len=list.length || 0; i<len; i++) {--%>
-<%--                    str += "<li data-sn='"+list[i].sn+"'>";--%>
-<%--                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";--%>
-<%--                    str += "<span>"+list[i].name+"</span>";--%>
-<%--                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";--%>
-<%--                }--%>
+        // ajax spring security header
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        });
 
-<%--                attendUL.html(str);--%>
+        showList();
 
-<%--                //showRatingPage(ratingCnt);--%>
-<%--            })--%>
-<%--        }--%>
+        function showList() {
+            groupAttendService.getList({grpSn:grpSnValue}, function(list) {
+                let str = "";
+                if(list == null || list.length == 0) {
+                    attendUL.html("");
+                    return;
+                }
 
-<%--        $("#attendBtn").on("click", function(e) {--%>
-<%--            let attend = {--%>
-<%--                grpSn : grpSnValue,--%>
-<%--                userId : 'jungbs3726@naver.com'--%>
-<%--            }--%>
+                for(let i=0, len=list.length || 0; i<len; i++) {
+                    str += "<li data-sn='"+list[i].sn+"'>";
+                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+                    str += "<span>"+list[i].name+"</span>";
+                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";
+                }
 
-<%--            groupAttendService.add(attend, function(result) {--%>
-<%--                alert("모임에 참여했습니다.");--%>
-<%--                showList();--%>
-<%--                console.log(this);--%>
-<%--            })--%>
-<%--        })--%>
+                attendUL.html(str);
 
-<%--    })--%>
-<%--</script>--%>
+                //showRatingPage(ratingCnt);
+            })
+        }
+
+        $("#attendBtn").on("click", function(e) {
+            let attend = {
+                grpSn : grpSnValue,
+                userId : userId
+            }
+
+            groupAttendService.add(attend, function(result) {
+                alert("모임에 참여했습니다.");
+                showList();
+                console.log(this);
+            })
+        })
+
+    })
+</script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -481,22 +494,24 @@
         let modalRemoveBtn = $('#modalRemoveBtn');
         let modalRegisterBtn = $('#modalRegisterBtn');
 
+        let userId = null;
         <sec:authorize access="isAuthenticated()">
-            let userId = "${pinfo.username}";
+            userId = "${pinfo.username}";
         </sec:authorize>
 
-        let csrfHeaderName = "${_csrf_headerName}";
-        let csrfTokenValue = "${_csrf_token}";
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
 
-        console.log("userId:!!!!" + userId);
-
+        // ajax spring security header
         $(document).ajaxSend(function(e, xhr, options) {
             xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-        })
+        });
 
         $('#addRatingBtn').on("click", function(e) {
             modal.find("input").val("");
             modal.find("input[name='userId']").val(userId);
+            modal.find("input[name='userId']").attr("readonly", true);
+            modal.find("input[name='stdSn']").attr("readonly", false);
             modal.find("button[id != 'modalCloseBtn']").hide();
 
             modalRegisterBtn.show();
@@ -534,7 +549,9 @@
                 modalInputReview.val(groupRating.review);
                 modalInputRating.val(groupRating.rating);
                 modalInputStdSn.val(groupRating.stdSn);
+                modalInputStdSn.attr("readonly", true);
                 modalInputUserId.val(groupRating.userId);
+                modalInputUserId.attr("readonly", true);
                 modalInputGrpSn.val(groupRating.grpSn);
                 modal.data("sn", groupRating.sn);
 
@@ -548,8 +565,24 @@
 
         modalModBtn.on("click", function(e) {
 
-            let groupRating = {sn:modal.data("sn"), userId: modalInputUserId.val(), rating: modalInputRating.val(),
+            let originalUserId = modalInputUserId.val();
+
+            let groupRating = {sn:modal.data("sn"), userId: originalUserId, rating: modalInputRating.val(),
                                 review: modalInputReview.val(), stdSn: modalInputStdSn.val(), grpSn: modalInputGrpSn.val()};
+
+            if(!userId) {
+                alert("로그인 후 수정이 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            console.log("original User id : " + originalUserId);
+
+            if(userId != originalUserId) {
+                alert("자신이 작성한 댓글만 수정이 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
 
             groupRatingService.update(groupRating, function(result) {
                 alert(result);
@@ -573,9 +606,9 @@
 
             let originalUserId = modalInputUserId.val();
 
-            console.log("Original userId: " + userId);
+            console.log("Original userId: " + originalUserId);
 
-            if(!userId) {
+            if(userId != originalUserId) {
                 alert("자신이 작성한 댓글만 삭제가 가능합니다.");
                 modal.modal("hide");
                 return;
