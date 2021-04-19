@@ -8,6 +8,7 @@
     <sec:authentication property="principal.username" var="userId"/>
 </sec:authorize>
 
+
 <div class="container">
     <h2>프로필 수정</h2>
     <hr/>
@@ -42,7 +43,8 @@
         <c:if test="${userId == MemberVo.id}">
             <div class="form-group">
                 <label for="picture">사진</label>
-                <input type="file" class="form-control" id="picture" name="picture" value="${MemberVo.picture}" readonly>
+                <input type="file" class="form-control" id="picture" name="picture" value="${MemberVo.picture}" accept="image/*" readonly>
+                <div id="uploadResult"></div>
             </div>
             <button id="submitBtn" class="btn btn-primary">정보 수정</button>
             <button id='cancel' class='btn btn-primary'>취소</button>
@@ -64,10 +66,15 @@
         let inputs = $("#userInfoForm > .form-group > input");
         let submitBtn = $("#userInfoForm > #submitBtn");
         let cancelBtn = $("#cancel")[0];
-        let isError = false;
+        let fileInput = $("#userInfoForm > .form-group > input[type='file']")[0];
+        let imgPlace = $("#uploadResult");
+        let profileImg = $("#imgPlace");
+
+
 
         // 기본세팅
         $(cancelBtn).hide();
+        $(imgPlace).hide();
 
         // $(password).change(function () {
         //     if(!compare(password, confirmPassword)) {
@@ -86,8 +93,9 @@
         // });
 
 
+
         // 제출 버튼을 누르면
-        $(submitBtn).click(function (e){
+        $(submitBtn).on("click", function (e){
             if(!compare(password, confirmPassword)) {
                 confirmPassword.setCustomValidity("비밀번호가 일치하지 않습니다");
                 return;
@@ -97,10 +105,15 @@
 
             sendData().then(function (result){
                 changeBtn(result);
+                $(submitBtn).attr("disabled", false);
+                console.log(profileImg.src);
+                console.log(fileInput.filepath);
+                // profileImg.src = fileInput.filepath;
             });
         });
 
-        $(cancelBtn).click(function (e){
+        //취소버튼
+        $(cancelBtn).on("click", function (e){
             e.preventDefault();
             $.ajax({url:"/user/details/profile" ,
                 data : {
@@ -112,21 +125,71 @@
 
         });
 
+        // 지금 처리방법
+        //파일 첨부 버튼을 누르면
+        //컨트롤러에 파일을 보내서 파일명을 폴더명 + uuid 로 썸네일과 함계 저장한다 << 파일을 변경하면 ajax를 호출
+        //썸네일을 불러와서 하단에 html 영역에 뿌려준다 << ajax가 실행되고 결과값을 받아서 ajax안에서 메소드 실행
+        //서밋을 누르면 유저 정보에 파일패스를 저장한다
+
+
+
+
+        // 파일버튼누르면 업로드하는
+        $(fileInput).on("change", function (){
+
+            let file = this.files[0];
+            let formData = new FormData();
+
+            if(!checkExtension(file.name, file.size)) return false;
+
+
+            formData.append("uploadFile", file);
+
+            $.ajax({
+                url: '/uploadAjaxAction',
+                processData: false,
+                contentType: false,
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                },
+                data: formData,
+                type: 'POST',
+                dataType:'json',
+                success: function(result) {
+                    showUploadResult(result, imgPlace, fileInput);
+                    alert('성공');
+                },
+                error : function (msg) {
+                    alert('에러가 발생했습니다');
+                }
+            })
+
+        });
+        console.log(fileInput);
+        console.dir(fileInput);
+
         function sendData() {
             return new Promise(function(resolve, reject) {
                 if(modifyMode){
+
+                    console.log($('#picture')[0].filepath);
+
+                    $(submitBtn).attr("disabled", true);
+
                     $.ajax({
                         url: '/user/modify',
                         type: 'POST',
+                        beforeSend : function(xhr) {
+                            xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                        },
                         data: {
                             id : $('#userId')[0].value,
                             password : $('#password')[0].value,
                             name : $('#name')[0].value,
                             birth : $('#birth')[0].value,
-                            picture : $('#picture')[0].value,
+                            picture : $('#picture')[0].filepath,
                             status : '${MemberVo.status}',
-                            email : '${MemberVo.id}',
-                            _csrf : $("#_csrf")[0].content
+                            email : '${MemberVo.id}'
                         },
                         success: function(msg) {
                             alert('정보를 수정했습니다');
@@ -195,6 +258,70 @@
             $(obj).text('확인');
             $(cancelBtn).show();
         }
+    }
+
+    function checkExtension(fileName, fileSize) {
+        let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+        let maxSize = 5242880;
+
+        if(fileSize >= maxSize) {
+            alert("파일 사이즈 초과");
+            return false;
+        }
+
+        if(regex.test(fileName)) {
+            alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+            return false;
+        }
+        return true;
+    }
+
+    function showUploadResult(uploadResult, imgPlace, fileInput) {
+        if(!uploadResult) return;
+
+        $(imgPlace).show();
+        $(imgPlace).html("test");
+
+
+        $(uploadResult).each(function(i, obj) {
+
+            //////////////////////////////
+            // let jobj = $(obj);
+
+            // console.dir(jobj);
+            //
+            //
+            // str += "<input type='hidden' name='attach.fileName' value='"+jobj.data("filename")+"'>";
+            // str += "<input type='hidden' name='attach.uuid' value='"+jobj.data("uuid")+"'>";
+            // str += "<input type='hidden' name='attach.uploadPath' value='"+jobj.data("path")+"'>";
+            // str += "<input type='hidden' name='attach.fileType' value='"+jobj.data("type")+"'>";
+
+
+            //////////////////////////////
+
+            let str = "";
+            if(obj.image) {
+                let fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
+
+                fileInput.filepath = encodeURIComponent(obj.uploadPath + "\\" + obj.uuid + "_" +obj.fileName);
+
+                // console.log("before = "+obj.uploadPath + "\\" + obj.uuid + "_" +obj.fileName);
+                // console.log("after = "+fileUrl);
+
+                // str += "<li data-path='"+obj.uploadPath+"'";
+                // str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'";
+                // str += "><div>";
+                // str += "<span> "+obj.fileName+"</span>";
+
+                str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
+                str += "<img src='/display?fileName="+fileCallPath+"'>";
+            } else {
+                return;
+            }
+            $(imgPlace).html(str);
+        })
+
+        // uploadUL.html(str);
     }
 </script>
 
