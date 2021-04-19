@@ -10,7 +10,7 @@
         <div class="form-group">
             <label for="userId">아이디</label>
             <input type="text" class="form-control" id="userId" name="userId" required
-            value="<sec:authentication property="principal.username"/>" readonly="readonly">
+            value="${pinfo.username}" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="category">카테고리</label>

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
 @ComponentScan(basePackages= {"com.swime.controller"})
-@EnableGlobalMethodSecurity(prePostEnabled=true, securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = false, securedEnabled = false)
 public class ServletConfig implements WebMvcConfigurer {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {

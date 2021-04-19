@@ -24,9 +24,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages="com.swime.service")
-@ComponentScan(basePackages="com.swime.aop")
-@ComponentScan(basePackages="com.swime.task")
+@ComponentScan(basePackages = {"com.swime.task", "com.swime.service", "com.swime.aop"})
 @EnableScheduling
 @MapperScan(basePackages = {"com.swime.mapper"})
 public class RootConfig {
@@ -56,7 +54,7 @@ public class RootConfig {
             hikariConfig.setPassword("1q2w3e4r5t6Y");
             hikariConfig.setMaximumPoolSize(2);
         }
-        else{
+        else {
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:XE");
             hikariConfig.setUsername("book_ex");
             hikariConfig.setPassword("book_ex");
