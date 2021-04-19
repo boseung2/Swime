@@ -44,7 +44,7 @@ let groupRatingService = (function(){
             type : 'delete',
             url : '/rating/' + sn,
             data : JSON.stringify({sn: sn, userId: userId}),
-            contentType : "application, json; charset=utf-8",
+            contentType : "application/json; charset=utf-8",
             success : function(deleteResult, status, xhr) {
                 if(callback) {
                     callback(deleteResult);

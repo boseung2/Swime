@@ -28,6 +28,8 @@ public class GroupRatingController {
         produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> create(@RequestBody GroupRatingVO vo) {
 
+        log.info("GroupRatingVO : " + vo);
+
         int insertCount = service.register(vo);
 
         log.info("Group Rating INSERT COUNT : " + insertCount);
@@ -63,20 +65,22 @@ public class GroupRatingController {
     }
 
     @PreAuthorize("principal.username == #vo.userId")
-    @DeleteMapping(value = "/{sn}", produces = {MediaType.TEXT_PLAIN_VALUE})
+    @DeleteMapping(value = "/{sn}")
     public ResponseEntity<String> remove(@RequestBody GroupRatingVO vo, @PathVariable("sn") Long sn) {
 
         log.info("remove: " + sn);
+
+        log.info("userId : " + vo.getUserId());
 
         return service.delete(sn) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @PreAuthorize("principal.username == #vo.userId")
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
     value = "/{sn}",
-    consumes = "application/json",
-    produces = {MediaType.TEXT_PLAIN_VALUE})
+    consumes = "application/json")
     public ResponseEntity<String> modify(
             @RequestBody GroupRatingVO vo,
             @PathVariable("sn") Long sn) {

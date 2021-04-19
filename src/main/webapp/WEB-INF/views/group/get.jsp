@@ -312,22 +312,23 @@
         let modalRemoveBtn = $('#modalRemoveBtn');
         let modalRegisterBtn = $('#modalRegisterBtn');
 
+        let userId = null;
         <sec:authorize access="isAuthenticated()">
-            let userId = "${pinfo.username}";
+            userId = "${pinfo.username}";
         </sec:authorize>
 
-        let csrfHeaderName = "${_csrf_headerName}";
-        let csrfTokenValue = "${_csrf_token}";
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
 
-        console.log("userId:!!!!" + userId);
-
+        // ajax spring security header
         $(document).ajaxSend(function(e, xhr, options) {
             xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-        })
+        });
 
         $('#addRatingBtn').on("click", function(e) {
             modal.find("input").val("");
             modal.find("input[name='userId']").val(userId);
+            modal.find("input[name='userId']").attr("readonly", "readonly");
             modal.find("button[id != 'modalCloseBtn']").hide();
 
             modalRegisterBtn.show();
@@ -366,6 +367,7 @@
                 modalInputRating.val(groupRating.rating);
                 modalInputStdSn.val(groupRating.stdSn);
                 modalInputUserId.val(groupRating.userId);
+                modalInputUserId.attr("readonly", true);
                 modalInputGrpSn.val(groupRating.grpSn);
                 modal.data("sn", groupRating.sn);
 
@@ -379,8 +381,24 @@
 
         modalModBtn.on("click", function(e) {
 
-            let groupRating = {sn:modal.data("sn"), userId: modalInputUserId.val(), rating: modalInputRating.val(),
+            let originalUserId = modalInputUserId.val();
+
+            let groupRating = {sn:modal.data("sn"), userId: originalUserId, rating: modalInputRating.val(),
                                 review: modalInputReview.val(), stdSn: modalInputStdSn.val(), grpSn: modalInputGrpSn.val()};
+
+            if(!userId) {
+                alert("로그인 후 수정이 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            console.log("original User id : " + originalUserId);
+
+            if(userId != originalUserId) {
+                alert("자신이 작성한 댓글만 수정이 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
 
             groupRatingService.update(groupRating, function(result) {
                 alert(result);
@@ -404,9 +422,9 @@
 
             let originalUserId = modalInputUserId.val();
 
-            console.log("Original userId: " + userId);
+            console.log("Original userId: " + originalUserId);
 
-            if(!userId) {
+            if(userId != originalUserId) {
                 alert("자신이 작성한 댓글만 삭제가 가능합니다.");
                 modal.modal("hide");
                 return;
