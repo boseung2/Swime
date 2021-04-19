@@ -22,6 +22,9 @@ public class GroupAttendServiceImpl implements GroupAttendService{
     @Transactional
     @Override
     public int attend(GroupAttendVO groupAttend) {
+        groupAttend.setGrpRole("GRRO03");
+        groupAttend.setStatus("GRUS01");
+
         //모임에 가입한다.
         int result = groupAttendMapper.insertSelectKey(groupAttend);
 
@@ -32,8 +35,8 @@ public class GroupAttendServiceImpl implements GroupAttendService{
     }
 
     @Override
-    public GroupAttendVO get(GroupAttendVO groupAttend) {
-        GroupAttendVO returnVO = groupAttendMapper.read(groupAttend);
+    public GroupAttendVO get(Long sn) {
+        GroupAttendVO returnVO = groupAttendMapper.read(sn);
         return returnVO;
     }
 
@@ -45,11 +48,21 @@ public class GroupAttendServiceImpl implements GroupAttendService{
 
     @Transactional
     @Override
-    public int withdraw(GroupAttendVO groupAttend) {
-        groupAttend.setStatus("GRUS02"); // GRUS02 탈퇴
-        int result = groupAttendMapper.update(groupAttend);
+    public int withdraw(Long sn) {
+
+        GroupAttendVO vo = groupAttendMapper.read(sn);
+
+        if(vo == null) {
+            return 0;
+        }
+
+        vo.setStatus("GRUS02"); // GRUS02 탈퇴
+
+        log.info(">>>>>>>>>>>>>groupAttend" + vo);
+
+        int result = groupAttendMapper.update(vo);
         // 해당 모임 가입자 수를 모임정보에 업데이트한다.
-        updateGroupAttendCount(groupAttend.getGrpSn());
+        updateGroupAttendCount(vo.getGrpSn());
         return result;
     }
 
@@ -63,14 +76,19 @@ public class GroupAttendServiceImpl implements GroupAttendService{
         return result;
     }
 
-    @Transactional
     @Override
     public int cancelBan(GroupAttendVO groupAttend) {
-        int result = withdraw(groupAttend);
-        // 해당 모임 가입자 수를 모임정보에 업데이트한다.
-        updateGroupAttendCount(groupAttend.getGrpSn());
-        return result; // GRUS02 탈퇴상태로 바꿈
+        return 0;
     }
+
+//    @Transactional
+//    @Override
+//    public int cancelBan(GroupAttendVO groupAttend) {
+//        int result = withdraw(groupAttend);
+//        // 해당 모임 가입자 수를 모임정보에 업데이트한다.
+//        updateGroupAttendCount(groupAttend.getGrpSn());
+//        return result; // GRUS02 탈퇴상태로 바꿈
+//    }
 
     @Override
     public int changeRole(GroupAttendVO groupAttend) {

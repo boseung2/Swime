@@ -5,35 +5,33 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
 <%@include file="../includes/header.jsp" %>
 
 <div class="container">
     <h2>스터디 만들기</h2>
     <hr/>
     <form role="form" action="/study/register" method="post">
-<%--        <div class="form-group">--%>
-<%--            <label for="sn">스터디번호</label>--%>
-<%--            <input type="text" class="form-control" id="sn" name="sn" value="${study.sn}" readonly="readonly">--%>
-<%--        </div>--%>
         <div class="form-group">
             <label for="grpSn">그룹번호</label>
-            <input type="text" class="form-control" id="grpSn" name="grpSn" value="${study.grpSn}">
+            <input type="text" class="form-control" id="grpSn" name="grpSn" value="${grpSn}" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="representation">작성자</label>
-            <input type="text" class="form-control" id="representation" name="representation">
+            <input type="text" class="form-control" id="representation" name="representation" value="${pinfo.username}" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="name">스터디명</label>
-            <input type="text" class="form-control" id="name" name="name">
+            <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="form-group">
             <label for="startDate">시작일자</label>
-            <input type="date" class="form-control" id="startDate" name="startDate">
+            <input type="date" class="form-control" id="startDate" name="startDate" required>
         </div>
         <div class="form-group">
             <label for="endDate">종료일자</label>
-            <input type="date" class="form-control" id="endDate" name="endDate">
+            <input type="date" class="form-control" id="endDate" name="endDate" required>
         </div>
         <div class="form-group">
             <label for="repeatCycle">반복주기</label>
@@ -45,13 +43,13 @@
             </select>
         </div>
         <div class="form-group">
-            <button id="mon">월</button>
-            <button id="tue">화</button>
-            <button id="wed">수</button>
-            <button id="thu">목</button>
-            <button id="fri">금</button>
-            <button id="sat">토</button>
-            <button id="sun">일</button>
+            <input type="checkbox" value="월" class="day">월
+            <input type="checkbox" value="화" class="day">화
+            <input type="checkbox" value="수" class="day">수
+            <input type="checkbox" value="목" class="day">목
+            <input type="checkbox" value="금" class="day">금
+            <input type="checkbox" value="토" class="day">토
+            <input type="checkbox" value="일" class="day">일
         </div>
         <div class="form-group">
             <label for="startTime">시작시간</label>
@@ -109,5 +107,23 @@
     }
 
     $(document).ready(function() {
+    })
+
+
+    $(".day").on("click", function(e) {
+
+        // 날짜가 클릭될때마다 전체 체크박스를 돌면서 결과값 새로 갱신
+
+        let dayList = $('input[class="day"]');
+
+        let days = "";
+
+        for(let i = 0; i < dayList.length; i++) {
+            if(dayList[i].checked === true) {
+                days += dayList[i].value;
+            }
+        }
+
+        console.log(days);
     })
 </script>

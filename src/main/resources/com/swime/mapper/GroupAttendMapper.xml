@@ -37,7 +37,6 @@
     <select id="read" resultType="com.swime.domain.GroupAttendVO">
         select sn, grp_sn, user_id, grp_role, status
         from tgrp_list
-        where grp_sn = #{grpSn}
-        and user_id = #{userId}
+        where sn = #{sn}
     </select>
 </mapper>

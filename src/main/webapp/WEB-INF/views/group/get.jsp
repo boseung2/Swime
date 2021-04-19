@@ -34,8 +34,14 @@
             <p>지역 <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
             <p>총인원 <c:out value="${group.attendCount}"/></p>
             <p>모임장 <c:out value="${group.userName}"/></p>
-            <a class="btn btn-primary" href="#">모임 가입</a>
-            <button data-oper="modify" class="btn btn-primary">모임 수정</button>
+
+            <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
+                <sec:authorize access="isAuthenticated()">
+                    <c:if test="${pinfo.username eq group.userId}">
+                        <button data-oper="modify" class="btn btn-primary">모임 수정</button>
+                    </c:if>
+                </sec:authorize>
+
             <a class="btn btn-primary" href="#">❤</a>
         </div>
         <!-- /.col-md-4 -->
@@ -58,22 +64,36 @@
     </div>
     <br>
 
-    <div id="member">
+    <!-- 멤버 리스트 -->
+    <div id="groupAttend">
         <h4>모임멤버</h4>
-        <c:forEach items="${attendList}" var="member" varStatus="status">
-            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
-            <span><c:out value="${member.name}"/></span>
-            <span><c:out value="${member.grpRole}"/></span>
-            <c:if test="${status.count % 3 == 0}">
-                <br>
-            </c:if>
-        </c:forEach>
+        <ul class="attend">
+            <li data-sn="12">
+                <div>
+                    <div class="header">
+                        <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
+                        <span>이름</span>
+                        <span>모임장</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+<%--        <c:forEach items="${attendList}" var="member" varStatus="status">--%>
+<%--            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">--%>
+<%--            <span><c:out value="${member.name}"/></span>--%>
+<%--            <span><c:out value="${member.grpRole}"/></span>--%>
+<%--            <c:if test="${status.count % 3 == 0}">--%>
+<%--                <br>--%>
+<%--            </c:if>--%>
+<%--        </c:forEach>--%>
     </div>
     <br>
 
     <div id="groupRating">
         <h4>후기</h4>
-        <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
+        <sec:authorize access="isAuthenticated()">
+            <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
+        </sec:authorize>
 
         <ul class="rating">
             <li data-sn="12">
@@ -91,6 +111,19 @@
 
     <!-- rating paginatino button -->
     <div class="panel-footer">
+
+    </div>
+
+
+    <!-- 스터디 만들기 버튼-->
+    <a href='/study/register?grpSn=${group.sn}' class='btn btn-primary btn-sm'>스터디 만들기</a>
+
+    <!-- 스터디 리스트 -->
+    <div class="studyList row">
+    </div>
+
+    <!-- 스터디 페이징 처리 -->
+    <div class="studyPageFooter panel-footer">
 
     </div>
 
@@ -158,8 +191,152 @@
 </div>
 <!-- /modal -->
 
+<!-- 스터디 삭제 확인 모달 -->
+<div class="studyModal fade" id="studyModal" tabindex="-1" role="dialog" aria-labelledby="studyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="studyModalLabel">Modal title</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="studyModal modal-body">정상적으로 처리되었습니다.</div>
+            <div class = "modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- GroupRating Module -->
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
+<script type="text/javascript" src="/resources/js/studyList.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        <!-- 스터디 삭제 후 모달 창-->
+        let result = '<c:out value="${result}"/>';
+
+        console.log("result>>>" + result);
+
+        checkModal(result);
+
+        history.replaceState({}, null, null);
+
+
+        function checkModal(result) {
+            if(result === '' || history.state) {
+                return;
+            }
+
+            if("success" === result) {
+                $(".studyModal").html("스터디가 정상적으로 삭제되었습니다.");
+            }
+            if("fail" === result) {
+                $(".studyModal").html("스터디를 삭제하실 수 없습니다.");
+            }
+            if("error" === result) {
+                $(".studyModal").html("스터디 삭제가 실패하였습니다.");
+            }
+
+            $("#studyModal").modal("show");
+        }
+    });
+</script>
+<!-- GroupAttend Module -->
+<script type="text/javascript" src="/resources/js/groupAttend.js"></script>
+
+
+<script>
+
+    $(document).ready(function() {
+
+        let grpSnValue = '<c:out value="${group.sn}"/>';
+        let attendUL = $(".attend");
+
+        let userId = null;
+        <sec:authorize access="isAuthenticated()">
+        userId = "${pinfo.username}";
+        </sec:authorize>
+
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
+
+        // ajax spring security header
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        });
+
+        showList();
+
+        function showList() {
+            groupAttendService.getList({grpSn:grpSnValue}, function(list) {
+                let str = "";
+                if(list == null || list.length == 0) {
+                    attendUL.html("");
+                    return;
+                }
+
+                for(let i=0, len=list.length || 0; i<len; i++) {
+                    str += "<li data-sn='"+list[i].sn+"'>";
+                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+                    str += "<span>"+list[i].name+"</span>";
+                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";
+                }
+
+                attendUL.html(str);
+
+                //showRatingPage(ratingCnt);
+            })
+        }
+
+        $("#attendBtn").on("click", function(e) {
+            let attend = {
+                grpSn : grpSnValue,
+                userId : userId
+            }
+
+            groupAttendService.add(attend, function(result) {
+                alert("모임에 참여했습니다.");
+                showList();
+                console.log(this);
+            })
+        })
+
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        <%--console.log("============");--%>
+        <%--console.log("js test");--%>
+
+        <%--let snValue = '<c:out value="${group.sn}"/>';--%>
+
+    //     {"grpSn" : snValue, "userId" : "jungbs3726@naver.com", "grpRole" : "GRRO02", "status" : "GRST01"}
+    // ,
+    //     function(result) {
+    //         alert("RESULT: " + result);
+    //     }
+    // )groupAttendService.add(
+
+
+        // groupAttendService.getList({grpSn:snValue}, function(list) {
+        //     for(let i=0, len = list.length||0; i<len; i++) {
+        //         console.log(list[i]);
+        //     }
+        // })
+
+        // groupAttendService.withdraw({
+        //     sn : 493
+        // }, function(result) {
+        //     alert("수정완료");
+        // })
+
+    })
+</script>
 
 <script>
 
@@ -167,8 +344,115 @@
 
         let grpSnValue = '<c:out value="${group.sn}"/>';
         let ratingUL = $('.rating');
+        let studyUL = $('.studyList');
 
         showList(1);
+        showStudyList(1);
+
+        function showStudyList(page) {
+            studyListService.getList({grpSn:grpSnValue, page: page || 1}, function(count, list) {
+
+                console.log("study count : " + count);
+                for(let i = 0, len = list.length; i < len; i++) {
+                    console.log(list[i]);
+                }
+
+                let str = "";
+
+                if(list == null || list.length == 0) {
+                    studyUL.html("");
+                    return;
+                }
+
+                for(let i = 0, len = list.length || 0; i < len; i++) {
+                    str += "<div class='col-md-4 mb-5'>";
+                    str += "<div class='card h-100'>";
+                    str += "<div class='card-body'>";
+                    str += "<h2 class='card-title'>" + list[i].name + "</h2>";
+                    str += "<p class='card-text'>" + list[i].startDate.substring(0,10) + " ~ " + list[i].endDate.substring(0,10) + "</p>";
+                    str += "<p class='card-text'>" + list[i].startTime.substring(0,5) + " ~ " + list[i].endTime.substring(0,5) + "</p>";
+                    if(list[i].onOff === 'STOF01') str += "<p class='card-text'>온라인 스터디</p>";
+                    if(list[i].onOff === 'STOF02') str += "<p class='card-text'>오프라인 스터디</p>";
+                    str += "<p class='card-text'>" + list[i].expense + "</p>";
+                    if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
+                    if(list[i].attendants < list[i].capacity) str += "<p class='card-text'>" + list[i].attendants + "/" +  list[i].capacity + "</p>";
+                    str += "</div>";
+                    str += "<div class='card-footer'>";
+                    str += "<a href='/study/get?sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    str += "</div>";
+                    str += "</div>";
+                    str += "</div>";
+                }
+
+                studyUL.html(str);
+
+                showStudyPage(count);
+            })
+        }
+
+        <!-- 스터디 페이징 처리 -->
+        let studyPageNum = 1;
+        let studyPageFooter = $('.studyPageFooter');
+
+        function showStudyPage(studyCount) {
+
+            let endNum = Math.ceil(studyPageNum / 10.0) * 10;
+            let startNum = endNum - 9;
+
+            let prev = startNum != 1;
+            let next = false;
+
+            if (endNum * 3 >= studyCount) {
+                endNum = Math.ceil(studyCount / 3.0);
+            }
+
+            if(endNum * 10 < studyCount) {
+                next = true;
+            }
+
+            console.log("studyCount = " + studyCount);
+            console.log("startNum = " + startNum);
+            console.log("endNum = " + endNum);
+            console.log("prev = " + prev);
+            console.log("next = " + next);
+
+            let str = "<ul class ='pagination'>";
+
+            if(prev) {
+                str += "<li class = 'page-item'><a class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
+            }
+
+            for(let i = startNum; i <= endNum; i++) {
+                console.log("i=" + i);
+                let active = studyPageNum == i ? "active" : "";
+
+                str += "<li class = 'page-item " + active +" '><a class='page-link' href='" + i + "'>" + i + "</a></li>";
+            }
+
+            if(next) {
+                str += "<li class = 'page-item'><a class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
+            }
+
+            str += "</ul></div>";
+
+            console.log(str);
+
+            studyPageFooter.html(str);
+        }
+
+        studyPageFooter.on("click", "li a", function(e) {
+            e.preventDefault();
+
+            console.log("study page click");
+
+            let targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            studyPageNum = targetPageNum;
+
+            showStudyList(studyPageNum);
+        })
 
         function showList(page) {
             groupRatingService.getList({grpSn:grpSnValue, page: page||1}, function(ratingCnt, list) {
@@ -213,8 +497,24 @@
         let modalRemoveBtn = $('#modalRemoveBtn');
         let modalRegisterBtn = $('#modalRegisterBtn');
 
+        let userId = null;
+        <sec:authorize access="isAuthenticated()">
+            userId = "${pinfo.username}";
+        </sec:authorize>
+
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
+
+        // ajax spring security header
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        });
+
         $('#addRatingBtn').on("click", function(e) {
             modal.find("input").val("");
+            modal.find("input[name='userId']").val(userId);
+            modal.find("input[name='userId']").attr("readonly", true);
+            modal.find("input[name='stdSn']").attr("readonly", false);
             modal.find("button[id != 'modalCloseBtn']").hide();
 
             modalRegisterBtn.show();
@@ -252,7 +552,9 @@
                 modalInputReview.val(groupRating.review);
                 modalInputRating.val(groupRating.rating);
                 modalInputStdSn.val(groupRating.stdSn);
+                modalInputStdSn.attr("readonly", true);
                 modalInputUserId.val(groupRating.userId);
+                modalInputUserId.attr("readonly", true);
                 modalInputGrpSn.val(groupRating.grpSn);
                 modal.data("sn", groupRating.sn);
 
@@ -266,8 +568,24 @@
 
         modalModBtn.on("click", function(e) {
 
-            let groupRating = {sn:modal.data("sn"), userId: modalInputUserId.val(), rating: modalInputRating.val(),
+            let originalUserId = modalInputUserId.val();
+
+            let groupRating = {sn:modal.data("sn"), userId: originalUserId, rating: modalInputRating.val(),
                                 review: modalInputReview.val(), stdSn: modalInputStdSn.val(), grpSn: modalInputGrpSn.val()};
+
+            if(!userId) {
+                alert("로그인 후 수정이 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            console.log("original User id : " + originalUserId);
+
+            if(userId != originalUserId) {
+                alert("자신이 작성한 댓글만 수정이 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
 
             groupRatingService.update(groupRating, function(result) {
                 alert(result);
@@ -280,7 +598,26 @@
 
             let sn = modal.data("sn");
 
-            groupRatingService.remove(sn, function(result) {
+            console.log("sn:" + sn);
+            console.log("userId" + userId);
+
+            if(!userId) {
+                alert("로그인 후 삭제가 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            let originalUserId = modalInputUserId.val();
+
+            console.log("Original userId: " + originalUserId);
+
+            if(userId != originalUserId) {
+                alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            groupRatingService.remove(sn, originalUserId, function(result) {
                 alert(result);
                 modal.modal("hide");
                 showList(pageNum);
@@ -347,31 +684,6 @@
             showList(pageNum);
 
         })
-
-    })
-</script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        //console.log("============");
-        //console.log("js test");
-
-        let snValue = '<c:out value="${group.sn}"/>';
-
-        // groupRatingService.add(
-        //     {"grpSn" : snValue, "stdSn" : 1, "userId" : "jungbs3726@naver.com", "rating" : 4.3, "review" : "ajax test리뷰"}
-        //     ,
-        //     function(result) {
-        //         alert("RESULT: " + result);
-        //     }
-        // )
-
-        // groupRatingService.getList({grpSn:snValue, page:1}, function(list) {
-        //     for(let i=0, len = list.length||0; i<len; i++) {
-        //         console.log(list[i]);
-        //     }
-        // })
 
     })
 </script>

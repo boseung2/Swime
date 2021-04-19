@@ -11,8 +11,9 @@
         <!-- Heading Row -->
         <div class="row align-items-center my-5">
             <div class="col-lg-7">
-                <img class="img-fluid rounded mb-4 mb-lg-0" src="http://placehold.it/900x400" alt="">
-                ${MemberVo.name}
+                <img id="imgPlace" class="img-fluid rounded mb-4 mb-lg-0" src="/display?fileName=${MemberVo.picture}" alt="">
+<%--                <img class="img-fluid rounded mb-4 mb-lg-0" src="/display?fileName=2021%5C04%5C19%2Fb9b4d22b-9d00-469c-92fb-eda4140920df_11.jpg" alt="">--%>
+                <c:out value="${MemberVo.name}"/>
             </div>
             <!-- /.col-lg-8 -->
 
@@ -53,8 +54,10 @@
             success:function(result) {
                 $("#content").html(result);
             }});
-
     });
+
+
+    console.log("${MemberVo.picture}");
 </script>
 
 <script>

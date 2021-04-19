@@ -95,11 +95,13 @@
             <input type="number" class="form-control" name="ratingCount" id="ratingCount" value="<c:out value="${group.ratingCount}"/>" hidden>
             <input type="text" class="form-control" name="status" id="status" value="<c:out value="${group.status}"/>" hidden>
         </div>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <sec:csrfInput/>
         <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
         <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
-        <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
-        <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
+        <c:if test="${pinfo.username eq group.userId}">
+            <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
+            <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
+        </c:if>
         <button type="submit" class="btn btn-secondary" data-oper="list">목록</button>
     </form>
 </div>
@@ -161,6 +163,8 @@
         let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
         let maxSize = 5242880;
         let formObj = $("form");
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
 
         (function() {
 
@@ -242,6 +246,9 @@
                 contentType: false,
                 data: formData,
                 type: 'POST',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue)
+                },
                 dataType:'json',
                 success: function(result) {
                     console.log(">>>>>>>" + result);
