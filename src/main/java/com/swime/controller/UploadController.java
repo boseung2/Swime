@@ -80,7 +80,10 @@ public class UploadController {
         if(uploadPath.exists() == false) {
             uploadPath.mkdirs();
         }
-
+        if(uploadFile == null){
+            log.info("upload file is null!!!!");
+            return null;
+        }
         for(MultipartFile multipartFile : uploadFile) {
 
             AttachFileDTO attachDTO = new AttachFileDTO();

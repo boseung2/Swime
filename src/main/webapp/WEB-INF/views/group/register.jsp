@@ -157,6 +157,9 @@
                 url: '/uploadAjaxAction',
                 processData: false,
                 contentType: false,
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                },
                 data: formData,
                 type: 'POST',
                 dataType:'json',
@@ -213,7 +216,6 @@
             let str = "";
 
             $(uploadResult).each(function(i, obj) {
-
                 if(obj.image) {
                     let fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
                     str += "<li data-path='"+obj.uploadPath+"'";
