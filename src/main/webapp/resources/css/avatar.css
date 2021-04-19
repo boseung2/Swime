@@ -185,3 +185,24 @@ ul {
     margin-top : 60px;
     margin-bottom : 60px;
 }
+
+/* star */
+.star_score span {
+    display: inline-block;
+    height: 14px;
+    width: 80px;
+    background: url(https://ssl.pstatic.net/static/movie/2019/09/sp_ico3.png) no-repeat -9999px -9999px;
+}
+
+.star_score span.st_off {
+    position: relative;
+
+    margin-right: 2px;
+    background-position: 0 -706px;
+}
+
+span.st_on {
+    position: absolute;
+    z-index: 10;
+    background-position: 0 -690px;
+}

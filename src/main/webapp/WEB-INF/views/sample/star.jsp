@@ -25,12 +25,7 @@
     }
 </style>
 
-<div class="star_score" id="netizen_point_tab_inner">
-    <span class="st_off">
-        <span class="st_on" style="">
-        </span>
-    </span>
-</div>
+
 <div id="place"></div>
 <div id="place1"></div>
 <div id="place2"></div>

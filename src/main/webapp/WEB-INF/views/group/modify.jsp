@@ -32,6 +32,7 @@
                 <option value="GRCA11">교양 · 기타</option>
             </select>
         </div>
+
         <div class="form-group">
             <label for="name">모임이름</label>
             <input type="text" class="form-control" name="name" id="name" value="<c:out value="${group.name}"/>" required>
@@ -72,9 +73,19 @@
                 </select>
             </div>
         </div>
+        <script>
+            $(document).ready(function() {
+                let seoul = $('#sido').children()[0];
+                let gyunggido = $('#sido').children()[1];
+
+                $('#sido').on("click", function(e) {
+                    $('#sido').children()
+                })
+            })
+        </script>
         <div class="form-group">
             <label for="tags">태그</label>
-            <select class="form-control" id="tags" name="tags">
+            <select class="form-control" id="tags" name="tags" >
                 <option value="GRTG01">자바</option>
                 <option value="GRTG02">파이썬</option>
                 <option value="GRTG03">스프링</option>
@@ -301,6 +312,32 @@
 
             uploadUL.html(str);
         }
+    })
+</script>
+<!-- Set Select Box -->
+<script>
+    $(document).ready(function() {
+        let category = $('#category').children();
+        let sido = $('#sido').children();
+        let sigungu = $('#sigungu').children();
+        let tag = $('tags').children();
+
+        let categoryValue = '<c:out value="${group.category}"/>';
+        let sidoValue = '<c:out value="${group.sido}"/>';
+        let sigunguValue = '<c:out value="${group.sigungu}"/>';
+        let tagValue = '<c:out value="${tags}"/>';
+
+        const setSelectBox = (selectBox, value) => {
+            for(let i=0; i<selectBox.length; i++) {
+                if(selectBox[i].value === value) {
+                    selectBox[i].setAttribute("selected", true);
+                }
+            }
+        };
+        setSelectBox(category, categoryValue);
+        setSelectBox(sido, sidoValue);
+        setSelectBox(sigungu, sigunguValue);
+        setSelectBox(tag, tagValue);
     })
 </script>
 

@@ -26,8 +26,9 @@
                         </div>
                         <h2 class="card-title"><c:out value="${group.name}"/></h2>
                         <p class="card-text"><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/><c:out value="${group.sigungu}"/></p>
-                        <p class="card-text"><c:forEach begin="1" end="${group.rating}"><i class="fas fa-star"></i></c:forEach><c:out value="${group.rating}"/> (<c:out value="${group.ratingCount}"/>)</p>
+                        <p class="card-text ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></p>
                         <p class="card-text"><c:out value="${group.description}"/></p>
+
                     </div>
                     <div class="card-footer">
                         <a href="<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm move">More Info</a>
@@ -130,6 +131,27 @@
             actionForm.submit();
         })
     })
+</script>
+
+<!-- 별 찍기 -->
+<script>
+    $(document).ready(function() {
+        let list = $('.ratingPlace');
+        for (let i = 0; i < list.length; i++) {
+            $(list[i]).html(star($(list[i]).data("rating")) + '<b>' + $(list[i]).data("rating") + ' </b>(' + $(list[i]).data("ratingcount") + '개)');
+        }
+    })
+    function star(rating){
+        let width = 80 * (rating / 5);
+        let tag = ''
+            +'<span class="star_score" id="netizen_point_tab_inner">'
+            +'  <span class="st_off">'
+            +'      <span class="st_on" style="width:' + width + 'px;">'
+            +'      </span>'
+            +'  </span>'
+            +'</span>';
+        return tag;
+    }
 </script>
 
 <%@include file="../includes/footer.jsp" %>
