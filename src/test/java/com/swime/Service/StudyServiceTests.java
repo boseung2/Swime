@@ -102,9 +102,11 @@ public class StudyServiceTests {
         cri.setPageNum(1);
         cri.setAmount(3);
 
-        List<StudyVO> list = service.getList(cri, 222);
+        GroupStudyListDTO groupStudyListDTO = service.getList(cri, 222);
 
+        List<StudyVO> list = groupStudyListDTO.getList();
         list.forEach(study -> log.info(study));
+        log.info(groupStudyListDTO.getCount());
 
         for (StudyVO li : list) {
             assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));

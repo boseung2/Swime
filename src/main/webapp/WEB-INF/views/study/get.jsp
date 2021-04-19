@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
 <%@include file="../includes/header.jsp" %>
 
 <!-- Page Content -->
@@ -30,39 +32,40 @@
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
-            <form id="operForm" action="group/modify" method="get">
-                <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">
-            </form>
+<%--            <form id="operForm" action="group/modify" method="get">--%>
+<%--                <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">--%>
+<%--            </form>--%>
             <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
-            <p>모임장 : ${study.representationName}</p>
+            <p>스터디장 : ${study.representationName}</p>
             <p>${study.attendants} / ${study.capacity}</p>
             <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디</p></c:if>
             <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
             <p>${study.expense}</p>
 
-            <c:if test="${wish == null}"><a class="wish btn btn-primary" href="#">♡</a></c:if>
-            <c:if test="${wish != null}"><a class="cancelWish btn btn-primary" href="#">❤</a></c:if>
+            <div class="wishButton"></div>
 
-            <c:choose>
-                <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
-                <c:when test="${study.representation == studyParam.userId}"></c:when>
-                <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="/study/attendCancel">참석 취소하기</a></c:when>
-                <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
-                <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
-                <c:otherwise><a class="attend btn btn-primary" href="/study/attend">참석하기</a></c:otherwise>
-            </c:choose>
+            <c:if test="${study.representation != pinfo.username}">
+                <c:choose>
+                    <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
+                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>
+                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
+                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
+                    <c:otherwise><a class="attend btn btn-primary" href="">참석하기</a></c:otherwise>
+                </c:choose>
+            </c:if>
 
             <br><br>
-<%--            <c:if test="${study.representation eq param.userId}">--%>
-            <a class="btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
-            <a class="remove btn btn-primary" href="#">스터디 삭제</a>
+            <c:if test="${study.representation eq pinfo.username}">
+            <a class="modify btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
+            <a class="remove btn btn-primary" href="">스터디 삭제</a>
             <br><br>
             <a class="btn btn-primary" href="#">참가 신청 마감</a>
             <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>
             <a class="btn btn-primary" href="#">참여멤버와 채팅</a>
             <br><br>
-            <a class="list btn btn-primary" href="">스터디 목록</a>
-<%--            </c:if>--%>
+            </c:if>
+
+            <a class="list btn btn-primary" href="">그룹으로 돌아가기</a>
             <br>
         </div>
         <!-- /.col-md-4 -->
@@ -126,30 +129,73 @@
         </div>
     </div>
 
-    <form id="actionForm" action="/study/list" method="get">
+    <form id="actionForm" action="" method="get">
         <input type="hidden" name="pageNum" value="${cri.pageNum}">
         <input type="hidden" name="amount" value="${cri.amount}">
         <input type="hidden" name="grpSn" value="${study.grpSn}">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <input type="hidden" name="userId" value="${pinfo.username}">
     </form>
 
 
 </div>
 
+<script type="text/javascript" src="/resources/js/studyWish.js"></script>
+<script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function(){
+
+        let stdSn = ${study.sn};
+        let userId = "boseung@naver.com"; // 임의의 사용자 설정
+        let wishUL = $('.wishButton');
+
+        getStudyWish();
+
+        <!--찜 버튼 출력-->
+        function getStudyWish() {
+
+            studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
+                console.log("get > getWish > result = " + result);
+
+                let str = "";
+
+                if(result === "not exist") {
+                    str += "<a class='wish btn btn-primary' href=''>♡</a>";
+                }else {
+                    str += "<a class='wish btn btn-primary' href=''>❤</a>";
+                }
+
+                wishUL.html(str);
+            })
+        }
+
+        <!--찜 버튼 눌렸을 때-->
+        $(".wish").on("click", function(e) {
+            e.preventDefault();
+
+            studyWishService.wish({stdSn : stdSn, userId : userId}, function(result) {
+                console.log("get > wish > result = " + result);
+
+                let str = "";
+
+                //성공시 모달창 띄우기
+
+                getStudyWish();
+            })
+        });
 
         <!-- 스터디 생성/수정/찜/찜 삭제 후 모달 창-->
         let result = '<c:out value="${result}"/>';
 
         checkModal(result);
 
-        history.replaceState({}, null, null);
-
-
         function checkModal(result) {
-            if(result === '' || history.state) {
+
+            console.log("checkModal")
+            console.log("checkModal result= " + result);
+
+            if(result === '') {
                 return;
             }
 
@@ -163,8 +209,18 @@
                 case "wish" :
                     $(".modal-body").html("스터디를 찜했습니다.");
                     break;
-                case "cancel" :
+                case "cancelWish" :
                     $(".modal-body").html("스터디 찜이 취소되었습니다.");
+                    break;
+                case "attend" :
+                    $(".modal-body").html("참석 완료되었습니다.");
+                    //참석 버튼을 탈퇴버튼으로 바꾸기
+                    break;
+                case "failAttend" :
+                    $(".modal-body").html("참석 실패하였습니다.");
+                    break;
+                case "cancelAttend" :
+                    $(".modal-body").html("참석 취소되었습니다.");
             }
 
             $("#myModal").modal("show");
@@ -175,6 +231,9 @@
 
         $(".list").on("click", function(e) {
             e.preventDefault();
+            actionForm.attr("action", "/group/get")
+            actionForm.find("input[name='grpSn']").remove();
+            actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.grpSn} + "'>");
             actionForm.submit();
         });
 
@@ -182,63 +241,14 @@
         $(".remove").on("click", function(e) {
             e.preventDefault();
 
-            actionForm.append("<input type='hidden' name='sn' value='" + ${study.sn} + "'>");
+            actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
             actionForm.attr("action", "/study/remove");
             actionForm.attr("method", "post");
             actionForm.submit();
         });
 
-        // REST로 변경
-        <!--찜 버튼 눌렸을 때 -->
-        $(".wish, .cancelWish").on("click", function(e) {
-            e.preventDefault();
+    });
 
-            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
-            actionForm.attr("action", "/study/wish");
-            actionForm.attr("method", "post");
-            actionForm.submit();
-        });
-
-        <!-- 참석하기 눌렸을때 -->
-        $(".attend").on("click", function(e) {
-            e.preventDefault();
-
-            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
-            actionForm.attr("action", "/study/attend");
-            actionForm.attr("method", "post");
-            actionForm.submit();
-        });
-
-        $(".cancelAttend").on("click", function(e) {
-            e.preventDefault();
-
-            actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");
-            actionForm.attr("action", "/study/cancelAttend");
-            actionForm.attr("method", "post");
-            actionForm.submit();
-        });
-
-        let attendService = function() {
-            function attend(studyParam, callback, error) {
-
-                $.ajax({
-                    type: 'post',
-                    url: '/study/attend',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (result, status, xhr) {
-                        if (callback) {
-                            callback(result);
-                        }
-                    },
-                    error: function (xhr, status, er) {
-                        if (error) {
-                            error(er);
-                        }
-                    }
-                })
-            }
-        }
-    })();
 </script>
 
 <%@include file="../includes/footer.jsp" %>
