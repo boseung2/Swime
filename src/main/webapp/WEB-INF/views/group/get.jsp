@@ -53,6 +53,7 @@
     </div>
     <!-- /nav -->
 
+    <!-- topnav javascript -->
     <script>
         let topnav = document.getElementsByClassName("topnav")[0];
         let sticky = topnav.offsetTop;
@@ -74,6 +75,8 @@
             }
         }
     </script>
+
+    <div class="main-contents">
 
     <div id="info" >
         <h4>정보</h4>
@@ -155,6 +158,7 @@
         <div class="card-body">
             <p class="text-white m-0">This call to action card is a great place to showcase some important information or display a clever tagline!</p>
         </div>
+    </div>
     </div>
 </div>
 

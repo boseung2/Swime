@@ -174,3 +174,7 @@ ul {
 .bigPicture img {
     width: 600px;
 }
+
+.main-contents {
+    margin: 20px 10px 10px 5px;
+}
