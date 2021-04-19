@@ -22,18 +22,14 @@
             <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
             <div class="flex-container" style="display: flex;">
                 <c:forEach items="${group.tags}" var="tag">
-                    <div style="background-color: #f1f1f1;
-                                        margin: 2px;
-                                        padding: 2px;
-                                        font-size: 10px;
-                                        border-radius: 0.5rem;">
+                    <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
                         <c:out value="${tag}"/>
                     </div>
                 </c:forEach>
             </div>
-            <p>지역 <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
-            <p>총인원 <c:out value="${group.attendCount}"/></p>
-            <p>모임장 <c:out value="${group.userName}"/></p>
+            <p><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
+            <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/></p>
+            <p><i class="fas fa-user"></i>모임장 <c:out value="${group.userName}"/></p>
 
             <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
                 <sec:authorize access="isAuthenticated()">
@@ -51,14 +47,38 @@
     <!-- nav -->
     <div class="topnav">
         <a href="#info" class="active">정보</a>
-        <a href="#member">모임멤버</a>
         <a href="#groupRating">후기</a>
         <a href="#study">스터디</a>
         <a href="#board">게시판</a>
     </div>
     <!-- /nav -->
 
-    <div id="info">
+    <!-- topnav javascript -->
+    <script>
+        let topnav = document.getElementsByClassName("topnav")[0];
+        let sticky = topnav.offsetTop;
+
+        $(document).ready(function() {
+            $('.topnav').on("click", "a", function(e) {
+                $(".topnav > a").removeClass('active');
+                console.dir(e.target);
+                $(this).attr("class", "active");
+            })
+        })
+
+        window.onscroll = function() {myFunction()};
+
+        function myFunction() {
+            if(window.pageYOffset >= sticky) {
+                topnav.classList.add("sticky");
+            } else {
+                topnav.classList.remove("sticky");
+            }
+        }
+    </script>
+
+    <div class="main-contents">
+    <div id="info" >
         <h4>정보</h4>
         <p><c:out value="${group.info}"/></p>
     </div>
@@ -78,32 +98,19 @@
                 </div>
             </li>
         </ul>
-<%--        <c:forEach items="${attendList}" var="member" varStatus="status">--%>
-<%--            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">--%>
-<%--            <span><c:out value="${member.name}"/></span>--%>
-<%--            <span><c:out value="${member.grpRole}"/></span>--%>
-<%--            <c:if test="${status.count % 3 == 0}">--%>
-<%--                <br>--%>
-<%--            </c:if>--%>
-<%--        </c:forEach>--%>
     </div>
     <br>
 
-    <div id="groupRating">
-        <h4>후기</h4>
-        <sec:authorize access="isAuthenticated()">
+    <hr class="centerHr" id="groupRating">
+    <div>
+        <h4>후기<sec:authorize access="isAuthenticated()">
             <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
-        </sec:authorize>
+        </sec:authorize></h4>
+
 
         <ul class="rating">
             <li data-sn="12">
                 <div>
-                    <div class="header">
-                        <strong>유저</strong>
-                        <small>2018-01-01 11:11</small>
-                    </div>
-                    <p>평점 : 4.5</p>
-                    <p>내용</p>
                 </div>
             </li>
         </ul>
@@ -116,15 +123,22 @@
 
 
     <!-- 스터디 만들기 버튼-->
-    <a href='/study/register?grpSn=${group.sn}' class='btn btn-primary btn-sm'>스터디 만들기</a>
+    <hr class="centerHr" id="study">
+    <h4>스터디<a href='/study/register?grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a></h4>
 
     <!-- 스터디 리스트 -->
-    <div class="studyList row">
+    <div class="studyList row" id="studyList">
     </div>
 
     <!-- 스터디 페이징 처리 -->
     <div class="studyPageFooter panel-footer">
 
+    </div>
+
+    <!-- 게시판 -->
+    <hr class="centerHr" id="board">
+    <div id="board">
+        <h4>게시판</h4>
     </div>
 
     <!-- 첨부파일 -->
@@ -147,6 +161,7 @@
         <div class="card-body">
             <p class="text-white m-0">This call to action card is a great place to showcase some important information or display a clever tagline!</p>
         </div>
+    </div>
     </div>
 </div>
 
@@ -210,43 +225,10 @@
 
 <!-- GroupRating Module -->
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
-<script type="text/javascript" src="/resources/js/studyList.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        <!-- 스터디 삭제 후 모달 창-->
-        let result = '<c:out value="${result}"/>';
-
-        console.log("result>>>" + result);
-
-        checkModal(result);
-
-        history.replaceState({}, null, null);
-
-
-        function checkModal(result) {
-            if(result === '' || history.state) {
-                return;
-            }
-
-            if("success" === result) {
-                $(".studyModal").html("스터디가 정상적으로 삭제되었습니다.");
-            }
-            if("fail" === result) {
-                $(".studyModal").html("스터디를 삭제하실 수 없습니다.");
-            }
-            if("error" === result) {
-                $(".studyModal").html("스터디 삭제가 실패하였습니다.");
-            }
-
-            $("#studyModal").modal("show");
-        }
-    });
-</script>
 <!-- GroupAttend Module -->
 <script type="text/javascript" src="/resources/js/groupAttend.js"></script>
-
+<!-- StudyList Module -->
+<script type="text/javascript" src="/resources/js/studyList.js"></script>
 
 <script>
 
@@ -338,15 +320,45 @@
     })
 </script>
 
-<script>
-
+<!-- 스터디 리스트 -->
+<script type="text/javascript">
     $(document).ready(function() {
 
+        <!-- 스터디 삭제 후 모달 창-->
+        let result = '<c:out value="${result}"/>';
+
+        console.log("result>>>" + result);
+
+        checkModal(result);
+
+        history.replaceState({}, null, null);
+
+
+        function checkModal(result) {
+            if(result === '' || history.state) {
+                return;
+            }
+
+            if("success" === result) {
+                $(".studyModal").html("스터디가 정상적으로 삭제되었습니다.");
+            }
+            if("fail" === result) {
+                $(".studyModal").html("스터디를 삭제하실 수 없습니다.");
+            }
+            if("error" === result) {
+                $(".studyModal").html("스터디 삭제가 실패하였습니다.");
+            }
+
+            $("#studyModal").modal("show");
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
         let grpSnValue = '<c:out value="${group.sn}"/>';
-        let ratingUL = $('.rating');
         let studyUL = $('.studyList');
 
-        showList(1);
         showStudyList(1);
 
         function showStudyList(page) {
@@ -453,6 +465,17 @@
 
             showStudyList(studyPageNum);
         })
+    })
+</script>
+
+<!-- 그룹 후기 작성 -->
+<script>
+    $(document).ready(function() {
+
+        let grpSnValue = '<c:out value="${group.sn}"/>';
+        let ratingUL = $('.rating');
+
+        showList(1);
 
         function showList(page) {
             groupRatingService.getList({grpSn:grpSnValue, page: page||1}, function(ratingCnt, list) {
@@ -474,7 +497,7 @@
                 }
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><strong>"+list[i].userId+"</strong>";
+                    str += "<div><div class='header'><strong>"+list[i].userName+"</strong>";
                     str += "<small>"+list[i].regDate+"</small></div>";
                     str += "<p>"+list[i].rating+"</p>";
                     str += "<p>"+list[i].review+"</p></div></li>";
@@ -582,7 +605,7 @@
             console.log("original User id : " + originalUserId);
 
             if(userId != originalUserId) {
-                alert("자신이 작성한 댓글만 수정이 가능합니다.");
+                alert("자신이 작성한 리뷰만 수정이 가능합니다.");
                 modal.modal("hide");
                 return;
             }
@@ -612,7 +635,7 @@
             console.log("Original userId: " + originalUserId);
 
             if(userId != originalUserId) {
-                alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+                alert("자신이 작성한 리뷰만 삭제가 가능합니다.");
                 modal.modal("hide");
                 return;
             }

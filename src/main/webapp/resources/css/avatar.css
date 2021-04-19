@@ -92,6 +92,7 @@ body {
 .pagination {
     isplay: flex;
     justify-content: center;
+    margin-bottom: 60px;
 }
 
 /* Pagination links */
@@ -173,4 +174,14 @@ ul {
 
 .bigPicture img {
     width: 600px;
+}
+
+.main-contents {
+    margin: 20px 10px 10px 5px;
+}
+
+.centerHr {
+    width : 90%;
+    margin-top : 60px;
+    margin-bottom : 60px;
 }
