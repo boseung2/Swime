@@ -103,6 +103,8 @@
         let formObj = $("form[role='form']");
         let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
         let maxSize = 5242880;
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
 
         $("button[type='submit']").on("click", function(e) {
 
@@ -158,6 +160,9 @@
                 url: '/uploadAjaxAction',
                 processData: false,
                 contentType: false,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+                },
                 data: formData,
                 type: 'POST',
                 dataType:'json',
@@ -180,6 +185,9 @@
             $.ajax({
                 url: '/deleteFile',
                 data: {fileName: targetFile, type:type},
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+                },
                 dataType:'text',
                 type: 'POST',
                 success: function(result) {

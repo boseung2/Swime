@@ -70,6 +70,7 @@ public class GroupController {
         model.addAttribute("attendList", groupAttendService.getList(sn));
     }
 
+    @PreAuthorize("principal.username == #userId")
     @PostMapping("/modify")
     public String modify(GroupVO group, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr) {
         log.info(">>>>>>>>>>>>>>>>>");
@@ -83,8 +84,9 @@ public class GroupController {
         return "redirect:/group/list";
     }
 
+    @PreAuthorize("principal.username == #userId")
     @PostMapping("/remove")
-    public String remove(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr) {
+    public String remove(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr, String userId) {
 
         GroupAttachVO attach = groupService.getAttach(sn);
 

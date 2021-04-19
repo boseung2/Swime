@@ -33,9 +33,8 @@
             <p>지역 <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
             <p>총인원 <c:out value="${group.attendCount}"/></p>
             <p>모임장 <c:out value="${group.userName}"/></p>
-            <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
 
-            <sec:authentication property="principal" var="pinfo"/>
+            <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
                 <sec:authorize access="isAuthenticated()">
                     <c:if test="${pinfo.username eq group.userId}">
                         <button data-oper="modify" class="btn btn-primary">모임 수정</button>
@@ -260,7 +259,6 @@
     })
 </script>
 
-
 <script>
 
     $(document).ready(function() {
@@ -313,8 +311,20 @@
         let modalRemoveBtn = $('#modalRemoveBtn');
         let modalRegisterBtn = $('#modalRegisterBtn');
 
+        let userId = "${pinfo.userName}";
+
+        let csrfHeaderName = "${_csrf_headerName}";
+        let csrfTokenValue = "${_csrf_token}";
+
+        console.log("userId:!!!!" + userId);
+
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        })
+
         $('#addRatingBtn').on("click", function(e) {
             modal.find("input").val("");
+            modal.find("input[name='userId']").val(userId);
             modal.find("button[id != 'modalCloseBtn']").hide();
 
             modalRegisterBtn.show();
@@ -380,7 +390,26 @@
 
             let sn = modal.data("sn");
 
-            groupRatingService.remove(sn, function(result) {
+            console.log("sn:" + sn);
+            console.log("userId" + userId);
+
+            if(!userId) {
+                alert("로그인 후 삭제가 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            let originalUserId = modalInputUserId.val();
+
+            console.log("Original userId: " + userId);
+
+            if(!userId) {
+                alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            groupRatingService.remove(sn, originalUserId, function(result) {
                 alert(result);
                 modal.modal("hide");
                 showList(pageNum);
