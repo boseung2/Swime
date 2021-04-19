@@ -209,43 +209,10 @@
 
 <!-- GroupRating Module -->
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
-<script type="text/javascript" src="/resources/js/studyList.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        <!-- 스터디 삭제 후 모달 창-->
-        let result = '<c:out value="${result}"/>';
-
-        console.log("result>>>" + result);
-
-        checkModal(result);
-
-        history.replaceState({}, null, null);
-
-
-        function checkModal(result) {
-            if(result === '' || history.state) {
-                return;
-            }
-
-            if("success" === result) {
-                $(".studyModal").html("스터디가 정상적으로 삭제되었습니다.");
-            }
-            if("fail" === result) {
-                $(".studyModal").html("스터디를 삭제하실 수 없습니다.");
-            }
-            if("error" === result) {
-                $(".studyModal").html("스터디 삭제가 실패하였습니다.");
-            }
-
-            $("#studyModal").modal("show");
-        }
-    });
-</script>
 <!-- GroupAttend Module -->
 <script type="text/javascript" src="/resources/js/groupAttend.js"></script>
-
+<!-- StudyList Module -->
+<script type="text/javascript" src="/resources/js/studyList.js"></script>
 
 <script>
 
@@ -337,15 +304,45 @@
     })
 </script>
 
-<script>
-
+<!-- 스터디 리스트 -->
+<script type="text/javascript">
     $(document).ready(function() {
 
+        <!-- 스터디 삭제 후 모달 창-->
+        let result = '<c:out value="${result}"/>';
+
+        console.log("result>>>" + result);
+
+        checkModal(result);
+
+        history.replaceState({}, null, null);
+
+
+        function checkModal(result) {
+            if(result === '' || history.state) {
+                return;
+            }
+
+            if("success" === result) {
+                $(".studyModal").html("스터디가 정상적으로 삭제되었습니다.");
+            }
+            if("fail" === result) {
+                $(".studyModal").html("스터디를 삭제하실 수 없습니다.");
+            }
+            if("error" === result) {
+                $(".studyModal").html("스터디 삭제가 실패하였습니다.");
+            }
+
+            $("#studyModal").modal("show");
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
         let grpSnValue = '<c:out value="${group.sn}"/>';
-        let ratingUL = $('.rating');
         let studyUL = $('.studyList');
 
-        showList(1);
         showStudyList(1);
 
         function showStudyList(page) {
@@ -452,6 +449,17 @@
 
             showStudyList(studyPageNum);
         })
+    })
+</script>
+
+<!-- 그룹 후기 작성 -->
+<script>
+    $(document).ready(function() {
+
+        let grpSnValue = '<c:out value="${group.sn}"/>';
+        let ratingUL = $('.rating');
+
+        showList(1);
 
         function showList(page) {
             groupRatingService.getList({grpSn:grpSnValue, page: page||1}, function(ratingCnt, list) {
@@ -581,7 +589,7 @@
             console.log("original User id : " + originalUserId);
 
             if(userId != originalUserId) {
-                alert("자신이 작성한 댓글만 수정이 가능합니다.");
+                alert("자신이 작성한 리뷰만 수정이 가능합니다.");
                 modal.modal("hide");
                 return;
             }
@@ -611,7 +619,7 @@
             console.log("Original userId: " + originalUserId);
 
             if(userId != originalUserId) {
-                alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+                alert("자신이 작성한 리뷰만 삭제가 가능합니다.");
                 modal.modal("hide");
                 return;
             }
