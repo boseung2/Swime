@@ -12,11 +12,11 @@ div #date{
 }
 
 .form-group > input{
-    border:none;
-    border-right:0px;
-    border-top:0px;
-    boder-left:0px;
-    boder-bottom:0px;
+    /*border:none;*/
+    /*border-right:0px;*/
+    /*border-top:0px;*/
+    /*boder-left:0px;*/
+    /*boder-bottom:0px;*/
 }
 .form-group > textarea{
     border:none;
@@ -47,7 +47,7 @@ div #date{
     height: 80px;
 }
 
-.CommentWriter{
+.commentWriter{
     border: 2px solid;
     border-radius: 6px;
     padding: 30px;
@@ -65,12 +65,12 @@ div #date{
     outline: 0;
 
 }
-.CommentWriter .register_box
+.commentWriter .register_box
 .button.btn_register.is_active{
     background: #bac9e0;
     color: #0067a3;
 }
-.CommentWriter .register_box .button{
+.commentWriter .register_box .button{
     display: inline-block;
     min-width: 40px;
     height: 30px;
@@ -91,9 +91,10 @@ div #date{
 
 }
 .chat{
-    border: 2px solid;
+    border: 2px;
     border-radius: 6px;
-    border-color: lightgrey;
+    margin-bottom: 10px;
+    /*border-color: lightgrey;*/
     /*background: #DCDCDC;*/
     /*display: inline-block;*/
 
@@ -109,7 +110,7 @@ div #date{
     background: transparent;
     float: right;
 }
-.reply_submit{
+.replySubmit{
     border: none;
     background: transparent;
     margin-right: 5px;
@@ -125,3 +126,4 @@ small{
 ul{
     list-style: none;
 }
+

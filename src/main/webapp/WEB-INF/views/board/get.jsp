@@ -57,8 +57,8 @@
 
             <div class="form-group">
                 <label for="content">내용</label>
-                <textarea class="form-control" rows="5" id="content" name="content" readonly="readonly">
-                    <c:out value="${board.content}"/></textarea>
+                <textarea class="form-control" rows="5"
+                          id="content" name="content" readonly="readonly"><c:out value="${board.content}"/></textarea>
             </div>
 
             <div class="form-group">
@@ -96,7 +96,7 @@
 <%--            </div>--%>
 
             <!--댓글 -->
-            <div class="reply_box">
+<%--            <div class="reply_box">--%>
                 <div class="panel-body">
 <%--                    <img class="reply_profile2" src="../../../resources/image/img_avatar2.png" alt="error">--%>
 
@@ -113,19 +113,20 @@
                                     <button id='replyModifyBtn'type="button" class="replyModify">수정</button>
                                 </div>
                                 <p>good job</p>
-                                <button class="reply_submit" type="submit">답글쓰기</button>
+                                <button class="replySubmit" type="submit">답글쓰기</button>
                             </div>
                         </li> <!--end li -->
                     </ul>
                 </div> <!--end panel-body-->
-            </div>
+<%--            </div> <!--end reply box-->--%>
 
 
             <!--댓글 입력 창-->
-            <div class="CommentWriter">
+            <div class="commentWriter">
                 <div class="comment_inbox">
             <textarea id='replyComment' placeholder="댓글을 입력해주세요" rows="1"
-                      class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px"></textarea>
+                      class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px"
+                      required></textarea>
                 </div>
                 <div class="register_box">
                     <button id='replyRegisterBtn' role="button" class="button btn_register is_active">등록</button>
@@ -133,11 +134,48 @@
             </div>
             <!--end 댓글 입력 창-->
 
-
-
         </div> <!-- ./col-lg-12-->
 
     </div><!-- row -->
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="float: left">댓글 수정</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>내용</label>
+                        <input class="form-control" name="content" value="내용">
+                    </div>
+
+                    <div class="form-group">
+                        <label>작성자</label>
+                        <input class="form-control" name="name" value="작성자">
+                    </div>
+
+                    <div class="form-group">
+                        <label>날짜</label>
+                        <input class="form-control" name="regDate" value="날짜">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button id="modalModBtn" type="button" class="btn btn-primary">수정</button>
+                    <button id="modalCloseBtn" type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
 </div><!--container-->
@@ -203,7 +241,7 @@
 
 <script>
 
-    let q1, q2;
+
 
     $(document).ready(function(){
 
@@ -212,43 +250,74 @@
         console.log("JS TEST")
 
         let snValue = '<c:out value="${board.sn}"/> ';
-        let replyUL = $(".panel-body");
-        let userId = 'boseung@naver.com'; //일단 이렇게 해야함..
+        let replyUL = $(".chat");
+        //boseung@naver.com
+        let userId = 'qwer6786@naver.com'; //일단 이렇게 해야함..
         let name = '<c:out value="${board.name}"/> ';
+
         console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
 
-
-
         let replyComment = $('#replyComment'); //댓글 내용
-
         let replyRegisterBtn = $('#replyRegisterBtn'); //댓글 버튼
 
-        let replyDeleteBtn = $('#replyDeleteBtn');//댓글 삭제 버튼
+        //modalData
+        let modal = $(".modal")
+        let modalInputContent = modal.find("input[name=content]");
+        let modalInputName = modal.find("input[name=name]");
+        let modalInputRegDate = modal.find("input[name=regDate]");
+
+        let modalModBtn = $('#modalModBtn');
+        let modalCloseBtn = $('#modalCloseBtn');
+
+
         //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
 
+        //댓글 수정
+        $(".chat").on("click", "button[id='replyModifyBtn']", function(){
+            console.log("modifyClicked");
 
-        // //댓글 삭제
-        // replyDeleteBtn.on("click", function(e){
-        //     alert('클릭 안되는데');
-        //
-        //     let sn = $("li[id='sn']").data('sn'); //댓글 번호 가져온다.
-        //
-        //     replyService.remove(sn, function(result){
-        //         alert('댓글이 삭제되었습니다.');
-        //         showList(1);
-        //     });
-        //
-        // });
+            $(".modal").modal("show");
+
+            modal.find("input").val("");
+            modalInputRegDate.closest("div").hide();
+
+            let sn = $(this).data("sn");
+
+            replyService.get(sn, function(reply){
+
+                modalInputContent.val("ggg");
+            });
+
+        });
+
+        //댓글 삭제
+        $(".chat").on("click", "button[id='replyDeleteBtn']", function(e){
+            console.log("RemoveClicked");
+
+            let sn = $(this).data("sn")
+            console.log("replySn : " + sn);
+
+            if(confirm('댓글을 삭제하시겠습니까?')){
+
+                replyService.remove(sn, function(result){
+                    console.log(result);
+                    showList(1);
+                });
+            }
+        });
+
 
         //댓글 생성
         replyRegisterBtn.on("click", function(e){
-
+            console.log("replyRegisterBtnClicked");
             let reply = {
                 brdSn : snValue,
                 userId : userId,
                 content : replyComment.val(),
                 status  : "RPST01"
             }
+
+            console.log("reply : " + JSON.stringify(reply));
 
             replyService.add(reply, function(){
                 alert('댓글이 달렸습니다.');
@@ -257,31 +326,12 @@
             })
         });
 
+
+
         showList(1);
-        //삭제 버튼 테스트중...
-        function test() {
-            console.log("test");
-            q1 = $('.replyDelete');
-            q2 = q1[0];
-
-
-            q2.onclick = function () {
-                console.log("!!!!!!!!!!!!!!!!!!!");
-            };
-
-            for (let i = 0; i <= q1; i++){
-                q1[i].on("click",function(){
-                    console.log("클릭clickクリック點擊");
-                });
-            }
-
-        }
-
-
-
-
+        // test
         function showList(page) {
-            replyService.getList({brdSn: snValue, page: page || 1, test}, function(list) {
+            replyService.getList({brdSn: snValue, page: page || 1,}, function(list) {
                 console.log(list);
                 let str = "";
                 if (list == null || list.length == 0) {
@@ -289,16 +339,23 @@
                     return;
                 }
                 for (let i = 0, len = list.length || 0; i < len; i++) {
-                    console.log("show reply!!!!!!!!!!!!!");
                     // str += "<img class='profile' src='../../../resources/image/img_avatar2.png' data-sn='"+list[i].picture+"'>"
-                    str += "<ul class='chat'><li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
+                    // str += "<ul class='chat'><li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
+                    // str += "<div><div class='header2'><strong id='userName' class='primary-" +
+                    //     "font'>"+list[i].name+"</strong>";
+                    // str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
+                    // str += "<button id='replyDeleteBtn' class='replyDelete'>삭제</button>";
+                    // str += "<button id='replyModifyBtn' class='replyModify'>수정</button></div>";
+                    // str += "<p id='replyContent'>"+list[i].content+"</p>";
+                    // str += "<button class='replySubmit'>답글 쓰기</button></div></li></ul>"
+                    str += "<li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
                     str += "<div><div class='header2'><strong id='userName' class='primary-" +
                         "font'>"+list[i].name+"</strong>";
                     str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
-                    str += "<button id='replyDeleteBtn' class='replyDelete'>삭제</button>";
+                    str += "<button id='replyDeleteBtn' class='replyDelete' data-sn='"+list[i].sn+"'>삭제</button>";
                     str += "<button id='replyModifyBtn' class='replyModify'>수정</button></div>";
                     str += "<p id='replyContent'>"+list[i].content+"</p>";
-                    str += "<button class='reply_submit'>답글 쓰기</button></div></li></ul>"
+                    str += "<button class='replySubmit'>답글 쓰기</button></div></li><hr>"
 
                 }//end function(list)
                 replyUL.html(str);
@@ -306,22 +363,18 @@
         } // end showlist
 
 
-
-
     });
 
-
-
-
-
-    //댓글 생성
+    // //댓글 생성
     // replyService.add(
-    //     {brdSn:snValue, userId:"toywar2@naver.com",content:"댓글 테스트2", status:"RPST01"}
-    //     ,
-    //     function(result){
+    //     {brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
+    //     , function(result){
+    //
     //         alert("댓글이 달렸습니다");
     //     }
     // )
+
+
     // //댓글 조회
     // replyService.getList({brdSn:snValue, page:1}, function(list){
     //
@@ -353,8 +406,6 @@
     // replyService.get(65, function(data){
     //     console.log(data);
     // });
-
-
 
 </script>
 

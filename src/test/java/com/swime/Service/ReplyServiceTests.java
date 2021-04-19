@@ -33,9 +33,9 @@ public class ReplyServiceTests {
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(197L);
-        reply.setUserId("qwer9827@naver.com");
-        reply.setContent("부모 댓글 카운트 증가3");
+        reply.setBrdSn(162L);
+        reply.setUserId("toywar1@naver.com");
+        reply.setContent("replyTest22222");
         reply.setStatus("RPST01");
 
         service.register(reply);

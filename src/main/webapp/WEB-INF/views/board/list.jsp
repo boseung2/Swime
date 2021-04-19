@@ -18,10 +18,10 @@
         color: #005cbf;
     }
   .board {
-      width: 800px;
+      /*width: 800px;*/
       height: 150px;
       background-color: #efefef;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
   }
 
   div div{
@@ -46,11 +46,16 @@
       width: 550px;
   }
   #regBtn{
+      /*float: right;*/
+      /*margin-right: 320px;*/
       float: right;
-      margin-right: 300px;
       background: #007bff;
       color: white;
   }
+  .pagination{
+    text-align: left;
+  }
+
 
 </style>
 
@@ -60,13 +65,13 @@
         <h3 style="display: inline-block">게시판</h3>
         <button id="regBtn" type="button" class="btn btn-xs pull-right">글쓰기</button>
 
-
+    <div class="row">
         <c:forEach items="${list}" var="board">
 
             <div class="board">
                 <div id="notice"><b>[필독]</b></div>
                 <div style="display: none"><c:out value="${board.sn}"/>번</div>
-                <div class="inline"><img class="profile" src="../../../resources/image/img_avatar2.png" alt="error"></div>
+                <div class="inline"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>
                 <div class="inline"><c:out value="${board.name}" /></div>
                 <div class="inline" id="role"><c:out value="${board.grpRole}"/></div>
 
@@ -95,11 +100,14 @@
                 <div class="inline"><b style="color: #005cbf"><c:out value="${board.likeCnt}"/> </b></div>
             </div>
         </c:forEach>
+    </div> <!--row-->
 
+        <!-- pageination -->
         <div class="pagination">
 
             <c:if test="${pageMaker.prev}">
-                <li class="pagination_button previous"><a href="${pageMaker.startPage - 1}">이전</a>
+                <li class="pagination_button previous">
+                    <a href="${pageMaker.startPage - 1}">이전</a>
                 </li>
             </c:if>
 
@@ -110,7 +118,8 @@
             </c:forEach>
 
             <c:if test="${pageMaker.next}">
-                <li class="pagination_button next"><a href="${pagemaker.endPage + 1}">다음</a></li>
+                <li class="pagination_button next">
+                    <a href="${pageMaker.endPage + 1}">다음</a></li>
             </c:if>
 
         </div> <!--end Pagination-->
