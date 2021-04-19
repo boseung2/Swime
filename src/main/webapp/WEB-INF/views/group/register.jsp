@@ -9,7 +9,8 @@
     <form role="form" action="/group/register" method="post">
         <div class="form-group">
             <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="userId" required>
+            <input type="text" class="form-control" id="userId" name="userId" required
+            value="<sec:authentication property="principal.username"/>" readonly="readonly">
         </div>
         <div class="form-group">
             <label for="category">카테고리</label>
@@ -89,7 +90,7 @@
 <%--            </div>--%>
 <%--        </div>--%>
 
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <sec:csrfInput/>
         <button type="submit" class="btn btn-primary">등록</button>
         <button type="reset" class="btn btn-primary">취소</button>
     </form>
@@ -102,6 +103,8 @@
         let formObj = $("form[role='form']");
         let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
         let maxSize = 5242880;
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
 
         $("button[type='submit']").on("click", function(e) {
 
@@ -157,6 +160,9 @@
                 url: '/uploadAjaxAction',
                 processData: false,
                 contentType: false,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+                },
                 data: formData,
                 type: 'POST',
                 dataType:'json',
@@ -179,6 +185,9 @@
             $.ajax({
                 url: '/deleteFile',
                 data: {fileName: targetFile, type:type},
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+                },
                 dataType:'text',
                 type: 'POST',
                 success: function(result) {
