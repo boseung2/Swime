@@ -21,9 +21,11 @@ public interface StudyService {
     // 스터디 삭제
     public int remove(StudyParamVO param);
 
+    // 스터디 리스트 for 관리자페이지
     public List<StudyVO> getList(long grpSn);
 
-    public List<StudyVO> getList(StudyCriteria cri, long grpSn);
+    // 그룹별 스터디 리스트
+    public GroupStudyListDTO getList(StudyCriteria cri, long grpSn);
 
     public int countStudy(long grpSn);
 
