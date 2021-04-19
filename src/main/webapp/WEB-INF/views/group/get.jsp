@@ -46,9 +46,8 @@
     <!-- nav -->
     <div class="topnav">
         <a href="#info" class="active">정보</a>
-        <a href="#groupAttend">모임멤버</a>
         <a href="#groupRating">후기</a>
-        <a href="#studyList">스터디</a>
+        <a href="#study">스터디</a>
         <a href="#board">게시판</a>
     </div>
     <!-- /nav -->
@@ -59,8 +58,9 @@
         let sticky = topnav.offsetTop;
 
         $(document).ready(function() {
-            $('.topnav').on("click", "a", function() {
+            $('.topnav').on("click", "a", function(e) {
                 $(".topnav > a").removeClass('active');
+                console.dir(e.target);
                 $(this).attr("class", "active");
             })
         })
@@ -77,7 +77,6 @@
     </script>
 
     <div class="main-contents">
-
     <div id="info" >
         <h4>정보</h4>
         <p><c:out value="${group.info}"/></p>
@@ -101,7 +100,8 @@
     </div>
     <br>
 
-    <div id="groupRating">
+    <hr class="centerHr" id="groupRating">
+    <div>
         <h4>후기<sec:authorize access="isAuthenticated()">
             <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
         </sec:authorize></h4>
@@ -122,6 +122,7 @@
 
 
     <!-- 스터디 만들기 버튼-->
+    <hr class="centerHr" id="study">
     <h4>스터디<a href='/study/register?grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a></h4>
 
     <!-- 스터디 리스트 -->
@@ -134,6 +135,7 @@
     </div>
 
     <!-- 게시판 -->
+    <hr class="centerHr" id="board">
     <div id="board">
         <h4>게시판</h4>
     </div>
@@ -494,7 +496,7 @@
                 }
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><strong>"+list[i].userId+"</strong>";
+                    str += "<div><div class='header'><strong>"+list[i].userName+"</strong>";
                     str += "<small>"+list[i].regDate+"</small></div>";
                     str += "<p>"+list[i].rating+"</p>";
                     str += "<p>"+list[i].review+"</p></div></li>";
