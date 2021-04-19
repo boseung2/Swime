@@ -30,5 +30,5 @@ public class GroupVO {
     private Date updDate;
     private String updUserId;
 
-    private List<GroupAttachVO> attachList;
+    private GroupAttachVO attach;
 }

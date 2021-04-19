@@ -4,6 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal" var="pinfo"/>
+</sec:authorize>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,6 +39,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
+
 </head>
 
 <body>
@@ -52,14 +56,14 @@
             <a class="active" href="/user/login">로그인</a>
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
-            <a href="/user/info"><sec:authentication property="principal.username"/> 님 안녕하세요</a>
+            <a href="/user/infoDetail?id=<sec:authentication property='principal.username'/>"><sec:authentication property="principal.memberVO.name"/> 님 안녕하세요</a>
             <a href="#" onclick="document.getElementById('logout').submit();">로그아웃</a>
         </sec:authorize>
     </div>
 </div>
 
 <form id="logout" action="/user/logout" method="post">
-<%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
+    <%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
     <sec:csrfInput/>
 </form>
 

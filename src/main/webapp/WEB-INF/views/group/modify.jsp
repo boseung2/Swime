@@ -36,6 +36,15 @@
             <label for="name">모임이름</label>
             <input type="text" class="form-control" name="name" id="name" value="<c:out value="${group.name}"/>" required>
         </div>
+        <div class="form-group uploadDiv">
+            <label for="uploadFile">대표사진</label>
+            <input type="file" class="form-control" id="uploadFile" name="uploadFile" >
+            <div class="uploadResult">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
         <div class="form-group">
             <label for="description">한줄소개</label>
             <textarea class="form-control" rows="1" id="description" name="description" required><c:out value="${group.description}"/></textarea>
@@ -73,18 +82,6 @@
             </select>
         </div>
 
-        <!-- 첨부파일 -->
-        <div class="form-group uploadDiv">
-            <label>사진</label><br>
-            <input type="file" name="uploadFile" multiple="multiple">
-        </div>
-        <div class="form-group">
-            <div class="uploadResult">
-                <ul>
-                </ul>
-            </div>
-        </div>
-
         <div class="bigPictureWrapper">
             <div class="bigPicture">
             </div>
@@ -98,11 +95,13 @@
             <input type="number" class="form-control" name="ratingCount" id="ratingCount" value="<c:out value="${group.ratingCount}"/>" hidden>
             <input type="text" class="form-control" name="status" id="status" value="<c:out value="${group.status}"/>" hidden>
         </div>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <sec:csrfInput/>
         <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
         <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
-        <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
-        <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
+        <c:if test="${pinfo.username eq group.userId}">
+            <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
+            <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
+        </c:if>
         <button type="submit" class="btn btn-secondary" data-oper="list">목록</button>
     </form>
 </div>
@@ -145,10 +144,10 @@
 
                     console.dir(jobj);
 
-                    str += "<input type='hidden' name='attachList[" + i + "].fileName' value='"+jobj.data("filename")+"'>";
-                    str += "<input type='hidden' name='attachList[" + i + "].uuid' value='"+jobj.data("uuid")+"'>";
-                    str += "<input type='hidden' name='attachList[" + i + "].uploadPath' value='"+jobj.data("path")+"'>";
-                    str += "<input type='hidden' name='attachList[" + i + "].fileType' value='"+jobj.data("type")+"'>";
+                    str += "<input type='hidden' name='attach.fileName' value='"+jobj.data("filename")+"'>";
+                    str += "<input type='hidden' name='attach.uuid' value='"+jobj.data("uuid")+"'>";
+                    str += "<input type='hidden' name='attach.uploadPath' value='"+jobj.data("path")+"'>";
+                    str += "<input type='hidden' name='attach.fileType' value='"+jobj.data("type")+"'>";
                 })
 
                 formObj.append(str).submit();
@@ -164,12 +163,14 @@
         let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
         let maxSize = 5242880;
         let formObj = $("form");
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
 
         (function() {
 
             let grpSn = '<c:out value="${group.sn}"/>';
 
-            $.getJSON("/group/getAttachList", {grpSn: grpSn}, function(arr) {
+            $.getJSON("/group/getAttach", {grpSn: grpSn}, function(arr) {
                 console.log(arr);
 
                 let str = "";
@@ -219,15 +220,25 @@
 
             let inputFile = $("input[name='uploadFile']");
 
-            let files = inputFile[0].files;
+            let file = inputFile[0].files[0];
 
-            for(let i=0; i<files.length; i++) {
+            console.log(file);
 
-                if(!checkExtension(files[i].name, files[i].size)) {
-                    return false;
-                }
-                formData.append("uploadFile", files[i]);
+            //let files = inputFile[0].files;
+
+            if(!checkExtension(file.name, file.size)) {
+                return false;
             }
+
+            formData.append("uploadFile", file);
+
+            // for(let i=0; i<files.length; i++) {
+            //
+            //     if(!checkExtension(files[i].name, files[i].size)) {
+            //         return false;
+            //     }
+            //     formData.append("uploadFile", files[i]);
+            // }
 
             $.ajax({
                 url: '/uploadAjaxAction',
@@ -235,9 +246,12 @@
                 contentType: false,
                 data: formData,
                 type: 'POST',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue)
+                },
                 dataType:'json',
                 success: function(result) {
-                    console.log(result);
+                    console.log(">>>>>>>" + result);
                     showUploadResult(result);
                 }
             })
@@ -258,9 +272,9 @@
             return true;
         }
 
-        function showUploadResult(uploadResultArr) {
+        function showUploadResult(uploadResult) {
 
-            if(!uploadResultArr || uploadResultArr.length == 0) {
+            if(!uploadResult) {
                 return;
             }
 
@@ -268,7 +282,7 @@
 
             let str = "";
 
-            $(uploadResultArr).each(function(i, obj) {
+            $(uploadResult).each(function(i, obj) {
 
                 if(obj.image) {
                     let fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
@@ -280,27 +294,15 @@
                     str += "<img src='/display?fileName="+fileCallPath+"'>";
                     str += "</div>";
                     str += "</li>";
-
                 } else {
-                    let fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
-                    let fileLink =fileCallPath.replace(new RegExp(/\\/g), "/");
-
-                    str += "<li";
-                    str += "data-path='" + obj.uploadPath + "' data-uuid='"+obj.uuid+"'data-filename='" + obj.fileName + "'data-type='" + obj.image+"'><div>";
-                    str += "<span> " + obj.fileName+"</span>";
-                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='file'>X</button><br>";
-                    str += "<img src='/resources/img/attach.png'></a>";
-                    str += "</div>";
-                    str += "</li>";
-
+                    return;
                 }
             })
 
-            uploadUL.append(str);
+            uploadUL.html(str);
         }
     })
 </script>
-
 
 
 

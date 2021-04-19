@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,18 +29,11 @@ public class GroupServiceImpl implements GroupService{
     public int register(GroupVO group) {
         //모임을 생성한다.
 
+        // 사진 경로 불러옴
+        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+
         // 1. 기본정보 등록
         groupMapper.insertSelectKey(group);
-
-        // 첨부파일등록
-        if(group.getAttachList() == null || group.getAttachList().size() <= 0) {
-            return 0;
-        }
-
-        group.getAttachList().forEach(attach -> {
-            attach.setGrpSn(group.getSn());
-            groupAttachMapper.insert(attach);
-        });
 
         // 2. 모임참여리스트에 모임장등록한다.
         GroupAttendVO groupAttend = new GroupAttendVO();
@@ -53,6 +47,15 @@ public class GroupServiceImpl implements GroupService{
         group.getTags().forEach(tag -> groupTagMapper.insert(new GroupTagVO(group.getSn(), tag)));
 
         // ***** 등록자 id 세션에서 가져와야함 *****
+
+        // 첨부파일등록
+        if(group.getAttach() == null) {
+            return 0;
+        }
+
+        GroupAttachVO attach = group.getAttach();
+        attach.setGrpSn(group.getSn());
+        groupAttachMapper.insert(attach);
 
         return 1;
     }
@@ -99,14 +102,15 @@ public class GroupServiceImpl implements GroupService{
         boolean modifyResult = groupMapper.update(group) == 1;
 
         // 첨부파일을 첨부한다.
-        if(modifyResult && group.getAttachList() != null && group.getAttachList().size() > 0) {
-            group.getAttachList().forEach(attach -> {
-                attach.setGrpSn(group.getSn());
-                groupAttachMapper.insert(attach);
-            });
+        if(modifyResult && group.getAttach() != null) {
+            GroupAttachVO attach = group.getAttach();
+            attach.setGrpSn(group.getSn());
+            groupAttachMapper.insert(attach);
         }
 
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>here");
+        // 사진 경로 불러옴
+        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+
         // 모임 상세페이지 모임정보(info)를 수정한다.
         groupMapper.updateInfo(group);
         // 모임 태그를 수정한다.(있던거 모두 삭제하고 다시 생성)
@@ -131,10 +135,14 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public List<GroupAttachVO> getAttachList(Long grpSn) {
-        log.info("get Attach list by grpSn" + grpSn);
+    public GroupAttachVO getAttach(Long grpSn) {
+        log.info("get Attach by grpSn" + grpSn);
 
         return groupAttachMapper.findByGrpSn(grpSn);
+    }
+
+    private String getPath(GroupAttachVO attach) {
+        return attach.getUploadPath() + "/" + attach.getUuid() + "_" + attach.getFileName();
     }
 
 }

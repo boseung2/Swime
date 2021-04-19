@@ -36,4 +36,6 @@ public interface MemberMapper {
 
     int deleteKey(String id);
 
+    int updateAuthdate(String id);
+
 }

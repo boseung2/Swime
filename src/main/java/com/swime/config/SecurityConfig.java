@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -38,26 +40,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class);
 
         http
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/group","/include","/user").permitAll()
-                .antMatchers("/user").permitAll()
+//                .antMatchers("/user/infoDetail").access("isAuthenticated()")
                 .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
                 .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
-        .and()
-            .formLogin()
+                .and()
+                .formLogin()
                 .usernameParameter("id")
                 .loginPage("/user/login")
                 .loginProcessingUrl("/user/login")
 //                .successHandler(loginSuccessHandler())
-        .and()
-            .logout()
+                .and()
+                .logout()
                 .logoutUrl("/user/logout")
                 .invalidateHttpSession(true)
-                .deleteCookies("remember-me", "JSESSIONID")
+//                .deleteCookies("remember-me", "JSESSIONID")
                 .and()
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .disable();
+                .rememberMe()
+                .key("remember-id")
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(604800)
+//        .and()
+//            .csrf()
+//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .disable()
         ;
 //        http
 //            .authorizeRequests()
@@ -83,13 +90,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        String getUserDetailQuery = "";
 
         auth
-             // 디테일서비스로 대신함
+                .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
+        // 디테일서비스로 대신함
 //            .jdbcAuthentication()
 //                .dataSource(dataSource)
 //                .passwordEncoder(passwordEncoder())
 //                .usersByUsernameQuery(getUserQuery)
 //                .authoritiesByUsernameQuery(getUserDetailQuery)
-            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
 //            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
         ;
 
@@ -110,5 +117,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomUserDetailsService();
     }
 
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+        repo.setDataSource(dataSource);
+        return repo;
+    }
 
 }

@@ -29,7 +29,7 @@ public class CustomUser extends User {
         super(vo.getId() // String username
                 , vo.getPassword() // String password
 //                , vo.getStatus().equals("USST04") // boolean enabled
-                ,true
+                , vo.getStatus().equals("USST01")
                 , true // boolean accountNonExpired
                 , true // boolean credentialsNonExpired
                 , true // boolean accountNonLocked
