@@ -4,16 +4,18 @@
 <%@include file="../includes/header.jsp" %>
 
 
-
 <!-- Page Content -->
 <div class="container">
     <c:if test="${!empty MemberVo}">
         <!-- Heading Row -->
         <div class="row align-items-center my-5">
             <div class="col-lg-7">
-                <img id="imgPlace" class="img-fluid rounded mb-4 mb-lg-0" src="/display?fileName=${MemberVo.picture}" alt="">
-<%--                <img class="img-fluid rounded mb-4 mb-lg-0" src="/display?fileName=2021%5C04%5C19%2Fb9b4d22b-9d00-469c-92fb-eda4140920df_11.jpg" alt="">--%>
-                <c:out value="${MemberVo.name}"/>
+                <div>
+                    <img id="imgPlace" class="img-fluid rounded mb-4 mb-lg-0" alt="">
+<%--                    <img id="imgPlace" class="img-fluid rounded mb-4 mb-lg-0" src="/display?fileName=${MemberVo.picture}" alt="">--%>
+<%--                    <img id="imgPlace" class="img-fluid rounded mb-4 mb-lg-0" src="${!empty MemberVo.picture ? '/display?fileName=' += MemberVo.picture : '사진없음'}" alt="">--%>
+                </div>
+                <div>${MemberVo.name}</div>
             </div>
             <!-- /.col-lg-8 -->
 
@@ -42,7 +44,6 @@
 
 <script>
     $(".topnav > a").click(function() {
-
         $(".topnav > a").removeClass('active');
         $(this).addClass('active')
         console.log(this.id +" click!!")
@@ -53,11 +54,20 @@
             },
             success:function(result) {
                 $("#content").html(result);
-            }});
+            }
+        });
+    });
+
+    $(document).ready(function (){
+        let profileImg = $("#imgPlace")[0];
+
+        let defaultImg = 'http://placehold.it/900x400';
+        let userImg = '/display?fileName=' + "${MemberVo.picture}".replace("s_", '');
+
+        profileImg.src = "${MemberVo.picture}" === 'myPicture.jpeg' || "${MemberVo.picture}" === '' ? defaultImg : userImg;
     });
 
 
-    console.log("${MemberVo.picture}");
 </script>
 
 <script>
