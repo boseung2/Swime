@@ -236,54 +236,56 @@
     });
 </script>
 <!-- GroupAttend Module -->
+<%--<script type="text/javascript" src="/resources/js/groupAttend.js"></script>--%>
 <script type="text/javascript" src="/resources/js/groupAttend.js"></script>
 <script type="text/javascript" src="/resources/js/studyList.js"></script>
 
-<script>
 
-    $(document).ready(function() {
+<%--<script>--%>
 
-        let grpSnValue = '<c:out value="${group.sn}"/>';
-        let attendUL = $(".attend");
+<%--    $(document).ready(function() {--%>
 
-        showList();
+<%--        let grpSnValue = '<c:out value="${group.sn}"/>';--%>
+<%--        let attendUL = $(".attend");--%>
 
-        function showList() {
-            groupAttendService.getList({grpSn:grpSnValue}, function(list) {
-                let str = "";
-                if(list == null || list.length == 0) {
-                    attendUL.html("");
-                    return;
-                }
+<%--        showList();--%>
 
-                for(let i=0, len=list.length || 0; i<len; i++) {
-                    str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
-                    str += "<span>"+list[i].name+"</span>";
-                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";
-                }
+<%--        function showList() {--%>
+<%--            groupAttendService.getList({grpSn:grpSnValue}, function(list) {--%>
+<%--                let str = "";--%>
+<%--                if(list == null || list.length == 0) {--%>
+<%--                    attendUL.html("");--%>
+<%--                    return;--%>
+<%--                }--%>
 
-                attendUL.html(str);
+<%--                for(let i=0, len=list.length || 0; i<len; i++) {--%>
+<%--                    str += "<li data-sn='"+list[i].sn+"'>";--%>
+<%--                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";--%>
+<%--                    str += "<span>"+list[i].name+"</span>";--%>
+<%--                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";--%>
+<%--                }--%>
 
-                //showRatingPage(ratingCnt);
-            })
-        }
+<%--                attendUL.html(str);--%>
 
-        $("#attendBtn").on("click", function(e) {
-            let attend = {
-                grpSn : grpSnValue,
-                userId : 'jungbs3726@naver.com'
-            }
+<%--                //showRatingPage(ratingCnt);--%>
+<%--            })--%>
+<%--        }--%>
 
-            groupAttendService.add(attend, function(result) {
-                alert("모임에 참여했습니다.");
-                showList();
-                console.log(this);
-            })
-        })
+<%--        $("#attendBtn").on("click", function(e) {--%>
+<%--            let attend = {--%>
+<%--                grpSn : grpSnValue,--%>
+<%--                userId : 'jungbs3726@naver.com'--%>
+<%--            }--%>
 
-    })
-</script>
+<%--            groupAttendService.add(attend, function(result) {--%>
+<%--                alert("모임에 참여했습니다.");--%>
+<%--                showList();--%>
+<%--                console.log(this);--%>
+<%--            })--%>
+<%--        })--%>
+
+<%--    })--%>
+<%--</script>--%>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -475,7 +477,9 @@
         let modalRemoveBtn = $('#modalRemoveBtn');
         let modalRegisterBtn = $('#modalRegisterBtn');
 
-        let userId = "${pinfo.userName}";
+        <sec:authorize access="isAuthenticated()">
+            let userId = "${pinfo.username}";
+        </sec:authorize>
 
         let csrfHeaderName = "${_csrf_headerName}";
         let csrfTokenValue = "${_csrf_token}";
