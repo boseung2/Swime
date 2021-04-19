@@ -5,6 +5,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
 <%@include file="../includes/header.jsp" %>
 
 <div class="container">
@@ -45,13 +47,13 @@
             </select>
         </div>
         <div class="form-group">
-            <button id="mon" value="false">월</button>
-            <button id="tue" value="false">화</button>
-            <button id="wed" value="false">수</button>
-            <button id="thu" value="false">목</button>
-            <button id="fri" value="false">금</button>
-            <button id="sat" value="false">토</button>
-            <button id="sun" value="false">일</button>
+            <span id="mon" value="월">월</span>
+            <span id="tue" value="화">화</span>
+            <span id="wed" value="수">수</span>
+            <span id="thu" value="목">목</span>
+            <span id="fri" value="금">금</span>
+            <span id="sat" value="토">토</span>
+            <span id="sun" value="일">일</span>
         </div>
         <div class="form-group">
             <label for="startTime">시작시간</label>
@@ -90,9 +92,10 @@
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
+        <c:if test="${pinfo.username eq study.representation}">
         <button type="submit" class="btn btn-primary">수정</button>
-        <button type="submit" class="btn btn-primary">삭제</button>
-        <button type="reset" class="btn btn-primary">취소</button>
+        </c:if>
+        <a href="/study/get?sn=${study.sn}" class="btn btn-primary">취소</a>
     </form>
 </div>
 

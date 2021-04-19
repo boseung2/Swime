@@ -70,7 +70,7 @@ public class GroupController {
         model.addAttribute("attendList", groupAttendService.getList(sn));
     }
 
-    @PreAuthorize("principal.username == #userId")
+    @PreAuthorize("principal.username == #group.userId")
     @PostMapping("/modify")
     public String modify(GroupVO group, @ModelAttribute("cri") GroupCriteria cri, RedirectAttributes rttr) {
         log.info(">>>>>>>>>>>>>>>>>");
@@ -81,7 +81,7 @@ public class GroupController {
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 
-        return "redirect:/group/list";
+        return "redirect:/group/list" + cri.getListLink();
     }
 
     @PreAuthorize("principal.username == #userId")

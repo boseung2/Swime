@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.acl.Group;
 import java.util.List;
 
 @Log4j
@@ -89,11 +90,14 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public List<StudyVO> getList(StudyCriteria cri, long grpSn) {
-        List<StudyVO> list = mapper.getListWithPaging(cri, grpSn);
-        list.forEach(study -> study.setAttendants(listMapper.count(study.getSn())));
+    public GroupStudyListDTO getList(StudyCriteria cri, long grpSn) {
+        GroupStudyListDTO groupStudyList = new GroupStudyListDTO();
+        groupStudyList.setList(mapper.getListWithPaging(cri, grpSn));
+        groupStudyList.setCount(mapper.countStudy(grpSn));
 
-        return list;
+        groupStudyList.getList().forEach(study -> study.setAttendants(listMapper.count(study.getSn())));
+
+        return groupStudyList;
     }
 
     @Override
