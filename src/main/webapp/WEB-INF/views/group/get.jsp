@@ -230,6 +230,12 @@
             if("success" === result) {
                 $(".studyModal").html("스터디가 정상적으로 삭제되었습니다.");
             }
+            if("fail" === result) {
+                $(".studyModal").html("스터디를 삭제하실 수 없습니다.");
+            }
+            if("error" === result) {
+                $(".studyModal").html("스터디 삭제가 실패하였습니다.");
+            }
 
             $("#studyModal").modal("show");
         }
@@ -237,8 +243,6 @@
 </script>
 <!-- GroupAttend Module -->
 <%--<script type="text/javascript" src="/resources/js/groupAttend.js"></script>--%>
-<script type="text/javascript" src="/resources/js/groupAttend.js"></script>
-<script type="text/javascript" src="/resources/js/studyList.js"></script>
 
 
 <%--<script>--%>

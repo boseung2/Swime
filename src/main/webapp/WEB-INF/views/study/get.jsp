@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
 <%@include file="../includes/header.jsp" %>
 
 <!-- Page Content -->
@@ -30,9 +32,9 @@
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
-            <form id="operForm" action="group/modify" method="get">
-                <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">
-            </form>
+<%--            <form id="operForm" action="group/modify" method="get">--%>
+<%--                <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">--%>
+<%--            </form>--%>
             <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
             <p>스터디장 : ${study.representationName}</p>
             <p>${study.attendants} / ${study.capacity}</p>
@@ -42,26 +44,28 @@
 
             <div class="wishButton"></div>
 
-            <c:choose>
-                <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
-                <c:when test="${study.representation == studyParam.userId}"></c:when>
-                <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="/study/attendCancel">참석 취소하기</a></c:when>
-                <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
-                <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
-                <c:otherwise><a class="attend btn btn-primary" href="javascript:studyAttendService.attend(); return false;">참석하기</a></c:otherwise>
-            </c:choose>
+            <c:if test="${study.representation != pinfo.username}">
+                <c:choose>
+                    <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
+                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>
+                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
+                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
+                    <c:otherwise><a class="attend btn btn-primary" href="">참석하기</a></c:otherwise>
+                </c:choose>
+            </c:if>
 
             <br><br>
-<%--            <c:if test="${study.representation eq param.userId}">--%>
-            <a class="btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
-            <a class="remove btn btn-primary" href="#">스터디 삭제</a>
+            <c:if test="${study.representation eq pinfo.username}">
+            <a class="modify btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
+            <a class="remove btn btn-primary" href="">스터디 삭제</a>
             <br><br>
             <a class="btn btn-primary" href="#">참가 신청 마감</a>
             <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>
             <a class="btn btn-primary" href="#">참여멤버와 채팅</a>
             <br><br>
-            <a class="list btn btn-primary" href="">스터디 목록</a>
-<%--            </c:if>--%>
+            </c:if>
+
+            <a class="list btn btn-primary" href="">그룹으로 돌아가기</a>
             <br>
         </div>
         <!-- /.col-md-4 -->
@@ -130,6 +134,7 @@
         <input type="hidden" name="amount" value="${cri.amount}">
         <input type="hidden" name="grpSn" value="${study.grpSn}">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <input type="hidden" name="userId" value="${pinfo.username}">
     </form>
 
 
@@ -147,7 +152,7 @@
 
         getStudyWish();
 
-        // 찜 버튼 출력
+        <!--찜 버튼 출력-->
         function getStudyWish() {
 
             studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
@@ -165,7 +170,7 @@
             })
         }
 
-        <!--찜 버튼 눌렸을 때 -->
+        <!--찜 버튼 눌렸을 때-->
         $(".wish").on("click", function(e) {
             e.preventDefault();
 
@@ -174,19 +179,10 @@
 
                 let str = "";
 
-                if(result === "not exist") {
-                    str += "<a class='wish btn btn-primary' href=''>♡</a>";
-                }else {
-                    str += "<a class='wish btn btn-primary' href=''>❤</a>";
-                }
+                //성공시 모달창 띄우기
 
-                wishUL.html(str);
+                getStudyWish();
             })
-
-            <%--actionForm.append("<input type='hidden' name='stdSn' value='" + ${study.sn} + "'>");--%>
-            <%--actionForm.attr("action", "/study/wish");--%>
-            <%--actionForm.attr("method", "post");--%>
-            <%--actionForm.submit();--%>
         });
 
         <!-- 스터디 생성/수정/찜/찜 삭제 후 모달 창-->
@@ -219,7 +215,6 @@
                 case "attend" :
                     $(".modal-body").html("참석 완료되었습니다.");
                     //참석 버튼을 탈퇴버튼으로 바꾸기
-
                     break;
                 case "failAttend" :
                     $(".modal-body").html("참석 실패하였습니다.");
@@ -250,24 +245,6 @@
             actionForm.attr("action", "/study/remove");
             actionForm.attr("method", "post");
             actionForm.submit();
-        });
-
-        // 참석하기 버튼 눌렸을 때
-        $('.attend').on("click", function (e) {
-
-            e.preventDefault();
-
-            studyAttendService.attend(
-                {stdSn : ${study.sn}, userId : "boseung@naver.com"},
-                function(result) {
-                    console.log(result);
-                    checkModal(result);
-                },
-                function(err) {
-                    console.log('failAttend');
-                    checkModal("failAttend");
-                }
-            )
         });
 
     });

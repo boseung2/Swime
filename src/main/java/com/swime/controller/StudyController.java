@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -73,11 +74,7 @@ public class StudyController {
     @PostMapping("/register")
     @PreAuthorize("isAuthenticated()")
     public String register(StudyVO study, RedirectAttributes rttr) {
-        // 임의로 설정
-//        study.setRepresentation("qwer8203@naver.com");
-//        study.setGrpSn(617);
 
-        // 함수로 빼기
         if(study.getOnUrl() != null) {
             study.setOnOff("STOF01");
         }else {
@@ -101,6 +98,7 @@ public class StudyController {
 
     // 스터디 수정
     @GetMapping("/modify")
+    @PreAuthorize("isAuthenticated()")
     public void modify(long sn, Model model) {
         model.addAttribute("study", service.get(sn));
     }
@@ -132,18 +130,20 @@ public class StudyController {
 
     // 스터디 삭제
     @PostMapping("/remove")
-    public String remove(long sn, long grpSn, StudyCriteria cri, RedirectAttributes rttr) { // 스터디번호 들어옴
+    public String remove(long sn, long grpSn, String userId, RedirectAttributes rttr) { // 스터디번호 들어옴
 
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(sn);
+        if (userId != null && userId.equals(service.get(sn).getRepresentation())) {
+            StudyParamVO param = new StudyParamVO();
+            param.setStdSn(sn);
 
-        if(service.remove(param) == 1) {
-            rttr.addFlashAttribute("result", "success");
+            if(service.remove(param) == 1) {
+                rttr.addFlashAttribute("result", "success");
+            }else {
+                rttr.addFlashAttribute("result", "error");
+            }
         }
+        else {rttr.addFlashAttribute("result", "fail");}
 
-        rttr.addAttribute("grpSn", grpSn);
-        rttr.addAttribute("pageNum", cri.getPageNum());
-        rttr.addAttribute("amount", cri.getAmount());
 
         return "redirect:/group/get?sn=" + grpSn;
     }
