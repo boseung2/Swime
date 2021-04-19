@@ -98,6 +98,9 @@ public class GroupServiceImpl implements GroupService{
 
         groupAttachMapper.deleteAll(group.getSn());
 
+        // 사진 경로 불러옴
+        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+
         // 모임 정보를 수정한다.
         boolean modifyResult = groupMapper.update(group) == 1;
 
@@ -107,9 +110,6 @@ public class GroupServiceImpl implements GroupService{
             attach.setGrpSn(group.getSn());
             groupAttachMapper.insert(attach);
         }
-
-        // 사진 경로 불러옴
-        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
 
         // 모임 상세페이지 모임정보(info)를 수정한다.
         groupMapper.updateInfo(group);

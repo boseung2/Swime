@@ -19,18 +19,14 @@
                         </div>
                         <div class="flex-container" style="display: flex;">
                         <c:forEach items="${group.tags}" var="tag">
-                            <div style="background-color: #f1f1f1;
-                                        margin: 2px;
-                                        padding: 2px;
-                                        font-size: 10px;
-                                        border-radius: 0.5rem;">
-                            <c:out value="${tag}"/>
+                            <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
+                            <b><c:out value="${tag}"/></b>
                             </div>
                         </c:forEach>
                         </div>
                         <h2 class="card-title"><c:out value="${group.name}"/></h2>
-                        <p class="card-text"><c:out value="${group.sido}"/><c:out value="${group.sigungu}"/></p>
-                        <p class="card-text">평점: <c:out value="${group.rating}"/>(<c:out value="${group.ratingCount}"/>)</p>
+                        <p class="card-text"><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/><c:out value="${group.sigungu}"/></p>
+                        <p class="card-text"><c:forEach begin="1" end="${group.rating}"><i class="fas fa-star"></i></c:forEach><c:out value="${group.rating}"/> (<c:out value="${group.ratingCount}"/>)</p>
                         <p class="card-text"><c:out value="${group.description}"/></p>
                     </div>
                     <div class="card-footer">

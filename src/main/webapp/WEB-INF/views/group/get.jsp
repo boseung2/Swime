@@ -21,18 +21,14 @@
             <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
             <div class="flex-container" style="display: flex;">
                 <c:forEach items="${group.tags}" var="tag">
-                    <div style="background-color: #f1f1f1;
-                                        margin: 2px;
-                                        padding: 2px;
-                                        font-size: 10px;
-                                        border-radius: 0.5rem;">
+                    <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
                         <c:out value="${tag}"/>
                     </div>
                 </c:forEach>
             </div>
-            <p>지역 <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
-            <p>총인원 <c:out value="${group.attendCount}"/></p>
-            <p>모임장 <c:out value="${group.userName}"/></p>
+            <p><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
+            <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/></p>
+            <p><i class="fas fa-user"></i>모임장 <c:out value="${group.userName}"/></p>
 
             <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
                 <sec:authorize access="isAuthenticated()">
@@ -50,14 +46,36 @@
     <!-- nav -->
     <div class="topnav">
         <a href="#info" class="active">정보</a>
-        <a href="#member">모임멤버</a>
+        <a href="#groupAttend">모임멤버</a>
         <a href="#groupRating">후기</a>
-        <a href="#study">스터디</a>
+        <a href="#studyList">스터디</a>
         <a href="#board">게시판</a>
     </div>
     <!-- /nav -->
 
-    <div id="info">
+    <script>
+        let topnav = document.getElementsByClassName("topnav")[0];
+        let sticky = topnav.offsetTop;
+
+        $(document).ready(function() {
+            $('.topnav').on("click", "a", function() {
+                $(".topnav > a").removeClass('active');
+                $(this).attr("class", "active");
+            })
+        })
+
+        window.onscroll = function() {myFunction()};
+
+        function myFunction() {
+            if(window.pageYOffset >= sticky) {
+                topnav.classList.add("sticky");
+            } else {
+                topnav.classList.remove("sticky");
+            }
+        }
+    </script>
+
+    <div id="info" >
         <h4>정보</h4>
         <p><c:out value="${group.info}"/></p>
     </div>
@@ -77,32 +95,18 @@
                 </div>
             </li>
         </ul>
-<%--        <c:forEach items="${attendList}" var="member" varStatus="status">--%>
-<%--            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">--%>
-<%--            <span><c:out value="${member.name}"/></span>--%>
-<%--            <span><c:out value="${member.grpRole}"/></span>--%>
-<%--            <c:if test="${status.count % 3 == 0}">--%>
-<%--                <br>--%>
-<%--            </c:if>--%>
-<%--        </c:forEach>--%>
     </div>
     <br>
 
     <div id="groupRating">
-        <h4>후기</h4>
-        <sec:authorize access="isAuthenticated()">
+        <h4>후기<sec:authorize access="isAuthenticated()">
             <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
-        </sec:authorize>
+        </sec:authorize></h4>
+
 
         <ul class="rating">
             <li data-sn="12">
                 <div>
-                    <div class="header">
-                        <strong>유저</strong>
-                        <small>2018-01-01 11:11</small>
-                    </div>
-                    <p>평점 : 4.5</p>
-                    <p>내용</p>
                 </div>
             </li>
         </ul>
@@ -115,15 +119,20 @@
 
 
     <!-- 스터디 만들기 버튼-->
-    <a href='/study/register?grpSn=${group.sn}' class='btn btn-primary btn-sm'>스터디 만들기</a>
+    <h4>스터디<a href='/study/register?grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a></h4>
 
     <!-- 스터디 리스트 -->
-    <div class="studyList row">
+    <div class="studyList row" id="studyList">
     </div>
 
     <!-- 스터디 페이징 처리 -->
     <div class="studyPageFooter panel-footer">
 
+    </div>
+
+    <!-- 게시판 -->
+    <div id="board">
+        <h4>게시판</h4>
     </div>
 
     <!-- 첨부파일 -->
