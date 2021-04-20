@@ -10,10 +10,11 @@ public interface ProfileMapper {
 
     List<GroupVO> ownerList(String id);
 
-
     GroupVO read(@Param("sn") Long sn, @Param("id") String id);
 
-    List<GroupVO> readList(String id);
+    List<GroupVO> joinList(String id);
+
+
 
 
 

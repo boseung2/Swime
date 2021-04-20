@@ -49,6 +49,14 @@ public class UserCotroller {
 
     ProfileService profileService;
 
+
+    @GetMapping("/already")
+    public ResponseEntity<Boolean> isAlready(String id){
+        return service.get(id) != null ?
+                new ResponseEntity(true, HttpStatus.OK) :
+                new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/login")
     public void login(){
     }
@@ -79,10 +87,12 @@ public class UserCotroller {
     }
 
     @PostMapping("/modify")
-    public ResponseEntity modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
-        log.info("test_Modify = " + vo.getPassword());
+    public ResponseEntity<String> modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
+        log.info("Modify = " + vo);
         service.modify(vo, hvo);
-        return service.modify(vo, hvo) ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return service.modify(vo, hvo) ?
+                new ResponseEntity("Modify Success", HttpStatus.OK) :
+                new ResponseEntity("Modify Fail", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/remove")

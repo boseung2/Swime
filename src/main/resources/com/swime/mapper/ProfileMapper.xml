@@ -17,6 +17,12 @@
         where user_id = #{id} and sn = #{sn}
     </select>
 
+    <select id="joinList" resultType="com.swime.domain.GroupVO">
+        select l.sn, l.grp_sn grpSn, l.grp_role grpRole, l.status, t.name, t.picture, t.description, t.attend_count, t.rating_count, t.rating, t.sido, t.sigungu, t.status, t.category
+        from Tgrp_list l LEFT OUTER JOIN tgrp t on l.grp_sn = t.sn and l.user_id = #{id}
+        where t.user_id != #{id}
+    </select>
+
 <!--    <select id="getListWithPaging" resultType="com.swime.domain.GroupVO">-->
 <!--        <![CDATA[-->
 <!--        select sn, category, name, user_id, user_name, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id-->

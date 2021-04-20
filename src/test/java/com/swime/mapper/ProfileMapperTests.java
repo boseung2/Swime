@@ -42,4 +42,11 @@ public class ProfileMapperTests {
         log.info(groupVO);
     }
 
+    @Test
+    public void joinList(){
+        List<GroupVO> list = mapper.joinList(id);
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+    }
+
 }

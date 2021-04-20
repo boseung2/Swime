@@ -5,7 +5,7 @@
 
 <h2>생성한 모임</h2>
 <c:forEach var="owner" items="${ownerList}">
-    ${owner.sn} ${owner.name} <a href="#">자세히 보기</a> <br>
+    ${owner.sn} ${owner.name} <a href="/group/get?sn=${owner.sn}">자세히 보기</a> <br>
 </c:forEach>
 
 <h2>가입한 모임</h2>
