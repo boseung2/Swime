@@ -109,7 +109,7 @@
                 confirmPassword.setCustomValidity("비밀번호가 일치하지 않습니다");
                 return;
             }
-
+            // console.log(password.value);
             e.preventDefault();
 
             sendData().then(function (result){
@@ -137,7 +137,6 @@
                 success:function(result) {
                     $("#content").html(result);
                 }});
-
         });
 
         // 지금 처리방법
@@ -243,14 +242,14 @@
                             email : '${MemberVo.id}'
                         },
                         success: function(msg) {
-                            alert('정보를 수정했습니다');
+                            alert(msg);
                             password.value = '';
                             confirmPassword.value = '';
                             if(fileInput.value !== '') profileImg.src = "/display?fileName=" + (fileInput.filepath).replace('s_', '');
                             resolve(true);
                         },
                         error : function (msg) {
-                            alert('에러가 발생했습니다');
+                            alert(msg);
                             resolve(false);
                         }
                     });
