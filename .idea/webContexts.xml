@@ -6,6 +6,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/group/get.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/group" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/includes/header.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/includes" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/study/get.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/study" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/study/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/study" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/details/profile.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/details" />
       </map>
     </option>

@@ -115,7 +115,7 @@
 
 
     <!-- 스터디 만들기 버튼-->
-    <a href='/study/register?grpSn=${group.sn}' class='btn btn-primary btn-sm'>스터디 만들기</a>
+    <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary btn-sm'>스터디 만들기</a>
 
     <!-- 스터디 리스트 -->
     <div class="studyList row">
@@ -376,7 +376,7 @@
                     if(list[i].attendants < list[i].capacity) str += "<p class='card-text'>" + list[i].attendants + "/" +  list[i].capacity + "</p>";
                     str += "</div>";
                     str += "<div class='card-footer'>";
-                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&studyPageNum=" + page + "&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
                     str += "</div>";
                     str += "</div>";
                     str += "</div>";

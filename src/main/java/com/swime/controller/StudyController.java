@@ -41,12 +41,16 @@ public class StudyController {
     // 스터디 상세조회
     @GetMapping("/get")
     public void get(long sn, StudyCriteria cri, String userId, Model model) {
-        model.addAttribute("cri", cri);
-        model.addAttribute("study", service.get(sn));
-        model.addAttribute("members", service.getAttendantList(sn));
-
         log.info("스터디 상세조회 cri = " + cri);
         log.info("스터디 조회자 = " + userId);
+
+        StudyCriteria sendCri = new StudyCriteria(cri.getPageNum(), cri.getAmount());
+        model.addAttribute("cri", sendCri);
+
+        log.info("sendCri = " + sendCri);
+
+        model.addAttribute("study", service.get(sn));
+        model.addAttribute("members", service.getAttendantList(sn));
 
         // 로그인한 경우
         // 찜 여부 가져오기
@@ -67,16 +71,17 @@ public class StudyController {
     // 스터디 생성 페이지
     @GetMapping("/register")
     @PreAuthorize("isAuthenticated()")
-    public void register(@RequestParam("grpSn") long grpSn, Model model) {
+    public void register(@RequestParam("grpSn") long grpSn, StudyCriteria cri, Model model) {
         model.addAttribute("grpSn", grpSn);
+        model.addAttribute("cri", cri);
     }
 
     // 스터디 생성
     @PostMapping("/register")
     @PreAuthorize("isAuthenticated()")
-    public String register(StudyVO study, String userId, RedirectAttributes rttr) {
+    public String register(StudyVO study, String userId, StudyCriteria cri, RedirectAttributes rttr) {
 
-        log.info("스터디 생성 study = " + study);
+        log.info("스터디 생성 cri = " + cri);
 
         if("".equals(study.getOnUrl())) {
             study.setOnOff("STOF02");
@@ -91,10 +96,15 @@ public class StudyController {
             study.setRepeatCycle(study.getRepeatCycle());
         }
 
-        service.register(study);
+        if(service.register(study) == 1) {
+            rttr.addFlashAttribute("result", "register");
+        }else {
+            rttr.addFlashAttribute("result", "register error");
+        }
 
-        rttr.addFlashAttribute("result", "register");
         rttr.addAttribute("userId", userId);
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
 
         // 만들어진 스터디의 상세조회 페이지로 이동한다.
         return "redirect:/study/get?sn=" + study.getSn();

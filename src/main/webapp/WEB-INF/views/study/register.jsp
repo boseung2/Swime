@@ -90,6 +90,8 @@
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <input type="hidden" name="userId" value="${pinfo.username}">
+        <input type="hidden" name="pageNum" value="<c:out value='${cri.pageNum}'/>">
+        <input type="hidden" name="amount" value="<c:out value='${cri.amount}'/>">
         <button type="submit" class="btn btn-primary">등록</button>
         <button type="reset" class="btn btn-primary">취소</button>
     </form>
