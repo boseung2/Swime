@@ -1,11 +1,13 @@
 package com.swime.controller;
 
+import com.swime.domain.GroupVO;
 import com.swime.domain.MailVO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.MemberMapper;
 import com.swime.service.AuthService;
 import com.swime.service.MemberService;
+import com.swime.service.ProfileService;
 import com.swime.util.GmailSend;
 import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
@@ -45,6 +47,16 @@ public class UserCotroller {
 
     MakeRandomValue makeRandomValue;
 
+    ProfileService profileService;
+
+
+    @GetMapping("/already")
+    public ResponseEntity<Boolean> isAlready(String id){
+        return service.get(id) != null ?
+                new ResponseEntity(true, HttpStatus.OK) :
+                new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/login")
     public void login(){
     }
@@ -75,10 +87,12 @@ public class UserCotroller {
     }
 
     @PostMapping("/modify")
-    public ResponseEntity modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
-        log.info("test_Modify = " + vo.getPassword());
+    public ResponseEntity<String> modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
+        log.info("Modify = " + vo);
         service.modify(vo, hvo);
-        return service.modify(vo, hvo) ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return service.modify(vo, hvo) ?
+                new ResponseEntity("Modify Success", HttpStatus.OK) :
+                new ResponseEntity("Modify Fail", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/remove")
@@ -125,12 +139,27 @@ public class UserCotroller {
         model.addAttribute("MemberVo", service.get(id));
     }
 
+    @GetMapping("/details/info")
+    public void info(Model model, String id){
+        model.addAttribute("MemberVo", service.get(id));
+    }
+
     @GetMapping("/details/group")
-    public void group(){
+    public void group(Model model, String id){
+        List<GroupVO> list = profileService.getOwnerGroupList(id);
+        list.forEach(log::info);
+        model.addAttribute("ownerList", profileService.getOwnerGroupList(id));
+        model.addAttribute("test", "왜 안되는거니??");
+
+        model.addAttribute("MemberVo", service.get(id));
+        model.addAttribute("test2", profileService.read(678L, id));
+        model.addAttribute("test3", new int[] {1,2,3,4,5});
+
     }
 
     @GetMapping("/details/study")
-    public void study(){
+    public void study(Model model, String id){
+        model.addAttribute("MemberVo", service.get(id));
     }
 
     @GetMapping("/details/written")
