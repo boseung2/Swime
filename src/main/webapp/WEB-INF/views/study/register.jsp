@@ -37,12 +37,14 @@
             <label for="repeatCycle">반복주기</label>
             <select class="form-control" id="repeatCycle" name="repeatCycle">
                 <option>(선택)</option>
-                <option value="GRCA01">매주</option>
-                <option value="GRCA02">격주</option>
-                <option value="GRCA03">매월</option>
+                <option value="STCY01">매주</option>
+                <option value="STCY02">격주</option>
+                <option value="STCY03">매월</option>
             </select>
         </div>
         <div class="form-group">
+            <label for="repeatDay">반복요일</label>
+            <input type="hidden" class="form-control" id="repeatDay" name="repeatDay">
             <input type="checkbox" value="월" class="day">월
             <input type="checkbox" value="화" class="day">화
             <input type="checkbox" value="수" class="day">수
@@ -53,18 +55,18 @@
         </div>
         <div class="form-group">
             <label for="startTime">시작시간</label>
-            <input type="time" class="form-control" id="startTime" name="startTime">
+            <input type="time" class="form-control" id="startTime" name="startTime" required>
         </div>
         <div class="form-group">
             <label for="endTime">종료시간</label>
-            <input type="time" class="form-control" id="endTime" name="endTime">
+            <input type="time" class="form-control" id="endTime" name="endTime" required>
         </div>
         <div class="form-group">
             <label for="information">상세 정보</label>
-            <textarea class="form-control" rows="5" id="information" name="information"></textarea>
+            <textarea class="form-control" rows="5" id="information" name="information" required></textarea>
         </div>
         <div class="form-group">
-            <input type="checkbox" id="onOff" onclick="checkOnOff()">온라인스터디
+            <input type="checkbox" id="onOff" onclick="checkOn()">온라인스터디
         </div>
         <div class="form-group" id="formUrl" hidden="true">
             <label for="onUrl">온라인 스터디 링크 추가</label>
@@ -80,13 +82,14 @@
         </div>
         <div class="form-group">
             <label for="capacity">모집 인원</label>
-            <input type="text" class="form-control" id="capacity" name="capacity">
+            <input type="text" class="form-control" id="capacity" name="capacity" required>
         </div>
-        <button>설문 등록하기</button>
-        <button>설문 수정하기</button>
+        <a class="btn btn-outline-dark" href="#">설문 등록하기</a>
+        <a class="btn btn-outline-dark" href="#">설문 수정하기</a>
         <br>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <input type="hidden" name="userId" value="${pinfo.username}">
         <button type="submit" class="btn btn-primary">등록</button>
         <button type="reset" class="btn btn-primary">취소</button>
     </form>
@@ -97,17 +100,52 @@
 
 <script type="text/javascript">
 
-    let onOffCheck = document.getElementById("onOff");
-    let formUrl = document.getElementById("formUrl");
-    let formPlace = document.getElementById("formPlace");
+    <!-- 날짜 -->
+    let today = new Date();
 
-    function checkOnOff() {
-        formUrl.hidden = !onOffCheck.checked;
-        formPlace.hidden = onOffCheck.checked;
+    let year = today.getFullYear();
+    let month = today.getMonth();
+    if(month < 10) month = "0" + (month+1);
+    let date = today.getDate();
+    if(date < 10) date = "0" + date;
+    let hours = today.getHours();
+    if(hours < 10) hours = "0" + hours;
+    let minutes = today.getMinutes();
+    if(minutes < 10) minutes = "0" + minutes;
+
+    console.log(today);
+    console.log(year);
+    console.log(month);
+    console.log(date);
+    console.log(hours);
+    console.log(minutes);
+
+    $('#startDate').val(year + "-" + month + "-" + date);
+    $('#endDate').val(year + "-" + month + "-" + date);
+    $('#startTime').val(hours + ":" + minutes);
+    $('#endTime').val(hours + ":" + minutes);
+
+    <!-- 온오프라인 -->
+    let onOffCheck = $('#onOff');
+    let formUrl = $('#formUrl');
+    let formPlace = $('#formPlace');
+
+    function checkOn() {
+        let on = onOffCheck[0].checked;
+        console.log("on = " + on);
+
+        formUrl[0].hidden = !on;
+        formPlace[0].hidden = on;
+        $('#onUrl').attr("required", on);
+        $('#placeId').attr("required", !on);
+
+        if(formUrl[0].hidden) {
+            $('#onUrl').val("");
+        }
+        if(formPlace[0].hidden) {
+            $('#placeId').val("");
+        }
     }
-
-    $(document).ready(function() {
-    })
 
 
     $(".day").on("click", function(e) {
@@ -116,14 +154,16 @@
 
         let dayList = $('input[class="day"]');
 
-        let days = "";
+        let days = [];
 
         for(let i = 0; i < dayList.length; i++) {
             if(dayList[i].checked === true) {
-                days += dayList[i].value;
+                days.push(dayList[i].value);
             }
         }
 
-        console.log(days);
+        console.log(days.join(','));
+
+        $('#repeatDay').val(days.join(','));
     })
 </script>

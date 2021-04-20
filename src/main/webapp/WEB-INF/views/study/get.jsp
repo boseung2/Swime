@@ -32,9 +32,6 @@
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
-<%--            <form id="operForm" action="group/modify" method="get">--%>
-<%--                <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">--%>
-<%--            </form>--%>
             <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
             <p>스터디장 : ${study.representationName}</p>
             <p>${study.attendants} / ${study.capacity}</p>
@@ -56,7 +53,7 @@
 
             <br><br>
             <c:if test="${study.representation eq pinfo.username}">
-            <a class="modify btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
+            <a class="modify btn btn-primary" href="">스터디 수정</a>
             <a class="remove btn btn-primary" href="">스터디 삭제</a>
             <br><br>
             <a class="btn btn-primary" href="#">참가 신청 마감</a>
@@ -134,14 +131,12 @@
         <input type="hidden" name="amount" value="${cri.amount}">
         <input type="hidden" name="grpSn" value="${study.grpSn}">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-        <input type="hidden" name="userId" value="${pinfo.username}">
     </form>
 
 
 </div>
 
 <script type="text/javascript" src="/resources/js/studyWish.js"></script>
-<script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -206,6 +201,9 @@
                 case "update" :
                     $(".modal-body").html("스터디가 정상적으로 수정되었습니다.");
                     break;
+                case "update error" :
+                    $(".modal-body").html("스터디 수정을 실패하였습니다.");
+                    break;
                 case "wish" :
                     $(".modal-body").html("스터디를 찜했습니다.");
                     break;
@@ -226,7 +224,7 @@
             $("#myModal").modal("show");
         }
 
-        <!-- 스터디 목록 버튼 눌렸을 때-->
+        <!-- 그룹으로 돌아가기 버튼 눌렸을 때-->
         let actionForm = $("#actionForm");
 
         $(".list").on("click", function(e) {
@@ -242,8 +240,20 @@
             e.preventDefault();
 
             actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
+            actionForm.append("<input type='hidden' name = 'representation' value='${study.representation}'>");
             actionForm.attr("action", "/study/remove");
             actionForm.attr("method", "post");
+            actionForm.submit();
+        });
+
+        <!-- 스터디 수정 버튼 눌렀을 때-->
+        $(".modify").on("click", function(e) {
+            e.preventDefault();
+
+            actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
+            actionForm.append("<input type='hidden' name = 'representation' value='${study.representation}'>");
+            actionForm.attr("action", "/study/modify");
+            actionForm.attr("method", "get");
             actionForm.submit();
         });
 

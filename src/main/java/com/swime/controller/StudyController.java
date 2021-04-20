@@ -9,11 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sun.net.www.protocol.http.AuthenticationInfo;
 
 import javax.xml.ws.Response;
 
@@ -38,19 +40,18 @@ public class StudyController {
 
     // 스터디 상세조회
     @GetMapping("/get")
-    public void get(long sn, StudyCriteria cri, Model model) {
+    public void get(long sn, StudyCriteria cri, String userId, Model model) {
         model.addAttribute("cri", cri);
         model.addAttribute("study", service.get(sn));
         model.addAttribute("members", service.getAttendantList(sn));
 
+        log.info("스터디 상세조회 cri = " + cri);
+        log.info("스터디 조회자 = " + userId);
+
         // 로그인한 경우
         // 찜 여부 가져오기
         StudyParamVO studyParam = new StudyParamVO();
-
-//        qwer8203@naver.com // 스터디장
-//        boseung@naver.com // 일반 회원
-//        aaa@service.com // 로그인 안한 회원
-        studyParam.setUserId("boseung@naver.com");
+        studyParam.setUserId(userId);
         studyParam.setStdSn(sn);
 
         model.addAttribute("studyParam", studyParam);
@@ -73,12 +74,14 @@ public class StudyController {
     // 스터디 생성
     @PostMapping("/register")
     @PreAuthorize("isAuthenticated()")
-    public String register(StudyVO study, RedirectAttributes rttr) {
+    public String register(StudyVO study, String userId, RedirectAttributes rttr) {
 
-        if(study.getOnUrl() != null) {
-            study.setOnOff("STOF01");
-        }else {
+        log.info("스터디 생성 study = " + study);
+
+        if("".equals(study.getOnUrl())) {
             study.setOnOff("STOF02");
+        }else {
+            study.setOnOff("STOF01");
         }
 
         // 반복 주기 설정
@@ -91,6 +94,7 @@ public class StudyController {
         service.register(study);
 
         rttr.addFlashAttribute("result", "register");
+        rttr.addAttribute("userId", userId);
 
         // 만들어진 스터디의 상세조회 페이지로 이동한다.
         return "redirect:/study/get?sn=" + study.getSn();
@@ -98,13 +102,17 @@ public class StudyController {
 
     // 스터디 수정
     @GetMapping("/modify")
-    @PreAuthorize("isAuthenticated()")
-    public void modify(long sn, Model model) {
+    @PreAuthorize("principal.username == #representation")
+    public void modify(long sn, StudyCriteria cri, String representation, Model model) {
         model.addAttribute("study", service.get(sn));
+        model.addAttribute("cri", cri);
     }
 
     @PostMapping("/modify")
-    public String modify(StudyVO study, RedirectAttributes rttr) {
+    @PreAuthorize("principal.username == #study.representation")
+    public String modify(StudyVO study, StudyCriteria cri, String userId, RedirectAttributes rttr) {
+
+        log.info("modify representation " + study.getRepresentation());
 
         if(study.getOnUrl() != null) {
             study.setOnOff("STOF01");
@@ -120,9 +128,15 @@ public class StudyController {
             study.setRepeatCycle(study.getRepeatCycle());
         }
 
-        service.modify(study);
+        if(service.modify(study) == 1) {
+            rttr.addFlashAttribute("result", "update");
+        }else {
+            rttr.addFlashAttribute("result", "update error");
+        }
 
-        rttr.addFlashAttribute("result", "update");
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
+        rttr.addAttribute("userId", userId);
 
         // 수정된 스터디의 상세조회 페이지로 이동한다.
         return "redirect:/study/get?sn=" + study.getSn();
@@ -130,26 +144,29 @@ public class StudyController {
 
     // 스터디 삭제
     @PostMapping("/remove")
-    public String remove(long sn, long grpSn, String userId, RedirectAttributes rttr) { // 스터디번호 들어옴
+    @PreAuthorize("principal.username == #representation")
+    public String remove(long sn, long grpSn, StudyCriteria cri, String representation, RedirectAttributes rttr) { // 스터디번호 들어옴
 
-        if (userId != null && userId.equals(service.get(sn).getRepresentation())) {
-            StudyParamVO param = new StudyParamVO();
-            param.setStdSn(sn);
+        log.info("=======================================remove cri = " + cri);
 
-            if(service.remove(param) == 1) {
-                rttr.addFlashAttribute("result", "success");
-            }else {
-                rttr.addFlashAttribute("result", "error");
-            }
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(sn);
+
+        if(service.remove(param) == 1) {
+            rttr.addFlashAttribute("result", "success");
+        }else {
+            rttr.addFlashAttribute("result", "error");
         }
-        else {rttr.addFlashAttribute("result", "fail");}
 
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
 
         return "redirect:/group/get?sn=" + grpSn;
     }
     
     // 스터디 멤버 관리 - 참여멤버/ 대기멤버 가져오기
     @GetMapping("/members")
+    @PreAuthorize("principal.username == #study.representation")
     public void members(long stdSn, Model model) {
         model.addAttribute("study", service.get(stdSn));
         model.addAttribute("attendantList", service.getAttendantList(stdSn));

@@ -91,11 +91,15 @@
         <br>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <input type="hidden" name="userId" value="${pinfo.username}">
+        <input type="hidden" name="pageNum" value="${cri.pageNum}">
+        <input type="hidden" name="amount" value="${cri.amount}">
 
         <c:if test="${pinfo.username eq study.representation}">
-        <button type="submit" class="btn btn-primary">수정</button>
+            <button type="submit" class="btn btn-primary">수정</button>
         </c:if>
-        <a href="/study/get?sn=${study.sn}" class="btn btn-primary">취소</a>
+        <a href="/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=${study.sn}" class="btn btn-primary">취소</a>
+
     </form>
 </div>
 

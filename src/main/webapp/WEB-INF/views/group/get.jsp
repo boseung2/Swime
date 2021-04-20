@@ -198,7 +198,7 @@
                 <h4 class="modal-title" id="studyModalLabel">Modal title</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
-            <div class="studyModal modal-body">정상적으로 처리되었습니다.</div>
+            <div class="studyModalBody modal-body">정상적으로 처리되었습니다.</div>
             <div class = "modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
@@ -217,24 +217,24 @@
         <!-- 스터디 삭제 후 모달 창-->
         let result = '<c:out value="${result}"/>';
 
+        console.log("스터디 삭제 result = " + result);
+
         checkModal(result);
 
         history.replaceState({}, null, null);
 
 
         function checkModal(result) {
+
             if(result === '' || history.state) {
                 return;
             }
 
             if("success" === result) {
-                $(".studyModal").html("스터디가 정상적으로 삭제되었습니다.");
-            }
-            if("fail" === result) {
-                $(".studyModal").html("스터디를 삭제하실 수 없습니다.");
+                $(".studyModalBody").html("스터디가 정상적으로 삭제되었습니다.");
             }
             if("error" === result) {
-                $(".studyModal").html("스터디 삭제가 실패하였습니다.");
+                $(".studyModalBody").html("스터디 삭제를 실패하였습니다.");
             }
 
             $("#studyModal").modal("show");
@@ -370,12 +370,13 @@
                     str += "<p class='card-text'>" + list[i].startTime.substring(0,5) + " ~ " + list[i].endTime.substring(0,5) + "</p>";
                     if(list[i].onOff === 'STOF01') str += "<p class='card-text'>온라인 스터디</p>";
                     if(list[i].onOff === 'STOF02') str += "<p class='card-text'>오프라인 스터디</p>";
-                    str += "<p class='card-text'>" + list[i].expense + "</p>";
+                    <c:if test="list[i].expense == null">str += "<p class='card-text'></p>"; </c:if>
+                    <c:if test="list[i].expense != null">str += "<p class='card-text'>" + list[i].expense + "</p>"; </c:if>
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
                     if(list[i].attendants < list[i].capacity) str += "<p class='card-text'>" + list[i].attendants + "/" +  list[i].capacity + "</p>";
                     str += "</div>";
                     str += "<div class='card-footer'>";
-                    str += "<a href='/study/get?sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&studyPageNum=" + page + "&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
                     str += "</div>";
                     str += "</div>";
                     str += "</div>";
