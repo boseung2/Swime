@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.CodeTable;
 import com.swime.domain.GroupAttendVO;
 import com.swime.domain.GroupVO;
 import com.swime.mapper.GroupAttendMapper;
@@ -37,13 +38,18 @@ public class GroupAttendServiceImpl implements GroupAttendService{
     @Override
     public GroupAttendVO get(Long sn) {
         GroupAttendVO returnVO = groupAttendMapper.read(sn);
+        returnVO.setGrpRole(CodeTable.valueOf(returnVO.getGrpRole()).getValue());
         return returnVO;
     }
 
     @Override
     public List<GroupAttendVO> getList(Long grpSn) {
+        List<GroupAttendVO> list = groupAttendMapper.getList(grpSn);
+        for(int i=0; i<list.size(); i++) {
+            list.get(i).setGrpRole(CodeTable.valueOf(list.get(i).getGrpRole()).getValue());
+        }
         // 해당 모임 가입인원들을 보여준다.
-        return groupAttendMapper.getList(grpSn);
+        return list;
     }
 
     @Transactional

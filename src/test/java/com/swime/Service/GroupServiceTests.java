@@ -1,5 +1,6 @@
 package com.swime.Service;
 
+import com.swime.domain.CodeTable;
 import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
 import com.swime.service.GroupService;
@@ -56,7 +57,9 @@ public class GroupServiceTests {
 
     @Test
     public void testGet() {
-        log.info(service.get(277L));
+        //GroupVO group = service.get(683L);
+
+        log.info(service.get(683L));
     }
 
     @Test

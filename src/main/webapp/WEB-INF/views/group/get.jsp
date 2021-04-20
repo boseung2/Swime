@@ -290,8 +290,8 @@
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
                     str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
-                    str += "<span>"+list[i].name+"</span>";
-                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";
+                    str += "<span><b>"+list[i].name+"</b></span>\t";
+                    str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
                 }
 
                 attendUL.html(str);

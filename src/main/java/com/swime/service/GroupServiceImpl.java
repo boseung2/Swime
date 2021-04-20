@@ -68,8 +68,11 @@ public class GroupServiceImpl implements GroupService{
         GroupVO group = groupMapper.read(sn);
         // 해당 모임 태그들을 불러와서 group 객체에 넣는다.
         List<String> tags = new ArrayList<>();
-        groupTagMapper.getList(sn).forEach(tag -> tags.add(tag.getName()));
+        groupTagMapper.getList(sn).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
         group.setTags(tags);
+        group.setSido(CodeTable.valueOf(group.getSido()).getValue());
+        group.setSigungu(CodeTable.valueOf(group.getSigungu()).getValue());
+        group.setCategory(CodeTable.valueOf(group.getCategory()).getValue());
         return group;
     }
 
@@ -82,8 +85,11 @@ public class GroupServiceImpl implements GroupService{
         // 각 모임 리스트에 태그를 불러와서 추가한다.
         list.forEach(group -> {
             List<String> tags = new ArrayList<>();
-            groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(tag.getName()));
+            groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
             group.setTags(tags);
+            group.setSido(CodeTable.valueOf(group.getSido()).getValue());
+            group.setSigungu(CodeTable.valueOf(group.getSigungu()).getValue());
+            group.setCategory(CodeTable.valueOf(group.getCategory()).getValue());
         });
 
         return list;

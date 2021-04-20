@@ -1,0 +1,141 @@
+package com.swime.domain;
+
+import lombok.Getter;
+
+@Getter
+public enum CodeTable {
+    //카테고리
+    GRCA01("프론트엔드"),
+    GRCA02("백엔드"),
+    GRCA03("앱 개발"),
+    GRCA04("게임 개발"),
+    GRCA05("프로그래밍 언어"),
+    GRCA06("알고리즘"),
+    GRCA07("데이터 사이언스"),
+    GRCA08("데이터베이스"),
+    GRCA09("컴퓨터 사이언스"),
+    GRCA10("개발 도구"),
+    GRCA11("교양 · 기타"),
+
+    //태그
+    GRTG01("HTML"),
+    GRTG02("CSS"),
+    GRTG03("Java Script"),
+    GRTG04("Vue.js"),
+    GRTG05("React"),
+    GRTG06("Java"),
+    GRTG07("Python"),
+    GRTG08("Node.js"),
+    GRTG09("Spring"),
+    GRTG10("Spring Boot"),
+    GRTG11("Django"),
+    GRTG12("Android"),
+    GRTG13("IOS"),
+    GRTG14("Kotlin"),
+    GRTG15("Firebase"),
+    GRTG16("Flutter"),
+    GRTG17("React Native"),
+    GRTG18("IONIC"),
+    GRTG19("Unity"),
+    GRTG20("C#"),
+    GRTG21("C"),
+    GRTG22("Unreal Engine"),
+    GRTG23("Swift"),
+    GRTG24("C++"),
+    GRTG25("Scratch"),
+    GRTG26("UE Blueprints"),
+    GRTG27("R"),
+    GRTG28("코딩테스트"),
+    GRTG29("자료구조"),
+    GRTG30("운영체제"),
+    GRTG31("알고리즘"),
+    GRTG32("SQL"),
+    GRTG33("MySQL"),
+    GRTG34("Oracle"),
+    GRTG35("JPA"),
+    GRTG36("MongoDB"),
+    GRTG37("MsSQL"),
+    GRTG38("IntelliJ"),
+    GRTG39("Eclipse"),
+    GRTG40("Excel"),
+
+    // 시/도
+    LODO01("서울특별시"),
+    LODO02("경기도"),
+
+    // 구
+    LOGU01("강남구"),
+    LOGU02("강동구"),
+    LOGU03("강북구"),
+    LOGU04("강서구"),
+    LOGU05("관악구"),
+    LOGU06("광진구"),
+    LOGU07("구로구"),
+    LOGU08("금천구"),
+    LOGU09("노원구"),
+    LOGU10("도봉구"),
+    LOGU11("동대문구"),
+    LOGU12("동작구"),
+    LOGU13("마포구"),
+    LOGU14("서대문구"),
+    LOGU15("서초구"),
+    LOGU16("성동구"),
+    LOGU17("성북구"),
+    LOGU18("송파구"),
+    LOGU19("양천구"),
+    LOGU20("영등포구"),
+    LOGU21("용산구"),
+    LOGU22("은평구"),
+    LOGU23("종로구"),
+    LOGU24("중구"),
+    LOGU25("중랑구"),
+
+    //시
+    LOSI01("고양시"),
+    LOSI02("과천시"),
+    LOSI03("광명시"),
+    LOSI04("광주시"),
+    LOSI05("구리시"),
+    LOSI06("군포시"),
+    LOSI07("김포시"),
+    LOSI08("남양주시"),
+    LOSI09("동두천시"),
+    LOSI10("미금시"),
+    LOSI11("부천시"),
+    LOSI12("성남시"),
+    LOSI13("송탄시"),
+    LOSI14("수원시"),
+    LOSI15("시흥시"),
+    LOSI16("안산시"),
+    LOSI17("안성시"),
+    LOSI18("안양시"),
+    LOSI19("양주시"),
+    LOSI20("양주시"),
+    LOSI21("여주시"),
+    LOSI22("여주시"),
+    LOSI23("오산시"),
+    LOSI24("용인시"),
+    LOSI25("의왕시"),
+    LOSI26("의정부시"),
+    LOSI27("이천시"),
+    LOSI28("파주시"),
+    LOSI29("평택시"),
+    LOSI30("포천시"),
+    LOSI31("포천시"),
+    LOSI32("하남시"),
+    LOSI33("화성시"),
+
+    GRRO01("모임장"),
+    GRRO02("운영진"),
+    GRRO03("모임원"),
+    GRRO04("영구강퇴")
+    ;
+
+    private String value;
+
+    CodeTable(String value) {
+        this.value = value;
+    }
+
+
+}
