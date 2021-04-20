@@ -24,9 +24,10 @@
                             </div>
                         </c:forEach>
                         </div>
-                        <h2 class="card-title"><c:out value="${group.name}"/></h2>
-                        <p class="card-text"><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/><c:out value="${group.sigungu}"/></p>
+                        <h2 class="card-title"><c:out value="${group.name}"/><span style="color:gray;font-size:20px;">[<c:out value="${group.category}"/>]</span></h2>
                         <p class="card-text ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></p>
+                        <p class="card-text"><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
+                        <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
                         <p class="card-text"><c:out value="${group.description}"/></p>
 
                     </div>
@@ -71,15 +72,14 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Modal Header</h4>
+                    <h4 class="modal-title">모임</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
                     <p>처리가 완료되었습니다.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
                 </div>
             </div>
         </div>
