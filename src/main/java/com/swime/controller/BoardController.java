@@ -1,14 +1,14 @@
 package com.swime.controller;
 
-import com.swime.domain.BoardCriteria;
-import com.swime.domain.BoardLikeVO;
-import com.swime.domain.BoardPageDTO;
-import com.swime.domain.BoardVO;
+import com.swime.domain.*;
 import com.swime.service.BoardLikeService;
 import com.swime.service.BoardService;
 import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +45,15 @@ public class BoardController {
         log.info("total: " + total);
         model.addAttribute("pageMaker", new BoardPageDTO(cri, total));
 
+    }
+
+    @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<BoardCriteria> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
+
+        BoardCriteria cri = new BoardCriteria(page, 10);
+
+        return new ResponseEntity<>(service.getListWithPaging(cri, grpSn), HttpStatus.OK);
     }
 
     @GetMapping("/register")

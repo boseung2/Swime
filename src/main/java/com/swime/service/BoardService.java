@@ -21,7 +21,7 @@ public interface BoardService {
     //댓글 개수
     //public int getReplyCnt(Long brdSn);
 
-    public List<BoardVO> getListWithPaging(BoardCriteria cri);
+    public List<BoardVO> getListWithPaging(BoardCriteria cri, long grpSn);
 
     public int getTotal(BoardCriteria cri);
 

@@ -135,11 +135,40 @@
 
     </div>
 
-    <!-- 게시판 -->
+
+    <!-- 게시판  -->
     <hr class="centerHr" id="board">
     <div id="board">
-        <h4>게시판</h4>
-    </div>
+
+        <h4>게시판
+            <button id="regBtn" type="button" class="btn btn-xs pull-right">글쓰기</button>
+        </h4>
+
+        <div class="boardHeader">
+            <span>1번</span>
+            <span id="boardNotice">[필독]</span>
+            <br>
+
+
+            <div id="boardDivBox">
+                <span><img class="avatar" src="../../../resources/img/img_avatar2.png" alt="error"></span>
+                <span id="boardName">이민재</span>
+                <span id="grpBrdRole">(모임장)</span>
+                <span id="boardRegDate">2021-10-10</span>
+            </div>
+
+            <span>스프링</span>
+
+            <div id="boardContent">스프링 초고수만</div>
+
+            <i class='fas fa-comment' style='font-size:18px'>100</i>
+            <i class='fas fa-heart' style='font-size:18px'>100</i>
+        </div>
+
+    </div><!--end board-->
+
+
+
 
     <!-- 첨부파일 -->
 <%--    <h4>사진</h4>--%>
@@ -775,6 +804,19 @@
         }
 
     })
+</script>
+
+<script type="text/javascript">
+    // 게시판
+    $('document').ready(function(){
+
+        let grpSnValue = '<c:out value="${group.sn}"/>';
+        console.log("brdSnValue"+brdSnValue);
+        let brdUl = $("")
+
+
+    });
+
 </script>
 
 

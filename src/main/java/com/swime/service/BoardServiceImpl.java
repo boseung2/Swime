@@ -59,12 +59,12 @@ public class BoardServiceImpl implements BoardService{
     }
 
 
-
+    //
     @Override
-    public List<BoardVO> getListWithPaging(BoardCriteria cri) {
+    public List<BoardVO> getListWithPaging(BoardCriteria cri, long grpSn) {
 
         log.info("get List with BoardCri: " + cri);
-        return mapper.getListWithPaging(cri);
+        return mapper.getListWithPaging(cri, grpSn);
     }
 
     @Override
@@ -72,6 +72,8 @@ public class BoardServiceImpl implements BoardService{
 
         return mapper.getTotalCount(cri);
     }
+
+
 
 //    @Override
 //    public List<BoardVO> getList() {

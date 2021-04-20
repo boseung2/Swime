@@ -13,7 +13,7 @@ public interface BoardMapper {
     public List<BoardVO> getList();
 
     // 게시판 페이징
-    public List<BoardVO> getListWithPaging(BoardCriteria cri);
+    public List<BoardVO> getListWithPaging(@Param("cri") BoardCriteria cri, @Param("grpSn") long grpSn);
 
     // 게시판 생성
     public int insertSelectKey(BoardVO board);
