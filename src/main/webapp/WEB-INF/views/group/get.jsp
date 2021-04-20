@@ -80,7 +80,7 @@
     <div class="main-contents">
     <div id="info" >
         <h4>모임정보</h4>
-        <p><c:out value="${group.info}"/></p>
+        <p><pre><c:out value="${group.info}"/></pre></p>
     </div>
     <br>
 
@@ -116,7 +116,7 @@
         </ul>
     </div>
 
-    <!-- rating paginatino button -->
+    <!-- rating pagination button -->
     <div class="panel-footer">
 
     </div>
@@ -137,22 +137,9 @@
 
     <!-- 게시판 -->
     <hr class="centerHr" id="board">
-    <div id="board">
+    <div>
         <h4>게시판</h4>
     </div>
-
-    <!-- 첨부파일 -->
-<%--    <h4>사진</h4>--%>
-<%--    <div class="uploadResult">--%>
-<%--        <ul>--%>
-<%--        </ul>--%>
-<%--    </div>--%>
-
-    <!-- 첨부파일 확대 -->
-<%--    <div class="bigPictureWrapper">--%>
-<%--        <div class="bigPicture">--%>
-<%--        </div>--%>
-<%--    </div>--%>
 
     <!-- container -->
 
@@ -165,7 +152,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- 후기 작성/수정 모달 -->
 <div class="modal fade" id="groupModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -195,6 +182,43 @@
                 <label for="grpSn" hidden>그룹번호</label>
                 <input type="number" class="form-control" name="grpSn" id="grpSn" hidden>
             </div>
+            <!-- 유효성 검사 -->
+            <script>
+                function ratingValidation() {
+
+                    if(isNaN($('#rating').val()) || $('#rating').val() == "") {
+                        alert("점수를 다시 입력해주세요")
+                        return false;
+                    }else if($('#rating').val() < 0 || $('#rating').val() > 5) {
+                        alert("점수는 0~5점까지 입력가능합니다.")
+                        return false;
+                    }
+
+                    if($("#review").val() == "") {
+                        alert("후기내용을 입력해주세요");
+                        return false;
+                    }else if(getByte($("#review").val()) > 300) {
+                        alert("후기내용을 100자 이내로 작성해주세요");
+                        return false;
+                    }
+
+                    if(isNaN($('#stdSn').val()) || $('#stdSn').val() == "" || $('#stdSn').val() <= 0) {
+                        alert("스터디번호를 다시 입력해주세요");
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                function getByte(str) {
+                    let byte = 0;
+                    for (let i=0; i<str.length; ++i) {
+                        (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
+                    }
+                    return byte;
+                }
+
+            </script>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" id="modalModBtn">Modify</button>
                 <button type="button" class="btn btn-danger" id="modalRemoveBtn">Remove</button>
@@ -230,8 +254,11 @@
 <!-- StudyList Module -->
 <script type="text/javascript" src="/resources/js/studyList.js"></script>
 
-<script>
 
+
+
+<!-- 모임 참여 -->
+<script>
     $(document).ready(function() {
 
         let grpSnValue = '<c:out value="${group.sn}"/>';
@@ -319,6 +346,13 @@
 
     })
 </script>
+
+
+
+
+
+
+
 
 <!-- 스터디 리스트 -->
 <script type="text/javascript">
@@ -468,6 +502,11 @@
     })
 </script>
 
+
+
+
+
+
 <!-- 그룹 후기 작성 -->
 <script>
     $(document).ready(function() {
@@ -548,6 +587,10 @@
 
         modalRegisterBtn.on("click", function(e) {
 
+            if(!ratingValidation()){
+                return;
+            }
+
             let groupRating = {
                 grpSn: grpSnValue,
                 stdSn: modalInputStdSn.val(),
@@ -585,7 +628,7 @@
                 modalModBtn.show();
                 modalRemoveBtn.show();
 
-                $(".modal").modal("show");
+                $("#groupModal").modal("show");
             })
         })
 
@@ -607,6 +650,10 @@
             if(userId != originalUserId) {
                 alert("자신이 작성한 리뷰만 수정이 가능합니다.");
                 modal.modal("hide");
+                return;
+            }
+
+            if(!ratingValidation()){
                 return;
             }
 
@@ -723,6 +770,13 @@
     })
 </script>
 
+
+
+
+
+
+
+<!-- 모임 사진 -->
 <script>
     $(document).ready(function() {
         (function() {
@@ -763,7 +817,12 @@
 
     })
 </script>
-<!-- 별 찍기 -->
+
+
+
+
+
+<!-- 후기 별 찍기 -->
 <script>
     $(document).ready(function() {
         let list = $('.ratingPlace');

@@ -82,20 +82,9 @@
             </select>
         </div>
 
-        <!-- 첨부파일 -->
-<%--        <div class="form-group uploadDiv">--%>
-<%--            <label for="uploadFile">사진</label>--%>
-<%--            <input type="file" class="form-control" id="uploadFile" name="uploadFile" multiple>--%>
-<%--            <div class="uploadResult">--%>
-<%--                <ul>--%>
-
-<%--                </ul>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-
         <sec:csrfInput/>
         <button type="submit" class="btn btn-primary">등록</button>
-        <button type="reset" class="btn btn-primary">취소</button>
+        <button type="reset" class="btn btn-primary">목록</button>
     </form>
 </div>
 
@@ -178,6 +167,10 @@
                 return;
             }
 
+            //$("#info").val($("#info").val().replace(/(?:\r\n|\r|\n)/g, '<br/>'));
+            //console.log($("#info").val());
+
+
             let str = "";
 
             $('.uploadResult ul li').each(function(i, obj) {
@@ -194,6 +187,13 @@
             })
 
             formObj.append(str).submit();
+        })
+
+        $("button[type='reset']").on("click", function(e) {
+            e.preventDefault();
+
+            formObj.attr("action", '/group/list').attr('method', 'get');
+            formObj.submit();
         })
 
         $("input[type='file']").change(function(e) {
