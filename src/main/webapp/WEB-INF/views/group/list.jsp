@@ -27,7 +27,7 @@
                         <h2 class="card-title"><c:out value="${group.name}"/><span style="color:gray;font-size:20px;">[<c:out value="${group.category}"/>]</span></h2>
                         <p class="card-text ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></p>
                         <p class="card-text"><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
-                        <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/></p>
+                        <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
                         <p class="card-text"><c:out value="${group.description}"/></p>
 
                     </div>

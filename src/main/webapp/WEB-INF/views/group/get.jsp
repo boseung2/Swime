@@ -28,7 +28,7 @@
                 </c:forEach>
             </div>
             <p><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
-            <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/></p>
+            <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
             <p><i class="fas fa-user"></i>모임장 <c:out value="${group.userName}"/></p>
 
             <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
@@ -502,11 +502,19 @@
                     str += "<li data-sn='"+list[i].sn+"'>";
                     str += "<div><div class='header'><strong>"+list[i].userName+"</strong>";
                     str += "<small> "+list[i].regDate+"</small></div>";
-                    str += "<p>점수 : "+list[i].rating+"</p>";
+                    str += "<p class='ratingPlace2' id='stars"+list[i].sn+"' data-rating='"+list[i].rating+"'></p>";
+                    console.log(list[i]);
                     str += "<p>내용 : "+list[i].review+"</p></div></li>";
                 }
 
                 ratingUL.html(str);
+
+                //후기마다 별달기
+                let list2 = $('.ratingPlace2');
+                for (let i = 0; i < list2.length; i++) {
+                    console.log($(list2[i]));
+                    $(list2[i]).html(star($(list2[i]).data("rating")) + '<b>' + $(list2[i]).data("rating") + ' </b>');
+                }
 
                 showRatingPage(ratingCnt);
             })
@@ -795,7 +803,8 @@
         for (let i = 0; i < list.length; i++) {
             $(list[i]).html(star($(list[i]).data("rating")) + '<b>' + $(list[i]).data("rating") + ' </b>(' + $(list[i]).data("ratingcount") + '개)');
         }
-    })
+    });
+
     function star(rating){
         let width = 80 * (rating / 5);
         let tag = ''
