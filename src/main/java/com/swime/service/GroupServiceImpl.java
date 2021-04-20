@@ -28,9 +28,12 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public int register(GroupVO group) {
         //모임을 생성한다.
+        log.info("here!!!!");
 
         // 사진 경로 불러옴
-        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+        if(group.getAttach() != null) {
+            group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+        }
 
         // 1. 기본정보 등록
         groupMapper.insertSelectKey(group);
@@ -48,14 +51,12 @@ public class GroupServiceImpl implements GroupService{
 
         // ***** 등록자 id 세션에서 가져와야함 *****
 
-        // 첨부파일등록
-        if(group.getAttach() == null) {
-            return 0;
+        if(group.getAttach() != null) {
+            // 첨부파일등록
+            GroupAttachVO attach = group.getAttach();
+            attach.setGrpSn(group.getSn());
+            groupAttachMapper.insert(attach);
         }
-
-        GroupAttachVO attach = group.getAttach();
-        attach.setGrpSn(group.getSn());
-        groupAttachMapper.insert(attach);
 
         return 1;
     }
@@ -99,7 +100,9 @@ public class GroupServiceImpl implements GroupService{
         groupAttachMapper.deleteAll(group.getSn());
 
         // 사진 경로 불러옴
-        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+        if(group.getAttach() != null) {
+            group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+        }
 
         // 모임 정보를 수정한다.
         boolean modifyResult = groupMapper.update(group) == 1;

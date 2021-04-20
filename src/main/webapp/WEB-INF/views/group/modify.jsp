@@ -18,7 +18,7 @@
         <div class="form-group">
             <label for="category">카테고리</label>
             <select class="form-control" id="category" name="category" required>
-                <option >------</option>
+                <option value="select">------</option>
                 <option value="GRCA01">프론트엔드</option>
                 <option value="GRCA02">백엔드</option>
                 <option value="GRCA03">앱 개발</option>
@@ -58,6 +58,7 @@
             <div class="col">
             <label for="sido">시/도</label>
             <select class="form-control" id="sido" name="sido">
+                <option value="select">------</option>
                 <option value="LOSI01">서울시</option>
                 <option value="LOSI02">경기도</option>
             </select>
@@ -65,6 +66,7 @@
             <div class="col">
                 <label for="sigungu">시/군/구</label>
                 <select class="form-control" id="sigungu" name="sigungu">
+                    <option value="select">------</option>
                     <option value="LOGU01">강남</option>
                     <option value="LOGU02">명동</option>
                     <option value="LOGU03">홍대</option>
@@ -86,6 +88,7 @@
         <div class="form-group">
             <label for="tags">태그</label>
             <select class="form-control" id="tags" name="tags" >
+                <option value="select">------</option>
                 <option value="GRTG01">자바</option>
                 <option value="GRTG02">파이썬</option>
                 <option value="GRTG03">스프링</option>
@@ -124,6 +127,10 @@
         $('button').on("click", function(e) {
 
             e.preventDefault();
+
+            if(!validation()) {
+                return;
+            }
 
             let operation = $(this).data('oper');
 
@@ -314,18 +321,21 @@
         }
     })
 </script>
-<!-- Set Select Box -->
+<!-- select box에 값 넣기 -->
 <script>
     $(document).ready(function() {
         let category = $('#category').children();
         let sido = $('#sido').children();
         let sigungu = $('#sigungu').children();
-        let tag = $('tags').children();
+        let tag = $('#tags').children();
 
         let categoryValue = '<c:out value="${group.category}"/>';
         let sidoValue = '<c:out value="${group.sido}"/>';
         let sigunguValue = '<c:out value="${group.sigungu}"/>';
-        let tagValue = '<c:out value="${tags}"/>';
+        let tagValue = '<c:out value="${group.tags}"/>'.substr(1,6); // 임시로 []제거
+
+        console.log(tag);
+        console.log(tagValue);
 
         const setSelectBox = (selectBox, value) => {
             for(let i=0; i<selectBox.length; i++) {
@@ -339,6 +349,64 @@
         setSelectBox(sigungu, sigunguValue);
         setSelectBox(tag, tagValue);
     })
+</script>
+<!-- 유효성검사 -->
+<script>
+    function validation() {
+        if($('#category > option:selected').val() == "select") {
+            alert("카테고리를 입력해주세요");
+            return false;
+        }
+
+        if(getByte($('#name').val()) == "") {
+            alert("모임명을 입력해주세요");
+            return false;
+        } else if(getByte($('#name').val()) > 70) {
+            alert("모임명을 20자 이하로 작성해주세요");
+            return false;
+        }
+
+        if(getByte($('#description').val()) == "") {
+            alert("한줄소개를 입력해주세요");
+            return false;
+        } else if(getByte($('#description').val()) > 120) {
+            alert("한줄소개를 40자 이내로 작성해주세요")
+            return false;
+        }
+
+        if(getByte($('#info').val()) == "") {
+            alert("모임정보를 입력해주세요");
+            return false;
+        } else if(getByte($('#info').val()) > 4000) {
+            alert("모임 정보가 너무 깁니다");
+            return false;
+        }
+
+        if($('#sido > option:selected').val() == "select") {
+            alert("지역을 입력해주세요");
+            return false;
+        }
+
+        if($('#sigungu > option:selected').val() == "select") {
+            alert("지역을 입력해주세요");
+            return false;
+        }
+
+        if($('#tags > option:selected').val() == "select") {
+            alert("태그를 입력해주세요");
+            return false;
+        }
+
+        return true;
+    }
+
+    function getByte(str) {
+        let byte = 0;
+        for (let i=0; i<str.length; ++i) {
+            (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
+        }
+        return byte;
+    }
 </script>
 
 

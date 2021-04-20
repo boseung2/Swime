@@ -79,7 +79,7 @@
 
     <div class="main-contents">
     <div id="info" >
-        <h4>정보</h4>
+        <h4>모임정보</h4>
         <p><c:out value="${group.info}"/></p>
     </div>
     <br>
@@ -166,7 +166,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="groupModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -509,7 +509,7 @@
             })
         }
 
-        let modal = $(".modal");
+        let modal = $("#groupModal");
         let modalInputUserId = modal.find("input[name='userId']");
         let modalInputRating = modal.find("input[name='rating']");
         let modalInputReview = modal.find("input[name='review']");
@@ -542,7 +542,7 @@
 
             modalRegisterBtn.show();
 
-            $('.modal').modal("show");
+            $('#groupModal').modal("show");
 
         })
 
@@ -742,6 +742,8 @@
                 })
 
                 $(".uploadResult").html(str);
+            }).fail(function() {
+                $(".uploadResult").html("<img src=/resources/img/group.jpg style='width:500px; height:300px;'>");
             });
         })();
 
@@ -758,21 +760,6 @@
                 self.location = "/download?fileName=" + path
             }
         })
-
-        $(".bigPictureWrapper").on("click", function(e) {
-            $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
-            setTimeout(function() {
-                $('.bigPictureWrapper').hide();
-            }, 300);
-        })
-
-        function showImage(fileCallPath) {
-            alert(fileCallPath);
-
-            $(".bigPictureWrapper").css("display", "flex").show();
-
-            $(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>").animate({width:'100%', height:'100%'}, 1000);
-        }
 
     })
 </script>
