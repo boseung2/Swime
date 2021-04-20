@@ -182,48 +182,12 @@
                 <label for="grpSn" hidden>그룹번호</label>
                 <input type="number" class="form-control" name="grpSn" id="grpSn" hidden>
             </div>
-            <!-- 유효성 검사 -->
-            <script>
-                function ratingValidation() {
 
-                    if(isNaN($('#rating').val()) || $('#rating').val() == "") {
-                        alert("점수를 다시 입력해주세요")
-                        return false;
-                    }else if($('#rating').val() < 0 || $('#rating').val() > 5) {
-                        alert("점수는 0~5점까지 입력가능합니다.")
-                        return false;
-                    }
-
-                    if($("#review").val() == "") {
-                        alert("후기내용을 입력해주세요");
-                        return false;
-                    }else if(getByte($("#review").val()) > 300) {
-                        alert("후기내용을 100자 이내로 작성해주세요");
-                        return false;
-                    }
-
-                    if(isNaN($('#stdSn').val()) || $('#stdSn').val() == "" || $('#stdSn').val() <= 0) {
-                        alert("스터디번호를 다시 입력해주세요");
-                        return false;
-                    }
-
-                    return true;
-                }
-
-                function getByte(str) {
-                    let byte = 0;
-                    for (let i=0; i<str.length; ++i) {
-                        (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
-                    }
-                    return byte;
-                }
-
-            </script>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" id="modalModBtn">Modify</button>
-                <button type="button" class="btn btn-danger" id="modalRemoveBtn">Remove</button>
-                <button type="button" class="btn btn-default" id="modalRegisterBtn" data-dismiss="modal">Register</button>
-                <button type="button" class="btn btn-primary" id="modalCloseBtn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" id="modalModBtn">수정</button>
+                <button type="button" class="btn btn-danger" id="modalRemoveBtn">삭제</button>
+                <button type="button" class="btn btn-primary" id="modalRegisterBtn">등록</button>
+                <button type="button" class="btn btn-secondary" id="modalCloseBtn" data-dismiss="modal">취소</button>
             </div>
         </div>
     </div>
@@ -523,7 +487,7 @@
                 console.log("list : " + list);
                 console.log(list);
 
-                if(page == -1) {
+                if(page === -1) {
                     pageNum = 1;
                     showList(1);
                     return;
@@ -537,9 +501,9 @@
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
                     str += "<div><div class='header'><strong>"+list[i].userName+"</strong>";
-                    str += "<small>"+list[i].regDate+"</small></div>";
-                    str += "<p>"+list[i].rating+"</p>";
-                    str += "<p>"+list[i].review+"</p></div></li>";
+                    str += "<small> "+list[i].regDate+"</small></div>";
+                    str += "<p>점수 : "+list[i].rating+"</p>";
+                    str += "<p>내용 : "+list[i].review+"</p></div></li>";
                 }
 
                 ratingUL.html(str);
@@ -588,6 +552,8 @@
         modalRegisterBtn.on("click", function(e) {
 
             if(!ratingValidation()){
+                console.dir(e);
+                e.preventDefault();
                 return;
             }
 
@@ -602,7 +568,7 @@
             groupRatingService.add(groupRating, function(result) {
                 alert(result);
                 modal.find("input").val("");
-                modal.modal("hide");
+                $("#groupModal").modal("hide");
 
                 showList(-1);
             })
@@ -841,6 +807,46 @@
             +'</span>';
         return tag;
     }
+</script>
+
+
+
+<!-- 유효성 검사 -->
+<script>
+    function ratingValidation() {
+
+        if(isNaN($('#rating').val()) || $('#rating').val() == "") {
+            alert("점수를 다시 입력해주세요")
+            return false;
+        }else if($('#rating').val() < 0 || $('#rating').val() > 5) {
+            alert("점수는 0~5점까지 입력가능합니다.")
+            return false;
+        }
+
+        if($("#review").val() == "") {
+            alert("후기내용을 입력해주세요");
+            return false;
+        }else if(getByte($("#review").val()) > 300) {
+            alert("후기내용을 100자 이내로 작성해주세요");
+            return false;
+        }
+
+        if(isNaN($('#stdSn').val()) || $('#stdSn').val() == "" || $('#stdSn').val() <= 0) {
+            alert("스터디번호를 다시 입력해주세요");
+            return false;
+        }
+
+        return true;
+    }
+
+    function getByte(str) {
+        let byte = 0;
+        for (let i=0; i<str.length; ++i) {
+            (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
+        }
+        return byte;
+    }
+
 </script>
 
 

@@ -203,8 +203,8 @@
         <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
         <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
         <c:if test="${pinfo.username eq group.userId}">
-            <button type="submit" class="btn btn-primary" data-oper="modify">수정</button>
-            <button type="submit" class="btn btn-warning" data-oper="remove">삭제</button>
+            <button type="submit" class="btn btn-warning" data-oper="modify">수정</button>
+            <button type="submit" class="btn btn-danger" data-oper="remove">삭제</button>
         </c:if>
         <button type="submit" class="btn btn-secondary" data-oper="list">목록</button>
     </form>
