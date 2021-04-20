@@ -1,6 +1,7 @@
 package com.swime.Service;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
 import com.swime.service.BoardService;
 import lombok.Setter;
@@ -33,11 +34,11 @@ public class BoardServiceTests {
     public void TestRegister(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(224L);
+        board.setGrpSn(720L);
         board.setUserId("boseung@naver.com");
         //board.setUserName("새로운 name");
-        board.setTitle("스프링 고수만 오세요333");
-        board.setContent("스프링 고수만요~~");
+        board.setTitle("자바 고수만 오세요333");
+        board.setContent("자바 고수만요~~");
         //board.setLikeCnt(500);
         board.setTopFix("BOFI01");
         board.setStatus("BOST01");
@@ -50,15 +51,24 @@ public class BoardServiceTests {
 
     @Test
     public void testGetListWithPaging(){
-        service.getListWithPaging(new BoardCriteria(1,10)).forEach(board -> log.info(board));
+        BoardCriteria cri = new BoardCriteria(1,10);
+
+        BoardPageDTO boardPageDTO = service.getListWithPaging(cri,720);
+
+        List<BoardVO> list = boardPageDTO.getList();
+
+        list.forEach(board -> log.info(board));
+
+        log.info(boardPageDTO.getBoardCnt());
     }
 
     @Test
     public void testGetList(){
         //service.getList().forEach(board -> log.info(board));
-        List<BoardVO> list = service.getList();
+        List<BoardVO> list = service.getList(720);
         Assert.assertNotNull(list);
         list.forEach(board -> log.info(board));
+
     }
 
     @Test

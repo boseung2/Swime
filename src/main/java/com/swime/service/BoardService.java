@@ -1,14 +1,16 @@
 package com.swime.service;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface BoardService {
 
-    //jsp getList test
-    public List<BoardVO> getList();
+    //모임별 게시글 리스트
+    public List<BoardVO> getList(long grpSn);
 
     public int register(BoardVO board);
 
@@ -21,7 +23,10 @@ public interface BoardService {
     //댓글 개수
     //public int getReplyCnt(Long brdSn);
 
-    public List<BoardVO> getListWithPaging(BoardCriteria cri, long grpSn);
+    //그룹별 게시글 리스트(페이징)
+    public BoardPageDTO getListWithPaging(@Param("cri") BoardCriteria cri,
+                                          @Param("grpSn") long grpSn);
+
 
     public int getTotal(BoardCriteria cri);
 

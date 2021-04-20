@@ -30,6 +30,8 @@
     and
         u.id = b.user_id
     and
+        b.grp_sn = #{grpSn}
+    and
         b.sn > 0
     order by top_fix desc,
         reg_date desc
@@ -82,8 +84,7 @@
                 from
                     tuser u,
                     tbrd b,
-                    tbrd_det d,
-                    tgrp g
+                    tbrd_det d
                 where
                     b.status != 'BOST02'
                 and
@@ -91,14 +92,14 @@
                 and
                     u.id = b.user_id
                 and
-                    b.grp_sn = g.sn
+                    b.grp_sn = #{grpSn}
                 and
-                rownum <= #{pageNum} * #{amount}
+                rownum <= #{cri.pageNum} * #{cri.amount}
                 order by
                     top_fix desc,
                     reg_date desc
             )
-        where rn > (#{pageNum} - 1) * #{amount}
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
     ]]>
     </select>
 
@@ -199,6 +200,14 @@
         set reply_cnt = reply_cnt + #{amount}
         where sn = #{sn}
     </update>
+
+    <select id="getCountBySn" resultType="int">
+        <![CDATA[
+            select count(sn)
+            from tbrd
+            where grp_sn = #{grpSn}
+        ]]>
+    </select>
 
     <select id="getTotalCount" resultType="int">
         select count(*) from tbrd where sn > 0

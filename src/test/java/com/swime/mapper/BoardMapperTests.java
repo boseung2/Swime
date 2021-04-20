@@ -24,7 +24,7 @@ public class BoardMapperTests {
 
     @Test
     public void testGetList(){
-        mapper.getList().forEach(board -> log.info(board));
+        mapper.getList(720).forEach(board -> log.info(board));
     }
 
     @Test
@@ -109,11 +109,17 @@ public class BoardMapperTests {
     @Test
     public void testPaging(){
 
+//        BoardCriteria cri = new BoardCriteria();
+//        cri.setPageNum(1);
+//        cri.setAmount(10);
+//        List<BoardVO> list = mapper.getListWithPaging();
+//        list.forEach(board -> log.info(board.getSn()));
         BoardCriteria cri = new BoardCriteria();
         cri.setPageNum(1);
         cri.setAmount(10);
-        List<BoardVO> list = mapper.getListWithPaging(cri);
-        list.forEach(board -> log.info(board.getSn()));
+
+        List<BoardVO> list = mapper.getListWithPaging(cri, 720);
+        list.forEach(board-> log.info(board.getSn()));
     }
 
     @Test

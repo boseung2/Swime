@@ -1,6 +1,7 @@
 package com.swime.service;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
 import com.swime.mapper.BoardMapper;
 import lombok.AllArgsConstructor;
@@ -18,9 +19,8 @@ public class BoardServiceImpl implements BoardService{
     private BoardMapper mapper;
 
     @Override
-    //jsp getList test
-    public List<BoardVO> getList() {
-        return mapper.getList();
+    public List<BoardVO> getList(long grpSn) {
+        return mapper.getList(grpSn);
     }
 
     @Override
@@ -59,12 +59,19 @@ public class BoardServiceImpl implements BoardService{
     }
 
 
-    //
-    @Override
-    public List<BoardVO> getListWithPaging(BoardCriteria cri, long grpSn) {
+//    @Override
+//    public List<BoardVO> getListWithPaging(BoardCriteria cri, long grpSn) {
+//
+//        log.info("get List with BoardCri: " + cri);
+//        return mapper.getListWithPaging(cri, grpSn);
+//    }
 
-        log.info("get List with BoardCri: " + cri);
-        return mapper.getListWithPaging(cri, grpSn);
+    @Override
+    public BoardPageDTO getListWithPaging(BoardCriteria cri, long grpSn){
+
+        return new BoardPageDTO(
+                mapper.getCountBySn(grpSn),
+                mapper.getListWithPaging(cri, grpSn));
     }
 
     @Override

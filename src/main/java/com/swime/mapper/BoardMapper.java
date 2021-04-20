@@ -10,10 +10,7 @@ import java.util.List;
 public interface BoardMapper {
 
     // 게시판 전체를 보여준다.
-    public List<BoardVO> getList();
-
-    // 게시판 페이징
-    public List<BoardVO> getListWithPaging(@Param("cri") BoardCriteria cri, @Param("grpSn") long grpSn);
+    public List<BoardVO> getList(long grpSn);
 
     // 게시판 생성
     public int insertSelectKey(BoardVO board);
@@ -35,7 +32,14 @@ public interface BoardMapper {
     // 댓글 개수
     public void updateReplyCnt(@Param("sn") long sn, @Param("amount") int amount);
 
-    //전체 게시물 개수
+    // 게시판 페이징
+    public List<BoardVO> getListWithPaging(@Param("cri") BoardCriteria cri,
+                                           @Param("grpSn") long grpSn);
+
+    //모임별 게시물 개수()
+    public int getCountBySn(long sn);
+
+    //전체 게시물 개수(x)
     public int getTotalCount(BoardCriteria cri);
 
 

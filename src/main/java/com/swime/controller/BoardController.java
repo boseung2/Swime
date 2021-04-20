@@ -35,32 +35,54 @@ public class BoardController {
 //        model.addAttribute("list", service.getList());
 //    }
 
-    @GetMapping("/list")
-    public void list(BoardCriteria cri, Model model){
-        log.info("list: " + cri);
-
-        model.addAttribute("list", service.getListWithPaging(cri));
-        //model.addAttribute("pageMaker", new BoardDTO(cri,123));
-        int total = service.getTotal(cri);
-        log.info("total: " + total);
-        model.addAttribute("pageMaker", new BoardPageDTO(cri, total));
-
-    }
+//    @GetMapping("/list")
+//    public void list(BoardCriteria cri, Model model){
+//        log.info("list: " + cri);
+//
+//        model.addAttribute("list", service.getListWithPaging(cri));
+//        //model.addAttribute("pageMaker", new BoardDTO(cri,123));
+//        int total = service.getTotal(cri);
+//        log.info("total: " + total);
+//        model.addAttribute("pageMaker", new BoardPageDTO(cri, total));
+//
+//    }
 
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<BoardCriteria> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
+    public ResponseEntity<BoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
 
         BoardCriteria cri = new BoardCriteria(page, 10);
+        BoardPageDTO list = service.getListWithPaging(cri, grpSn);
 
-        return new ResponseEntity<>(service.getListWithPaging(cri, grpSn), HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+
+//    @GetMapping("/register")
+//    public void register(){
+//
+//    }
+
+    //게시판 생성 페이지
     @GetMapping("/register")
-    public void register(){
-
+    public void register(@RequestParam("grpSn") long grpSn, Model model){
+        model.addAttribute("grpSn", grpSn);
     }
 
+
+//    @PostMapping("/register")
+//    public String register(BoardVO board, RedirectAttributes rttr) {
+//
+//        log.info("register...." + board);
+//
+//        service.register(board);
+//
+//        rttr.addFlashAttribute("result", board.getSn());
+//
+//        return "redirect:/board/list";
+//    }
+
+    //등록 후 게시판 상세 페이지로 이동
     @PostMapping("/register")
     public String register(BoardVO board, RedirectAttributes rttr) {
 
@@ -70,7 +92,7 @@ public class BoardController {
 
         rttr.addFlashAttribute("result", board.getSn());
 
-        return "redirect:/board/list";
+        return "redirect:/board/get?sn="+board.getSn();
     }
 
     @GetMapping({"/get","/modify"})

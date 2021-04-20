@@ -22,18 +22,20 @@
     <form role="form" action="/board/register" method="post">
 
         <div class="form-group">
-            <label for="title">제목</label>
-            <input type="text" class="form-control" name="title" id="title" required>
-        </div>
-
-        <div class="form-group">
             <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="userId" value="${userId}" required>
+            <input type="text" class="form-control" id="userId" name="userId"
+                   value="<sec:authentication property="principal.username"/>" readonly="readonly">
         </div>
 
         <div class="form-group">
             <label for="grpSn">모임번호</label>
-            <input type="text" class="form-control" id="grpSn" name="grpSn" required>
+            <input type="text" class="form-control" id="grpSn" name="grpSn" value="${grpSn}"
+                   readonly="readonly">
+        </div>
+
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" class="form-control" name="title" id="title" required>
         </div>
 
         <div class="form-group">
