@@ -135,10 +135,8 @@
 
     </div>
 
+        <!--boardList-->
         <%@include file="/WEB-INF/views/group/groupBoard.jsp" %>
-
-
-
 
 
     <!-- 첨부파일 -->

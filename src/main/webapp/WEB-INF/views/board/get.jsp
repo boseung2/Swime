@@ -41,10 +41,10 @@
 
             </div>
             <form id="operForm" action="/board/modify" method="get">
-                <input type="text" id="sn" name="sn" value="${board.sn}">
+                <input type="hidden" id="sn" name="sn" value="${board.sn}">
 <%--                <input type="hidden" id="pageNum" name="pageNum" value="${cri.pageNum}">--%>
 <%--                <input type="hidden" id="amount" name="amount" value="${cri.amount}">--%>
-                <input type="text" class="form-control" id="grpSn" name="grpSn" value="${board.grpSn}">
+                <input type="hidden" class="form-control" id="grpSn" name="grpSn" value="${board.grpSn}">
             </form>
 
 

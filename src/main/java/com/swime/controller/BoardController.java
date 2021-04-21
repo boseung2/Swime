@@ -50,7 +50,7 @@ public class BoardController {
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
-
+        log.info(">>>>>>>>>>>>>  " + grpSn);
         BoardCriteria cri = new BoardCriteria(page, 10);
         GroupBoardPageDTO list = service.getListWithPaging(cri, grpSn);
 

@@ -7,7 +7,7 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-
+<%@include file="../includes/tagLib.jsp" %>
 
 <!-- 게시판  -->
 <hr class="centerHr" id="board">
@@ -58,7 +58,7 @@
     // 게시판
     $(document).ready(function(){
 
-        let grpSnValue = '<c:out value="${group.sn}"/>';
+        let grpSnValue = "${group.sn}";
         let boardUL = $(".boardHeader");
 
         showBoardList(1);
@@ -110,11 +110,10 @@
         }//end showList
 
 
+        let boardPageNum = 1;
+        let boardPageFooter = $('.boardPageFooter');
         <!--게시글 페이지-->
         function showBoardPage(boardCnt) {
-
-            let boardPageNum = 1;
-            let boardPageFooter = $('.boardPageFooter');
 
             console.log('boardCnt'+boardCnt+"개");
             let endNum = Math.ceil(boardPageNum / 10.0) * 10;
@@ -161,21 +160,22 @@
 
             boardPageFooter.html(str);
 
-            boardPageFooter.on("click", "li a", function(e) {
-                e.preventDefault();
-
-                console.log("board page click");
-
-                let targetPageNum = $(this).attr("href");
-
-                console.log("targetPageNum: " + targetPageNum);
-
-                boardPageNum = targetPageNum;
-
-                showBoardList(boardPageNum);
-            })
 
         }
+        boardPageFooter.on("click", "li a", function(e) {
+            e.preventDefault();
+
+            console.log("board page click");
+
+            let targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            boardPageNum = targetPageNum;
+
+            showBoardList(boardPageNum);
+
+        })
 
 
     });
