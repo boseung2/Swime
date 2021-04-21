@@ -40,7 +40,7 @@
         </div>
 
         <c:if test="${userId == MemberVo.id}">
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label for="picture">사진</label>
                 <input type="file" class="form-control" id="picture" name="picture" accept="image/*" value="${MemberVo.picture}" readonly>
 
@@ -237,6 +237,9 @@
                     alert(result);
                     if(fileInput.value !== '') profileImg.src = 'http://placehold.it/900x400';
                     $(imgPlace).hide();
+
+                    $('#picture')[0].removeAttr("filepath");
+                    $('#picture')[0].removeAttr("value.textContent");
                 }
             });
         });
