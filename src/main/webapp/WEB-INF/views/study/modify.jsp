@@ -192,15 +192,26 @@
         if($('#capacity').val() == '') {
             alert("모집인원을 설정해주세요.");
             return false;
-        }else if (isNaN(parseInt(($('#capacity').val())))){
-            alert("숫자만 입력해주세요.");
-            return false;
-        }else if(parseInt($('#capacity').val()) < 2) {
-            alert("모집인원은 2명 이상이어야합니다.");
-            return false;
-        }else if (parseInt($('#capacity').val()) > 99) {
-            alert("모집인원은 99명 이하이어야합니다.");
-            return false;
+        }else {
+            let str = $('#capacity').val();
+            let flag = true;
+
+            for(let i = 0; i < str.length; i ++) {
+                if(isNaN(parseInt(str[i]))) flag = false;
+            }
+
+            if(flag == false) {
+                alert("숫자만 입력해주세요.");
+                return false;
+            }else {
+                if(parseInt(str) < 2) {
+                    alert("모집인원은 2명 이상이어야합니다.");
+                    return false;
+                }else if (parseInt(str) > 99) {
+                    alert("모집인원은 99명 이하이어야합니다.");
+                    return false;
+                }
+            }
         }
 
         return true;
