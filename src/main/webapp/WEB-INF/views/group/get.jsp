@@ -823,8 +823,8 @@
         let grpSnValue = '<c:out value="${group.sn}"/>';
         let boardUL = $(".boardHeader");
 
-
         showBoardList(1);
+
         function showBoardList(page){
             console.log("boardPage: " + page);
             boardListService.getList({grpSn:grpSnValue, page: page||1},
@@ -835,8 +835,8 @@
                 console.log(list);
 
                 if(page == -1){
-                    brdPage = Math.ceil(boardCnt/10.0);
-                    showBoardList(brdPage);
+                    boardPageNum = Math.ceil(boardCnt/10.0);
+                    showBoardList(boardPageNum);
                     return;
                 }
                 let str="";
@@ -872,8 +872,8 @@
 
         }//end showList
 
-        <!--게시글 페이지-->
 
+        <!--게시글 페이지-->
         function showBoardPage(boardCnt) {
 
             let boardPageNum = 1;
@@ -924,7 +924,6 @@
 
             boardPageFooter.html(str);
 
-
             boardPageFooter.on("click", "li a", function(e) {
                 e.preventDefault();
 
@@ -938,12 +937,16 @@
 
                 showBoardList(boardPageNum);
             })
-        }
+
+        } //end showBoardPage
+
+
 
     });
 
 
 </script>
+
 <script>
     $(document).ready(function() {
         $("#regBtn").on("click", function(){

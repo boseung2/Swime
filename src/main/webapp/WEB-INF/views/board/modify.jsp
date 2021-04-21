@@ -65,10 +65,10 @@
         <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
         <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
 
-        <button type="submit" data-oper="modify" class="btn btn-primary">수정</button>
+        <button id='modifyBtn' type="submit" data-oper="modify" class="btn btn-primary">수정</button>
         <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
         <button type="submit" data-oper="list" class="btn btn-dark">목록</button>
-<%-- onclick="location.href='joinUs.jsp'       <a id="back" class="btn btn-dark">취소</a>--%>
+<%--        <a id="back" class="btn btn-dark">취소</a>--%>
 
         <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
         <sec:csrfInput/>
@@ -77,34 +77,80 @@
 
 <script type="text/javascript">
 
-     // $(document).ready(function(){
-     //
-     //     let formObj = $("#modifyForm");
-     //
-     //     $("button").on("click", function(e){
-     //         e.preventDefault();
-     //
-     //         let operation = $(this).data('oper');
-     //
-     //         console.log(operation);
-     //
-     //         if(operation === 'remove') {
-     //             formObj.attr("action", "/board/remove");
-     //         } else if (operation === 'list') {
-     //             formObj.attr("action", '/board/list').attr("method", "get");
-     //             let pageNumTag = $("input[name='pageNum']").clone();
-     //             let amountTag = $("input[name='amount']").clone();
-     //             formObj.empty();
-     //             formObj.append(pageNumTag);
-     //             formObj.append(amountTag);
-     //         }
-     //         formObj.submit();
-     //     });
+    $(document).ready(function(){
 
-         // $("#back").on("click", function(){
-         //     window.history.back();
-         // });
-     //});
+        let formObj = $("#modifyForm");
+
+        $("button").on("click", function(e){
+            e.preventDefault();
+
+            let operation = $(this).data('oper');
+
+            console.log(operation);
+
+            if(operation === 'remove') {
+                formObj.attr("action", "/board/remove");
+            } else if (operation === 'list') {
+                formObj.attr("action", '/board/list').attr("method", "get");
+                let pageNumTag = $("input[name='pageNum']").clone();
+                let amountTag = $("input[name='amount']").clone();
+                formObj.empty();
+                formObj.append(pageNumTag);
+                formObj.append(amountTag);
+            } else {
+
+                e.preventDefault();
+
+                if(!validation()) {
+                    return;
+                }
+            }
+
+            formObj.submit();
+        });
+
+        // $("#back").on("click", function(){
+        //     window.history.back();
+        // });
+
+
+        // $("button[id='modifyBtn']").on("click", function(e) {
+        //
+        //
+        // })
+
+        function validation(){
+
+            if(getByte($("input[id='title']").val())== "") {
+                alert("제목을 입력해주세요.");
+                return false;
+            }else if(getByte($("input[id='title']").val()) > 200){
+                alert("게시글 제목을 65자 이하로 작성해주세요.");
+                return false;
+            }
+
+            if(getByte($("textarea[id='content']").val()) == "") {
+                alert("내용을 입력해주세요");
+                return false;
+
+            }else if(getByte($("textarea[id='content']").val()) > 4000){
+                alert("게시글 내용이 너무 깁니다.");
+                return false;
+            }
+            return true;
+        }
+
+        function getByte(str){
+            let byte = 0;
+            for(let i = 0; i<str.length; ++i){
+                (str.charCodeAt(i) > 127) ? byte += 3 : byte++;
+            }
+            return byte;
+        }
+
+
+
+    });
 
 </script>
 

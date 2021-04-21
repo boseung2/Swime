@@ -209,6 +209,37 @@
 
     });
 
+    <!--유효성 검사-->
+    $('button[id="replyRegisterBtn"]').on("click", function(e) {
+        e.preventDefault();
+
+        if(!validation()) {
+            return;
+        }
+
+    })
+
+
+    function validation(){
+
+        if(getByte($("textarea[id='replyComment']").val()) == "") {
+            alert("댓글을 입력해주세요");
+            return false;
+
+        }else if(getByte($("textarea[id='replyComment']").val()) > 1000){
+            alert("댓글 내용이 너무 깁니다.");
+            return false;
+        }
+    }
+
+    function getByte(str){
+        let byte = 0;
+        for(let i = 0; i<str.length; ++i){
+            (str.charCodeAt(i) > 127) ? byte += 3 : byte++;
+        }
+        return byte;
+    }
+
 
     //*좋아요 기능 구현*
     //아이디가 likeCnt인 하트를 가져온다.

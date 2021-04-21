@@ -19,7 +19,7 @@
 <div class="container">
     <h2>게시글 작성</h2>
     <hr/>
-    <form role="form" action="/board/register" method="post">
+    <form id="registerForm"role="form" action="/board/register" method="post">
 
         <div class="form-group">
             <label for="userId">아이디</label>
@@ -66,7 +66,7 @@
             </label>
         </div>
 
-        <button type="submit" class="btn btn-primary">등록</button>
+        <button id='registerBtn' type="submit" class="btn btn-primary">등록</button>
         <button id="back" type="reset" class="btn btn-dark">취소</button>
 
 
@@ -78,6 +78,54 @@
     $("#back").on("click", function(){
         window.history.back();
     });
+
+    objForm = $('#registerForm');
+
+    $('button[type="submit"]').on("click", function(e) {
+        e.preventDefault();
+
+        if(!validation()) {
+            return;
+        }
+
+        console.log('hi');
+        objForm.submit();
+
+    })
+
+
+    function validation(){
+
+        if(getByte($("input[id='title']").val())== "") {
+            alert("제목을 입력해주세요.");
+            return false;
+        }else if(getByte($("input[id='title']").val()) > 200){
+            alert("게시글 제목을 65자 이하로 작성해주세요.");
+            return false;
+        }
+
+        if(getByte($("textarea[id='content']").val()) == "") {
+            alert("내용을 입력해주세요");
+            return false;
+
+        }else if(getByte($("textarea[id='content']").val()) > 4000){
+            alert("게시글 내용이 너무 깁니다.");
+            return false;
+        }
+
+        return true;
+
+
+    }
+
+
+    function getByte(str){
+        let byte = 0;
+        for(let i = 0; i<str.length; ++i){
+            (str.charCodeAt(i) > 127) ? byte += 3 : byte++;
+        }
+        return byte;
+    }
 </script>
 
 
