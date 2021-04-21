@@ -3,6 +3,7 @@ package com.swime.Service;
 import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
+import com.swime.domain.GroupBoardPageDTO;
 import com.swime.service.BoardService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -53,7 +54,7 @@ public class BoardServiceTests {
     public void testGetListWithPaging(){
         BoardCriteria cri = new BoardCriteria(1,10);
 
-        BoardPageDTO boardPageDTO = service.getListWithPaging(cri,720);
+        GroupBoardPageDTO boardPageDTO = service.getListWithPaging(cri,720);
 
         List<BoardVO> list = boardPageDTO.getList();
 

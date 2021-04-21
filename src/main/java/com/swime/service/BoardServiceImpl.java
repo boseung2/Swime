@@ -3,6 +3,7 @@ package com.swime.service;
 import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
+import com.swime.domain.GroupBoardPageDTO;
 import com.swime.mapper.BoardMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -67,9 +68,9 @@ public class BoardServiceImpl implements BoardService{
 //    }
 
     @Override
-    public BoardPageDTO getListWithPaging(BoardCriteria cri, long grpSn){
+    public GroupBoardPageDTO getListWithPaging(BoardCriteria cri, long grpSn){
 
-        return new BoardPageDTO(
+        return new GroupBoardPageDTO(
                 mapper.getCountBySn(grpSn),
                 mapper.getListWithPaging(cri, grpSn));
     }

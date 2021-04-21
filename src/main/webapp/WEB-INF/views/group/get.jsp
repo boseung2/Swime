@@ -141,11 +141,12 @@
     <div id="board">
 
         <h4>게시판
-            <button id="regBtn" type="button" class="btn btn-xs pull-right">
+            <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
+                    style="float: right; margin-bottom: 5px">
                 글쓰기
             </button>
         </h4>
-
+        <div>
         <div class="boardHeader">
             <span>1번</span>
             <span id="boardNotice">[필독]</span>
@@ -164,6 +165,7 @@
 
             <i class='fas fa-comment'>100</i>
             <i class='fas fa-heart'>100</i>
+        </div>
         </div>
     </div><!--end board-->
     <!--게시판 페이징 처리 -->
@@ -811,16 +813,19 @@
     })
 </script>
 
+
+
+
 <script type="text/javascript">
     // 게시판
-    $('document').ready(function(){
+    $(document).ready(function(){
 
         let grpSnValue = '<c:out value="${group.sn}"/>';
         let boardUL = $(".boardHeader");
 
 
-        showList(1);
-        function showList(page){
+        showBoardList(1);
+        function showBoardList(page){
             console.log("boardPage: " + page);
             boardListService.getList({grpSn:grpSnValue, page: page||1},
             function(boardCnt, list){
@@ -830,8 +835,8 @@
                 console.log(list);
 
                 if(page == -1){
-                    pageNum = Math.ceil(boardCnt/10.0);
-                    showList(pageNum);
+                    brdPage = Math.ceil(boardCnt/10.0);
+                    showBoardList(brdPage);
                     return;
                 }
                 let str="";
@@ -847,16 +852,17 @@
                     str += "<span id='boardNotice'>"+"[필독]"+"</span>";
                     str += "<br>";
                     str += "<div id='boardDivBox'>";
-                    str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'>";
+                    str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
                     str += "<span id='boardName'>"+list[i].name+"</span>";
                     // str += "<span id='grpBrdRole'>"+list[i].grpRole+"</span>";
                     str += "<span id='boardRegDate'>"+list[i].regDate+"</span>";
                     str += "</div>";
-                    str += "<span>"+list[i].title+"</span>";
+                    str += "<a class='boardMove' href='/board/get?sn="+list[i].sn+">";
+                    str += "<span>"+list[i].title+"</span></a>";
                     str += "<div id='boardContent'>"+list[i].content+"</div>";
                     str += "<i class='fas fa-comment'>"+list[i].replyCnt+"</i>";
                     str += "<i class='fas fa-heart'>"+list[i].likeCnt+"</i>";
-                    str += "</div>";
+                    str += "</div><hr>";
 
                 }
                 boardUL.html(str);
@@ -867,11 +873,13 @@
         }//end showList
 
         <!--게시글 페이지-->
-        let boardPageNum = 1;
-        let boardPageFooter = $('.boardPageFooter');
 
         function showBoardPage(boardCnt) {
 
+            let boardPageNum = 1;
+            let boardPageFooter = $('.boardPageFooter');
+
+            console.log('boardCnt'+boardCnt+"개");
             let endNum = Math.ceil(boardPageNum / 10.0) * 10;
             let startNum = endNum - 9;
 
@@ -892,6 +900,7 @@
             console.log("prev = " + prev);
             console.log("next = " + next);
 
+
             let str = "<ul class ='pagination'>";
 
             if(prev) {
@@ -911,25 +920,25 @@
 
             str += "</ul></div>";
 
-            console.log(str);
+            console.log("brdStr : "+str);
 
             boardPageFooter.html(str);
+
+
+            boardPageFooter.on("click", "li a", function(e) {
+                e.preventDefault();
+
+                console.log("board page click");
+
+                let targetPageNum = $(this).attr("href");
+
+                console.log("targetPageNum: " + targetPageNum);
+
+                boardPageNum = targetPageNum;
+
+                showBoardList(boardPageNum);
+            })
         }
-
-        boardPageFooter.on("click", "li a", function(e) {
-            e.preventDefault();
-
-            console.log("study page click");
-
-            let targetPageNum = $(this).attr("href");
-
-            console.log("targetPageNum: " + targetPageNum);
-
-            boardPageNum = targetPageNum;
-
-            boardPageFooter(boardPageNum);
-        })
-
 
     });
 
@@ -941,6 +950,7 @@
 
             self.location = "/board/register?grpSn=${group.sn}";
         });
+
     });
 </script>
 

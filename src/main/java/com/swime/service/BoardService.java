@@ -3,6 +3,7 @@ package com.swime.service;
 import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
+import com.swime.domain.GroupBoardPageDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public interface BoardService {
     //public int getReplyCnt(Long brdSn);
 
     //그룹별 게시글 리스트(페이징)
-    public BoardPageDTO getListWithPaging(@Param("cri") BoardCriteria cri,
-                                          @Param("grpSn") long grpSn);
+    public GroupBoardPageDTO getListWithPaging(@Param("cri") BoardCriteria cri,
+                                               @Param("grpSn") long grpSn);
 
 
     public int getTotal(BoardCriteria cri);

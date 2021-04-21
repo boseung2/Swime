@@ -49,10 +49,10 @@ public class BoardController {
 
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity<BoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
+    public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
 
         BoardCriteria cri = new BoardCriteria(page, 10);
-        BoardPageDTO list = service.getListWithPaging(cri, grpSn);
+        GroupBoardPageDTO list = service.getListWithPaging(cri, grpSn);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -127,7 +127,7 @@ public class BoardController {
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 
-        return "redirect:/board/list";
+        return "redirect:/board/get?sn="+board.getSn();
     }
 
     @PostMapping("/remove")

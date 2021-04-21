@@ -68,7 +68,7 @@
         <button type="submit" data-oper="modify" class="btn btn-primary">수정</button>
         <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
         <button type="submit" data-oper="list" class="btn btn-dark">목록</button>
-<%--        <a id="back" class="btn btn-dark">취소</a>--%>
+<%-- onclick="location.href='joinUs.jsp'       <a id="back" class="btn btn-dark">취소</a>--%>
 
         <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
         <sec:csrfInput/>
@@ -77,34 +77,34 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
+     // $(document).ready(function(){
+     //
+     //     let formObj = $("#modifyForm");
+     //
+     //     $("button").on("click", function(e){
+     //         e.preventDefault();
+     //
+     //         let operation = $(this).data('oper');
+     //
+     //         console.log(operation);
+     //
+     //         if(operation === 'remove') {
+     //             formObj.attr("action", "/board/remove");
+     //         } else if (operation === 'list') {
+     //             formObj.attr("action", '/board/list').attr("method", "get");
+     //             let pageNumTag = $("input[name='pageNum']").clone();
+     //             let amountTag = $("input[name='amount']").clone();
+     //             formObj.empty();
+     //             formObj.append(pageNumTag);
+     //             formObj.append(amountTag);
+     //         }
+     //         formObj.submit();
+     //     });
 
-        let formObj = $("#modifyForm");
-
-        $("button").on("click", function(e){
-            e.preventDefault();
-
-            let operation = $(this).data('oper');
-
-            console.log(operation);
-
-            if(operation === 'remove') {
-                formObj.attr("action", "/board/remove");
-            } else if (operation === 'list') {
-                formObj.attr("action", '/board/list').attr("method", "get");
-                let pageNumTag = $("input[name='pageNum']").clone();
-                let amountTag = $("input[name='amount']").clone();
-                formObj.empty();
-                formObj.append(pageNumTag);
-                formObj.append(amountTag);
-            }
-            formObj.submit();
-        });
-
-        // $("#back").on("click", function(){
-        //     window.history.back();
-        // });
-    });
+         // $("#back").on("click", function(){
+         //     window.history.back();
+         // });
+     //});
 
 </script>
 
