@@ -187,6 +187,9 @@
         if($('#capacity').val() == '') {
             alert("모집인원을 설정해주세요.");
             return false;
+        }else if (isNaN(parseInt(($('#capacity').val())))){
+            alert("숫자만 입력해주세요.");
+            return false;
         }else if(parseInt($('#capacity').val()) < 2) {
             alert("모집인원은 2명 이상이어야합니다.");
             return false;
