@@ -9,9 +9,7 @@
 <div>
     <main class="form-signin">
         <div id="regdiv">
-            <div id="errorMsgDiv">
-
-            </div>
+            <div id="errorMsgDiv"></div>
             <%--            <form id="regForm" action="/user/AuthSuccess">--%>
             <form id="regForm" action="/user/register" method="post">
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
@@ -55,6 +53,7 @@
 
 
 <script>
+    let a;
     $(document).ready(function () {
         let email = $("#id")[0];
         let password = $("#pw")[0];
@@ -65,24 +64,25 @@
 
         let errorBox = $("#errorMsgDiv")[0];
         let errorMsg;
+        let ismsg = false;
         init();
 
 
         $(email).on("change", function () {
             console.log("이메일 내용");
 
-            if(isAlready()){
-                return;
-            }
+            if(isAlready(true)) return;
+
         });
 
 
-        $(submitBtn).on("click", function (e) {
+        $(submitBtn).on("click", async function (e) {
             e.preventDefault();
-            e.stopPropagation();
-            console.log("hello")
-            if(!checkOne()||!checkTwo()) return;
+            // e.stopPropagation();
 
+            if(await isAlready(false)) return;
+            if(!(await checkOne())) return;
+            if(!(await checkTwo())) return;
             $("#regForm")[0].submit();
         });
 
@@ -110,16 +110,15 @@
         }
 
         function checkTwo() {
-            let min = 0;
+            let min = 8;
             let max = 20;
-            if (!checkLength(email, min, max, errorBox, errorMsg, "아이디")
-                || !checkLength(password, min, max, errorBox, errorMsg, "비밀번호")
-                || !checkLength(nameInput, min, max, errorBox, errorMsg, "이름")) return false;
+            if (!checkLength(email, min, 33, errorBox, errorMsg, "아이디")
+                || !checkLength(password, 4, 12, errorBox, errorMsg, "비밀번호")
+                || !checkLength(nameInput, 1, 10, errorBox, errorMsg, "이름")) return false;
             else return true;
         }
 
-        function isAlready() {
-
+        function isAlready(res) {
             $.ajax({
                 url: '/user/already',
                 type: 'GET',
@@ -129,30 +128,20 @@
                 data: {
                     id : email.value
                 },
-                success: function(msg) {
-                    if(msg === true) {
-                        alert("msg");
+                success: function(result) {
+                    let is = result.all[0].innerHTML === "true";
+                    if(is) {
                         $(errorBox).show();
                         showErrorMsg(errorBox, errorMsg, "이미 있는 아이디입니다");
                     }
                     else {
-                        alert("msg");
-                        $(errorBox).hide();
+                        if(res){
+                            $(errorBox).hide();
+                        }
                     }
-                },
-                error : function (msg) {
-                    alert(msg);
-                    resolve(false);
+                    return is;
                 }
             });
-
-
-
-
-
-
-            // showErrorMsg(errorBox, errorMsg, "이미 있는 아이디입니다");
-            return true;
         }
     });
 
