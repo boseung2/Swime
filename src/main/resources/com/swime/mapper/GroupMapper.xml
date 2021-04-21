@@ -34,6 +34,7 @@
                  where g.user_id = u.id
                  and g.status != 'GRST03'
                  and rownum <=  #{pageNum} * #{amount}
+                 order by g.sn desc
              )
         where rn > (#{pageNum} - 1) * #{amount}
         ]]>

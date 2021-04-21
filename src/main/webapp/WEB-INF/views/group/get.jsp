@@ -168,11 +168,11 @@
                     <input type="text" class="form-control" name="userId" id="userId">
                 </div>
                 <div class="form-group">
-                    <label for="rating">별점</label>
+                    <label for="rating">모임평점(0~5점)</label>
                     <input type="number" class="form-control" name="rating" id="rating">
                 </div>
                 <div class="form-group">
-                    <label for="review">내용</label>
+                    <label for="review">후기</label>
                     <input type="text" class="form-control" name="review" id="review">
                 </div>
                 <div class="form-group">
