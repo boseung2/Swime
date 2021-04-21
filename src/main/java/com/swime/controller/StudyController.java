@@ -157,12 +157,6 @@ public class StudyController {
 
         log.info("study onOff = " + study.getOnOff());
 
-//        if("".equals(study.getOnUrl())) {
-//            study.setOnOff("STOF02");
-//        }else {
-//            study.setOnOff("STOF01");
-//        }
-
         // 반복 주기 설정
         if("(선택)".equals(study.getRepeatCycle())) {
             study.setRepeatCycle(null);
@@ -200,11 +194,6 @@ public class StudyController {
         log.info("modify representation " + study.getRepresentation());
 
         log.info("modify study onOff = " + study.getOnOff());
-//        if(study.getOnUrl() != null) {
-//            study.setOnOff("STOF01");
-//        }else {
-//            study.setOnOff("STOF02");
-//        }
 
         // 반복 주기 설정
         log.info("====================================repeatCycle" + study.getRepeatCycle()); //STCY01
@@ -250,7 +239,7 @@ public class StudyController {
         return "redirect:/group/get?sn=" + grpSn;
     }
     
-    // 스터디 멤버 관리 - 참여멤버/ 대기멤버 가져오기
+    // 스터디 멤버 관리 페이지 - 참여멤버/ 대기멤버 가져오기 - 아직 구현 x
     @GetMapping("/members")
     @PreAuthorize("principal.username == #study.representation")
     public void members(long stdSn, Model model) {
@@ -263,15 +252,14 @@ public class StudyController {
     @GetMapping(value = "/wish/{stdSn}/{userId}")
     public ResponseEntity<String> getWish(@PathVariable("stdSn") long stdSn, @PathVariable("userId") String userId) {
 
+        // 로그인 되어있는 경우만 반환 가능
         StudyParamVO studyParam = new StudyParamVO();
         studyParam.setStdSn(stdSn);
         studyParam.setUserId(userId);
 
-        log.info("=====================================스터디 찜 여부 반환 : " + studyParam);
-
         WishStudyVO wish = service.getWish(studyParam);
 
-        log.info("=====================================wish 여부 " + wish);
+        log.info("=====================================스터디 찜 여부" + wish);
 
         if(wish == null) {
             log.info("not exist");
