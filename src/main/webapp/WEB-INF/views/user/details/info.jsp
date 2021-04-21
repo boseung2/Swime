@@ -8,6 +8,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@include file="../../includes/tagLib.jsp" %>
+
+
+<style>
+    .topnav > a {
+        cursor: pointer;
+    }
+</style>
+
+
+
 <!-- Page Content -->
 <div class="container">
     <c:if test="${!empty MemberVo}">
@@ -28,11 +38,11 @@
 
         <!-- nav -->
         <div class="topnav">
-            <a id="group" href="#" class="active">모임</a>
-            <a id="study" href="#">스터디</a>
-            <a id="written" href="#">작성한 글</a>
-            <a id="reply" href="#">작성한 댓글</a>
-            <a id="profile" href="#">프로필</a>
+            <a id="group" class="active">모임</a>
+            <a id="study" >스터디</a>
+            <a id="written" >작성한 글</a>
+            <a id="reply" >작성한 댓글</a>
+            <a id="profile" >프로필</a>
         </div>
         <!-- /nav -->
 
