@@ -40,7 +40,7 @@
         </div>
 
         <c:if test="${userId == MemberVo.id}">
-            <div class="form-group" hidden>
+            <div class="form-group">
                 <label for="picture">사진</label>
                 <input type="file" class="form-control" id="picture" name="picture" accept="image/*" value="${MemberVo.picture}" readonly>
 

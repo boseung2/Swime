@@ -64,14 +64,16 @@
 
         let errorBox = $("#errorMsgDiv")[0];
         let errorMsg;
-        let ismsg = false;
+
+
+        let test = false;
         init();
 
 
         $(email).on("change", function () {
             console.log("이메일 내용");
 
-            if(isAlready(true)) return;
+            if(isAlready()) return;
 
         });
 
@@ -80,10 +82,12 @@
             e.preventDefault();
             // e.stopPropagation();
 
-            if(await isAlready(false)) return;
+
             if(!(await checkOne())) return;
             if(!(await checkTwo())) return;
-            $("#regForm")[0].submit();
+            await isAlready();
+            // $("#regForm")[0].submit();
+            if(!test) registerForAjax();
         });
 
 
@@ -117,32 +121,56 @@
                 || !checkLength(nameInput, 1, 10, errorBox, errorMsg, "이름")) return false;
             else return true;
         }
+        
+        function registerForAjax() {
+            console.log("ajax 실행");
 
-        function isAlready(res) {
+            $("#submitBtn").attr("disabled", true);
+
+            $.ajax({
+                url : '/user/register',
+                type : 'POST',
+                data : {
+                    id : email.value,
+                    password : password.value,
+                    name : nameInput.value
+                },
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                },
+                success: function(result) {
+                    $(location).attr('href', '/user/registerSuccess');
+                },
+                error : function (msg) {
+                    $("#submitBtn").attr("disabled", false);
+                }
+            });
+        }
+
+        function isAlready() {
+            let isAlready;
             $.ajax({
                 url: '/user/already',
                 type: 'GET',
-                <%--beforeSend : function(xhr) {--%>
-                <%--    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");--%>
-                <%--},--%>
                 data: {
                     id : email.value
                 },
                 success: function(result) {
-                    let is = result.all[0].innerHTML === "true";
-                    if(is) {
+                    isAlready = result.documentElement.textContent === "true";
+                    if(isAlready){
                         $(errorBox).show();
                         showErrorMsg(errorBox, errorMsg, "이미 있는 아이디입니다");
+                    }else{
+                        $(errorBox).hide();
                     }
-                    else {
-                        if(res){
-                            $(errorBox).hide();
-                        }
-                    }
-                    return is;
+                    test = isAlready;
+                    return isAlready;
                 }
             });
         }
+
+
+
     });
 
 

@@ -4,21 +4,15 @@ import com.swime.domain.GroupVO;
 import com.swime.domain.MailVO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
-import com.swime.mapper.MemberMapper;
 import com.swime.service.AuthService;
 import com.swime.service.MemberService;
 import com.swime.service.ProfileService;
 import com.swime.util.GmailSend;
 import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +45,7 @@ public class UserCotroller {
 
 
     @GetMapping("/already")
-    public ResponseEntity<Boolean> isAlready(String id){
+    public ResponseEntity isAlready(String id){
         return service.get(id) != null ?
                 new ResponseEntity(true, HttpStatus.OK) :
                 new ResponseEntity(false, HttpStatus.OK);
@@ -67,17 +61,28 @@ public class UserCotroller {
 
     @Transactional
     @PostMapping("/register")
-    public String register(MemberVO vo, RedirectAttributes rttr){
+    public ResponseEntity register(MemberVO vo, RedirectAttributes rttr){
+        log.info(vo);
+        boolean result = false;
+        boolean result1 = false;
+        boolean result2 = false;
+        boolean result3 = false;
         vo.setPassword(passwordEncoder.encode(vo.getPassword()));
-        service.registerHistory(vo);
-        service.register(vo);
+        result = service.registerHistory(vo);
+        result1 = service.register(vo);
         String key = makeRandomValue.MakeAuthKey();
-        service.registerKey(vo.getId(), key);
-        authService.register(vo.getId(),"MEMBER");
+        result2 = service.registerKey(vo.getId(), key);
+        result3 = authService.register(vo.getId(),"MEMBER");
         gmailSend.sendAuthMail(new MailVO(vo.getId(), key));
         rttr.addFlashAttribute("vo", vo);
-        return "redirect:/user/registerSuccess";
+//        return "redirect:/user/registerSuccess";
+        boolean all = result && result1 && result2 && result3;
+        return all ?
+                new ResponseEntity("Register Success", HttpStatus.OK) :
+                new ResponseEntity("Register Fail", HttpStatus.BAD_REQUEST);
     }
+
+
 
     @GetMapping("/registerSuccess")
     public void regSuccess(MemberVO vo){}
@@ -149,11 +154,7 @@ public class UserCotroller {
         List<GroupVO> list = profileService.getOwnerGroupList(id);
         list.forEach(log::info);
         model.addAttribute("ownerList", profileService.getOwnerGroupList(id));
-        model.addAttribute("test", "왜 안되는거니??");
-
-        model.addAttribute("MemberVo", service.get(id));
-        model.addAttribute("test2", profileService.read(678L, id));
-        model.addAttribute("test3", new int[] {1,2,3,4,5});
+        model.addAttribute("joinList", profileService.getJoinList(id));
 
     }
 

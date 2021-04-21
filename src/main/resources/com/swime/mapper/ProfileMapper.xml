@@ -18,9 +18,10 @@
     </select>
 
     <select id="joinList" resultType="com.swime.domain.GroupVO">
-        select l.sn, l.grp_sn grpSn, l.grp_role grpRole, l.status, t.name, t.picture, t.description, t.attend_count, t.rating_count, t.rating, t.sido, t.sigungu, t.status, t.category
-        from Tgrp_list l LEFT OUTER JOIN tgrp t on l.grp_sn = t.sn and l.user_id = #{id}
-        where t.user_id != #{id}
+        select l.grp_sn sn, l.grp_role, l.status, t.name, t.picture, t.description,
+               t.attend_count, t.rating_count, t.rating, t.sido, t.sigungu, t.status, t.category from Tgrp_list
+                                                                                                          l LEFT OUTER JOIN tgrp t on l.grp_sn = t.sn and l.user_id = #{id} where t.user_id
+            != #{id}
     </select>
 
 <!--    <select id="getListWithPaging" resultType="com.swime.domain.GroupVO">-->

@@ -13,4 +13,6 @@ public interface ProfileService {
     List<GroupVO> getOwnerGroupList(String id);
 
     GroupVO read(@Param("sn") Long sn, @Param("id") String id);
+
+    List<GroupVO> getJoinList(String id);
 }

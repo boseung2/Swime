@@ -16,8 +16,8 @@ function checkLength(input, min, max, textPlaceDiv, textPlace, msg) {
         showErrorMsg(textPlaceDiv, textPlace, msg + "의 글자수가 " + max + "보다 큽니다");
         return false;
     }
-    if (stringLength <= min){
-        showErrorMsg(textPlaceDiv, textPlace, msg + "의 글자수가 " + min + "보다 같거나 작습니다");
+    if (stringLength < min){
+        showErrorMsg(textPlaceDiv, textPlace, msg + "의 글자수는 " + (min - 1) + "보다 커야 합니다");
         return false;
     }
     return true

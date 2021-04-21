@@ -33,5 +33,10 @@ public class ProfileServiceImpl implements ProfileService{
     public GroupVO read(Long sn, String id) {
         return mapper.read(sn, id);
     }
+
+    @Override
+    public List<GroupVO> getJoinList(String id) {
+        return mapper.joinList(id);
+    }
 }
 

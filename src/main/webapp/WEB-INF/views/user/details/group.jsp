@@ -9,7 +9,10 @@
 </c:forEach>
 
 <h2>가입한 모임</h2>
-
+<c:forEach var="join" items="${joinList}">
+<%--    ${join.sn} ${join.name} <a href="/group/get?sn=${join.sn}">자세히 보기</a> <br>--%>
+    ${join}
+</c:forEach>
 <h2>관심 모임</h2>
 
 
