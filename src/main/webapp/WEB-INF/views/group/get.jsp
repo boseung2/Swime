@@ -616,7 +616,6 @@
         $(".rating").on("click", "li", function(e) {
 
             let sn = $(this).data("sn");
-            let originalUserId = modalInputUserId.val();
 
             console.log(">>>>>" + sn);
 
@@ -631,10 +630,8 @@
                 modal.data("sn", groupRating.sn);
 
                 modal.find("button[id !='modalCloseBtn']").hide();
-                if(userId === originalUserId) {
-                    modalModBtn.show();
-                    modalRemoveBtn.show();
-                }
+                modalModBtn.show();
+                modalRemoveBtn.show();
 
                 $("#groupModal").modal("show");
             })

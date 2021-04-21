@@ -14,6 +14,18 @@
         VALUES (#{sn}, #{grpSn}, #{userId})
     </insert>
 
+    <select id="read" resultType="com.swime.domain.GroupWishVO">
+        select sn, grp_sn, user_id
+        from TGRP_WISH
+        where user_id = ${userId}
+        and grp_sn = #{grpSn}
+    </select>
+
+    <delete id="delete">
+        delete from TGRP_WISH
+        where user_id = #{userId} and GRP_SN = #{grpSn}
+    </delete>
+
     <select id="readByid" resultType="com.swime.domain.GroupWishVO">
         select *
         from TGRP_WISH
@@ -25,11 +37,6 @@
         from TGRP_WISH
         where GRP_SN = #{grpSn}
     </select>
-
-    <delete id="delete">
-        delete from TGRP_WISH
-        where user_id = #{id} and GRP_SN = #{grpSn}
-    </delete>
 
     <select id="getList" resultType="com.swime.domain.GroupWishVO">
         select *

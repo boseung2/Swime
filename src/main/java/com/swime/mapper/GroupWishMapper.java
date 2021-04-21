@@ -9,11 +9,13 @@ import java.util.List;
 
 public interface GroupWishMapper {
 
+    int insert(GroupWishVO vo);
+
+
+
     List<GroupWishVO> readByGroupSn(long grpSn);
 
     List<GroupWishVO> readByid(String id);
-
-    int insert(GroupWishVO vo);
 
     int delete(@Param("id") String id, @Param("grpSn") long grpSn);
 
