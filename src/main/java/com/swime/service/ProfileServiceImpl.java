@@ -35,8 +35,13 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public List<GroupVO> getJoinList(String id) {
+    public List<GroupVO> getJoinGroupList(String id) {
         return mapper.joinList(id);
+    }
+
+    @Override
+    public List<GroupVO> getWishGroupList(String id) {
+        return mapper.wishList(id);
     }
 }
 

@@ -3,9 +3,40 @@
 
 <%@include file="../includes/header.jsp" %>
 
-<%@include file="../user/details/info.jsp" %>
+<style>
+    .content {
+        min-height: calc(100vh - 96px);
+    }
+    footer {
+        margin-top: 30px;
+    }
+
+    @media screen and (max-width: 500px) {
+        .topnav a {
+            float: none;
+            display: block;
+            text-align: left;
+            font-size: 13px;
+            height: 40px;
+        }
+
+        .header-right {
+            float: none;
+        }
+
+    }
+</style>
+
+<div class="content">
+    <%@include file="../user/details/info.jsp" %>
+</div>
 
 <%@include file="../includes/footer.jsp" %>
+
+
+
+
+
 
 <script>
     $(document).ready(function (){

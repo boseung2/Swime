@@ -154,7 +154,8 @@ public class UserCotroller {
         List<GroupVO> list = profileService.getOwnerGroupList(id);
         list.forEach(log::info);
         model.addAttribute("ownerList", profileService.getOwnerGroupList(id));
-        model.addAttribute("joinList", profileService.getJoinList(id));
+        model.addAttribute("joinList", profileService.getJoinGroupList(id));
+        model.addAttribute("wishList", profileService.getWishGroupList(id));
 
     }
 
