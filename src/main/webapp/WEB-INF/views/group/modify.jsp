@@ -39,7 +39,7 @@
         </div>
         <div class="form-group uploadDiv">
             <label for="uploadFile">대표사진</label>
-            <input type="file" class="form-control" id="uploadFile" name="uploadFile" >
+            <input type="file" class="form-control" id="uploadFile" name="uploadFile" accept="image/*">
             <div class="uploadResult">
                 <ul>
 
@@ -136,6 +136,34 @@
 
                 $('#sido').on("click", function(e) {
                     $('#sido').children()
+                })
+            })
+        </script>
+        <!-- 시/군/구를 시/도에 맞게 변경-->
+        <script>
+            $(document).ready(function() {
+                $('#sido').on("change", function() {
+                    let options = $('#sigungu option');
+
+                    for(let i=1; i<options.length; i++) {
+                        options[i].setAttribute("hidden", "hidden");
+                    }
+
+                    if($('#sido option:selected').val() == "LODO01") {
+                        // 서울특별시일때
+                        for(let i=0; i<options.length; i++) {
+                            if(options[i].value.substr(0,4) == "LOGU") {
+                                options[i].removeAttribute("hidden");
+                            }
+                        }
+                    }else if($('#sido option:selected').val() == "LODO02") {
+                        // 경기도일때
+                        for(let i=0; i<options.length; i++) {
+                            if(options[i].value.substr(0,4) == "LOSI") {
+                                options[i].removeAttribute("hidden");
+                            }
+                        }
+                    }
                 })
             })
         </script>
@@ -268,7 +296,8 @@
 
 <script>
     $(document).ready(function() {
-        let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+        let regex = new RegExp("(.*?)\.(png|jpg|jpeg|bmp)$");
+
         let maxSize = 5242880;
         let formObj = $("form");
         let csrfHeaderName = "${_csrf.headerName}";
@@ -373,7 +402,7 @@
                 return false;
             }
 
-            if(regex.test(fileName)) {
+            if(!regex.test(fileName)) {
                 alert("해당 종류의 파일은 업로드 할 수 없습니다.");
                 return false;
             }

@@ -5,11 +5,12 @@
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal.username" var="userId"/>
 </sec:authorize>
-
+<script type="text/javascript" src="../../../../resources/js/validation.js"></script>
 
 <div class="container">
     <h2>프로필 수정</h2>
     <hr/>
+    <div id="errorMsgDiv"></div>
 <%--    action="/user/modify" method="post"--%>
     <form role="form" id="userInfoForm">
 
@@ -70,6 +71,8 @@
         let cancelBtn = $("#cancel")[0];
         let fileInput = $("#userInfoForm > .form-group > input[type='file']")[0];
         let profileImg = $("#imgPlace")[0];
+        let nameInput = $("#name")[0];
+        let birthInput = $("#birth")[0];
 
         let imgPlace = $("#uploadResult")[0];
         let uploadImg = $("#imageTag")[0];
@@ -81,24 +84,46 @@
         $(fileInput).hide();
         // $(imgPlace).hide();
 
+
+        let errorBox = $("#errorMsgDiv")[0];
+        let errorMsg;
+        init();
+
+        function init() {
+            $(errorBox).hide();
+            $(errorBox).html('<div id="errorMsg" class="w-100 btn btn-lg btn-danger">error</div>');
+            errorMsg = $("#errorMsg")[0];
+        }
+
+        $(birthInput).on("change", function () {
+            futureDate();
+        });
+
+
+
         if("${MemberVo.picture}" === '' || "${MemberVo.picture}" === 'myPicture.jpeg') $(imgPlace).hide();
 
 
-        // $(password).change(function () {
-        //     if(!compare(password, confirmPassword)) {
-        //         console.log("비밀번호 일치x")
-        //         this.setCustomValidity("비밀번호가 일치하지 않습니다");
-        //         return;
-        //     }
-        // });
-        //
-        // $(confirmPassword).keyup(function (e){
-        //     e.preventDefault();
-        //     if(!compare(password, confirmPassword)) {
-        //         confirmPassword.setCustomValidity("비밀번호가 일치하지 않습니다");
-        //
-        //     }
-        // });
+        function checkTwo() {
+            let min = 8;
+            let max = 20;
+            if(password.value !== '') if(!checkLength(password, 4, 12, errorBox, errorMsg, "비밀번호")) return false;
+            if (!checkLength(nameInput, 1, 10, errorBox, errorMsg, "이름")) return false;
+            else return true;
+        }
+
+        function futureDate(){
+            if(birthInput.valueAsNumber > Date.now()){
+                showErrorMsg(errorBox, errorMsg, "생일을 미래로 설정 할 수 없습니다");
+                // function showErrorMsg(textPlaceDiv, textPlace, msg) {
+                //     $(textPlaceDiv).show();
+                //     $(textPlace).html(msg);
+                // }
+                return false;
+            }
+            return true;
+
+        }
 
 
 
@@ -110,7 +135,18 @@
                 return;
             }
 
+            // console.log(password.value);
             e.preventDefault();
+            if(modifyMode){
+                if(!checkTwo()) return;
+                if(!futureDate()) return;
+
+            }
+
+
+
+
+
 
             sendData().then(function (result){
                 changeBtn(result);
@@ -137,7 +173,6 @@
                 success:function(result) {
                     $("#content").html(result);
                 }});
-
         });
 
         // 지금 처리방법
@@ -243,14 +278,15 @@
                             email : '${MemberVo.id}'
                         },
                         success: function(msg) {
-                            alert('정보를 수정했습니다');
+                            alert(msg);
                             password.value = '';
                             confirmPassword.value = '';
                             if(fileInput.value !== '') profileImg.src = "/display?fileName=" + (fileInput.filepath).replace('s_', '');
+                            $(errorBox).hide();
                             resolve(true);
                         },
                         error : function (msg) {
-                            alert('에러가 발생했습니다');
+                            alert(msg);
                             resolve(false);
                         }
                     });
@@ -298,7 +334,7 @@
 
     function changeBtn(obj, condition, cancelBtn, deleteImg, fileInput){
         if(condition){
-            $(obj).removeClass('btn btn-warning');
+            $(obj).removeClass('btn btn-danger');
             $(obj).addClass('btn btn-primary');
             $(obj).text('정보 수정');
             $(cancelBtn).hide();
@@ -307,7 +343,7 @@
         }
         else{
             $(obj).removeClass('btn btn-primary');
-            $(obj).addClass('btn btn-warning');
+            $(obj).addClass('btn btn-danger');
             $(obj).text('확인');
             $(cancelBtn).show();
             $(deleteImg).show();
@@ -316,7 +352,7 @@
     }
 
     function checkExtension(fileName, fileSize) {
-        let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+        let regex = new RegExp("(.*?)\.(jpg|jpeg|png|bmp)$");
         let maxSize = 5242880;
 
         if(fileSize >= maxSize) {
@@ -324,7 +360,7 @@
             return false;
         }
 
-        if(regex.test(fileName)) {
+        if(!regex.test(fileName)) {
             alert("해당 종류의 파일은 업로드 할 수 없습니다.");
             return false;
         }

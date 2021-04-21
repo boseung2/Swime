@@ -35,7 +35,7 @@
         </div>
         <div class="form-group uploadDiv">
             <label for="uploadFile">대표사진</label>
-            <input type="file" class="form-control" id="uploadFile" name="uploadFile" >
+            <input type="file" class="form-control" id="uploadFile" name="uploadFile" accept="image/*">
             <div class="uploadResult">
                 <ul>
 
@@ -63,68 +63,95 @@
                 <label for="sigungu">시/군/구</label>
                 <select class="form-control" id="sigungu" name="sigungu">
                     <option value="select">-------------</option>
-                    <option value="LOGU01">강남구</option>
-                    <option value="LOGU02">강동구</option>
-                    <option value="LOGU03">강북구</option>
-                    <option value="LOGU04">강서구</option>
-                    <option value="LOGU05">관악구</option>
-                    <option value="LOGU06">광진구</option>
-                    <option value="LOGU07">구로구</option>
-                    <option value="LOGU08">금천구</option>
-                    <option value="LOGU09">노원구</option>
-                    <option value="LOGU10">도봉구</option>
-                    <option value="LOGU11">동대문구</option>
-                    <option value="LOGU12">동작구</option>
-                    <option value="LOGU13">마포구</option>
-                    <option value="LOGU14">서대문구</option>
-                    <option value="LOGU15">서초구</option>
-                    <option value="LOGU16">성동구</option>
-                    <option value="LOGU17">성북구</option>
-                    <option value="LOGU18">송파구</option>
-                    <option value="LOGU19">양천구</option>
-                    <option value="LOGU20">영등포구</option>
-                    <option value="LOGU21">용산구</option>
-                    <option value="LOGU22">은평구</option>
-                    <option value="LOGU23">종로구</option>
-                    <option value="LOGU24">중구"</option>
-                    <option value="LOGU25">중랑구</option>
-                    <option value="select">-------------</option>
-                    <option value="LOSI01">고양시</option>
-                    <option value="LOSI02">과천시</option>
-                    <option value="LOSI03">광명시</option>
-                    <option value="LOSI04">광주시</option>
-                    <option value="LOSI05">구리시</option>
-                    <option value="LOSI06">군포시</option>
-                    <option value="LOSI07">김포시</option>
-                    <option value="LOSI08">남양주시</option>
-                    <option value="LOSI09">동두천시</option>
-                    <option value="LOSI10">미금시</option>
-                    <option value="LOSI11">부천시</option>
-                    <option value="LOSI12">성남시</option>
-                    <option value="LOSI13">송탄시</option>
-                    <option value="LOSI14">수원시</option>
-                    <option value="LOSI15">시흥시</option>
-                    <option value="LOSI16">안산시</option>
-                    <option value="LOSI17">안성시</option>
-                    <option value="LOSI18">안양시</option>
-                    <option value="LOSI19">양주시시</option>
-                    <option value="LOSI20">양주시</option>
-                    <option value="LOSI21">여주시</option>
-                    <option value="LOSI22">여주시</option>
-                    <option value="LOSI23">오산시</option>
-                    <option value="LOSI24">용인시</option>
-                    <option value="LOSI25">의왕시</option>
-                    <option value="LOSI26">의정부</option>
-                    <option value="LOSI27">이천시</option>
-                    <option value="LOSI28">파주시</option>
-                    <option value="LOSI29">평택시</option>
-                    <option value="LOSI30">포천시</option>
-                    <option value="LOSI31">포천시</option>
-                    <option value="LOSI32">하남시</option>
-                    <option value="LOSI33">화성시</option>
+                    <option value="LOGU01" hidden="hidden">강남구</option>
+                    <option value="LOGU02" hidden="hidden">강동구</option>
+                    <option value="LOGU03" hidden="hidden">강북구</option>
+                    <option value="LOGU04" hidden="hidden">강서구</option>
+                    <option value="LOGU05" hidden="hidden">관악구</option>
+                    <option value="LOGU06" hidden="hidden">광진구</option>
+                    <option value="LOGU07" hidden="hidden">구로구</option>
+                    <option value="LOGU08" hidden="hidden">금천구</option>
+                    <option value="LOGU09" hidden="hidden">노원구</option>
+                    <option value="LOGU10" hidden="hidden">도봉구</option>
+                    <option value="LOGU11" hidden="hidden">동대문구</option>
+                    <option value="LOGU12" hidden="hidden">동작구</option>
+                    <option value="LOGU13" hidden="hidden">마포구</option>
+                    <option value="LOGU14" hidden="hidden">서대문구</option>
+                    <option value="LOGU15" hidden="hidden">서초구</option>
+                    <option value="LOGU16" hidden="hidden">성동구</option>
+                    <option value="LOGU17" hidden="hidden">성북구</option>
+                    <option value="LOGU18" hidden="hidden">송파구</option>
+                    <option value="LOGU19" hidden="hidden">양천구</option>
+                    <option value="LOGU20" hidden="hidden">영등포구</option>
+                    <option value="LOGU21" hidden="hidden">용산구</option>
+                    <option value="LOGU22" hidden="hidden">은평구</option>
+                    <option value="LOGU23" hidden="hidden">종로구</option>
+                    <option value="LOGU24" hidden="hidden">중구</option>
+                    <option value="LOGU25" hidden="hidden">중랑구</option>
+                    <option value="LOSI01" hidden="hidden">고양시</option>
+                    <option value="LOSI02" hidden="hidden">과천시</option>
+                    <option value="LOSI03" hidden="hidden">광명시</option>
+                    <option value="LOSI04" hidden="hidden">광주시</option>
+                    <option value="LOSI05" hidden="hidden">구리시</option>
+                    <option value="LOSI06" hidden="hidden">군포시</option>
+                    <option value="LOSI07" hidden="hidden">김포시</option>
+                    <option value="LOSI08" hidden="hidden">남양주시</option>
+                    <option value="LOSI09" hidden="hidden">동두천시</option>
+                    <option value="LOSI10" hidden="hidden">미금시</option>
+                    <option value="LOSI11" hidden="hidden">부천시</option>
+                    <option value="LOSI12" hidden="hidden">성남시</option>
+                    <option value="LOSI13" hidden="hidden">송탄시</option>
+                    <option value="LOSI14" hidden="hidden">수원시</option>
+                    <option value="LOSI15" hidden="hidden">시흥시</option>
+                    <option value="LOSI16" hidden="hidden">안산시</option>
+                    <option value="LOSI17" hidden="hidden">안성시</option>
+                    <option value="LOSI18" hidden="hidden">안양시</option>
+                    <option value="LOSI19" hidden="hidden">양주시시</option>
+                    <option value="LOSI20" hidden="hidden">양주시</option>
+                    <option value="LOSI21" hidden="hidden">여주시</option>
+                    <option value="LOSI22" hidden="hidden">여주시</option>
+                    <option value="LOSI23" hidden="hidden">오산시</option>
+                    <option value="LOSI24" hidden="hidden">용인시</option>
+                    <option value="LOSI25" hidden="hidden">의왕시</option>
+                    <option value="LOSI26" hidden="hidden">의정부</option>
+                    <option value="LOSI27" hidden="hidden">이천시</option>
+                    <option value="LOSI28" hidden="hidden">파주시</option>
+                    <option value="LOSI29" hidden="hidden">평택시</option>
+                    <option value="LOSI30" hidden="hidden">포천시</option>
+                    <option value="LOSI31" hidden="hidden">포천시</option>
+                    <option value="LOSI32" hidden="hidden">하남시</option>
+                    <option value="LOSI33" hidden="hidden">화성시</option>
                 </select>
             </div>
         </div>
+        <!-- 시/군/구를 시/도에 맞게 변경-->
+        <script>
+            $(document).ready(function() {
+                $('#sido').on("change", function() {
+                    let options = $('#sigungu option');
+
+                    for(let i=1; i<options.length; i++) {
+                        options[i].setAttribute("hidden", "hidden");
+                    }
+
+                    if($('#sido option:selected').val() == "LODO01") {
+                        // 서울특별시일때
+                        for(let i=0; i<options.length; i++) {
+                            if(options[i].value.substr(0,4) == "LOGU") {
+                                options[i].removeAttribute("hidden");
+                            }
+                        }
+                    }else if($('#sido option:selected').val() == "LODO02") {
+                        // 경기도일때
+                        for(let i=0; i<options.length; i++) {
+                            if(options[i].value.substr(0,4) == "LOSI") {
+                                options[i].removeAttribute("hidden");
+                            }
+                        }
+                    }
+                })
+            })
+        </script>
         <div class="form-group">
             <label for="tags">태그</label>
             <select class="form-control" id="tags" name="tags">
@@ -242,7 +269,7 @@
     $(document).ready(function(e) {
 
         let formObj = $("form[role='form']");
-        let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+        let regex = new RegExp("(.*?)\.(png|jpg|jpeg|bmp)$");
         let maxSize = 5242880;
         let csrfHeaderName = "${_csrf.headerName}";
         let csrfTokenValue = "${_csrf.token}";
@@ -360,7 +387,7 @@
                 return false;
             }
 
-            if(regex.test(fileName)) {
+            if(!regex.test(fileName)) {
                 alert("해당 종류의 파일은 업로드 할 수 없습니다.");
                 return false;
             }
