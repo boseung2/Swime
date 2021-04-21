@@ -362,18 +362,24 @@
                 }
 
                 for(let i = 0, len = list.length || 0; i < len; i++) {
+
                     str += "<div class='col-md-4 mb-5'>";
                     str += "<div class='card h-100'>";
                     str += "<div class='card-body'>";
                     str += "<h2 class='card-title'>" + list[i].name + "</h2>";
-                    str += "<p class='card-text'>" + list[i].startDate.substring(0,10) + " ~ " + list[i].endDate.substring(0,10) + "</p>";
+
+                    if(list[i].endDate != null) str += "<p class='card-text'>" + list[i].startDate.substring(0,10) + " ~ " + list[i].endDate.substring(0,10) + "</p>";
+                    else str += "<p class='card-text'>" + list[i].startDate.substring(0,10) + "</p>"
                     str += "<p class='card-text'>" + list[i].startTime.substring(0,5) + " ~ " + list[i].endTime.substring(0,5) + "</p>";
+
                     if(list[i].onOff === 'STOF01') str += "<p class='card-text'>온라인 스터디</p>";
                     if(list[i].onOff === 'STOF02') str += "<p class='card-text'>오프라인 스터디</p>";
+
                     <c:if test="list[i].expense == null">str += "<p class='card-text'></p>"; </c:if>
                     <c:if test="list[i].expense != null">str += "<p class='card-text'>" + list[i].expense + "</p>"; </c:if>
+
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
-                    if(list[i].attendants < list[i].capacity) str += "<p class='card-text'>" + list[i].attendants + "/" +  list[i].capacity + "</p>";
+                    else str += "<p class='card-text'>" + list[i].attendants + "/" +  list[i].capacity + "</p>";
                     str += "</div>";
                     str += "<div class='card-footer'>";
                     str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";

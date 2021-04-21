@@ -24,11 +24,13 @@
             <c:if test="${study.repeatCycle eq 'STCY01'}"><span>매주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY02'}"><span>격주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY03'}"><span>매월</span></c:if>
+
             <c:if test="${study.repeatDay != null}"><span>${study.repeatDay}</span></c:if>
             <br>
             <span>${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
             <br>
-            <span>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span>
+            <c:if test="${endDate != null}"><span>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
+            <c:if test="${endDate == null}"><span>${fn:substring(startDate,0,10)}</span></c:if>
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
@@ -197,6 +199,9 @@
             switch (result) {
                 case "register" :
                     $(".modal-body").html("스터디가 정상적으로 등록되었습니다.");
+                    break;
+                case "register error" :
+                    $(".modal-body").html("스터디가 등록을 실패하였습니다.");
                     break;
                 case "update" :
                     $(".modal-body").html("스터디가 정상적으로 수정되었습니다.");

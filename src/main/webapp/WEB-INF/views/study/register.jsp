@@ -29,11 +29,14 @@
             <label for="startDate">시작일자</label>
             <input type="date" class="form-control" id="startDate" name="startDate" required>
         </div>
-        <div class="form-group">
-            <label for="endDate">종료일자</label>
-            <input type="date" class="form-control" id="endDate" name="endDate" required>
+        <div class="form-group" hidden="true">
+            <input type="checkbox" id="repeat" onclick="repeatFunction()">정기 스터디
         </div>
-        <div class="form-group">
+        <div class="form-group" id="formEndDate" hidden="true">
+            <label for="endDate">종료일자</label>
+            <input type="date" class="form-control" id="endDate" name="endDate">
+        </div>
+        <div class="form-group" id="formRepeatCycle" hidden="true">
             <label for="repeatCycle">반복주기</label>
             <select class="form-control" id="repeatCycle" name="repeatCycle">
                 <option>(선택)</option>
@@ -42,7 +45,7 @@
                 <option value="STCY03">매월</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="formRepeatDay" hidden="true">
             <label for="repeatDay">반복요일</label>
             <input type="hidden" class="form-control" id="repeatDay" name="repeatDay">
             <input type="checkbox" value="월" class="day">월
@@ -66,7 +69,7 @@
             <textarea class="form-control" rows="5" id="information" name="information" required></textarea>
         </div>
         <div class="form-group">
-            <input type="checkbox" id="onOff" onclick="checkOn()">온라인스터디
+            <input type="checkbox" id="onOff" onclick="checkOn()" value="STOF02">온라인스터디
         </div>
         <div class="form-group" id="formUrl" hidden="true">
             <label for="onUrl">온라인 스터디 링크 추가</label>
@@ -123,32 +126,73 @@
     console.log(minutes);
 
     $('#startDate').val(year + "-" + month + "-" + date);
-    $('#endDate').val(year + "-" + month + "-" + date);
+    $('#startDate').attr("min", year + "-" + month + "-" + date);
+
+    // $('#endDate').val(year + "-" + month + "-" + date);
+    // $('#endDate').attr("min", year + "-" + month + "-" + date);
+
     $('#startTime').val(hours + ":" + minutes);
+    $('#startTime').attr("min", hours + ":" + minutes);
+
     $('#endTime').val(hours + ":" + minutes);
+    $('#endTime').attr("min", hours + ":" + minutes);
 
-    <!-- 온오프라인 -->
-    let onOffCheck = $('#onOff');
-    let formUrl = $('#formUrl');
-    let formPlace = $('#formPlace');
+    <!-- 반복주기/요일 -->
+    let repeat = $('#repeat');
 
-    function checkOn() {
-        let on = onOffCheck[0].checked;
-        console.log("on = " + on);
+    let formEndDate = $('#formEndDate');
+    let formRepeatCycle = $('#formRepeatCycle');
+    let formRepeatDay = $('#formRepeatDay');
 
-        formUrl[0].hidden = !on;
-        formPlace[0].hidden = on;
-        $('#onUrl').attr("required", on);
-        $('#placeId').attr("required", !on);
+    let endDate = $('#endDate');
+    let repeatCycle = $('#repeatCycle');
+    let repeatDay = $('#repeatDay');
 
-        if(formUrl[0].hidden) {
-            $('#onUrl').val("");
+    function repeatFunction() {
+        let repeatCheck = repeat[0].checked;
+
+        console.log("repeatCheck = " + repeatCheck);
+
+        // 정기스터디이면 true
+        // 체크 true -> 종료일자/반복주기/반복요일 보여주기 (hidden = false)
+        // 체크 false -> 종료일자/반복주기/반복요일 숨기기 (hidden = true)
+        formEndDate[0].hidden = !repeatCheck;
+        formRepeatCycle[0].hidden = !repeatCheck;
+        formRepeatDay[0].hidden = !repeatCheck;
+
+        // 정기스터디이면 true
+        if(repeatCheck == true) {
+            // 기본 데이터 설정
+            // endDate.val(year + "-" + month + "-" + date);
+            endDate.attr("min", year + "-" + month + "-" + date);
+            repeatCycle.val('(선택)');
+
+            // 필수 속성 정의
+            endDate.attr("required", "required");
+            // repeatCycle.attr("required", "required");
+            // repeatDay.attr("required", "required");
         }
-        if(formPlace[0].hidden) {
-            $('#placeId').val("");
+        if(repeatCheck == false) {
+            // 정기스터디 취소시 데이터도 모두 지우기
+            endDate.val('');
+            repeatCycle.val('(선택)');
+            repeatDay.val('');
+
+            // 필수 속성 없애기
+            endDate.removeAttr("required");
+            // repeatCycle.removeAttr("required");
+            // repeatDay.removeAttr("required");
+
+            // 요일 체크박스 제거
+            let dayList = $('input[class="day"]');
+
+            for(let i = 0; i < dayList.length; i++) {
+                if(dayList[i].checked === true) {
+                    dayList[i].checked = false;
+                }
+            }
         }
     }
-
 
     $(".day").on("click", function(e) {
 
@@ -168,4 +212,33 @@
 
         $('#repeatDay').val(days.join(','));
     })
+
+    <!-- 온오프라인 -->
+    let onOffCheck = $('#onOff');
+    let formUrl = $('#formUrl');
+    let formPlace = $('#formPlace');
+
+    function checkOn() {
+        onOffCheck.val("STOF01");
+        let on = onOffCheck[0].checked;
+        console.log("on = " + on);
+
+        formUrl[0].hidden = !on;
+        formPlace[0].hidden = on;
+
+        if(on === true) { // 온라인
+            $('#onUrl').attr("required", "required");
+            $('#placeId').removeAttr("required");
+
+            $('#placeId').val("");
+        }
+        if(on === false) { // 오프라인
+            onOffCheck.val("STOF02");
+
+            $('#placeId').attr("required", "required");
+            $('#onUrl').removeAttr("required");
+
+            $('#onUrl').val("");
+        }
+    }
 </script>

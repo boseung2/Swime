@@ -18,6 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sun.net.www.protocol.http.AuthenticationInfo;
 
 import javax.xml.ws.Response;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 
 @Controller
 @RequestMapping("/study")
@@ -82,6 +84,77 @@ public class StudyController {
     public String register(StudyVO study, String userId, StudyCriteria cri, RedirectAttributes rttr) {
 
         log.info("스터디 생성 cri = " + cri);
+        
+        // 유효성 검사
+        // 스터디명 30자 이하
+//        if(study.getName().length() > 30) {
+//            rttr.addFlashAttribute("result", "스터디명은 30자 이하여야합니다.");
+//            return "redirect:/study/get?sn=" + study.getSn();
+//        }
+//
+//        // 시작/종료날짜 유효성 검사
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        try {
+//            dateFormat.parse(study.getStartDate());
+//        }catch (Exception e) {
+//            rttr.addFlashAttribute("result", "시작 날짜가 유효하지 않습니다.");
+//            return "redirect:/study/get?sn=" + study.getSn();
+//        }
+//
+//        // 시작일자 < 종료일자인지 확인
+//
+//        // 매주일경우 종료 - 시작 > 7
+//        // 격주일 경우 종료 - 시작 > 14
+//        // 매달일 경우 종료일자가 다음달 같은 날짜 보다 클 때
+//
+//        // 시작/종료시간 유효성 검사
+//        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+//        try {
+//            timeFormat.parse(study.getStartDate());
+//        }catch (Exception e) {
+//            rttr.addFlashAttribute("result", "시작 시간이 유효하지 않습니다.");
+//            return "redirect:/study/get?sn=" + study.getSn();
+//        }
+//        try {
+//            timeFormat.parse(study.getEndTime());
+//        }catch (Exception e) {
+//            rttr.addFlashAttribute("result", "종료 시간이 유효하지 않습니다.");
+//            return "redirect:/study/get?sn=" + study.getSn();
+//        }
+//
+//        // 상세정보 400자 이하
+//        if(study.getInformation().length() > 400) {
+//            rttr.addFlashAttribute("result", "스터디명은 400자 이하여야합니다.");
+//            return "redirect:/study/get?sn=" + study.getSn();
+//        }
+//
+//        // 비용 10자 이하
+//        if(study.getExpense().length() > 10) {
+//            rttr.addFlashAttribute("result", "지참금은 10자 이하여야합니다.");
+//            return "redirect:/study/get?sn=" + study.getSn();
+//        }
+//
+//        // 온라인일경우 url(300바이트), 오프라인일 경우 장소 id(40바이트) 존재
+//        if ("STOF01".equals(study.getOnOff())) {
+//            if(study.getOnUrl().getBytes(StandardCharsets.UTF_8).length > 300) {
+//                rttr.addFlashAttribute("result", "url이 너무 큽니다.");
+//                return "redirect:/study/get?sn=" + study.getSn();
+//            }
+//        }
+//
+//        if("STOF02".equals(study.getOnOff())) {
+//            if(study.getOnUrl().getBytes(StandardCharsets.UTF_8).length > 40) {
+//                rttr.addFlashAttribute("result", "장소 id가 너무 큽니다.");
+//                return "redirect:/study/get?sn=" + study.getSn();
+//            }
+//        }
+//
+//        // 모집인원 99명까지
+//        if(study.getCapacity() > 99) {
+//            rttr.addFlashAttribute("result", "모집인원은 99명 이하여야합니다.");
+//            return "redirect:/study/get?sn=" + study.getSn();
+//        }
+
 
         if("".equals(study.getOnUrl())) {
             study.setOnOff("STOF02");
@@ -96,9 +169,10 @@ public class StudyController {
             study.setRepeatCycle(study.getRepeatCycle());
         }
 
-        if(service.register(study) == 1) {
+        try {
+            service.register(study);
             rttr.addFlashAttribute("result", "register");
-        }else {
+        }catch (Exception e) {
             rttr.addFlashAttribute("result", "register error");
         }
 
