@@ -38,7 +38,7 @@
                     </c:if>
                 </sec:authorize>
 
-            <a class="btn btn-primary" href="#">❤</a>
+<%--            <a class="btn btn-primary" href="#">❤</a>--%>
         </div>
         <!-- /.col-md-4 -->
     </div>

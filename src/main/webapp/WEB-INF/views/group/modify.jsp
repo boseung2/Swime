@@ -139,6 +139,34 @@
                 })
             })
         </script>
+        <!-- 시/군/구를 시/도에 맞게 변경-->
+        <script>
+            $(document).ready(function() {
+                $('#sido').on("change", function() {
+                    let options = $('#sigungu option');
+
+                    for(let i=1; i<options.length; i++) {
+                        options[i].setAttribute("hidden", "hidden");
+                    }
+
+                    if($('#sido option:selected').val() == "LODO01") {
+                        // 서울특별시일때
+                        for(let i=0; i<options.length; i++) {
+                            if(options[i].value.substr(0,4) == "LOGU") {
+                                options[i].removeAttribute("hidden");
+                            }
+                        }
+                    }else if($('#sido option:selected').val() == "LODO02") {
+                        // 경기도일때
+                        for(let i=0; i<options.length; i++) {
+                            if(options[i].value.substr(0,4) == "LOSI") {
+                                options[i].removeAttribute("hidden");
+                            }
+                        }
+                    }
+                })
+            })
+        </script>
         <div class="form-group">
             <label for="tags">태그</label>
             <select class="form-control" id="tags" name="tags" >
