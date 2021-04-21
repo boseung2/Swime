@@ -46,10 +46,10 @@
             <c:if test="${study.representation != pinfo.username}">
                 <c:choose>
                     <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
-                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>
-                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
-                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
-                    <c:otherwise><a class="attend btn btn-primary" href="">참석하기</a></c:otherwise>
+<%--                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>--%>
+<%--                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>--%>
+<%--                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>--%>
+<%--                    <c:otherwise><a class="attend btn btn-primary" href="">참석하기</a></c:otherwise>--%>
                 </c:choose>
             </c:if>
 
@@ -57,11 +57,11 @@
             <c:if test="${study.representation eq pinfo.username}">
             <a class="modify btn btn-primary" href="">스터디 수정</a>
             <a class="remove btn btn-primary" href="">스터디 삭제</a>
-            <br><br>
-            <a class="btn btn-primary" href="#">참가 신청 마감</a>
-            <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>
-            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>
-            <br><br>
+<%--            <br><br>--%>
+<%--            <a class="btn btn-primary" href="#">참가 신청 마감</a>--%>
+<%--            <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>--%>
+<%--            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>--%>
+<%--            <br><br>--%>
             </c:if>
 
             <a class="list btn btn-primary" href="">그룹으로 돌아가기</a>
@@ -147,25 +147,25 @@
         let userId = "boseung@naver.com"; // 임의의 사용자 설정
         let wishUL = $('.wishButton');
 
-        getStudyWish();
-
-        <!--찜 버튼 출력-->
-        function getStudyWish() {
-
-            studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
-                console.log("get > getWish > result = " + result);
-
-                let str = "";
-
-                if(result === "not exist") {
-                    str += "<a class='wish btn btn-primary' href=''>♡</a>";
-                }else {
-                    str += "<a class='wish btn btn-primary' href=''>❤</a>";
-                }
-
-                wishUL.html(str);
-            })
-        }
+        // getStudyWish();
+        //
+        // <!--찜 버튼 출력-->
+        // function getStudyWish() {
+        //
+        //     studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
+        //         console.log("get > getWish > result = " + result);
+        //
+        //         let str = "";
+        //
+        //         if(result === "not exist") {
+        //             str += "<a class='wish btn btn-primary' href=''>♡</a>";
+        //         }else {
+        //             str += "<a class='wish btn btn-primary' href=''>❤</a>";
+        //         }
+        //
+        //         wishUL.html(str);
+        //     })
+        // }
 
         <!--찜 버튼 눌렸을 때-->
         $(".wish").on("click", function(e) {
