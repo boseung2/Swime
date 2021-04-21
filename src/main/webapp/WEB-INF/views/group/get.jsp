@@ -211,47 +211,12 @@
     </div>
 </div>
 
-<!-- GroupRating Module -->
-<script type="text/javascript" src="/resources/js/groupRating.js"></script>
-
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        <!-- 스터디 삭제 후 모달 창-->
-        let result = '<c:out value="${result}"/>';
-
-        console.log("스터디 삭제 result = " + result);
-
-        checkModal(result);
-
-        history.replaceState({}, null, null);
-
-
-        function checkModal(result) {
-
-            if(result === '' || history.state) {
-                return;
-            }
-
-            if("success" === result) {
-                $(".studyModalBody").html("스터디가 정상적으로 삭제되었습니다.");
-            }
-            if("error" === result) {
-                $(".studyModalBody").html("스터디 삭제를 실패하였습니다.");
-            }
-
-            $("#studyModal").modal("show");
-        }
-    });
-</script>
 <!-- GroupAttend Module -->
 <script type="text/javascript" src="/resources/js/groupAttend.js"></script>
 <!-- StudyList Module -->
 <script type="text/javascript" src="/resources/js/studyList.js"></script>
-
-
-
+<!-- GroupRating Module -->
+<script type="text/javascript" src="/resources/js/groupRating.js"></script>
 
 <!-- 모임 참여 -->
 <script>
@@ -320,12 +285,12 @@
 
         <%--let snValue = '<c:out value="${group.sn}"/>';--%>
 
-    //     {"grpSn" : snValue, "userId" : "jungbs3726@naver.com", "grpRole" : "GRRO02", "status" : "GRST01"}
-    // ,
-    //     function(result) {
-    //         alert("RESULT: " + result);
-    //     }
-    // )groupAttendService.add(
+        //     {"grpSn" : snValue, "userId" : "jungbs3726@naver.com", "grpRole" : "GRRO02", "status" : "GRST01"}
+        // ,
+        //     function(result) {
+        //         alert("RESULT: " + result);
+        //     }
+        // )groupAttendService.add(
 
 
         // groupAttendService.getList({grpSn:snValue}, function(list) {
@@ -342,9 +307,6 @@
 
     })
 </script>
-
-
-
 
 
 
@@ -504,6 +466,36 @@
         })
     })
 </script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        <!-- 스터디 삭제 후 모달 창-->
+        let result = '<c:out value="${result}"/>';
+
+        console.log("스터디 삭제 result = " + result);
+
+        checkModal(result);
+
+        history.replaceState({}, null, null);
+
+
+        function checkModal(result) {
+
+            if(result === '' || history.state) {
+                return;
+            }
+
+            if("success" === result) {
+                $(".studyModalBody").html("스터디가 정상적으로 삭제되었습니다.");
+            }
+            if("error" === result) {
+                $(".studyModalBody").html("스터디 삭제를 실패하였습니다.");
+            }
+
+            $("#studyModal").modal("show");
+        }
+    });
+</script>
 
 
 
@@ -624,6 +616,7 @@
         $(".rating").on("click", "li", function(e) {
 
             let sn = $(this).data("sn");
+            let originalUserId = modalInputUserId.val();
 
             console.log(">>>>>" + sn);
 
@@ -638,8 +631,10 @@
                 modal.data("sn", groupRating.sn);
 
                 modal.find("button[id !='modalCloseBtn']").hide();
-                modalModBtn.show();
-                modalRemoveBtn.show();
+                if(userId === originalUserId) {
+                    modalModBtn.show();
+                    modalRemoveBtn.show();
+                }
 
                 $("#groupModal").modal("show");
             })
