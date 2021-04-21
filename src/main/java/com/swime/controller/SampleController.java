@@ -28,7 +28,14 @@ public class SampleController {
 
     @GetMapping("/member")
     public void test(){
+    }
 
+    @GetMapping("/testcroll")
+    public void test1(){
+    }
+
+    @GetMapping("/star")
+    public void test2(){
     }
 
 

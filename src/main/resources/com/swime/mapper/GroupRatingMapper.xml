@@ -24,19 +24,22 @@
     </select>
 
     <select id="getList" resultType="com.swime.domain.GroupRatingVO">
-        select sn, grp_sn, std_sn, user_id, rating, review, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
-        from tgrp_rating
+        select r.sn, r.grp_sn, r.std_sn, r.user_id, u.name user_name, r.rating, r.review, to_char(r.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+        from tgrp_rating r, tuser u
         where grp_sn = #{grpSn}
+        and r.user_id = u.id
     </select>
 
     <select id="getListWithPaging" resultType="com.swime.domain.GroupRatingVO">
         <![CDATA[
-        select sn, grp_sn, std_sn, user_id, rating, review, reg_date
-        from (  select /*+INDEX_DESC(tgrp_rating pk_tgrp_rating) */
-                rownum rn, sn, grp_sn, std_sn, user_id, rating, review, to_char(reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
-                from tgrp_rating
+        select sn, grp_sn, std_sn, user_id, user_name, rating, review, reg_date
+        from (  select /*+INDEX_DESC(r pk_tgrp_rating) */
+                rownum rn, r.sn, r.grp_sn, r.std_sn, r.user_id, u.name user_name, r.rating, r.review, to_char(r.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date
+                from tgrp_rating r, tuser u
                 where (grp_sn = #{grpSn})
                 and (rownum <=  #{cri.pageNum} * #{cri.amount})
+                and r.user_id = u.id
+                order by r.sn desc
             )
         where rn > (#{cri.pageNum} - 1) * #{cri.amount}
         ]]>

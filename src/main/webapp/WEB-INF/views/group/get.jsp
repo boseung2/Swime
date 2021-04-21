@@ -18,21 +18,18 @@
                 <input type="hidden" id="pageNum" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
                 <input type="hidden" id="amount" name="amount" value="<c:out value="${cri.amount}"/>">
             </form>
-            <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
+            <h1 class="font-weight-light"><c:out value="${group.name}"/><span style="color:gray;font-size:20px;">[<c:out value="${group.category}"/>]</span></h1>
+            <div class="ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></div>
             <div class="flex-container" style="display: flex;">
                 <c:forEach items="${group.tags}" var="tag">
-                    <div style="background-color: #f1f1f1;
-                                        margin: 2px;
-                                        padding: 2px;
-                                        font-size: 10px;
-                                        border-radius: 0.5rem;">
+                    <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
                         <c:out value="${tag}"/>
                     </div>
                 </c:forEach>
             </div>
-            <p>지역 <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
-            <p>총인원 <c:out value="${group.attendCount}"/></p>
-            <p>모임장 <c:out value="${group.userName}"/></p>
+            <p><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
+            <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
+            <p><i class="fas fa-user"></i>모임장 <c:out value="${group.userName}"/></p>
 
             <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
                 <sec:authorize access="isAuthenticated()">
@@ -50,16 +47,40 @@
     <!-- nav -->
     <div class="topnav">
         <a href="#info" class="active">정보</a>
-        <a href="#member">모임멤버</a>
         <a href="#groupRating">후기</a>
         <a href="#study">스터디</a>
         <a href="#board">게시판</a>
     </div>
     <!-- /nav -->
 
-    <div id="info">
-        <h4>정보</h4>
-        <p><c:out value="${group.info}"/></p>
+    <!-- topnav javascript -->
+    <script>
+        let topnav = document.getElementsByClassName("topnav")[0];
+        let sticky = topnav.offsetTop;
+
+        $(document).ready(function() {
+            $('.topnav').on("click", "a", function(e) {
+                $(".topnav > a").removeClass('active');
+                console.dir(e.target);
+                $(this).attr("class", "active");
+            })
+        })
+
+        window.onscroll = function() {myFunction()};
+
+        function myFunction() {
+            if(window.pageYOffset >= sticky) {
+                topnav.classList.add("sticky");
+            } else {
+                topnav.classList.remove("sticky");
+            }
+        }
+    </script>
+
+    <div class="main-contents">
+    <div id="info" >
+        <h4>모임정보</h4>
+        <p><pre><c:out value="${group.info}"/></pre></p>
     </div>
     <br>
 
@@ -77,45 +98,34 @@
                 </div>
             </li>
         </ul>
-<%--        <c:forEach items="${attendList}" var="member" varStatus="status">--%>
-<%--            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">--%>
-<%--            <span><c:out value="${member.name}"/></span>--%>
-<%--            <span><c:out value="${member.grpRole}"/></span>--%>
-<%--            <c:if test="${status.count % 3 == 0}">--%>
-<%--                <br>--%>
-<%--            </c:if>--%>
-<%--        </c:forEach>--%>
     </div>
     <br>
 
-    <div id="groupRating">
-        <h4>후기</h4>
-        <sec:authorize access="isAuthenticated()">
+    <hr class="centerHr" id="groupRating">
+    <div>
+        <h4>후기<sec:authorize access="isAuthenticated()">
             <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
-        </sec:authorize>
+        </sec:authorize></h4>
+
 
         <ul class="rating">
             <li data-sn="12">
                 <div>
-                    <div class="header">
-                        <strong>유저</strong>
-                        <small>2018-01-01 11:11</small>
-                    </div>
-                    <p>평점 : 4.5</p>
-                    <p>내용</p>
                 </div>
             </li>
         </ul>
     </div>
 
-    <!-- rating paginatino button -->
+    <!-- rating pagination button -->
     <div class="panel-footer">
 
     </div>
 
 
     <!-- 스터디 만들기 버튼-->
+    <hr class="centerHr" id="study">
     <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary btn-sm'>스터디 만들기</a>
+    <h4>스터디<a href='/study/register?grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a></h4>
 
     <!-- 스터디 리스트 -->
     <div class="studyList row">
@@ -126,18 +136,11 @@
 
     </div>
 
-    <!-- 첨부파일 -->
-<%--    <h4>사진</h4>--%>
-<%--    <div class="uploadResult">--%>
-<%--        <ul>--%>
-<%--        </ul>--%>
-<%--    </div>--%>
-
-    <!-- 첨부파일 확대 -->
-<%--    <div class="bigPictureWrapper">--%>
-<%--        <div class="bigPicture">--%>
-<%--        </div>--%>
-<%--    </div>--%>
+    <!-- 게시판 -->
+    <hr class="centerHr" id="board">
+    <div>
+        <h4>게시판</h4>
+    </div>
 
     <!-- container -->
 
@@ -147,10 +150,11 @@
             <p class="text-white m-0">This call to action card is a great place to showcase some important information or display a clever tagline!</p>
         </div>
     </div>
+    </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+<!-- 후기 작성/수정 모달 -->
+<div class="modal fade" id="groupModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -179,11 +183,12 @@
                 <label for="grpSn" hidden>그룹번호</label>
                 <input type="number" class="form-control" name="grpSn" id="grpSn" hidden>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" id="modalModBtn">Modify</button>
-                <button type="button" class="btn btn-danger" id="modalRemoveBtn">Remove</button>
-                <button type="button" class="btn btn-default" id="modalRegisterBtn" data-dismiss="modal">Register</button>
-                <button type="button" class="btn btn-primary" id="modalCloseBtn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" id="modalModBtn">수정</button>
+                <button type="button" class="btn btn-danger" id="modalRemoveBtn">삭제</button>
+                <button type="button" class="btn btn-primary" id="modalRegisterBtn">등록</button>
+                <button type="button" class="btn btn-secondary" id="modalCloseBtn" data-dismiss="modal">취소</button>
             </div>
         </div>
     </div>
@@ -209,7 +214,7 @@
 
 <!-- GroupRating Module -->
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
-<script type="text/javascript" src="/resources/js/studyList.js"></script>
+
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -243,10 +248,14 @@
 </script>
 <!-- GroupAttend Module -->
 <script type="text/javascript" src="/resources/js/groupAttend.js"></script>
+<!-- StudyList Module -->
+<script type="text/javascript" src="/resources/js/studyList.js"></script>
 
 
+
+
+<!-- 모임 참여 -->
 <script>
-
     $(document).ready(function() {
 
         let grpSnValue = '<c:out value="${group.sn}"/>';
@@ -278,8 +287,8 @@
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
                     str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
-                    str += "<span>"+list[i].name+"</span>";
-                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";
+                    str += "<span><b>"+list[i].name+"</b></span>\t";
+                    str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
                 }
 
                 attendUL.html(str);
@@ -335,15 +344,52 @@
     })
 </script>
 
-<script>
 
+
+
+
+
+
+
+<!-- 스터디 리스트 -->
+<script type="text/javascript">
     $(document).ready(function() {
 
+        <!-- 스터디 삭제 후 모달 창-->
+        let result = '<c:out value="${result}"/>';
+
+        console.log("result>>>" + result);
+
+        checkModal(result);
+
+        history.replaceState({}, null, null);
+
+
+        function checkModal(result) {
+            if(result === '' || history.state) {
+                return;
+            }
+
+            if("success" === result) {
+                $(".studyModal").html("스터디가 정상적으로 삭제되었습니다.");
+            }
+            if("fail" === result) {
+                $(".studyModal").html("스터디를 삭제하실 수 없습니다.");
+            }
+            if("error" === result) {
+                $(".studyModal").html("스터디 삭제가 실패하였습니다.");
+            }
+
+            $("#studyModal").modal("show");
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
         let grpSnValue = '<c:out value="${group.sn}"/>';
-        let ratingUL = $('.rating');
         let studyUL = $('.studyList');
 
-        showList(1);
         showStudyList(1);
 
         function showStudyList(page) {
@@ -457,6 +503,22 @@
 
             showStudyList(studyPageNum);
         })
+    })
+</script>
+
+
+
+
+
+
+<!-- 그룹 후기 작성 -->
+<script>
+    $(document).ready(function() {
+
+        let grpSnValue = '<c:out value="${group.sn}"/>';
+        let ratingUL = $('.rating');
+
+        showList(1);
 
         function showList(page) {
             groupRatingService.getList({grpSn:grpSnValue, page: page||1}, function(ratingCnt, list) {
@@ -465,7 +527,7 @@
                 console.log("list : " + list);
                 console.log(list);
 
-                if(page == -1) {
+                if(page === -1) {
                     pageNum = 1;
                     showList(1);
                     return;
@@ -478,19 +540,27 @@
                 }
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><strong>"+list[i].userId+"</strong>";
-                    str += "<small>"+list[i].regDate+"</small></div>";
-                    str += "<p>"+list[i].rating+"</p>";
-                    str += "<p>"+list[i].review+"</p></div></li>";
+                    str += "<div><div class='header'><strong>"+list[i].userName+"</strong>";
+                    str += "<small> "+list[i].regDate+"</small></div>";
+                    str += "<p class='ratingPlace2' id='stars"+list[i].sn+"' data-rating='"+list[i].rating+"'></p>";
+                    console.log(list[i]);
+                    str += "<p>내용 : "+list[i].review+"</p></div></li>";
                 }
 
                 ratingUL.html(str);
+
+                //후기마다 별달기
+                let list2 = $('.ratingPlace2');
+                for (let i = 0; i < list2.length; i++) {
+                    console.log($(list2[i]));
+                    $(list2[i]).html(star($(list2[i]).data("rating")) + '<b>' + $(list2[i]).data("rating") + ' </b>');
+                }
 
                 showRatingPage(ratingCnt);
             })
         }
 
-        let modal = $(".modal");
+        let modal = $("#groupModal");
         let modalInputUserId = modal.find("input[name='userId']");
         let modalInputRating = modal.find("input[name='rating']");
         let modalInputReview = modal.find("input[name='review']");
@@ -523,11 +593,17 @@
 
             modalRegisterBtn.show();
 
-            $('.modal').modal("show");
+            $('#groupModal').modal("show");
 
         })
 
         modalRegisterBtn.on("click", function(e) {
+
+            if(!ratingValidation()){
+                console.dir(e);
+                e.preventDefault();
+                return;
+            }
 
             let groupRating = {
                 grpSn: grpSnValue,
@@ -540,7 +616,7 @@
             groupRatingService.add(groupRating, function(result) {
                 alert(result);
                 modal.find("input").val("");
-                modal.modal("hide");
+                $("#groupModal").modal("hide");
 
                 showList(-1);
             })
@@ -566,7 +642,7 @@
                 modalModBtn.show();
                 modalRemoveBtn.show();
 
-                $(".modal").modal("show");
+                $("#groupModal").modal("show");
             })
         })
 
@@ -586,8 +662,12 @@
             console.log("original User id : " + originalUserId);
 
             if(userId != originalUserId) {
-                alert("자신이 작성한 댓글만 수정이 가능합니다.");
+                alert("자신이 작성한 리뷰만 수정이 가능합니다.");
                 modal.modal("hide");
+                return;
+            }
+
+            if(!ratingValidation()){
                 return;
             }
 
@@ -616,7 +696,7 @@
             console.log("Original userId: " + originalUserId);
 
             if(userId != originalUserId) {
-                alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+                alert("자신이 작성한 리뷰만 삭제가 가능합니다.");
                 modal.modal("hide");
                 return;
             }
@@ -704,6 +784,13 @@
     })
 </script>
 
+
+
+
+
+
+
+<!-- 모임 사진 -->
 <script>
     $(document).ready(function() {
         (function() {
@@ -723,6 +810,8 @@
                 })
 
                 $(".uploadResult").html(str);
+            }).fail(function() {
+                $(".uploadResult").html("<img src=/resources/img/group.jpg style='width:500px; height:300px;'>");
             });
         })();
 
@@ -740,24 +829,74 @@
             }
         })
 
-        $(".bigPictureWrapper").on("click", function(e) {
-            $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
-            setTimeout(function() {
-                $('.bigPictureWrapper').hide();
-            }, 300);
-        })
-
-        function showImage(fileCallPath) {
-            alert(fileCallPath);
-
-            $(".bigPictureWrapper").css("display", "flex").show();
-
-            $(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>").animate({width:'100%', height:'100%'}, 1000);
-        }
-
     })
 </script>
 
+
+
+
+
+<!-- 후기 별 찍기 -->
+<script>
+    $(document).ready(function() {
+        let list = $('.ratingPlace');
+        for (let i = 0; i < list.length; i++) {
+            $(list[i]).html(star($(list[i]).data("rating")) + '<b>' + $(list[i]).data("rating") + ' </b>(' + $(list[i]).data("ratingcount") + '개)');
+        }
+    });
+
+    function star(rating){
+        let width = 80 * (rating / 5);
+        let tag = ''
+            +'<span class="star_score" id="netizen_point_tab_inner">'
+            +'  <span class="st_off">'
+            +'      <span class="st_on" style="width:' + width + 'px;">'
+            +'      </span>'
+            +'  </span>'
+            +'</span>';
+        return tag;
+    }
+</script>
+
+
+
+<!-- 유효성 검사 -->
+<script>
+    function ratingValidation() {
+
+        if(isNaN($('#rating').val()) || $('#rating').val() == "") {
+            alert("점수를 다시 입력해주세요")
+            return false;
+        }else if($('#rating').val() < 0 || $('#rating').val() > 5) {
+            alert("점수는 0~5점까지 입력가능합니다.")
+            return false;
+        }
+
+        if($("#review").val() == "") {
+            alert("후기내용을 입력해주세요");
+            return false;
+        }else if(getByte($("#review").val()) > 300) {
+            alert("후기내용을 100자 이내로 작성해주세요");
+            return false;
+        }
+
+        if(isNaN($('#stdSn').val()) || $('#stdSn').val() == "" || $('#stdSn').val() <= 0) {
+            alert("스터디번호를 다시 입력해주세요");
+            return false;
+        }
+
+        return true;
+    }
+
+    function getByte(str) {
+        let byte = 0;
+        for (let i=0; i<str.length; ++i) {
+            (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
+        }
+        return byte;
+    }
+
+</script>
 
 
 <%@include file="../includes/footer.jsp" %>

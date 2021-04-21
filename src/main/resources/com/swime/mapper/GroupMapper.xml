@@ -10,7 +10,7 @@
         </selectKey>
         insert all
         into tgrp(sn, category, name, user_id, description, picture, sido, sigungu, reg_user_id)
-        values(#{sn}, #{category}, #{name}, #{userId}, #{description}, #{picture}, #{sido}, #{sigungu}, #{userId})
+        values(#{sn}, #{category}, #{name}, #{userId}, #{description}, #{picture, jdbcType=VARCHAR}, #{sido}, #{sigungu}, #{userId})
         into tgrp_det(grp_sn, info)
         values(#{sn}, #{info})
         select * from dual
@@ -48,7 +48,7 @@
         attend_count = #{attendCount},
         rating = #{rating},
         rating_count = #{ratingCount},
-        picture = #{picture},
+        picture = #{picture, jdbcType=VARCHAR},
         sido = #{sido},
         sigungu = #{sigungu},
         status = #{status},

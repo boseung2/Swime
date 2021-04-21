@@ -19,19 +19,17 @@
                         </div>
                         <div class="flex-container" style="display: flex;">
                         <c:forEach items="${group.tags}" var="tag">
-                            <div style="background-color: #f1f1f1;
-                                        margin: 2px;
-                                        padding: 2px;
-                                        font-size: 10px;
-                                        border-radius: 0.5rem;">
-                            <c:out value="${tag}"/>
+                            <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
+                            <b><c:out value="${tag}"/></b>
                             </div>
                         </c:forEach>
                         </div>
-                        <h2 class="card-title"><c:out value="${group.name}"/></h2>
-                        <p class="card-text"><c:out value="${group.sido}"/><c:out value="${group.sigungu}"/></p>
-                        <p class="card-text">평점: <c:out value="${group.rating}"/>(<c:out value="${group.ratingCount}"/>)</p>
+                        <h2 class="card-title"><c:out value="${group.name}"/><span style="color:gray;font-size:20px;">[<c:out value="${group.category}"/>]</span></h2>
+                        <p class="card-text ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></p>
+                        <p class="card-text"><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
+                        <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
                         <p class="card-text"><c:out value="${group.description}"/></p>
+
                     </div>
                     <div class="card-footer">
                         <a href="<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm move">More Info</a>
@@ -74,15 +72,14 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Modal Header</h4>
+                    <h4 class="modal-title">모임</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
                     <p>처리가 완료되었습니다.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
                 </div>
             </div>
         </div>
@@ -134,6 +131,27 @@
             actionForm.submit();
         })
     })
+</script>
+
+<!-- 별 찍기 -->
+<script>
+    $(document).ready(function() {
+        let list = $('.ratingPlace');
+        for (let i = 0; i < list.length; i++) {
+            $(list[i]).html(star($(list[i]).data("rating")) + '<b>' + $(list[i]).data("rating") + ' </b>(' + $(list[i]).data("ratingcount") + '개)');
+        }
+    })
+    function star(rating){
+        let width = 80 * (rating / 5);
+        let tag = ''
+            +'<span class="star_score" id="netizen_point_tab_inner">'
+            +'  <span class="st_off">'
+            +'      <span class="st_on" style="width:' + width + 'px;">'
+            +'      </span>'
+            +'  </span>'
+            +'</span>';
+        return tag;
+    }
 </script>
 
 <%@include file="../includes/footer.jsp" %>

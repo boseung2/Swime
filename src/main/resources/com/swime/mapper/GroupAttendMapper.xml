@@ -17,6 +17,7 @@
         from tgrp_list l, tuser u
         where l.user_id = u.id
         and l.grp_sn = #{grpSn}
+        order by l.sn asc
     </select>
 
     <update id="update">

@@ -28,9 +28,12 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public int register(GroupVO group) {
         //모임을 생성한다.
+        log.info("here!!!!");
 
         // 사진 경로 불러옴
-        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+        if(group.getAttach() != null) {
+            group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+        }
 
         // 1. 기본정보 등록
         groupMapper.insertSelectKey(group);
@@ -48,14 +51,12 @@ public class GroupServiceImpl implements GroupService{
 
         // ***** 등록자 id 세션에서 가져와야함 *****
 
-        // 첨부파일등록
-        if(group.getAttach() == null) {
-            return 0;
+        if(group.getAttach() != null) {
+            // 첨부파일등록
+            GroupAttachVO attach = group.getAttach();
+            attach.setGrpSn(group.getSn());
+            groupAttachMapper.insert(attach);
         }
-
-        GroupAttachVO attach = group.getAttach();
-        attach.setGrpSn(group.getSn());
-        groupAttachMapper.insert(attach);
 
         return 1;
     }
@@ -67,8 +68,11 @@ public class GroupServiceImpl implements GroupService{
         GroupVO group = groupMapper.read(sn);
         // 해당 모임 태그들을 불러와서 group 객체에 넣는다.
         List<String> tags = new ArrayList<>();
-        groupTagMapper.getList(sn).forEach(tag -> tags.add(tag.getName()));
+        groupTagMapper.getList(sn).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
         group.setTags(tags);
+        group.setSido(CodeTable.valueOf(group.getSido()).getValue());
+        group.setSigungu(CodeTable.valueOf(group.getSigungu()).getValue());
+        group.setCategory(CodeTable.valueOf(group.getCategory()).getValue());
         return group;
     }
 
@@ -81,8 +85,11 @@ public class GroupServiceImpl implements GroupService{
         // 각 모임 리스트에 태그를 불러와서 추가한다.
         list.forEach(group -> {
             List<String> tags = new ArrayList<>();
-            groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(tag.getName()));
+            groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
             group.setTags(tags);
+            group.setSido(CodeTable.valueOf(group.getSido()).getValue());
+            group.setSigungu(CodeTable.valueOf(group.getSigungu()).getValue());
+            group.setCategory(CodeTable.valueOf(group.getCategory()).getValue());
         });
 
         return list;
@@ -98,6 +105,11 @@ public class GroupServiceImpl implements GroupService{
 
         groupAttachMapper.deleteAll(group.getSn());
 
+        // 사진 경로 불러옴
+        if(group.getAttach() != null) {
+            group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
+        }
+
         // 모임 정보를 수정한다.
         boolean modifyResult = groupMapper.update(group) == 1;
 
@@ -107,9 +119,6 @@ public class GroupServiceImpl implements GroupService{
             attach.setGrpSn(group.getSn());
             groupAttachMapper.insert(attach);
         }
-
-        // 사진 경로 불러옴
-        group.setPicture(URLEncoder.encode(getPath(group.getAttach())));
 
         // 모임 상세페이지 모임정보(info)를 수정한다.
         groupMapper.updateInfo(group);
