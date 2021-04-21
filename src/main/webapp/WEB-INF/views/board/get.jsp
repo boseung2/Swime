@@ -22,10 +22,10 @@
             <div id="inline2">
                 <button data-oper='modify' class="btn btn-primary"
                 onclick="location.href='/board/modify?sn=<c:out value="${board.sn}"/>'">수정</button>
-                <button data-oper="list" class="btn btn-dark"
-                onclick="location.href='board/list'">취소</button>
+                <button data-oper="list" class="btn btn-dark">취소</button>
 
-<%--                <a id="back" class="btn btn-dark">취소</a>--%>
+
+            <%--                <a id="back" class="btn btn-dark">취소</a>--%>
 
 <%--                <button data-oper="modify" class=""--%>
 
@@ -35,11 +35,16 @@
 <%--                    <sec:csrfInput/>--%>
 <%--                </form>--%>
 <%--                                    <button data-oper='remove' class="btn btn-default">삭제</button>--%>
+<%--                <input type="text" class="form-control" id="userId" name="name"--%>
+<%--                       value="${board.userId}" readonly="readonly">--%>
+
+
             </div>
             <form id="operForm" action="/board/modify" method="get">
-                <input type="hidden" id="sn" name="sn" value="<c:out value="${board.sn}"/>">
-                <input type="hidden" id="pageNum" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
-                <input type="hidden" id="amount" name="amount" value="<c:out value="${cri.amount}"/>">
+                <input type="text" id="sn" name="sn" value="${board.sn}">
+<%--                <input type="hidden" id="pageNum" name="pageNum" value="${cri.pageNum}">--%>
+<%--                <input type="hidden" id="amount" name="amount" value="${cri.amount}">--%>
+                <input type="text" class="form-control" id="grpSn" name="grpSn" value="${board.grpSn}">
             </form>
 
 
@@ -189,56 +194,69 @@
     $(document).ready(function(){
 
         let operForm = $("#operForm");
+        let brdSn = ${board.sn};
+        console.log(brdSn);
 
         $("button[data-oper='modify']").on("click",function(){
             operForm.attr("action", "/board/modify").submit();
 
         })
+        //취소 -> 그룹 리스트로 돌아가지
+        <%--$("button[data-oper='list']").on("click",function(){--%>
+        <%--    operForm.attr("action","/group/get");--%>
+        <%--    operForm.find("input[name='sn']").remove();--%>
+        <%--    operForm.append("<input type='hidden' name = 'sn' value='" + ${board.grpSn} + "'>");--%>
+        <%--    operForm.submit();--%>
 
+        <%--})--%>
+        // http://localhost/group/get?sn=720
         $("button[data-oper='list']").on("click",function(){
-            operForm.find("#sn").remove();
-            operForm.attr("action","/board/list")
-            operForm.submit();
+            console.log("return list");
+        });
+
+        // $("button[data-oper='list']").on("click",function(){
+        //     window.history.back();
+        //
+        // })
+
+
+        // <!--유효성 검사-->
+        $('button[id="replyRegisterBtn"]').on("click", function(e) {
+            e.preventDefault();
+
+            if(!validation()) {
+                return;
+            }
 
         })
 
-        $("#back").on("click", function(){
-            window.history.back();
-        });
+
+        function validation(){
+
+            if(getByte($("textarea[id='replyComment']").val()) == "") {
+                alert("댓글을 입력해주세요");
+                return false;
+
+            }else if(getByte($("textarea[id='replyComment']").val()) > 1000){
+                alert("댓글 내용이 너무 깁니다.");
+                return false;
+            }
+            return true;
+        }
+
+        function getByte(str){
+            let byte = 0;
+            for(let i = 0; i<str.length; ++i){
+                (str.charCodeAt(i) > 127) ? byte += 3 : byte++;
+            }
+            return byte;
+        }
+
+
 
 
     });
 
-    <!--유효성 검사-->
-    $('button[id="replyRegisterBtn"]').on("click", function(e) {
-        e.preventDefault();
-
-        if(!validation()) {
-            return;
-        }
-
-    })
-
-
-    function validation(){
-
-        if(getByte($("textarea[id='replyComment']").val()) == "") {
-            alert("댓글을 입력해주세요");
-            return false;
-
-        }else if(getByte($("textarea[id='replyComment']").val()) > 1000){
-            alert("댓글 내용이 너무 깁니다.");
-            return false;
-        }
-    }
-
-    function getByte(str){
-        let byte = 0;
-        for(let i = 0; i<str.length; ++i){
-            (str.charCodeAt(i) > 127) ? byte += 3 : byte++;
-        }
-        return byte;
-    }
 
 
     //*좋아요 기능 구현*

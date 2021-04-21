@@ -131,18 +131,20 @@ public class BoardController {
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam("sn") Long sn, @ModelAttribute("cri") BoardCriteria cri,
+    public String remove(@RequestParam("sn") Long sn, long grpSn, @ModelAttribute("cri") BoardCriteria cri,
                          RedirectAttributes rttr) {
 
         log.info("remove: " + sn);
         if (service.remove(sn)) {
             rttr.addFlashAttribute("result", "success");
+        }else{
+            rttr.addFlashAttribute("result", "fail");
         }
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 
-        return "redirect:/board/list";
+        return "redirect:/group/get?sn=" + grpSn;
 
     }
 

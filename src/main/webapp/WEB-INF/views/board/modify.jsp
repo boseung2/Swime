@@ -13,34 +13,26 @@
 
 
         <div class="form-group">
-            <label for="sn">번호</label>
-            <input type="text" class="form-control" name="sn" id="sn"
-                   value="<c:out value="${board.sn}"/>" readonly="readonly">
-        </div>
-
-        <div class="form-group">
             <!--<label for="name">아이디</label>-->
             <input type="hidden" class="form-control" id="name" name="name"
-                   value="<c:out value="${board.userId}"/>" readonly="readonly">
+                   value="${board.userId}" readonly="readonly">
         </div>
 
         <div class="form-group">
-            <label for="grpSn">모임번호</label>
-            <input type="text" class="form-control" id="grpSn" name="grpSn"
-                   value="<c:out value="${board.grpSn}"/>" readonly="readonly">
+            <label for="sn">번호</label>
+            <input type="text" class="form-control" name="sn" id="sn"
+                   value="${board.sn}" readonly="readonly">
         </div>
+
 
         <div class="form-group">
             <label for="title">제목</label>
-            <input type="text" class="form-control" name="title" id="title"
-                   value="<c:out value="${board.title}"/>">
+            <input type="text" class="form-control" name="title" id="title" value="${board.title}">
         </div>
 
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea class="form-control" rows="5" id="content" name="content">
-                <c:out value="${board.content}"/>
-            </textarea>
+            <textarea class="form-control" rows="5" id="content" name="content">${board.content}</textarea>
         </div>
 
         <div class="form-group">
@@ -62,8 +54,9 @@
         </div>
 
         <input type="hidden" name="status" value="${board.status}">
-        <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
-        <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
+<%--        <input type="hidden" name="pageNum" value="${cri.pageNum}">--%>
+<%--        <input type="hidden" name="amount" value="${cri.amount}">--%>
+        <input type="hidden" class="form-control" id="grpSn" name="grpSn" value="${board.grpSn}">
 
         <button id='modifyBtn' type="submit" data-oper="modify" class="btn btn-primary">수정</button>
         <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
@@ -79,6 +72,17 @@
 
     $(document).ready(function(){
 
+
+        // $("#back").on("click", function(){
+        //     window.history.back();
+        // });
+        //
+        //
+        // $("button[id='modifyBtn']").on("click", function(e) {
+        //
+        //
+        // })
+
         let formObj = $("#modifyForm");
 
         $("button").on("click", function(e){
@@ -91,15 +95,18 @@
             if(operation === 'remove') {
                 formObj.attr("action", "/board/remove");
             } else if (operation === 'list') {
-                formObj.attr("action", '/board/list').attr("method", "get");
-                let pageNumTag = $("input[name='pageNum']").clone();
-                let amountTag = $("input[name='amount']").clone();
-                formObj.empty();
-                formObj.append(pageNumTag);
-                formObj.append(amountTag);
+                formObj.attr("action", '/group/get').attr("method", "get");
+                formObj.find("input[name='grpSn']").remove();
+                formObj.append("<input type='hidden' name = 'grpSn' value='" + ${board.grpSn} + "'>");
+                formObj.submit();
+                // let pageNumTag = $("input[name='pageNum']").clone();
+                // let amountTag = $("input[name='amount']").clone();
+                // formObj.empty();
+                // formObj.append(pageNumTag);
+                // formObj.append(amountTag);
             } else {
 
-                e.preventDefault();
+                //e.preventDefault();
 
                 if(!validation()) {
                     return;
@@ -108,16 +115,6 @@
 
             formObj.submit();
         });
-
-        // $("#back").on("click", function(){
-        //     window.history.back();
-        // });
-
-
-        // $("button[id='modifyBtn']").on("click", function(e) {
-        //
-        //
-        // })
 
         function validation(){
 
@@ -149,8 +146,9 @@
         }
 
 
-
     });
+
+
 
 </script>
 

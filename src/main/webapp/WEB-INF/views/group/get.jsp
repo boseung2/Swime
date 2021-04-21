@@ -146,7 +146,8 @@
                 글쓰기
             </button>
         </h4>
-        <div>
+
+
         <div class="boardHeader">
             <span>1번</span>
             <span id="boardNotice">[필독]</span>
@@ -166,8 +167,9 @@
             <i class='fas fa-comment'>100</i>
             <i class='fas fa-heart'>100</i>
         </div>
-        </div>
+
     </div><!--end board-->
+
     <!--게시판 페이징 처리 -->
     <div class="boardPageFooter panel-footer">
 
@@ -857,13 +859,12 @@
                     // str += "<span id='grpBrdRole'>"+list[i].grpRole+"</span>";
                     str += "<span id='boardRegDate'>"+list[i].regDate+"</span>";
                     str += "</div>";
-                    str += "<a class='boardMove' href='/board/get?sn="+list[i].sn+">";
-                    str += "<span>"+list[i].title+"</span></a>";
+                    str += "<a href='/board/get?sn="+list[i].sn+ "' class='boardMove'><span>"+list[i].title+"</span></a>";
                     str += "<div id='boardContent'>"+list[i].content+"</div>";
                     str += "<i class='fas fa-comment'>"+list[i].replyCnt+"</i>";
                     str += "<i class='fas fa-heart'>"+list[i].likeCnt+"</i>";
                     str += "</div><hr>";
-
+                    console.log("dddddddddddddddd"+list[i].content);
                 }
                 boardUL.html(str);
 
@@ -938,8 +939,7 @@
                 showBoardList(boardPageNum);
             })
 
-        } //end showBoardPage
-
+        }
 
 
     });
