@@ -54,8 +54,8 @@
         </div>
 
         <input type="hidden" name="status" value="${board.status}">
-<%--        <input type="hidden" name="pageNum" value="${cri.pageNum}">--%>
-<%--        <input type="hidden" name="amount" value="${cri.amount}">--%>
+<%--        <input type="text" name="pageNum" value="${cri.pageNum}">--%>
+<%--        <input type="text" name="amount" value="${cri.amount}">--%>
         <input type="hidden" class="form-control" id="grpSn" name="grpSn" value="${board.grpSn}">
 
         <button id='modifyBtn' type="submit" data-oper="modify" class="btn btn-primary">수정</button>
@@ -94,18 +94,20 @@
 
             if(operation === 'remove') {
                 formObj.attr("action", "/board/remove");
-            } else if (operation === 'list') {
-                formObj.attr("action", '/group/get').attr("method", "get");
-                formObj.find("input[name='grpSn']").remove();
-                formObj.append("<input type='hidden' name = 'grpSn' value='" + ${board.grpSn} + "'>");
                 formObj.submit();
+            } else if (operation === 'list') {
+
+                $(location).attr('href', '/group/get?sn=' + '${board.grpSn}');
+                <%--formObj.attr("action", '/group/get').attr("method", "get");--%>
+                <%--formObj.find("input[name='grpSn']").remove();--%>
+                <%--formObj.append("<input type='hidden' name = 'grpSn' value='" + ${board.grpSn} + "'>");--%>
+                <%--formObj.submit();--%>
                 // let pageNumTag = $("input[name='pageNum']").clone();
                 // let amountTag = $("input[name='amount']").clone();
                 // formObj.empty();
                 // formObj.append(pageNumTag);
                 // formObj.append(amountTag);
             } else {
-
                 //e.preventDefault();
 
                 if(!validation()) {
@@ -113,7 +115,7 @@
                 }
             }
 
-            formObj.submit();
+            // formObj.submit();
         });
 
         function validation(){

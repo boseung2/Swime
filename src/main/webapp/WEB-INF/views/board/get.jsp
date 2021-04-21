@@ -212,6 +212,7 @@
         // http://localhost/group/get?sn=720
         $("button[data-oper='list']").on("click",function(){
             console.log("return list");
+            $(location).attr('href', '/group/get?sn=' + '${board.grpSn}');
         });
 
         // $("button[data-oper='list']").on("click",function(){
