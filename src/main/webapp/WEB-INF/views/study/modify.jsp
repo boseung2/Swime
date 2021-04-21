@@ -12,7 +12,7 @@
 <div class="container">
     <h2>스터디 수정</h2>
     <hr/>
-    <form role="form" action="/study/modify" method="post">
+    <form role="form" id="modifyForm" action="/study/modify" method="post">
         <div class="form-group">
             <label for="sn">스터디번호</label>
             <input type="text" class="form-control" id="sn" name="sn" value="${study.sn}" readonly="readonly">
@@ -72,8 +72,9 @@
             <label for="information">상세 정보</label>
             <textarea class="form-control" rows="5" id="information" name="information" required>${study.information}</textarea>
         </div>
+        <input type="hidden" class="form-control" id="onOff" name="onOff" value="${study.onOff}">
         <div class="form-group">
-            <input type="checkbox" id="onOff" onclick="checkOn()" value="${study.onOff}">온라인스터디
+            <input type="checkbox" id="onOffCheck" onclick="checkOn()">온라인스터디
         </div>
         <div class="form-group" id="formUrl" hidden="true">
             <label for="onUrl">온라인 스터디 링크 추가</label>
@@ -91,8 +92,8 @@
             <label for="capacity">모집 인원</label>
             <input type="text" class="form-control" id="capacity" name="capacity" value="${study.capacity}" required>
         </div>
-        <button>설문 등록하기</button>
-        <button>설문 수정하기</button>
+<%--        <button>설문 등록하기</button>--%>
+<%--        <button>설문 수정하기</button>--%>
         <br>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
@@ -110,6 +111,106 @@
 
 
 <%@include file="../includes/footer.jsp" %>
+
+<!-- 유효성검사 -->
+<script>
+    $(document).ready(function() {
+        let formObj = $('#modifyForm');
+
+        $('button[type="submit"]').on("click", function(e) {
+            e.preventDefault();
+
+            if(!validation()) {
+                return;
+            }
+
+            formObj.submit();
+        })
+    })
+    function validation() {
+
+        if($('#name').val() == "") {
+            alert("스터디명을 입력해주세요");
+            return false;
+        } else if($('#name').val().length > 30) {
+            alert("스터디명을 30자 이하로 작성해주세요");
+            return false;
+        }
+
+        if($('#startDate').val() == "") {
+            alert("시작일자를 입력해주세요");
+            return false;
+        }
+        if($('#startTime').val() == "") {
+            alert("시작시간을 입력해주세요");
+            return false;
+        }
+        if($('#endTime').val() == "") {
+            alert("종료시간을 입력해주세요");
+            return false;
+        }else {
+            let date1 = new Date($('#startDate').val() + ' ' + $('#startTime').val());
+            let date2 = new Date($('#startDate').val() + ' ' + $('#endTime').val());
+
+            if(date1 > date2) {
+                alert("종료시간이 시작시간보다 빠를 수 없습니다.");
+                return false;
+            }
+        }
+
+        if($('#information').val() == "") {
+            alert("상세정보를 입력해주세요");
+            return false;
+        } else if($('#information').val().lenth > 400) {
+            alert("상세정보를 400자 이하로 작성해주세요");
+            return false;
+        }
+
+        if($('#onOff').val() === 'STOF01') { // 온라인일 경우
+            if ($('#onUrl').val() == '') {
+                alert("온라인 링크를 입력해주세요.");
+                return false;
+            } else if (getByte($('#onUrl').val()) > 300) {
+                alert("온라인 링크 정보가 너무 큽니다.");
+                return false;
+            }
+        } else if ($('#onOff').val() === 'STOF02'){// 오프라인일 경우
+            if ($('#placeId').val() == '') {
+                alert("장소 정보를 입력해주세요.");
+                return false;
+            } else if (getByte($('#placeId').val()) > 40) {
+                alert("장소 정보가 너무 큽니다.");
+                return false;
+            }
+        }
+
+        if($('#expense').val().length > 10) {
+            alert("지참금 정보가 너무 큽니다.");
+            return false;
+        }
+
+        if($('#capacity').val() == '') {
+            alert("모집인원을 설정해주세요.");
+            return false;
+        }else if(parseInt($('#capacity').val()) < 2) {
+            alert("모집인원은 2명 이상이어야합니다.");
+            return false;
+        }else if (parseInt($('#capacity').val()) > 99) {
+            alert("모집인원은 99명 이하이어야합니다.");
+            return false;
+        }
+
+        return true;
+    }
+
+    function getByte(str) {
+        let byte = 0;
+        for (let i=0; i<str.length; ++i) {
+            (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
+        }
+        return byte;
+    }
+</script>
 
 <script type="text/javascript">
 
@@ -135,7 +236,8 @@
     })
 
     <!-- 온오프라인 -->
-    let onOffCheck = $('#onOff');
+    let onOffCheck = $('#onOffCheck');
+    let onOff = $('#onOff');
     let formUrl = $('#formUrl');
     let formPlace = $('#formPlace');
 
@@ -148,7 +250,8 @@
         formPlace[0].hidden = on;
 
         if(on === true) { // 온라인
-            onOffCheck.val("STOF01");
+            $('#onOff').val("STOF01");
+            console.log("온오프 = " + onOffCheck.val());
 
             $('#onUrl').attr("required", "required");
             $('#placeId').removeAttr("required");
@@ -156,7 +259,8 @@
             $('#placeId').val("");
         }
         if(on === false) { // 오프라인
-            onOffCheck.val("STOF02");
+            $('#onOff').val("STOF02");
+            console.log("온오프 = " + onOffCheck.val());
 
             $('#placeId').attr("required", "required");
             $('#onUrl').removeAttr("required");

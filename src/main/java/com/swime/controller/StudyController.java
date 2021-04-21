@@ -155,12 +155,13 @@ public class StudyController {
 //            return "redirect:/study/get?sn=" + study.getSn();
 //        }
 
+        log.info("study onOff = " + study.getOnOff());
 
-        if("".equals(study.getOnUrl())) {
-            study.setOnOff("STOF02");
-        }else {
-            study.setOnOff("STOF01");
-        }
+//        if("".equals(study.getOnUrl())) {
+//            study.setOnOff("STOF02");
+//        }else {
+//            study.setOnOff("STOF01");
+//        }
 
         // 반복 주기 설정
         if("(선택)".equals(study.getRepeatCycle())) {
@@ -198,11 +199,12 @@ public class StudyController {
 
         log.info("modify representation " + study.getRepresentation());
 
-        if(study.getOnUrl() != null) {
-            study.setOnOff("STOF01");
-        }else {
-            study.setOnOff("STOF02");
-        }
+        log.info("modify study onOff = " + study.getOnOff());
+//        if(study.getOnUrl() != null) {
+//            study.setOnOff("STOF01");
+//        }else {
+//            study.setOnOff("STOF02");
+//        }
 
         // 반복 주기 설정
         log.info("====================================repeatCycle" + study.getRepeatCycle()); //STCY01
