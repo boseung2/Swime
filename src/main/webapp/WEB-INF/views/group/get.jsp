@@ -124,7 +124,7 @@
 
     <!-- 스터디 만들기 버튼-->
     <hr class="centerHr" id="study">
-        <h4>스터디<sec:authorize access="isAuthenticated()"><a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary btn-sm'>스터디 만들기</a></sec:authorize></h4>
+        <h4>스터디<sec:authorize access="isAuthenticated()"><a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a></sec:authorize></h4>
 
     <!-- 스터디 리스트 -->
     <div class="studyList row">
