@@ -54,7 +54,7 @@ public class UserCotroller {
     public ResponseEntity<Boolean> isAlready(String id){
         return service.get(id) != null ?
                 new ResponseEntity(true, HttpStatus.OK) :
-                new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+                new ResponseEntity(false, HttpStatus.OK);
     }
 
     @GetMapping("/login")

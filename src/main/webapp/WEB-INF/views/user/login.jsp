@@ -5,6 +5,12 @@
 <c:set var="error" value="${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'] != null ? '유효하지 않은 접근입니다<br>아이디와 비밀번호를 확인하세요' : null}"/>
 <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"></c:remove>
 
+<sec:authorize access="isAuthenticated()">
+    <c:set var="isAuthenticated" value="true"/>
+</sec:authorize>
+
+
+
 <link href="/resources/css/user.css" rel="stylesheet">
 <div id="regdiv">
     <div id="errorMsgDiv">
@@ -42,7 +48,7 @@
 </div>
 
 <script>
-
+    alreadyLogin();
 
 
     $(document).ready(function () {
@@ -67,6 +73,16 @@
             errorMsg = $("#errorMsg")[0];
         }
     });
+
+    function alreadyLogin() {
+        let isLogin = "${isAuthenticated}" != '';
+        if(isLogin){
+            alert("이미 로그인중입니다\n메인페이지로 돌아갑니다");
+            $(location).attr('href', '/');
+            // window.history.back();
+
+        }
+    }
 
 
 
