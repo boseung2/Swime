@@ -28,7 +28,7 @@
                 </c:forEach>
             </div>
             <p><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
-            <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/></p>
+            <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
             <p><i class="fas fa-user"></i>모임장 <c:out value="${group.userName}"/></p>
 
             <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
@@ -79,8 +79,8 @@
 
     <div class="main-contents">
     <div id="info" >
-        <h4>정보</h4>
-        <p><c:out value="${group.info}"/></p>
+        <h4>모임정보</h4>
+        <p><pre><c:out value="${group.info}"/></pre></p>
     </div>
     <br>
 
@@ -116,7 +116,7 @@
         </ul>
     </div>
 
-    <!-- rating paginatino button -->
+    <!-- rating pagination button -->
     <div class="panel-footer">
 
     </div>
@@ -137,22 +137,9 @@
 
     <!-- 게시판 -->
     <hr class="centerHr" id="board">
-    <div id="board">
+    <div>
         <h4>게시판</h4>
     </div>
-
-    <!-- 첨부파일 -->
-<%--    <h4>사진</h4>--%>
-<%--    <div class="uploadResult">--%>
-<%--        <ul>--%>
-<%--        </ul>--%>
-<%--    </div>--%>
-
-    <!-- 첨부파일 확대 -->
-<%--    <div class="bigPictureWrapper">--%>
-<%--        <div class="bigPicture">--%>
-<%--        </div>--%>
-<%--    </div>--%>
 
     <!-- container -->
 
@@ -165,8 +152,8 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+<!-- 후기 작성/수정 모달 -->
+<div class="modal fade" id="groupModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -195,11 +182,12 @@
                 <label for="grpSn" hidden>그룹번호</label>
                 <input type="number" class="form-control" name="grpSn" id="grpSn" hidden>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" id="modalModBtn">Modify</button>
-                <button type="button" class="btn btn-danger" id="modalRemoveBtn">Remove</button>
-                <button type="button" class="btn btn-default" id="modalRegisterBtn" data-dismiss="modal">Register</button>
-                <button type="button" class="btn btn-primary" id="modalCloseBtn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" id="modalModBtn">수정</button>
+                <button type="button" class="btn btn-danger" id="modalRemoveBtn">삭제</button>
+                <button type="button" class="btn btn-primary" id="modalRegisterBtn">등록</button>
+                <button type="button" class="btn btn-secondary" id="modalCloseBtn" data-dismiss="modal">취소</button>
             </div>
         </div>
     </div>
@@ -230,8 +218,11 @@
 <!-- StudyList Module -->
 <script type="text/javascript" src="/resources/js/studyList.js"></script>
 
-<script>
 
+
+
+<!-- 모임 참여 -->
+<script>
     $(document).ready(function() {
 
         let grpSnValue = '<c:out value="${group.sn}"/>';
@@ -263,8 +254,8 @@
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
                     str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
-                    str += "<span>"+list[i].name+"</span>";
-                    str += "<span>"+list[i].grpRole+"</span></div></div></li>";
+                    str += "<span><b>"+list[i].name+"</b></span>\t";
+                    str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
                 }
 
                 attendUL.html(str);
@@ -319,6 +310,13 @@
 
     })
 </script>
+
+
+
+
+
+
+
 
 <!-- 스터디 리스트 -->
 <script type="text/javascript">
@@ -468,6 +466,11 @@
     })
 </script>
 
+
+
+
+
+
 <!-- 그룹 후기 작성 -->
 <script>
     $(document).ready(function() {
@@ -484,7 +487,7 @@
                 console.log("list : " + list);
                 console.log(list);
 
-                if(page == -1) {
+                if(page === -1) {
                     pageNum = 1;
                     showList(1);
                     return;
@@ -498,18 +501,26 @@
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
                     str += "<div><div class='header'><strong>"+list[i].userName+"</strong>";
-                    str += "<small>"+list[i].regDate+"</small></div>";
-                    str += "<p>"+list[i].rating+"</p>";
-                    str += "<p>"+list[i].review+"</p></div></li>";
+                    str += "<small> "+list[i].regDate+"</small></div>";
+                    str += "<p class='ratingPlace2' id='stars"+list[i].sn+"' data-rating='"+list[i].rating+"'></p>";
+                    console.log(list[i]);
+                    str += "<p>내용 : "+list[i].review+"</p></div></li>";
                 }
 
                 ratingUL.html(str);
+
+                //후기마다 별달기
+                let list2 = $('.ratingPlace2');
+                for (let i = 0; i < list2.length; i++) {
+                    console.log($(list2[i]));
+                    $(list2[i]).html(star($(list2[i]).data("rating")) + '<b>' + $(list2[i]).data("rating") + ' </b>');
+                }
 
                 showRatingPage(ratingCnt);
             })
         }
 
-        let modal = $(".modal");
+        let modal = $("#groupModal");
         let modalInputUserId = modal.find("input[name='userId']");
         let modalInputRating = modal.find("input[name='rating']");
         let modalInputReview = modal.find("input[name='review']");
@@ -542,11 +553,17 @@
 
             modalRegisterBtn.show();
 
-            $('.modal').modal("show");
+            $('#groupModal').modal("show");
 
         })
 
         modalRegisterBtn.on("click", function(e) {
+
+            if(!ratingValidation()){
+                console.dir(e);
+                e.preventDefault();
+                return;
+            }
 
             let groupRating = {
                 grpSn: grpSnValue,
@@ -559,7 +576,7 @@
             groupRatingService.add(groupRating, function(result) {
                 alert(result);
                 modal.find("input").val("");
-                modal.modal("hide");
+                $("#groupModal").modal("hide");
 
                 showList(-1);
             })
@@ -585,7 +602,7 @@
                 modalModBtn.show();
                 modalRemoveBtn.show();
 
-                $(".modal").modal("show");
+                $("#groupModal").modal("show");
             })
         })
 
@@ -607,6 +624,10 @@
             if(userId != originalUserId) {
                 alert("자신이 작성한 리뷰만 수정이 가능합니다.");
                 modal.modal("hide");
+                return;
+            }
+
+            if(!ratingValidation()){
                 return;
             }
 
@@ -723,6 +744,13 @@
     })
 </script>
 
+
+
+
+
+
+
+<!-- 모임 사진 -->
 <script>
     $(document).ready(function() {
         (function() {
@@ -742,6 +770,8 @@
                 })
 
                 $(".uploadResult").html(str);
+            }).fail(function() {
+                $(".uploadResult").html("<img src=/resources/img/group.jpg style='width:500px; height:300px;'>");
             });
         })();
 
@@ -759,31 +789,22 @@
             }
         })
 
-        $(".bigPictureWrapper").on("click", function(e) {
-            $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
-            setTimeout(function() {
-                $('.bigPictureWrapper').hide();
-            }, 300);
-        })
-
-        function showImage(fileCallPath) {
-            alert(fileCallPath);
-
-            $(".bigPictureWrapper").css("display", "flex").show();
-
-            $(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>").animate({width:'100%', height:'100%'}, 1000);
-        }
-
     })
 </script>
-<!-- 별 찍기 -->
+
+
+
+
+
+<!-- 후기 별 찍기 -->
 <script>
     $(document).ready(function() {
         let list = $('.ratingPlace');
         for (let i = 0; i < list.length; i++) {
             $(list[i]).html(star($(list[i]).data("rating")) + '<b>' + $(list[i]).data("rating") + ' </b>(' + $(list[i]).data("ratingcount") + '개)');
         }
-    })
+    });
+
     function star(rating){
         let width = 80 * (rating / 5);
         let tag = ''
@@ -795,6 +816,46 @@
             +'</span>';
         return tag;
     }
+</script>
+
+
+
+<!-- 유효성 검사 -->
+<script>
+    function ratingValidation() {
+
+        if(isNaN($('#rating').val()) || $('#rating').val() == "") {
+            alert("점수를 다시 입력해주세요")
+            return false;
+        }else if($('#rating').val() < 0 || $('#rating').val() > 5) {
+            alert("점수는 0~5점까지 입력가능합니다.")
+            return false;
+        }
+
+        if($("#review").val() == "") {
+            alert("후기내용을 입력해주세요");
+            return false;
+        }else if(getByte($("#review").val()) > 300) {
+            alert("후기내용을 100자 이내로 작성해주세요");
+            return false;
+        }
+
+        if(isNaN($('#stdSn').val()) || $('#stdSn').val() == "" || $('#stdSn').val() <= 0) {
+            alert("스터디번호를 다시 입력해주세요");
+            return false;
+        }
+
+        return true;
+    }
+
+    function getByte(str) {
+        let byte = 0;
+        for (let i=0; i<str.length; ++i) {
+            (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
+        }
+        return byte;
+    }
+
 </script>
 
 
