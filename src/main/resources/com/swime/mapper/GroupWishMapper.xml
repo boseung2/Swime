@@ -17,13 +17,14 @@
     <select id="read" resultType="com.swime.domain.GroupWishVO">
         select sn, grp_sn, user_id
         from TGRP_WISH
-        where user_id = ${userId}
+        where user_id = #{userId}
         and grp_sn = #{grpSn}
     </select>
 
     <delete id="delete">
         delete from TGRP_WISH
-        where user_id = #{userId} and GRP_SN = #{grpSn}
+        where user_id = #{userId}
+        and GRP_SN = #{grpSn}
     </delete>
 
     <select id="readByid" resultType="com.swime.domain.GroupWishVO">

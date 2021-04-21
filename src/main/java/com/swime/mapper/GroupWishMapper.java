@@ -11,7 +11,9 @@ public interface GroupWishMapper {
 
     int insert(GroupWishVO vo);
 
+    GroupWishVO read(GroupWishVO vo);
 
+    int delete(GroupWishVO vo);
 
     List<GroupWishVO> readByGroupSn(long grpSn);
 
