@@ -39,7 +39,7 @@
         </div>
         <div class="form-group uploadDiv">
             <label for="uploadFile">대표사진</label>
-            <input type="file" class="form-control" id="uploadFile" name="uploadFile" >
+            <input type="file" class="form-control" id="uploadFile" name="uploadFile" accept="image/*">
             <div class="uploadResult">
                 <ul>
 
@@ -268,7 +268,8 @@
 
 <script>
     $(document).ready(function() {
-        let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+        let regex = new RegExp("(.*?)\.(png|jpg|jpeg|bmp)$");
+
         let maxSize = 5242880;
         let formObj = $("form");
         let csrfHeaderName = "${_csrf.headerName}";
@@ -373,7 +374,7 @@
                 return false;
             }
 
-            if(regex.test(fileName)) {
+            if(!regex.test(fileName)) {
                 alert("해당 종류의 파일은 업로드 할 수 없습니다.");
                 return false;
             }
