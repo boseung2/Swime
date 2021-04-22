@@ -174,6 +174,13 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
+
+        // ajax spring security header
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        });
 
         let stdSn = ${study.sn};
         let userId = "${pinfo.username}"; // 로그인중인 id
@@ -182,7 +189,7 @@
         let wishUL = $('.wishButton');
 
         if(userId !== '') {
-            // getStudyWish();
+            getStudyWish();
         }
 
         <!--찜 버튼 출력-->
@@ -195,7 +202,7 @@
 
                 if(result === "not exist") {
                     str += "<a class='wish btn btn-primary' href=''>♡</a>";
-                }else {
+                } else {
                     str += "<a class='wish btn btn-primary' href=''>❤</a>";
                 }
 
@@ -204,9 +211,8 @@
         }
 
         <!--찜 버튼 눌렸을 때-->
-        $(".wish").on("click", function(e) {
+        $(".wishButton").on("click", function(e) {
             e.preventDefault();
-            console.log("찜버튼 눌림");
 
             studyWishService.wish({stdSn : stdSn, userId : userId}, function(result) {
                 console.log("찜버튼 눌린 result = " + result);
@@ -218,7 +224,7 @@
                 }else if(result === "cancelWish"){
                     alert("스터디를 찜을 취소했습니다.");
                 }else if(result === "fail") {
-                    alert("찜하기를 실패했습니다.")
+                    alert("찜 서비스가 실패했습니다.")
                 }
 
                 wishUL.html(str);
