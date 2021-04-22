@@ -274,31 +274,32 @@ public class StudyController {
     }
 
     // 스터디 찜/취소
-//    @PostMapping("/wish")
-//    public ResponseEntity<String> wish(@RequestBody WishStudyVO wish) {
-//        // 1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-//
-//        //임의로 설정
-//        wish.setUserId("boseung@naver.com");
-//
-//        StudyParamVO studyParam = new StudyParamVO();
-//        studyParam.setStdSn(wish.getStdSn());
-//        studyParam.setUserId(wish.getUserId());
-//
-//        // 2. 해당 wish가 존재하면 삭제
-//        if(service.getWish(studyParam) != null) {
-//            return service.removeWish(studyParam) == 1
-//                ? new ResponseEntity<>("cancelWish", HttpStatus.OK)
-//                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }else {
-//            // 3. 해당 wish가 없으면 등록
-//            return service.registerWish(wish) == 1
-//                ? new ResponseEntity<>("wish", HttpStatus.OK)
-//                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//        // 4. get 페이지에서 하트가 바뀌어있어야함
-//    }
+    @PostMapping("/wish")
+    public ResponseEntity<String> wish(@RequestBody WishStudyVO wish) {
+        // 1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+        log.info("스터디 찜/취소 stdSn = " + wish.getStdSn());
+        log.info("스터디 찜/취소 userId = " + wish.getUserId());
+
+        wish.setUserId(wish.getUserId());
+
+        StudyParamVO studyParam = new StudyParamVO();
+        studyParam.setStdSn(wish.getStdSn());
+        studyParam.setUserId(wish.getUserId());
+
+        // 2. 해당 wish가 존재하면 삭제
+        if(service.getWish(studyParam) != null) {
+            return service.removeWish(studyParam) == 1
+                ? new ResponseEntity<>("cancelWish", HttpStatus.OK)
+                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }else {
+            // 3. 해당 wish가 없으면 등록
+            return service.registerWish(wish) == 1
+                ? new ResponseEntity<>("wish", HttpStatus.OK)
+                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // 4. get 페이지에서 하트가 바뀌어있어야함
+    }
 //
 //    // 스터디 참가
 //    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})

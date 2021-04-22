@@ -21,6 +21,8 @@ let studyWishService = (function(){
 
     function wish(param, callback, error){
 
+        console.log('wish 호출됨');
+
         console.log("wish stdSn = " + param.stdSn);
         console.log("wish userId = " + param.userId);
 

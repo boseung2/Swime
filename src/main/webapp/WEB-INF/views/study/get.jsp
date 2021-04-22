@@ -176,14 +176,13 @@
     $(document).ready(function(){
 
         let stdSn = ${study.sn};
-        let userId = "${pinfo.username}";
+        let userId = "${pinfo.username}"; // 로그인중인 id
         console.log("userId = " + userId);
-        console.log("userId type = " + typeof(userId));
+
         let wishUL = $('.wishButton');
 
         if(userId !== '') {
-            console.log("userId 널아님");
-            getStudyWish();
+            // getStudyWish();
         }
 
         <!--찜 버튼 출력-->
@@ -207,13 +206,22 @@
         <!--찜 버튼 눌렸을 때-->
         $(".wish").on("click", function(e) {
             e.preventDefault();
+            console.log("찜버튼 눌림");
 
             studyWishService.wish({stdSn : stdSn, userId : userId}, function(result) {
-                console.log("get > wish > result = " + result);
+                console.log("찜버튼 눌린 result = " + result);
 
                 let str = "";
 
-                //성공시 모달창 띄우기
+                if(result === "wish") {
+                    alert("스터디를 찜했습니다.");
+                }else if(result === "cancelWish"){
+                    alert("스터디를 찜을 취소했습니다.");
+                }else if(result === "fail") {
+                    alert("찜하기를 실패했습니다.")
+                }
+
+                wishUL.html(str);
 
                 getStudyWish();
             })
