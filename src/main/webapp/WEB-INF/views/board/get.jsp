@@ -208,8 +208,8 @@
         <%--    operForm.find("input[name='sn']").remove();--%>
         <%--    operForm.append("<input type='hidden' name = 'sn' value='" + ${board.grpSn} + "'>");--%>
         <%--    operForm.submit();--%>
-
         <%--})--%>
+        //
         // http://localhost/group/get?sn=720
         $("button[data-oper='list']").on("click",function(){
             console.log("return list");

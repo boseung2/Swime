@@ -125,8 +125,8 @@ public class BoardController {
             rttr.addFlashAttribute("result", "success");
         }
 //
-//        rttr.addAttribute("pageNum", cri.getPageNum());
-//        rttr.addAttribute("amount", cri.getAmount());
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
 
         return "redirect:/board/get?sn="+board.getSn();
     }
@@ -142,8 +142,8 @@ public class BoardController {
             rttr.addFlashAttribute("result", "fail");
         }
 //
-//        rttr.addAttribute("pageNum", cri.getPageNum());
-//        rttr.addAttribute("amount", cri.getAmount());
+        rttr.addAttribute("pageNum", cri.getPageNum());
+        rttr.addAttribute("amount", cri.getAmount());
 
         return "redirect:/group/get?sn=" + grpSn;
 
