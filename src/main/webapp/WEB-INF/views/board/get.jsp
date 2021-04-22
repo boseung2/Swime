@@ -201,7 +201,7 @@
             operForm.attr("action", "/board/modify").submit();
 
         })
-        //취소 -> 그룹 리스트로 돌아가지
+        //취소 -> 그룹 리스트
         <%--$("button[data-oper='list']").on("click",function(){--%>
         <%--    operForm.attr("action","/group/get");--%>
         <%--    operForm.find("input[name='sn']").remove();--%>

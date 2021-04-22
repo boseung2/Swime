@@ -109,12 +109,12 @@
                 // formObj.append(amountTag);
             } else {
                 //e.preventDefault();
-                formObj.submit();
+
                 if(!validation()) {
                     return;
                 }
             }
-
+            formObj.submit();
 
         });
 

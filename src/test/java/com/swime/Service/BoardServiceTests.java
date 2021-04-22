@@ -35,6 +35,7 @@ public class BoardServiceTests {
     public void TestRegister(){
         BoardVO board = new BoardVO();
 
+        //board.setSn(142L);
         board.setGrpSn(720L);
         board.setUserId("boseung@naver.com");
         //board.setUserName("새로운 name");

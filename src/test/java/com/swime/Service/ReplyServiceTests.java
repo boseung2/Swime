@@ -33,7 +33,7 @@ public class ReplyServiceTests {
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(162L);
+        reply.setBrdSn(720L);
         reply.setUserId("toywar1@naver.com");
         reply.setContent("replyTest22222");
         reply.setStatus("RPST01");
