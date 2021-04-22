@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class ReplyController {
     private ReplyService service;
 
     //생성
+//    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/new")
     public ResponseEntity<String> create(@RequestBody ReplyVO vo){
 

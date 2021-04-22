@@ -518,18 +518,18 @@
         let modalRemoveBtn = $('#modalRemoveBtn');
         let modalRegisterBtn = $('#modalRegisterBtn');
 
-        let userId = null;
-        <sec:authorize access="isAuthenticated()">
-            userId = "${pinfo.username}";
-        </sec:authorize>
+        <%--let userId = null;--%>
+        <%--<sec:authorize access="isAuthenticated()">--%>
+        <%--    userId = "${pinfo.username}";--%>
+        <%--</sec:authorize>--%>
 
-        let csrfHeaderName = "${_csrf.headerName}";
-        let csrfTokenValue = "${_csrf.token}";
+        <%--let csrfHeaderName = "${_csrf.headerName}";--%>
+        <%--let csrfTokenValue = "${_csrf.token}";--%>
 
-        // ajax spring security header
-        $(document).ajaxSend(function(e, xhr, options) {
-            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-        });
+        <%--// ajax spring security header--%>
+        <%--$(document).ajaxSend(function(e, xhr, options) {--%>
+        <%--    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);--%>
+        <%--});--%>
 
         $('#addRatingBtn').on("click", function(e) {
             modal.find("input").val("");

@@ -3,8 +3,9 @@
 
 
 <%@include file="../includes/header.jsp" %>
-<link rel="stylesheet" href="/resources/css/board-get.css">
 <%@include file="../includes/pictogramLib.jsp" %>
+<%@include file="../includes/tagLib.jsp"%>
+<link rel="stylesheet" href="/resources/css/board-get.css">
 
 <div class="container">
     <div class="row">
@@ -291,10 +292,7 @@
 
 <script>
 
-
-
     $(document).ready(function(){
-
 
         console.log(".......................")
         console.log("JS TEST")
@@ -318,6 +316,19 @@
 
         let modalModBtn = $('#modalModBtn');
         let modalCloseBtn = $('#modalCloseBtn');
+
+        <%--let userId = null;--%>
+        <%--<sec:authorize access="isAuthenticated()">--%>
+        <%--        userId = '<sec:authentication property="principal.userName"/>';--%>
+        <%--</sec:authorize>--%>
+
+        <%--let csrfHeaderName = "${_csrf.headerName}";--%>
+        <%--let csrfTokenValue = "${_csrf.token}";--%>
+
+        <%--// ajax spring security header--%>
+        <%--$(document).ajaxSend(function(e, xhr, options) {--%>
+        <%--    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);--%>
+        <%--});--%>
 
 
         //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}

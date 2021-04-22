@@ -82,9 +82,9 @@ public class BoardController {
 //        return "redirect:/board/list";
 //    }
 
-    //등록 후 게시판 상세 페이지로 이동
+
     @PostMapping("/register")
-    public String register(BoardVO board, RedirectAttributes rttr) {
+    public String register(BoardVO board, long grpSn, RedirectAttributes rttr) {
 
         log.info("register...." + board);
 
@@ -92,6 +92,7 @@ public class BoardController {
 
         rttr.addFlashAttribute("result", board.getSn());
 
+//        return "redirect:/group/get?sn="+grpSn;
         return "redirect:/board/get?sn="+board.getSn();
     }
 
@@ -123,9 +124,9 @@ public class BoardController {
         if (service.modify(board)) {
             rttr.addFlashAttribute("result", "success");
         }
-
-        rttr.addAttribute("pageNum", cri.getPageNum());
-        rttr.addAttribute("amount", cri.getAmount());
+//
+//        rttr.addAttribute("pageNum", cri.getPageNum());
+//        rttr.addAttribute("amount", cri.getAmount());
 
         return "redirect:/board/get?sn="+board.getSn();
     }
@@ -140,9 +141,9 @@ public class BoardController {
         }else{
             rttr.addFlashAttribute("result", "fail");
         }
-
-        rttr.addAttribute("pageNum", cri.getPageNum());
-        rttr.addAttribute("amount", cri.getAmount());
+//
+//        rttr.addAttribute("pageNum", cri.getPageNum());
+//        rttr.addAttribute("amount", cri.getAmount());
 
         return "redirect:/group/get?sn=" + grpSn;
 

@@ -48,11 +48,26 @@
 
 </div>
 
+<!-- 게시판Modal -->
+<div class="boardModal fade" id="boardModal" tabindex="-1" role="dialog"
+     aria-labelledby="boardModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="boardModalLabel">Modal title</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="boardModal modal-body">정상적으로 처리되었습니다.</div>
+            <div class = "modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- BoardList Module-->
 <script type="text/javascript" src="/resources/js/boardList.js"></script>
-
-
-
 
 <script type="text/javascript">
     // 게시판
@@ -73,7 +88,9 @@
                     console.log(list);
 
                     if(page == -1){
-                        boardPageNum = Math.ceil(boardCnt/10.0);
+                        // boardPageNum = Math.ceil(boardCnt/10.0);
+                        // showBoardList(boardPageNum);
+                        boardPageNum = 1;
                         showBoardList(boardPageNum);
                         return;
                     }
@@ -93,7 +110,7 @@
                         str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
                         str += "<span id='boardName'>"+list[i].name+"</span>";
                         // str += "<span id='grpBrdRole'>"+list[i].grpRole+"</span>";
-                        str += "<span id='boardRegDate'>"+list[i].regDate+"</span>";
+                        str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";
                         str += "</div>";
                         str += "<a href='/board/get?sn="+list[i].sn+ "' class='boardMove'><span>"+list[i].title+"</span></a>";
                         str += "<div id='boardContent'>"+list[i].content+"</div>";
@@ -109,11 +126,10 @@
 
         }//end showList
 
-
-        let boardPageNum = 1;
-        let boardPageFooter = $('.boardPageFooter');
         <!--게시글 페이지-->
         function showBoardPage(boardCnt) {
+            let boardPageNum = 1;
+            let boardPageFooter = $('.boardPageFooter');
 
             console.log('boardCnt'+boardCnt+"개");
             let endNum = Math.ceil(boardPageNum / 10.0) * 10;
@@ -160,22 +176,23 @@
 
             boardPageFooter.html(str);
 
+            boardPageFooter.on("click", "li a", function(e) {
+                e.preventDefault();
+
+                console.log("board page click");
+
+                let targetPageNum = $(this).attr("href");
+
+                console.log("targetPageNum: " + targetPageNum);
+
+                boardPageNum = targetPageNum;
+
+                showBoardList(boardPageNum);
+
+            })
 
         }
-        boardPageFooter.on("click", "li a", function(e) {
-            e.preventDefault();
 
-            console.log("board page click");
-
-            let targetPageNum = $(this).attr("href");
-
-            console.log("targetPageNum: " + targetPageNum);
-
-            boardPageNum = targetPageNum;
-
-            showBoardList(boardPageNum);
-
-        })
 
 
     });
@@ -190,5 +207,32 @@
             self.location = "/board/register?grpSn=${group.sn}";
         });
 
+        let result = '<c:out value="${result}"/>';
+
+        console.log("BoardRemoveResult" + result);
+
+        checkModal(result);
+
+        history.replaceState({}, null, null);
+
+        <!--게시판 삭제 모달-->
+        function checkModal(result) {
+            if(result === '' || history.state) {
+                return;
+            }
+
+            if("success" === result) {
+                $(".boardModal").html("게시글이 정상적으로 삭제되었습니다.");
+            }
+
+            $("#boardModal").modal("show");
+        }
+
+
+
+
     });
+
+
+
 </script>
