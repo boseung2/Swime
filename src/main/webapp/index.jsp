@@ -6,6 +6,10 @@
 <%@include file="./WEB-INF/views/includes/header.jsp" %>
 
 
-
-
+<iframe width="560" height="315"
+        src="https://www.youtube.com/embed/2yJgwwDcgV8?autoplay=1&mute=1&controls=0&start=4&showinfo=0"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
 <%@include file="./WEB-INF/views/includes/footer.jsp" %>

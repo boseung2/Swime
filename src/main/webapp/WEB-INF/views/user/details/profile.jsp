@@ -216,6 +216,7 @@
 
         });
 
+        // 삭제 버튼 누르면
         $(deleteImg).on("click", function () {
             console.log("delete click!");
             let obj = uploadImg.src;
@@ -224,21 +225,35 @@
             let type = 'image';
 
 
-            $.ajax({
-                url: '/deleteFile',
-                data: {fileName: targetFile, type:type},
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-                },
-                dataType:'text',
-                type: 'POST',
-                success: function(result) {
-                    fileInput.filepath = '';
-                    alert(result);
-                    if(fileInput.value !== '') profileImg.src = 'http://placehold.it/900x400';
-                    $(imgPlace).hide();
-                }
-            });
+            alert("파일을 삭제합니다");
+            fileInput.filepath = '';
+            // profileImg.src = 'http://placehold.it/900x400';
+            $(imgPlace).hide();
+
+            try{
+                $('#picture')[0].removeAttr("filepath");
+                $('#picture')[0].removeAttr("value.textContent");
+            }catch(e){}
+
+
+            <%--$.ajax({--%>
+            <%--    url: '/deleteFile',--%>
+            <%--    data: {fileName: targetFile, type:type},--%>
+            <%--    beforeSend : function(xhr) {--%>
+            <%--        xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");--%>
+            <%--    },--%>
+            <%--    dataType:'text',--%>
+            <%--    type: 'POST',--%>
+            <%--    success: function(result) {--%>
+            <%--        fileInput.filepath = '';--%>
+            <%--        alert(result);--%>
+            <%--        if(fileInput.value !== '') profileImg.src = 'http://placehold.it/900x400';--%>
+            <%--        $(imgPlace).hide();--%>
+
+            <%--        $('#picture')[0].removeAttr("filepath");--%>
+            <%--        $('#picture')[0].removeAttr("value.textContent");--%>
+            <%--    }--%>
+            <%--});--%>
         });
 
 
@@ -261,6 +276,8 @@
                         upImg !== undefined ?
                             upImg :
                             beforeImg !== undefined ? beforeImg : '';
+                    profileImg.src = img === '' ? 'http://placehold.it/900x400' : '';
+                    console.dir(img);
 
                     $.ajax({
                         url: '/user/modify',

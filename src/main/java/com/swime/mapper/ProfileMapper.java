@@ -14,7 +14,7 @@ public interface ProfileMapper {
 
     List<GroupVO> joinList(String id);
 
-
+    List<GroupVO> wishList(String id);
 
 
 
