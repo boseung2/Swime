@@ -31,14 +31,72 @@
             <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
             <p><i class="fas fa-user"></i>모임장 <c:out value="${group.userName}"/></p>
 
-            <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
                 <sec:authorize access="isAuthenticated()">
+                    <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
                     <c:if test="${pinfo.username eq group.userId}">
                         <button data-oper="modify" class="btn btn-primary">모임 수정</button>
                     </c:if>
                 </sec:authorize>
 
-<%--            <a class="btn btn-primary" href="#">❤</a>--%>
+            <sec:authorize access="isAuthenticated()">
+            <a class="btn btn-primary" href="#" id="heartOff"><i class="far fa-heart"></i></a>
+            <a class="btn btn-primary" href="#" id="heartOn"><i class="fas fa-heart"></i></a>
+            </sec:authorize>
+
+            <!-- 모임 찜 -->
+            <script>
+                $(document).ready(function() {
+                    let grpSn = <c:out value="${group.sn}"/>
+                    let userId = null;
+                    <sec:authorize access="isAuthenticated()">
+                    userId = "${pinfo.username}";
+                    </sec:authorize>
+
+                    let groupWish = {
+                        grpSn : grpSn,
+                        userId : userId
+                    };
+
+                    $('#heartOn').hide();
+                    $('#heartOff').show();
+                    groupWishService.get(groupWish, function(result) {
+                        $('#heartOn').show();
+                        $('#heartOff').hide();
+                    })
+
+                    $('#heartOff').on("click", function(e) {
+                        e.preventDefault();
+
+                        groupWishService.add(groupWish, function(result) {
+                            alert(result);
+
+                            $('#heartOff').hide();
+                            $('#heartOn').show();
+                        })
+                    })
+
+                    $('#heartOn').on("click", function(e) {
+                        e.preventDefault();
+
+                        groupWishService.remove(groupWish, function(result) {
+                            alert(result);
+
+                            $('#heartOff').show();
+                            $('#heartOn').hide();
+                        })
+                    })
+                })
+            </script>
+
+
+
+
+
+
+
+
+
+
         </div>
         <!-- /.col-md-4 -->
     </div>
@@ -52,30 +110,6 @@
         <a href="#board">게시판</a>
     </div>
     <!-- /nav -->
-
-    <!-- topnav javascript -->
-    <script>
-        let topnav = document.getElementsByClassName("topnav")[0];
-        let sticky = topnav.offsetTop;
-
-        $(document).ready(function() {
-            $('.topnav').on("click", "a", function(e) {
-                $(".topnav > a").removeClass('active');
-                console.dir(e.target);
-                $(this).attr("class", "active");
-            })
-        })
-
-        window.onscroll = function() {myFunction()};
-
-        function myFunction() {
-            if(window.pageYOffset >= sticky) {
-                topnav.classList.add("sticky");
-            } else {
-                topnav.classList.remove("sticky");
-            }
-        }
-    </script>
 
     <div class="main-contents">
     <div id="info" >
@@ -217,6 +251,9 @@
 <script type="text/javascript" src="/resources/js/studyList.js"></script>
 <!-- GroupRating Module -->
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
+<!-- GroupWish Module -->
+<script type="text/javascript" src="/resources/js/groupWish.js"></script>
+
 
 <!-- 모임 참여 -->
 <script>
@@ -887,6 +924,31 @@
         return byte;
     }
 
+</script>
+
+
+<!-- topnav javascript -->
+<script>
+    let topnav = document.getElementsByClassName("topnav")[0];
+    let sticky = topnav.offsetTop;
+
+    $(document).ready(function() {
+        $('.topnav').on("click", "a", function(e) {
+            $(".topnav > a").removeClass('active');
+            console.dir(e.target);
+            $(this).attr("class", "active");
+        })
+    })
+
+    window.onscroll = function() {myFunction()};
+
+    function myFunction() {
+        if(window.pageYOffset >= sticky) {
+            topnav.classList.add("sticky");
+        } else {
+            topnav.classList.remove("sticky");
+        }
+    }
 </script>
 
 

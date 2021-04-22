@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/wish/")
+@RequestMapping("/groupWish/")
 @RestController
 @Log4j
 @AllArgsConstructor
@@ -39,43 +39,29 @@ public class GroupWishController {
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping(value = "/get",
+    @GetMapping(value = "/get/{grpSn}/{userId}",
         produces = {MediaType.APPLICATION_XML_VALUE,
         MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<GroupWishVO> get(@RequestBody GroupWishVO vo) {
+    public ResponseEntity<GroupWishVO> get(@PathVariable("grpSn") Long grpSn, @PathVariable("userId") String userId) {
+        GroupWishVO vo = new GroupWishVO();
+        vo.setGrpSn(grpSn);
+        vo.setUserId(userId);
         log.info("vo: " + vo);
 
         return new ResponseEntity<>(service.read(vo), HttpStatus.OK);
     }
 
-    @PreAuthorize("principal.username == #vo.userId")
-    @DeleteMapping(value = "/delete")
-    public ResponseEntity<String> remove(@RequestBody GroupWishVO vo) {
-
+    @PreAuthorize("principal.username == #userId")
+    @DeleteMapping(value = "/delete/{grpSn}/{userId:.+}")
+    public ResponseEntity<String> remove(@PathVariable("grpSn") Long grpSn, @PathVariable("userId") String userId) {
+        GroupWishVO vo = new GroupWishVO();
+        vo.setGrpSn(grpSn);
+        vo.setUserId(userId);
         log.info("remove: " + vo);
 
         return service.delete(vo)
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    /*
-    @PreAuthorize("principal.username == #vo.userId")
-    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
-    value = "/{sn}",
-    consumes = "application/json")
-    public ResponseEntity<String> modify(
-            @RequestBody GroupRatingVO vo,
-            @PathVariable("sn") Long sn) {
-        vo.setSn(sn);
-        //vo.setGrpSn(service.get(sn).getGrpSn());
-        log.info("sn: " + sn);
-        log.info("modify: " + vo);
-
-        return service.modify(vo) == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-     */
 
 }
