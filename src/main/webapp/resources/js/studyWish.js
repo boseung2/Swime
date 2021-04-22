@@ -9,7 +9,7 @@ let studyWishService = (function(){
 
         $.get("/study/wish/" + param.stdSn + "/" + param.userId, function (result) {
             if (callback) {
-                console.log("result = " + result);
+                console.log("studyWishService result = " + result);
                 callback(result);
             }
         }).fail(function (xhr, status, err) {
@@ -20,6 +20,8 @@ let studyWishService = (function(){
     }
 
     function wish(param, callback, error){
+
+        console.log('wish 호출됨');
 
         console.log("wish stdSn = " + param.stdSn);
         console.log("wish userId = " + param.userId);

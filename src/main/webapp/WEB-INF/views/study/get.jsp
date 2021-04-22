@@ -80,23 +80,55 @@
     </div>
     <!-- /nav -->
 
+    <!-- topnav javascript -->
+    <script>
+        let topnav = document.getElementsByClassName("topnav")[0];
+        let sticky = topnav.offsetTop;
+
+        $(document).ready(function() {
+            $('.topnav').on("click", "a", function(e) {
+                $(".topnav > a").removeClass('active');
+                console.dir(e.target);
+                $(this).attr("class", "active");
+            })
+        })
+
+        // window.onscroll = function() {myFunction()};
+        //
+        // function myFunction() {
+        //     if(window.pageYOffset >= sticky) {
+        //         topnav.classList.add("sticky");
+        //     } else {
+        //         topnav.classList.remove("sticky");
+        //     }
+        // }
+    </script>
+
+    <div class="main-contents">
     <div id="info">
         <h4> 정보</h4>
-        <p>${study.information}</p>
+        <pre>${study.information}</pre>
     </div>
+    <br>
 
+    <hr class="centerHr">
     <div id="member">
         <h4> 참여멤버</h4>
 
         <c:forEach items="${members}" var="member">
-            <img src="../../../resources/image/img_avatar2.png" alt="Avatar" class="avatar">
-            <span>${member.userName}</span>
+            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
+            <strong>${member.userName}</strong>
             <c:if test="${member.userId eq study.representation}"><span>스터디장</span></c:if>
-            <span>${member.grpRole}</span>
+            <c:choose>
+                <c:when test="${member.grpRole == 'GRRO01'}">모임장</c:when>
+                <c:when test="${member.grpRole == 'GRRO02'}">운영진</c:when>
+                <c:when test="${member.grpRole == 'GRRO03'}">일반회원</c:when>
+            </c:choose>
             <br>
         </c:forEach>
     </div>
 
+    <hr class="centerHr">
     <div id="onOff">
         <c:if test="${study.onOff eq 'STOF01'}">
             <h4>온라인 스터디 링크</h4>
@@ -144,39 +176,52 @@
     $(document).ready(function(){
 
         let stdSn = ${study.sn};
-        let userId = "boseung@naver.com"; // 임의의 사용자 설정
+        let userId = "${pinfo.username}"; // 로그인중인 id
+        console.log("userId = " + userId);
+
         let wishUL = $('.wishButton');
 
-        // getStudyWish();
-        //
-        // <!--찜 버튼 출력-->
-        // function getStudyWish() {
-        //
-        //     studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
-        //         console.log("get > getWish > result = " + result);
-        //
-        //         let str = "";
-        //
-        //         if(result === "not exist") {
-        //             str += "<a class='wish btn btn-primary' href=''>♡</a>";
-        //         }else {
-        //             str += "<a class='wish btn btn-primary' href=''>❤</a>";
-        //         }
-        //
-        //         wishUL.html(str);
-        //     })
-        // }
+        if(userId !== '') {
+            // getStudyWish();
+        }
+
+        <!--찜 버튼 출력-->
+        function getStudyWish() {
+
+            studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
+                console.log("get > getWish > result = " + result);
+
+                let str = "";
+
+                if(result === "not exist") {
+                    str += "<a class='wish btn btn-primary' href=''>♡</a>";
+                }else {
+                    str += "<a class='wish btn btn-primary' href=''>❤</a>";
+                }
+
+                wishUL.html(str);
+            })
+        }
 
         <!--찜 버튼 눌렸을 때-->
         $(".wish").on("click", function(e) {
             e.preventDefault();
+            console.log("찜버튼 눌림");
 
             studyWishService.wish({stdSn : stdSn, userId : userId}, function(result) {
-                console.log("get > wish > result = " + result);
+                console.log("찜버튼 눌린 result = " + result);
 
                 let str = "";
 
-                //성공시 모달창 띄우기
+                if(result === "wish") {
+                    alert("스터디를 찜했습니다.");
+                }else if(result === "cancelWish"){
+                    alert("스터디를 찜을 취소했습니다.");
+                }else if(result === "fail") {
+                    alert("찜하기를 실패했습니다.")
+                }
+
+                wishUL.html(str);
 
                 getStudyWish();
             })

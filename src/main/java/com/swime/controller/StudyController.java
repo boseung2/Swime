@@ -157,12 +157,6 @@ public class StudyController {
 
         log.info("study onOff = " + study.getOnOff());
 
-//        if("".equals(study.getOnUrl())) {
-//            study.setOnOff("STOF02");
-//        }else {
-//            study.setOnOff("STOF01");
-//        }
-
         // 반복 주기 설정
         if("(선택)".equals(study.getRepeatCycle())) {
             study.setRepeatCycle(null);
@@ -200,11 +194,6 @@ public class StudyController {
         log.info("modify representation " + study.getRepresentation());
 
         log.info("modify study onOff = " + study.getOnOff());
-//        if(study.getOnUrl() != null) {
-//            study.setOnOff("STOF01");
-//        }else {
-//            study.setOnOff("STOF02");
-//        }
 
         // 반복 주기 설정
         log.info("====================================repeatCycle" + study.getRepeatCycle()); //STCY01
@@ -250,7 +239,7 @@ public class StudyController {
         return "redirect:/group/get?sn=" + grpSn;
     }
     
-    // 스터디 멤버 관리 - 참여멤버/ 대기멤버 가져오기
+    // 스터디 멤버 관리 페이지 - 참여멤버/ 대기멤버 가져오기 - 아직 구현 x
     @GetMapping("/members")
     @PreAuthorize("principal.username == #study.representation")
     public void members(long stdSn, Model model) {
@@ -263,15 +252,14 @@ public class StudyController {
     @GetMapping(value = "/wish/{stdSn}/{userId}")
     public ResponseEntity<String> getWish(@PathVariable("stdSn") long stdSn, @PathVariable("userId") String userId) {
 
+        // 로그인 되어있는 경우만 반환 가능
         StudyParamVO studyParam = new StudyParamVO();
         studyParam.setStdSn(stdSn);
         studyParam.setUserId(userId);
 
-        log.info("=====================================스터디 찜 여부 반환 : " + studyParam);
-
         WishStudyVO wish = service.getWish(studyParam);
 
-        log.info("=====================================wish 여부 " + wish);
+        log.info("=====================================스터디 찜 여부" + wish);
 
         if(wish == null) {
             log.info("not exist");
@@ -286,31 +274,32 @@ public class StudyController {
     }
 
     // 스터디 찜/취소
-//    @PostMapping("/wish")
-//    public ResponseEntity<String> wish(@RequestBody WishStudyVO wish) {
-//        // 1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-//
-//        //임의로 설정
-//        wish.setUserId("boseung@naver.com");
-//
-//        StudyParamVO studyParam = new StudyParamVO();
-//        studyParam.setStdSn(wish.getStdSn());
-//        studyParam.setUserId(wish.getUserId());
-//
-//        // 2. 해당 wish가 존재하면 삭제
-//        if(service.getWish(studyParam) != null) {
-//            return service.removeWish(studyParam) == 1
-//                ? new ResponseEntity<>("cancelWish", HttpStatus.OK)
-//                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }else {
-//            // 3. 해당 wish가 없으면 등록
-//            return service.registerWish(wish) == 1
-//                ? new ResponseEntity<>("wish", HttpStatus.OK)
-//                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//        // 4. get 페이지에서 하트가 바뀌어있어야함
-//    }
+    @PostMapping("/wish")
+    public ResponseEntity<String> wish(@RequestBody WishStudyVO wish) {
+        // 1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+        log.info("스터디 찜/취소 stdSn = " + wish.getStdSn());
+        log.info("스터디 찜/취소 userId = " + wish.getUserId());
+
+        wish.setUserId(wish.getUserId());
+
+        StudyParamVO studyParam = new StudyParamVO();
+        studyParam.setStdSn(wish.getStdSn());
+        studyParam.setUserId(wish.getUserId());
+
+        // 2. 해당 wish가 존재하면 삭제
+        if(service.getWish(studyParam) != null) {
+            return service.removeWish(studyParam) == 1
+                ? new ResponseEntity<>("cancelWish", HttpStatus.OK)
+                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }else {
+            // 3. 해당 wish가 없으면 등록
+            return service.registerWish(wish) == 1
+                ? new ResponseEntity<>("wish", HttpStatus.OK)
+                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // 4. get 페이지에서 하트가 바뀌어있어야함
+    }
 //
 //    // 스터디 참가
 //    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})

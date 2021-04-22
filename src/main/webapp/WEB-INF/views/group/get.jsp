@@ -117,7 +117,7 @@
     </div>
 
     <!-- rating pagination button -->
-    <div class="panel-footer">
+    <div class="paging-footer panel-footer">
 
     </div>
 
@@ -468,18 +468,18 @@
             let str = "<ul class ='pagination'>";
 
             if(prev) {
-                str += "<li class = 'page-item'><a class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
+                str += "<li id='study-item' class = 'page-item'><a id='study-link' class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
             }
 
             for(let i = startNum; i <= endNum; i++) {
                 console.log("i=" + i);
                 let active = studyPageNum == i ? "active" : "";
 
-                str += "<li class = 'page-item " + active +" '><a class='page-link' href='" + i + "'>" + i + "</a></li>";
+                str += "<li id='study-item' class = 'page-item " + active +" '><a id ='study-link' class='page-link' href='" + i + "'>" + i + "</a></li>";
             }
 
             if(next) {
-                str += "<li class = 'page-item'><a class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
+                str += "<li id = 'study-item' class = 'page-item'><a id = 'study-link' class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
             }
 
             str += "</ul></div>";
@@ -489,7 +489,7 @@
             studyPageFooter.html(str);
         }
 
-        studyPageFooter.on("click", "li a", function(e) {
+        studyPageFooter.on("click", "li[id='study-item'] a[id='study-link']", function(e) {
             e.preventDefault();
 
             console.log("study page click");
@@ -502,6 +502,20 @@
 
             showStudyList(studyPageNum);
         })
+
+        // studyPageFooter.on("click", "li a", function(e) {
+        //     e.preventDefault();
+        //
+        //     console.log("study page click");
+        //
+        //     let targetPageNum = $(this).attr("href");
+        //
+        //     console.log("targetPageNum: " + targetPageNum);
+        //
+        //     studyPageNum = targetPageNum;
+        //
+        //     showStudyList(studyPageNum);
+        // })
     })
 </script>
 
@@ -709,7 +723,7 @@
         })
 
         let pageNum = 1;
-        let groupRatingPageFooter = $('.panel-footer');
+        let groupRatingPageFooter = $('.paging-footer');
 
         function showRatingPage(ratingCnt) {
 
@@ -730,7 +744,7 @@
             let str = '<ul class="pagination">';
 
             if(prev) {
-                str += "<li class='page-item'><a class='page-link' href='"+(startNum - 1)+"'>Previous</a></li>"
+                str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='"+(startNum - 1)+"'>Previous</a></li>"
             }
 
             console.log("!!!!!!!!!!!!!!!!!!!!" + pageNum);
@@ -738,11 +752,11 @@
 
                 let active = pageNum == i ? "active" : "";
 
-                str += "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+                str += "<li id='rating-item' class='page-item "+active+" '><a id='rating-link' class='page-link' href='"+i+"'>"+i+"</a></li>";
             }
 
             if(next) {
-                str += "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+                str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
             }
 
             str += "</ul></div>";
@@ -753,10 +767,10 @@
 
         }
 
-        groupRatingPageFooter.on("click", "li a", function(e) {
+        groupRatingPageFooter.on("click", "li[id='rating-item'] a[id='rating-link']", function(e) {
             e.preventDefault();
 
-            console.log("page click");
+            console.log("rating page click");
 
             let targetPageNum = $(this).attr("href");
 
