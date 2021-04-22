@@ -1,22 +1,18 @@
 package com.swime.controller;
 
+import com.swime.domain.GroupVO;
 import com.swime.domain.MailVO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
-import com.swime.mapper.MemberMapper;
 import com.swime.service.AuthService;
 import com.swime.service.MemberService;
+import com.swime.service.ProfileService;
 import com.swime.util.GmailSend;
 import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +41,16 @@ public class UserCotroller {
 
     MakeRandomValue makeRandomValue;
 
+    ProfileService profileService;
+
+
+    @GetMapping("/already")
+    public ResponseEntity isAlready(String id){
+        return service.get(id) != null ?
+                new ResponseEntity(true, HttpStatus.OK) :
+                new ResponseEntity(false, HttpStatus.OK);
+    }
+
     @GetMapping("/login")
     public void login(){
     }
@@ -55,17 +61,28 @@ public class UserCotroller {
 
     @Transactional
     @PostMapping("/register")
-    public String register(MemberVO vo, RedirectAttributes rttr){
+    public ResponseEntity register(MemberVO vo, RedirectAttributes rttr){
+        log.info(vo);
+        boolean result = false;
+        boolean result1 = false;
+        boolean result2 = false;
+        boolean result3 = false;
         vo.setPassword(passwordEncoder.encode(vo.getPassword()));
-        service.registerHistory(vo);
-        service.register(vo);
+        result = service.registerHistory(vo);
+        result1 = service.register(vo);
         String key = makeRandomValue.MakeAuthKey();
-        service.registerKey(vo.getId(), key);
-        authService.register(vo.getId(),"MEMBER");
+        result2 = service.registerKey(vo.getId(), key);
+        result3 = authService.register(vo.getId(),"MEMBER");
         gmailSend.sendAuthMail(new MailVO(vo.getId(), key));
         rttr.addFlashAttribute("vo", vo);
-        return "redirect:/user/registerSuccess";
+//        return "redirect:/user/registerSuccess";
+        boolean all = result && result1 && result2 && result3;
+        return all ?
+                new ResponseEntity("Register Success", HttpStatus.OK) :
+                new ResponseEntity("Register Fail", HttpStatus.BAD_REQUEST);
     }
+
+
 
     @GetMapping("/registerSuccess")
     public void regSuccess(MemberVO vo){}
@@ -75,10 +92,12 @@ public class UserCotroller {
     }
 
     @PostMapping("/modify")
-    public ResponseEntity modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
-        log.info("test_Modify = " + vo.getPassword());
+    public ResponseEntity<String> modify(MemberVO vo, MemberHistoryVO hvo){//, MemberHistoryVO hvo
+        log.info("Modify = " + vo);
         service.modify(vo, hvo);
-        return service.modify(vo, hvo) ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return service.modify(vo, hvo) ?
+                new ResponseEntity("Modify Success", HttpStatus.OK) :
+                new ResponseEntity("Modify Fail", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/remove")
@@ -125,12 +144,24 @@ public class UserCotroller {
         model.addAttribute("MemberVo", service.get(id));
     }
 
+    @GetMapping("/details/info")
+    public void info(Model model, String id){
+        model.addAttribute("MemberVo", service.get(id));
+    }
+
     @GetMapping("/details/group")
-    public void group(){
+    public void group(Model model, String id){
+        List<GroupVO> list = profileService.getOwnerGroupList(id);
+        list.forEach(log::info);
+        model.addAttribute("ownerList", profileService.getOwnerGroupList(id));
+        model.addAttribute("joinList", profileService.getJoinGroupList(id));
+        model.addAttribute("wishList", profileService.getWishGroupList(id));
+
     }
 
     @GetMapping("/details/study")
-    public void study(){
+    public void study(Model model, String id){
+        model.addAttribute("MemberVo", service.get(id));
     }
 
     @GetMapping("/details/written")

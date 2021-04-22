@@ -22,7 +22,7 @@
     </delete>
 
     <select id="getOldFiles" resultType="com.swime.domain.GroupAttachVO">
-        select * from tgrp_attach where uploadpath = to_char(current_date - 1, 'yyyy/mm/dd')
+        select * from tgrp_attach where uploadpath = to_char(current_date - 1, 'yyyy\mm\dd')
     </select>
 
 </mapper>

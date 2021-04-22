@@ -5,6 +5,11 @@
 <%@include file="../includes/header.jsp" %>
 <%@include file="../includes/pictogramLib.jsp" %>
 <%@include file="../includes/tagLib.jsp"%>
+
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal" var="pinfo"/>
+    <sec:authentication property="principal.memberVO" var="mv"/>
+</sec:authorize>
 <link rel="stylesheet" href="/resources/css/board-get.css">
 
 <div class="container">
@@ -300,10 +305,12 @@
         let snValue = '<c:out value="${board.sn}"/> ';
         let replyUL = $(".chat");
         //boseung@naver.com
-        let userId = 'qwer6786@naver.com'; //일단 이렇게 해야함..
-        let name = '<c:out value="${board.name}"/> ';
+        //let userId = 'qwer6786@naver.com'; //일단 이렇게 해야함..
+        <%--let name = '<c:out value="${board.name}"/> ';--%>
+        //let realname = '{mv.name}'
 
-        console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
+
+        // console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
 
         let replyComment = $('#replyComment'); //댓글 내용
         let replyRegisterBtn = $('#replyRegisterBtn'); //댓글 버튼
@@ -317,19 +324,14 @@
         let modalModBtn = $('#modalModBtn');
         let modalCloseBtn = $('#modalCloseBtn');
 
-        <%--let userId = null;--%>
-        <%--<sec:authorize access="isAuthenticated()">--%>
-        <%--        userId = '<sec:authentication property="principal.userName"/>';--%>
-        <%--</sec:authorize>--%>
+        let userId = 'null';
+        <sec:authorize access="isAuthenticated()">
+                userId = '${mv.name}';
+        </sec:authorize>
 
-        <%--let csrfHeaderName = "${_csrf.headerName}";--%>
-        <%--let csrfTokenValue = "${_csrf.token}";--%>
-
-        <%--// ajax spring security header--%>
-        <%--$(document).ajaxSend(function(e, xhr, options) {--%>
-        <%--    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);--%>
-        <%--});--%>
-
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+        });
 
         //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
 
@@ -368,7 +370,7 @@
         });
 
 
-        //댓글 생성
+        //댓글 생성,    name : {mv.name}
         replyRegisterBtn.on("click", function(e){
             console.log("replyRegisterBtnClicked");
             let reply = {
@@ -411,7 +413,7 @@
                     // str += "<button class='replySubmit'>답글 쓰기</button></div></li></ul>"
                     str += "<li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
                     str += "<div><div class='header2'><strong id='userName' class='primary-" +
-                        "font'>"+list[i].name+"</strong>";
+                        "font'>"+list[i].userId+"</strong>";
                     str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
                     str += "<button id='replyDeleteBtn' class='replyDelete' data-sn='"+list[i].sn+"'>삭제</button>";
                     str += "<button id='replyModifyBtn' class='replyModify'>수정</button></div>";

@@ -90,10 +90,12 @@ public class BoardController {
 
         service.register(board);
 
-        rttr.addFlashAttribute("result", board.getSn());
+        //rttr.addFlashAttribute("result", board.getSn());
+        rttr.addFlashAttribute("boardResult", "registerSuccess");
 
-//        return "redirect:/group/get?sn="+grpSn;
-        return "redirect:/board/get?sn="+board.getSn();
+
+       return "redirect:/group/get?sn="+grpSn;
+        //return "redirect:/board/get?sn="+board.getSn();
     }
 
     @GetMapping({"/get","/modify"})
@@ -124,7 +126,7 @@ public class BoardController {
         if (service.modify(board)) {
             rttr.addFlashAttribute("result", "success");
         }
-//
+
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 
@@ -136,10 +138,11 @@ public class BoardController {
                          RedirectAttributes rttr) {
 
         log.info("remove: " + sn);
+        //변수명 겹쳐서 모달창 다중으로 나온 것.
         if (service.remove(sn)) {
-            rttr.addFlashAttribute("result", "success");
+            rttr.addFlashAttribute("boardResult", "removeSuccess");
         }else{
-            rttr.addFlashAttribute("result", "fail");
+            rttr.addFlashAttribute("boardResult", "removefail");
         }
 //
         rttr.addAttribute("pageNum", cri.getPageNum());

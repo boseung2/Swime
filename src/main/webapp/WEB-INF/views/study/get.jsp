@@ -24,17 +24,16 @@
             <c:if test="${study.repeatCycle eq 'STCY01'}"><span>매주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY02'}"><span>격주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY03'}"><span>매월</span></c:if>
+
             <c:if test="${study.repeatDay != null}"><span>${study.repeatDay}</span></c:if>
             <br>
             <span>${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
             <br>
-            <span>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span>
+            <c:if test="${endDate != null}"><span>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
+            <c:if test="${endDate == null}"><span>${fn:substring(startDate,0,10)}</span></c:if>
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
-<%--            <form id="operForm" action="group/modify" method="get">--%>
-<%--                <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">--%>
-<%--            </form>--%>
             <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
             <p>스터디장 : ${study.representationName}</p>
             <p>${study.attendants} / ${study.capacity}</p>
@@ -47,22 +46,22 @@
             <c:if test="${study.representation != pinfo.username}">
                 <c:choose>
                     <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
-                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>
-                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>
-                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>
-                    <c:otherwise><a class="attend btn btn-primary" href="">참석하기</a></c:otherwise>
+<%--                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>--%>
+<%--                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>--%>
+<%--                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>--%>
+<%--                    <c:otherwise><a class="attend btn btn-primary" href="">참석하기</a></c:otherwise>--%>
                 </c:choose>
             </c:if>
 
             <br><br>
             <c:if test="${study.representation eq pinfo.username}">
-            <a class="modify btn btn-primary" href="/study/modify?sn=${study.sn}">스터디 수정</a>
+            <a class="modify btn btn-primary" href="">스터디 수정</a>
             <a class="remove btn btn-primary" href="">스터디 삭제</a>
-            <br><br>
-            <a class="btn btn-primary" href="#">참가 신청 마감</a>
-            <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>
-            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>
-            <br><br>
+<%--            <br><br>--%>
+<%--            <a class="btn btn-primary" href="#">참가 신청 마감</a>--%>
+<%--            <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>--%>
+<%--            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>--%>
+<%--            <br><br>--%>
             </c:if>
 
             <a class="list btn btn-primary" href="">그룹으로 돌아가기</a>
@@ -81,23 +80,55 @@
     </div>
     <!-- /nav -->
 
+    <!-- topnav javascript -->
+    <script>
+        let topnav = document.getElementsByClassName("topnav")[0];
+        let sticky = topnav.offsetTop;
+
+        $(document).ready(function() {
+            $('.topnav').on("click", "a", function(e) {
+                $(".topnav > a").removeClass('active');
+                console.dir(e.target);
+                $(this).attr("class", "active");
+            })
+        })
+
+        // window.onscroll = function() {myFunction()};
+        //
+        // function myFunction() {
+        //     if(window.pageYOffset >= sticky) {
+        //         topnav.classList.add("sticky");
+        //     } else {
+        //         topnav.classList.remove("sticky");
+        //     }
+        // }
+    </script>
+
+    <div class="main-contents">
     <div id="info">
         <h4> 정보</h4>
-        <p>${study.information}</p>
+        <pre>${study.information}</pre>
     </div>
+    <br>
 
+    <hr class="centerHr">
     <div id="member">
         <h4> 참여멤버</h4>
 
         <c:forEach items="${members}" var="member">
-            <img src="../../../resources/image/img_avatar2.png" alt="Avatar" class="avatar">
-            <span>${member.userName}</span>
+            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
+            <strong>${member.userName}</strong>
             <c:if test="${member.userId eq study.representation}"><span>스터디장</span></c:if>
-            <span>${member.grpRole}</span>
+            <c:choose>
+                <c:when test="${member.grpRole == 'GRRO01'}">모임장</c:when>
+                <c:when test="${member.grpRole == 'GRRO02'}">운영진</c:when>
+                <c:when test="${member.grpRole == 'GRRO03'}">일반회원</c:when>
+            </c:choose>
             <br>
         </c:forEach>
     </div>
 
+    <hr class="centerHr">
     <div id="onOff">
         <c:if test="${study.onOff eq 'STOF01'}">
             <h4>온라인 스터디 링크</h4>
@@ -134,23 +165,25 @@
         <input type="hidden" name="amount" value="${cri.amount}">
         <input type="hidden" name="grpSn" value="${study.grpSn}">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-        <input type="hidden" name="userId" value="${pinfo.username}">
     </form>
 
 
 </div>
 
 <script type="text/javascript" src="/resources/js/studyWish.js"></script>
-<script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function(){
 
         let stdSn = ${study.sn};
-        let userId = "boseung@naver.com"; // 임의의 사용자 설정
+        let userId = "${pinfo.username}"; // 로그인중인 id
+        console.log("userId = " + userId);
+
         let wishUL = $('.wishButton');
 
-        getStudyWish();
+        if(userId !== '') {
+            // getStudyWish();
+        }
 
         <!--찜 버튼 출력-->
         function getStudyWish() {
@@ -173,13 +206,22 @@
         <!--찜 버튼 눌렸을 때-->
         $(".wish").on("click", function(e) {
             e.preventDefault();
+            console.log("찜버튼 눌림");
 
             studyWishService.wish({stdSn : stdSn, userId : userId}, function(result) {
-                console.log("get > wish > result = " + result);
+                console.log("찜버튼 눌린 result = " + result);
 
                 let str = "";
 
-                //성공시 모달창 띄우기
+                if(result === "wish") {
+                    alert("스터디를 찜했습니다.");
+                }else if(result === "cancelWish"){
+                    alert("스터디를 찜을 취소했습니다.");
+                }else if(result === "fail") {
+                    alert("찜하기를 실패했습니다.")
+                }
+
+                wishUL.html(str);
 
                 getStudyWish();
             })
@@ -203,8 +245,14 @@
                 case "register" :
                     $(".modal-body").html("스터디가 정상적으로 등록되었습니다.");
                     break;
+                case "register error" :
+                    $(".modal-body").html("스터디가 등록을 실패하였습니다.");
+                    break;
                 case "update" :
                     $(".modal-body").html("스터디가 정상적으로 수정되었습니다.");
+                    break;
+                case "update error" :
+                    $(".modal-body").html("스터디 수정을 실패하였습니다.");
                     break;
                 case "wish" :
                     $(".modal-body").html("스터디를 찜했습니다.");
@@ -226,7 +274,7 @@
             $("#myModal").modal("show");
         }
 
-        <!-- 스터디 목록 버튼 눌렸을 때-->
+        <!-- 그룹으로 돌아가기 버튼 눌렸을 때-->
         let actionForm = $("#actionForm");
 
         $(".list").on("click", function(e) {
@@ -242,8 +290,20 @@
             e.preventDefault();
 
             actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
+            actionForm.append("<input type='hidden' name = 'representation' value='${study.representation}'>");
             actionForm.attr("action", "/study/remove");
             actionForm.attr("method", "post");
+            actionForm.submit();
+        });
+
+        <!-- 스터디 수정 버튼 눌렀을 때-->
+        $(".modify").on("click", function(e) {
+            e.preventDefault();
+
+            actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
+            actionForm.append("<input type='hidden' name = 'representation' value='${study.representation}'>");
+            actionForm.attr("action", "/study/modify");
+            actionForm.attr("method", "get");
             actionForm.submit();
         });
 

@@ -49,12 +49,12 @@
 </div>
 
 <!-- 게시판Modal -->
-<div class="boardModal fade" id="boardModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="boardModal" tabindex="-1" role="dialog"
      aria-labelledby="boardModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="boardModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="boardModalLabel">게시글</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="boardModal modal-body">정상적으로 처리되었습니다.</div>
@@ -177,6 +177,7 @@
             boardPageFooter.html(str);
 
             boardPageFooter.on("click", "li a", function(e) {
+
                 e.preventDefault();
 
                 console.log("board page click");
@@ -189,7 +190,8 @@
 
                 showBoardList(boardPageNum);
 
-            })
+            });
+
 
         }
 
@@ -207,23 +209,29 @@
             self.location = "/board/register?grpSn=${group.sn}";
         });
 
-        let result = '<c:out value="${result}"/>';
+        let boardResult = '<c:out value="${boardResult}"/>';
 
-        console.log("BoardRemoveResult" + result);
+        console.log("boardRemoveResult" + boardResult);
 
-        checkModal(result);
+        checkModal(boardResult);
+        //history.replaceState({}, null, null);
 
-        history.replaceState({}, null, null);
+        <!--게시판 등록, 삭제 모달   ||history.state-->
+        function checkModal(boardResult) {
+            if(boardResult === '') {
+                console.log(boardResult);
 
-        <!--게시판 삭제 모달-->
-        function checkModal(result) {
-            if(result === '' || history.state) {
-                return;
+                return false;
             }
 
-            if("success" === result) {
+            if("removeSuccess" === boardResult) {
                 $(".boardModal").html("게시글이 정상적으로 삭제되었습니다.");
             }
+
+            if("registerSuccess" === boardResult){
+                $(".boardModal").html("게시글이 정상적으로 등록되었습니다..");
+            }
+
 
             $("#boardModal").modal("show");
         }

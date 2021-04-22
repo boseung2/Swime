@@ -8,8 +8,8 @@
 
 <div class="container">
     <h2>게시글 수정하기</h2>
-    <hr/>
-    <form id="modifyForm" role="form" action="/board/modify" method="post">
+    <hr/>action="/board/modify"
+    <form id="modifyForm" role="form"  method="post">
 
 
         <div class="form-group">
@@ -90,18 +90,27 @@
 
             let operation = $(this).data('oper');
 
-            console.log(operation);
+            console.log("operation : "+operation);
 
             if(operation === 'remove') {
                 formObj.attr("action", "/board/remove");
                 formObj.submit();
             } else if (operation === 'list') {
-
-                $(location).attr('href', '/group/get?sn=' + '${board.grpSn}');
-                <%--formObj.attr("action", '/group/get').attr("method", "get");--%>
-                <%--formObj.find("input[name='grpSn']").remove();--%>
-                <%--formObj.append("<input type='hidden' name = 'grpSn' value='" + ${board.grpSn} + "'>");--%>
-                <%--formObj.submit();--%>
+                console.log("list !!!!!!!!!!!!!!");
+                // $(location).attr('href', 'www.naver.com');
+                formObj.attr("action", '/group/get').attr("method", "get");
+                formObj.find("input[name='sn']").remove();
+                formObj.find("input[name='name']").remove();
+                formObj.find("input[name='title']").remove();
+                formObj.find("textarea[name='content']").remove();
+                formObj.find("input[name='_csrf']").remove();
+                formObj.find("input[name='picture']").remove();
+                formObj.find("input[name='post']").remove();
+                formObj.find("input[name='topFix']").remove();
+                formObj.find("input[name='grpSn']").remove();
+                formObj.find("input[name='status']").remove();
+                formObj.append("<input type='hidden' name = 'sn' value='" + ${board.grpSn} + "'>");
+                formObj.submit();
                 // let pageNumTag = $("input[name='pageNum']").clone();
                 // let amountTag = $("input[name='amount']").clone();
                 // formObj.empty();
@@ -115,7 +124,7 @@
                 }
             }
             formObj.submit();
-
+            // alert("asda");
         });
 
         function validation(){

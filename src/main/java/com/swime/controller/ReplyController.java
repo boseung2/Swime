@@ -24,7 +24,7 @@ public class ReplyController {
     private ReplyService service;
 
     //생성
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/new")
     public ResponseEntity<String> create(@RequestBody ReplyVO vo){
 
