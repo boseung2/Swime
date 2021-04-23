@@ -9,43 +9,60 @@
     <c:set var="isAuthenticated" value="true"/>
 </sec:authorize>
 
+<style>
+    .content {
+        min-height: calc(100vh - 26vh);
+    }
 
+    footer {
+        margin-top: 30px;
+    }
+
+    .uploadResult > img {
+        height: 70px;
+    }
+</style>
 
 <link href="/resources/css/user.css" rel="stylesheet">
-<div id="regdiv">
-    <div id="errorMsgDiv">
+<div class="content">
+    <div id="regdiv">
+        <div id="errorMsgDiv">
 
+        </div>
+        <form id="regForm" action="/user/login" method="post">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+            <label for="email" class="inp">
+                <input type="email" id="email" name="id" placeholder="&nbsp;">
+                <span class="label">Email</span>
+                <span class="focus-bg"></span>
+            </label>
+            <br>
+
+            <label for="email" class="inp">
+                <input type="password" id="password" name="password" placeholder="&nbsp;">
+                <span class="label">Password</span>
+                <span class="focus-bg"></span>
+            </label>
+            <br>
+
+            <div>
+                <input type="checkbox" id="check" name="remember-me">
+                <label for="check">자동로그인</label>
+            </div>
+
+            <sec:csrfInput/>
+            <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
+
+            <div>
+                <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login"></button>
+            </div>
+        </form>
     </div>
-    <form id="regForm" action="/user/login" method="post">
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-        <label for="email" class="inp">
-            <input type="email" id="email" name="id" placeholder="&nbsp;">
-            <span class="label">Email</span>
-            <span class="focus-bg"></span>
-        </label>
-        <br>
-
-        <label for="email" class="inp">
-            <input type="password" id="password" name="password" placeholder="&nbsp;">
-            <span class="label">Password</span>
-            <span class="focus-bg"></span>
-        </label>
-        <br>
-
-        <div>
-            <input type="checkbox" id="check" name="remember-me">
-            <label for="check">자동로그인</label>
-        </div>
-
-        <sec:csrfInput/>
-        <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
-
-        <div>
-            <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login"></button>
-        </div>
-    </form>
 </div>
+
+
+
 
 <script>
     alreadyLogin();
