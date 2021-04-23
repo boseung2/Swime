@@ -66,6 +66,7 @@
             </label>
         </div>
 
+        <input type="text" name="${_csrf.parameterName}" value="${_csrf.token}">
         <button id='registerBtn' type="submit" class="btn btn-primary">등록</button>
         <button id="back" type="reset" class="btn btn-dark">취소</button>
 
@@ -82,7 +83,7 @@
         window.history.back();
     });
 
-    objForm = $('#registerForm');
+    let objForm = $('#registerForm');
 
     $('button[type="submit"]').on("click", function(e) {
         e.preventDefault();
@@ -98,7 +99,7 @@
         }
 
         console.log('hi');
-        //objForm.submit();
+        objForm.submit();
 
     });
     //내용이 입력되면 글자 개수 증가

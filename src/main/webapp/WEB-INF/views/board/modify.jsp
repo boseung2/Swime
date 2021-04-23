@@ -127,16 +127,16 @@
         });
 
         function validation(){
-
-            if(getByte($("input[id='title']").val())== "") {
+            // getByte($("input[id='title']").val()) == ""
+            if($("input[id='title']").val().trim().length == 0) {
                 alert("제목을 입력해주세요.");
                 return false;
             }else if(getByte($("input[id='title']").val()) > 200){
                 alert("게시글 제목을 65자 이하로 작성해주세요.");
                 return false;
             }
-
-            if(getByte($("textarea[id='content']").val()) == "") {
+            //getByte($("textarea[id='content']").val()) == ""
+            if($("textarea[id='content']").val().trim().length == 0) {
                 alert("내용을 입력해주세요");
                 return false;
 

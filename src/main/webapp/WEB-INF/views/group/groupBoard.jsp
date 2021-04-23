@@ -14,10 +14,12 @@
 <%--<div id="board">--%>
 
     <h4>게시판
-        <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
-                style="float: right; margin-bottom: 5px">
-            글쓰기
-        </button>
+        <sec:authorize access="isAuthenticated()">
+            <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
+                    style="float: right; margin-bottom: 5px">
+                글쓰기
+            </button>
+        </sec:authorize>
     </h4>
 
 

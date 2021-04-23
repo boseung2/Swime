@@ -26,8 +26,11 @@
 
 
             <div id="inline2">
-                <button data-oper='modify' class="btn btn-primary"
-                onclick="location.href='/board/modify?sn=<c:out value="${board.sn}"/>'">수정</button>
+                <!--principal.MemberVo > mv.name 접근해서 이름 가져온다. 위에 참고-->
+                <c:if test="${mv.name eq board.name}">
+                    <button data-oper='modify' class="btn btn-primary">수정</button>
+                </c:if>
+
                 <button data-oper="list" class="btn btn-dark">취소</button>
 
 
@@ -113,26 +116,28 @@
 
                     <ul class="chat">
 
+
                         <!-- 댓글 시작 -->
                         <li class="left clearfix" data-sn="12">
                             <div>
                                 <div class="header2">
-                                    <strong class="primary-font">user</strong>
-                                    <small class="pull-right text-muted">2018-01-01 13:13</small>
+                                    <strong class="primary-font"></strong>
+                                    <small class="pull-right text-muted"></small>
                                     <!--내 글이면 수정 삭제 / 다른 사람 글이면 ...표시 -> 신고하기-->
-                                    <button id='replyDeleteBtn' type="button" class="replyDelete">삭제</button>
-                                    <button id='replyModifyBtn'type="button" class="replyModify">수정</button>
+                                    <button id='replyDeleteBtn' type="button" class="replyDelete"></button>
+                                    <button id='replyModifyBtn'type="button" class="replyModify"></button>
                                 </div>
-                                <p>good job</p>
-                                <button class="replySubmit" type="submit">답글쓰기</button>
+                                <p></p>
+                                <button class="replySubmit" type="submit"></button>
                             </div>
                         </li> <!--end li -->
                     </ul>
+
                 </div> <!--end panel-body-->
 <%--            </div> <!--end reply box-->--%>
 
-
-            <!--댓글 입력 창-->
+        <!--댓글 입력 창(로그인 안하면 댓글 창 안보이게 함.)-->
+        <c:if test="${mv.name eq board.name}">
             <div class="commentWriter">
                 <div class="comment_inbox">
             <textarea id='replyComment' placeholder="댓글을 입력해주세요" rows="1"
@@ -144,7 +149,7 @@
                 </div>
             </div>
             <!--end 댓글 입력 창-->
-
+        </c:if>
         </div> <!-- ./col-lg-12-->
 
     </div><!-- row -->
@@ -163,13 +168,13 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label>내용</label>
-                        <input class="form-control" name="content" value="내용">
+                        <label>작성자</label>
+                        <input class="form-control" id="replyName" name="name" value="작성자" readonly="readonly">
                     </div>
 
                     <div class="form-group">
-                        <label>작성자</label>
-                        <input class="form-control" name="name" value="작성자">
+                        <label>내용</label>
+                        <input class="form-control" id="replyContent" name="content" value="내용">
                     </div>
 
                     <div class="form-group">
@@ -324,9 +329,11 @@
         let modalModBtn = $('#modalModBtn');
         let modalCloseBtn = $('#modalCloseBtn');
 
+        //userid = 이메일,  id = 이름
+        //댓글 등록할 때 insert는 userid로 get은 id로
         let userId = 'null';
         <sec:authorize access="isAuthenticated()">
-                userId = '${mv.name}';
+                userId = '${mv.id}';
         </sec:authorize>
 
         $(document).ajaxSend(function(e, xhr, options) {
@@ -336,20 +343,52 @@
         //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
 
         //댓글 수정
-        $(".chat").on("click", "button[id='replyModifyBtn']", function(){
-            console.log("modifyClicked");
+        $(".chat").on("click", "button[id='replyModifyBtn']", function(e){
+            console.log("modify Clicked");
+
+            let sn = $(this).data("sn");
+            console.log("replySn : "+sn);
 
             $(".modal").modal("show");
 
-            modal.find("input").val("");
+            //replyVal = $("p[id='replyContent']").innerHTML;
+
+            //modal.find("input").val("");
             modalInputRegDate.closest("div").hide();
 
-            let sn = $(this).data("sn");
 
             replyService.get(sn, function(reply){
+                console.log("userName : " +reply.name);
+                console.log("replyContent : " +reply.content);
+                console.log("replySn : " + reply.sn);
+                console.log("regDate : " + replyService.displayTime(reply.regDate));
+                modalInputName.val(reply.name);
+                modalInputContent.val(reply.content);
+                modalInputRegDate.val(replyService.displayTime(reply.regDate))
+                .attr("readonly","readonly");
+                modal.data("sn", reply.sn);
 
-                modalInputContent.val("ggg");
+
+                modalModBtn.on("click", function(e){
+
+                    console.log("modalModBtnClick..");
+                    let modReply = {
+                        sn : modal.data("sn"),
+                        content : modalInputContent.val(),
+                        status  : "RPST01"
+                    }
+                    replyService.update(modReply, function(result){
+                        console.log("modReplyContent:"+modReply.content);
+                        console.log("modReplyBrdSn:"+modReply.sn);
+
+                        //alert('댓글이 수정되었습니다.');
+                        modal.modal("hide");
+                        showList(1);
+                    });
+
+                });
             });
+
 
         });
 
@@ -413,10 +452,10 @@
                     // str += "<button class='replySubmit'>답글 쓰기</button></div></li></ul>"
                     str += "<li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
                     str += "<div><div class='header2'><strong id='userName' class='primary-" +
-                        "font'>"+list[i].userId+"</strong>";
+                        "font'>"+list[i].name+"</strong>";
                     str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
                     str += "<button id='replyDeleteBtn' class='replyDelete' data-sn='"+list[i].sn+"'>삭제</button>";
-                    str += "<button id='replyModifyBtn' class='replyModify'>수정</button></div>";
+                    str += "<button id='replyModifyBtn' class='replyModify' data-sn='"+list[i].sn+"'>수정</button></div>";
                     str += "<p id='replyContent'>"+list[i].content+"</p>";
                     str += "<button class='replySubmit'>답글 쓰기</button></div></li><hr>"
 

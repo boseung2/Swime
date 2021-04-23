@@ -59,7 +59,7 @@ let replyService = (function() {
     }
     //댓글 업데이트
     function update(reply, callback, error){
-        console.log("SN: " + reply.sn);
+        console.log("sn: " + reply.sn);
 
         $.ajax({
             type : 'put',
