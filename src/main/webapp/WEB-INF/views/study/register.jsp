@@ -29,7 +29,7 @@
             <label for="startDate">시작일자</label>
             <input type="date" class="form-control" id="startDate" name="startDate" required>
         </div>
-        <div class="form-group" hidden="true">
+        <div class="form-group">
             <input type="checkbox" id="repeat" onclick="repeatFunction()">정기 스터디
         </div>
         <div class="form-group" id="formEndDate" hidden="true">
@@ -40,9 +40,9 @@
             <label for="repeatCycle">반복주기</label>
             <select class="form-control" id="repeatCycle" name="repeatCycle">
                 <option>(선택)</option>
-                <option value="STCY01">매주</option>
-                <option value="STCY02">격주</option>
-                <option value="STCY03">매월</option>
+                <option value="STCY01" hidden="true">매주</option>
+                <option value="STCY02" hidden="true">격주</option>
+                <option value="STCY03" hidden="true">매월</option>
             </select>
         </div>
         <div class="form-group" id="formRepeatDay" hidden="true">
@@ -163,7 +163,8 @@
             alert("상세정보를 400자 이하로 작성해주세요");
             return false;
         }else {
-            let infoTemp = $('#information').val().trim();
+            let infoTemp = $('#information').val().trim().toString();
+            infoTemp = removeTag(infoTemp);
             $('#information').val(infoTemp);
         }
 
@@ -234,6 +235,11 @@
         let expUrl = /^http[s]?\:\/\/./i;
         return expUrl.test(url);
     }
+
+    // 태그 제거
+    function removeTag(str) {
+        return str.replace(/(<([^>]+)>)/ig,"");
+    }
 </script>
 
 
@@ -251,13 +257,6 @@
     if(hours < 10) hours = "0" + hours;
     let minutes = today.getMinutes();
     if(minutes < 10) minutes = "0" + minutes;
-
-    console.log(today);
-    console.log(year);
-    console.log(month);
-    console.log(date);
-    console.log(hours);
-    console.log(minutes);
 
     $('#startDate').val(year + "-" + month + "-" + date);
     $('#startDate').attr("min", year + "-" + month + "-" + date);
@@ -284,6 +283,69 @@
     let repeatDay = $('#repeatDay');
 
 
+    // 종료일자에따라 반복주기 다르게 보여주기
+    $('#endDate').on('change', function(){
+        let start = new Date($('#startDate').val());
+        let end = new Date($('#endDate').val());
+
+        // 매주
+        if((end-start) / (1000 * 24 * 60 * 60) > 7) {
+            $('option[value="STCY01"]').removeAttr("hidden");
+        }else {
+            $('option[value="STCY01"]').attr("hidden", "true");
+        }
+        // 격주
+        if((end-start) / (1000 * 24 * 60 * 60) > 15) {
+            $('option[value="STCY02"]').removeAttr("hidden");
+        }else {
+            $('option[value="STCY02"]').attr("hidden", "true");
+        }
+        // 매달
+        let flag = false;
+        for(let i = start.getMonth()+2; i < end.getMonth()+1; i++) {
+            console.log("start = " + start.getMonth()+2);
+            console.log("i = " + i);
+            console.log("end = " + end.getMonth()+1);
+
+            if(start.getDate() <= new Date(end.getFullYear(), i, 0)) { // 해당 월의 말일
+                flag = true;
+                break;
+            }
+        }
+        if(!flag && start.getMonth() < end.getMonth()  && start.getDate() <= end.getDate()){
+            flag = true;
+        }
+
+        if(flag) {
+            $('option[value="STCY03"]').removeAttr("hidden");
+        }else {
+            $('option[value="STCY03"]').attr("hidden", "true");
+        }
+    })
+
+    // 반복주기가 매주/격주일때 반복요일 출력
+    $('#repeatCycle').on('change', function(){
+        alert('반복주기 선택됨');
+        console.log("this.val = " + $(this).val());
+
+        let cycle = $(this).val();
+        if(cycle === 'STCY01' || cycle === 'STCY02') {
+            $('#formRepeatDay').removeAttr("hidden");
+        }else {
+            $('#formRepeatDay').attr("hidden", "true");
+
+            // 체크박스 없애기
+            let dayList = $('input[class="day"]');
+
+            for(let i = 0; i < dayList.length; i++) {
+                if(dayList[i].checked === true) {
+                    dayList[i].checked = false;
+                }
+            }
+        }
+    })
+
+
     function repeatFunction() {
         let repeatCheck = repeat[0].checked;
 
@@ -294,30 +356,46 @@
         // 체크 false -> 종료일자/반복주기/반복요일 숨기기 (hidden = true)
         formEndDate[0].hidden = !repeatCheck;
         formRepeatCycle[0].hidden = !repeatCheck;
-        formRepeatDay[0].hidden = !repeatCheck;
+        // formRepeatDay[0].hidden = !repeatCheck;
 
         // 정기스터디이면 true
         if(repeatCheck == true) {
             // 기본 데이터 설정
-            // endDate.val(year + "-" + month + "-" + date);
-            endDate.attr("min", year + "-" + month + "-" + date);
+            let end = new Date($('#startDate').val());
+            end.setDate(end.getDate() + 1);
+
+            console.log("end = " + end);
+
+            let endMonth = end.getMonth()+1;
+            if(endMonth < 10) endMonth = "0" + endMonth;
+            let endDt = end.getDate();
+            if(endDt < 10) endDt = "0" + endDt;
+
+
+            let maxEnd = new Date($('#startDate').val());
+            maxEnd.setMonth(maxEnd.getMonth() + 6);
+            console.log("maxEnd = " + maxEnd);
+
+            let maxEndMonth = maxEnd.getMonth()+1;
+            if(maxEndMonth < 10) maxEndMonth = "0" + maxEndMonth;
+            let maxEndDate = maxEnd.getDate();
+            if(maxEndDate < 10) maxEndDate = "0" + maxEndDate;
+
+            endDate.val(end.getFullYear() + "-" + endMonth + "-" + endDt);
+            endDate.attr("min", end.getFullYear() + "-" + endMonth + "-" + endDt);
+
+            // 최대 6개월
+            endDate.attr("max", maxEnd.getFullYear() + "-" + maxEndMonth + "-" + maxEndDate)
             repeatCycle.val('(선택)');
 
-            // 필수 속성 정의
-            endDate.attr("required", "required");
-            // repeatCycle.attr("required", "required");
-            // repeatDay.attr("required", "required");
+            // 필수 속성 정의 -> 유효성 검사
         }
         if(repeatCheck == false) {
             // 정기스터디 취소시 데이터도 모두 지우기
             endDate.val('');
             repeatCycle.val('(선택)');
+            // select도 모두 hidden 처리
             repeatDay.val('');
-
-            // 필수 속성 없애기
-            endDate.removeAttr("required");
-            // repeatCycle.removeAttr("required");
-            // repeatDay.removeAttr("required");
 
             // 요일 체크박스 제거
             let dayList = $('input[class="day"]');
