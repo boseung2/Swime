@@ -161,7 +161,7 @@
         if($('#information').val() == "") {
             alert("상세정보를 입력해주세요");
             return false;
-        } else if($('#information').val().lenth > 400) {
+        } else if($('#information').val().length > 400) {
             alert("상세정보를 400자 이하로 작성해주세요");
             return false;
         }
@@ -169,6 +169,9 @@
         if($('#onOff').val() === 'STOF01') { // 온라인일 경우
             if ($('#onUrl').val() == '') {
                 alert("온라인 링크를 입력해주세요.");
+                return false;
+            } else if(!checkUrl($('#onUrl').val())) {
+                alert("url 형식이 맞지 않습니다.");
                 return false;
             } else if (getByte($('#onUrl').val()) > 300) {
                 alert("온라인 링크 정보가 너무 큽니다.");
@@ -224,6 +227,13 @@
         }
         return byte;
     }
+
+    // url 형식인지 체크( http, https 를 포함하는 형식 )
+    function checkUrl(url) {
+        let expUrl = /^http[s]?\:\/\/./i;
+        return expUrl.test(url);
+    }
+
 </script>
 
 <script type="text/javascript">

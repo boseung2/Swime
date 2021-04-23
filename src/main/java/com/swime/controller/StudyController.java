@@ -42,9 +42,19 @@ public class StudyController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    // 에러페이지
+    @GetMapping("/error")
+    public void error() {
+
+    }
+
     // 스터디 상세조회
     @GetMapping("/get")
-    public void get(long sn, StudyCriteria cri, String userId, Model model) {
+    public String get(long sn, StudyCriteria cri, String userId, Model model) {
+
+        if(userId == "") {
+
+        }
         log.info("스터디 상세조회 cri = " + cri);
         log.info("스터디 조회자 = " + userId);
 
@@ -53,23 +63,36 @@ public class StudyController {
 
         log.info("sendCri = " + sendCri);
 
-        model.addAttribute("study", service.get(sn));
-        model.addAttribute("members", service.getAttendantList(sn));
+        try {
+            StudyVO study = service.get(sn);
+            model.addAttribute("study", study);
+
+            if(study == null) {
+                // 해당스터디가 존재하지 않으면 에러페이지로 이동
+                return "redirect:/study/error";
+            }
+            model.addAttribute("members", service.getAttendantList(sn));
+
+        }catch (Exception e) {
+            // 스터디 정보를 가져오는데 실패하면 에러페이지로 이동
+            return "redirect:/study/error";
+        }
 
         // 로그인한 경우
-        // 찜 여부 가져오기
         StudyParamVO studyParam = new StudyParamVO();
         studyParam.setUserId(userId);
         studyParam.setStdSn(sn);
 
-        model.addAttribute("studyParam", studyParam);
+//        model.addAttribute("studyParam", studyParam);
 
-        // 찜 여부 : null이면 찜 아니면 찜취소
-        log.info("=============================찜 여부 : " + service.getWish(studyParam));
-        model.addAttribute("wish", service.getWish(studyParam));
+//        // 찜 여부 가져오기 : null이면 찜 아니면 찜취소
+//        log.info("=============================찜 여부 : " + service.getWish(studyParam));
+//        model.addAttribute("wish", service.getWish(studyParam));
 
         // 참석 여부 가져오기
         model.addAttribute("attend", service.getAttendant(studyParam));
+
+        return "study/get";
     }
 
     // 스터디 생성 페이지
@@ -86,76 +109,6 @@ public class StudyController {
     public String register(StudyVO study, String userId, StudyCriteria cri, RedirectAttributes rttr) {
 
         log.info("스터디 생성 cri = " + cri);
-        
-        // 유효성 검사
-        // 스터디명 30자 이하
-//        if(study.getName().length() > 30) {
-//            rttr.addFlashAttribute("result", "스터디명은 30자 이하여야합니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 시작/종료날짜 유효성 검사
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        try {
-//            dateFormat.parse(study.getStartDate());
-//        }catch (Exception e) {
-//            rttr.addFlashAttribute("result", "시작 날짜가 유효하지 않습니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 시작일자 < 종료일자인지 확인
-//
-//        // 매주일경우 종료 - 시작 > 7
-//        // 격주일 경우 종료 - 시작 > 14
-//        // 매달일 경우 종료일자가 다음달 같은 날짜 보다 클 때
-//
-//        // 시작/종료시간 유효성 검사
-//        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-//        try {
-//            timeFormat.parse(study.getStartDate());
-//        }catch (Exception e) {
-//            rttr.addFlashAttribute("result", "시작 시간이 유효하지 않습니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//        try {
-//            timeFormat.parse(study.getEndTime());
-//        }catch (Exception e) {
-//            rttr.addFlashAttribute("result", "종료 시간이 유효하지 않습니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 상세정보 400자 이하
-//        if(study.getInformation().length() > 400) {
-//            rttr.addFlashAttribute("result", "스터디명은 400자 이하여야합니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 비용 10자 이하
-//        if(study.getExpense().length() > 10) {
-//            rttr.addFlashAttribute("result", "지참금은 10자 이하여야합니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 온라인일경우 url(300바이트), 오프라인일 경우 장소 id(40바이트) 존재
-//        if ("STOF01".equals(study.getOnOff())) {
-//            if(study.getOnUrl().getBytes(StandardCharsets.UTF_8).length > 300) {
-//                rttr.addFlashAttribute("result", "url이 너무 큽니다.");
-//                return "redirect:/study/get?sn=" + study.getSn();
-//            }
-//        }
-//
-//        if("STOF02".equals(study.getOnOff())) {
-//            if(study.getOnUrl().getBytes(StandardCharsets.UTF_8).length > 40) {
-//                rttr.addFlashAttribute("result", "장소 id가 너무 큽니다.");
-//                return "redirect:/study/get?sn=" + study.getSn();
-//            }
-//        }
-//
-//        // 모집인원 99명까지
-//        if(study.getCapacity() > 99) {
-//            rttr.addFlashAttribute("result", "모집인원은 99명 이하여야합니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
 
         log.info("study onOff = " + study.getOnOff());
 
@@ -327,7 +280,7 @@ public class StudyController {
 
         // 4. get 페이지에서 하트가 바뀌어있어야함
     }
-//
+
 //    // 스터디 참가
 //    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
 //    @ResponseBody

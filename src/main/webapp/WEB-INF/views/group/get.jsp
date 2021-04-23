@@ -204,7 +204,7 @@
             </div>
             <div class="studyModalBody modal-body">정상적으로 처리되었습니다.</div>
             <div class = "modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+<%--                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>--%>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
             </div>
         </div>

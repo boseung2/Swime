@@ -74,7 +74,7 @@
         </div>
         <div class="form-group" id="formUrl" hidden="true">
             <label for="onUrl">온라인 스터디 링크 추가</label>
-            <input type="text" class="form-control" id="onUrl" name="onUrl">
+            <input type="text" class="form-control" id="onUrl" name="onUrl" value="http://">
         </div>
         <div class="form-group" id="formPlace">
             <label for="placeId">스터디 장소 추가</label>
@@ -122,12 +122,15 @@
     })
     function validation() {
 
-        if($('#name').val() == "") {
+        if($('#name').val() == "" || $('#name').val().replaceAll(" ", "").length == 0) {
             alert("스터디명을 입력해주세요");
             return false;
         } else if($('#name').val().length > 30) {
             alert("스터디명을 30자 이하로 작성해주세요");
             return false;
+        }else {
+            let nameTemp = $('#name').val().trim();
+            $('#name').val(nameTemp);
         }
 
         if($('#startDate').val() == "") {
@@ -153,17 +156,23 @@
         }
 
 
-        if($('#information').val() == "") {
+        if($('#information').val() == "" || $('#information').val().replaceAll(" ", "").length == 0) {
             alert("상세정보를 입력해주세요");
             return false;
-        } else if($('#information').val().lenth > 400) {
+        } else if($('#information').val().length > 400) {
             alert("상세정보를 400자 이하로 작성해주세요");
             return false;
+        }else {
+            let infoTemp = $('#information').val().trim();
+            $('#information').val(infoTemp);
         }
 
         if($('#onOff').val() === 'STOF01') { // 온라인일 경우
             if ($('#onUrl').val() == '') {
                 alert("온라인 링크를 입력해주세요.");
+                return false;
+            } else if(!checkUrl($('#onUrl').val())) {
+                alert("url 형식이 맞지 않습니다.");
                 return false;
             } else if (getByte($('#onUrl').val()) > 300) {
                 alert("온라인 링크 정보가 너무 큽니다.");
@@ -218,6 +227,12 @@
             (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
         }
         return byte;
+    }
+
+    // url 형식인지 체크( http, https 를 포함하는 형식 )
+    function checkUrl(url) {
+        let expUrl = /^http[s]?\:\/\/./i;
+        return expUrl.test(url);
     }
 </script>
 

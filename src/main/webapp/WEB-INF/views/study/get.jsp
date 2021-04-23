@@ -153,7 +153,7 @@
                 </div>
                 <div class="modal-body">정상적으로 처리되었습니다.</div>
                 <div class = "modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+<%--                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>--%>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
                 </div>
             </div>
@@ -295,11 +295,15 @@
         $(".remove").on("click", function(e) {
             e.preventDefault();
 
-            actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
-            actionForm.append("<input type='hidden' name = 'representation' value='${study.representation}'>");
-            actionForm.attr("action", "/study/remove");
-            actionForm.attr("method", "post");
-            actionForm.submit();
+            if (confirm('글을 삭제하시겠습니까?')) {
+
+                actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
+                actionForm.append("<input type='hidden' name = 'representation' value='${study.representation}'>");
+                actionForm.attr("action", "/study/remove");
+                actionForm.attr("method", "post");
+                actionForm.submit();
+            }
+
         });
 
         <!-- 스터디 수정 버튼 눌렀을 때-->
