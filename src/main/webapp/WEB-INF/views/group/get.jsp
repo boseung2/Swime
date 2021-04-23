@@ -43,64 +43,69 @@
             <a class="btn btn-primary" href="#" id="heartOn"><i class="fas fa-heart"></i></a>
             </sec:authorize>
 
-            <!-- 모임 찜 -->
-            <script>
-                $(document).ready(function() {
-                    let grpSn = <c:out value="${group.sn}"/>
-                    let userId = null;
-                    <sec:authorize access="isAuthenticated()">
-                    userId = "${pinfo.username}";
-                    </sec:authorize>
-
-                    let groupWish = {
-                        grpSn : grpSn,
-                        userId : userId
-                    };
-
-                    $('#heartOn').hide();
-                    $('#heartOff').show();
-                    groupWishService.get(groupWish, function(result) {
-                        $('#heartOn').show();
-                        $('#heartOff').hide();
-                    })
-
-                    $('#heartOff').on("click", function(e) {
-                        e.preventDefault();
-
-                        groupWishService.add(groupWish, function(result) {
-                            alert(result);
-
-                            $('#heartOff').hide();
-                            $('#heartOn').show();
-                        })
-                    })
-
-                    $('#heartOn').on("click", function(e) {
-                        e.preventDefault();
-
-                        groupWishService.remove(groupWish, function(result) {
-                            alert(result);
-
-                            $('#heartOff').show();
-                            $('#heartOn').hide();
-                        })
-                    })
-                })
-            </script>
-
-
-
-
-
-
-
-
-
-
         </div>
         <!-- /.col-md-4 -->
     </div>
     <!-- /.row -->
+
+    <!-- 모임 참여 -->
+    <script>
+        $(document).ready(function() {
+
+            let grpSnValue = '<c:out value="${group.sn}"/>';
+            let attendUL = $(".attend");
+
+            let userId = null;
+            <sec:authorize access="isAuthenticated()">
+            userId = "${pinfo.username}";
+            </sec:authorize>
+
+            let csrfHeaderName = "${_csrf.headerName}";
+            let csrfTokenValue = "${_csrf.token}";
+
+            // ajax spring security header
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+            });
+
+            showList();
+
+            function showList() {
+                groupAttendService.getList({grpSn:grpSnValue}, function(list) {
+                    let str = "";
+                    if(list == null || list.length == 0) {
+                        attendUL.html("");
+                        return;
+                    }
+
+                    for(let i=0, len=list.length || 0; i<len; i++) {
+                        str += "<li data-sn='"+list[i].sn+"'>";
+                        str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+                        str += "<span><b>"+list[i].name+"</b></span>\t";
+                        str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
+                    }
+
+                    attendUL.html(str);
+
+                    //showRatingPage(ratingCnt);
+                })
+            }
+
+            $("#attendBtn").on("click", function(e) {
+                let attend = {
+                    grpSn : grpSnValue,
+                    userId : userId
+                }
+
+                groupAttendService.add(attend, function(result) {
+                    alert("모임에 참여했습니다.");
+                    showList();
+                    console.log(this);
+                })
+            })
+
+        })
+    </script>
 
     <!-- nav -->
     <div class="topnav">
@@ -253,66 +258,6 @@
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
 <!-- GroupWish Module -->
 <script type="text/javascript" src="/resources/js/groupWish.js"></script>
-
-
-<!-- 모임 참여 -->
-<script>
-    $(document).ready(function() {
-
-        let grpSnValue = '<c:out value="${group.sn}"/>';
-        let attendUL = $(".attend");
-
-        let userId = null;
-        <sec:authorize access="isAuthenticated()">
-        userId = "${pinfo.username}";
-        </sec:authorize>
-
-        let csrfHeaderName = "${_csrf.headerName}";
-        let csrfTokenValue = "${_csrf.token}";
-
-        // ajax spring security header
-        $(document).ajaxSend(function(e, xhr, options) {
-            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-        });
-
-        showList();
-
-        function showList() {
-            groupAttendService.getList({grpSn:grpSnValue}, function(list) {
-                let str = "";
-                if(list == null || list.length == 0) {
-                    attendUL.html("");
-                    return;
-                }
-
-                for(let i=0, len=list.length || 0; i<len; i++) {
-                    str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
-                    str += "<span><b>"+list[i].name+"</b></span>\t";
-                    str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
-                }
-
-                attendUL.html(str);
-
-                //showRatingPage(ratingCnt);
-            })
-        }
-
-        $("#attendBtn").on("click", function(e) {
-            let attend = {
-                grpSn : grpSnValue,
-                userId : userId
-            }
-
-            groupAttendService.add(attend, function(result) {
-                alert("모임에 참여했습니다.");
-                showList();
-                console.log(this);
-            })
-        })
-
-    })
-</script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -949,6 +894,59 @@
             topnav.classList.remove("sticky");
         }
     }
+</script>
+
+
+
+
+
+
+<!-- 모임 찜 -->
+<script>
+    $(document).ready(function() {
+        let grpSn = <c:out value="${group.sn}"/>
+            let userId = null;
+        <sec:authorize access="isAuthenticated()">
+        userId = "${pinfo.username}";
+        </sec:authorize>
+
+        let groupWish = {
+            grpSn : grpSn,
+            userId : userId
+        };
+
+        let heartOn = $('#heartOn');
+        let heartOff = $('#heartOff');
+
+        heartOn.hide();
+        heartOff.show();
+        groupWishService.get(groupWish, function(result) {
+            heartOn.show();
+            heartOff.hide();
+        })
+
+        heartOff.on("click", function(e) {
+            e.preventDefault();
+
+            groupWishService.add(groupWish, function(result) {
+                alert(result);
+
+                heartOff.hide();
+                heartOn.show();
+            })
+        })
+
+        heartOn.on("click", function(e) {
+            e.preventDefault();
+
+            groupWishService.remove(groupWish, function(result) {
+                alert(result);
+
+                heartOff.show();
+                heartOn.hide();
+            })
+        })
+    })
 </script>
 
 

@@ -50,7 +50,7 @@ public class GroupAttendServiceTests {
         vo.setGrpSn(316L);
         vo.setUserId("jungbs3726@naver.com");
         GroupAttendVO groupAttend = service.get(50L);
-        service.ban(groupAttend);
+        //service.ban(groupAttend);
     }
 
     @Test

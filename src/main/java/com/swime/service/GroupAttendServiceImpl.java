@@ -23,6 +23,10 @@ public class GroupAttendServiceImpl implements GroupAttendService{
     @Transactional
     @Override
     public int attend(GroupAttendVO groupAttend) {
+        //if(groupAttendMapper.readByGrpSnUserId(groupAttend) != null) {
+        //    return 0;
+        //}
+
         groupAttend.setGrpRole("GRRO03");
         groupAttend.setStatus("GRUS01");
 
@@ -72,21 +76,25 @@ public class GroupAttendServiceImpl implements GroupAttendService{
         return result;
     }
 
-    @Transactional
     @Override
-    public int ban(GroupAttendVO groupAttend) {
-        groupAttend.setStatus("GRUS03"); // GRUS03 영구추방
-        int result = groupAttendMapper.update(groupAttend);
-        // 해당 모임 가입자 수를 모임정보에 업데이트한다.
-        updateGroupAttendCount(groupAttend.getGrpSn());
-        return result;
-    }
-
-    @Override
-    public int cancelBan(GroupAttendVO groupAttend) {
+    public int ban(Long sn) {
         return 0;
     }
 
+    @Override
+    public int cancelBan(Long sn) {
+        return 0;
+    }
+
+    @Override
+    public int changeManager(Long sn) {
+        return 0;
+    }
+
+    @Override
+    public int changeMember(Long sn) {
+        return 0;
+    }
 //    @Transactional
 //    @Override
 //    public int cancelBan(GroupAttendVO groupAttend) {
@@ -96,11 +104,6 @@ public class GroupAttendServiceImpl implements GroupAttendService{
 //        return result; // GRUS02 탈퇴상태로 바꿈
 //    }
 
-    @Override
-    public int changeRole(GroupAttendVO groupAttend) {
-        groupAttend.setGrpRole("GRRO02"); // GRRO02 운영진
-        return groupAttendMapper.update(groupAttend);
-    }
 
     @Override
     public long getAttendCountByGroupSn(Long grpSn) {
