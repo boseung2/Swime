@@ -39,7 +39,7 @@
         </div>
 
         <div class="form-group">
-            <label for="content">내용</label>
+            <label for="content">내용</label><small id="contentLength">(0/1333)</small>
             <textarea class="form-control" rows="5" id="content" name="content" required></textarea>
         </div>
 
@@ -75,6 +75,9 @@
 </div>
 
 <script>
+    $(document).ready(function(){
+
+
     $("#back").on("click", function(){
         window.history.back();
     });
@@ -85,26 +88,52 @@
         e.preventDefault();
 
         if(!validation()) {
+            console.log('no validataion');
+
             return;
+        }else{
+            console.log('inserting');
+            // alert("제목을 입력해주세요.");
+            // return;
         }
 
         console.log('hi');
-        objForm.submit();
+        //objForm.submit();
 
-    })
+    });
+    //내용이 입력되면 글자 개수 증가
+     $('textarea').keyup(function(){
+            //정규식 숫자 영어 특수문자 한글
+            let inputLength = $(this).val().length;
+            let remain = inputLength++;
 
-
-    function validation(){
-
-        if(getByte($("input[id='title']").val())== "") {
-            alert("제목을 입력해주세요.");
-            return false;
-        }else if(getByte($("input[id='title']").val()) > 200){
-            alert("게시글 제목을 65자 이하로 작성해주세요.");
-            return false;
+        if(inputLength > 0){
+            $('textarea').val($('textarea').val().substring(0,1333));
+            if(remain > 1333){
+                alert("내용 입력을 초과하였습니다.");
+            }
         }
 
-        if(getByte($("textarea[id='content']").val()) == "") {
+
+        $('#contentLength').html('('+remain+'/1333)');
+    });
+
+    /*테스트 결과 register에서 처리해야 할 부분
+    1. 제목 내용 공백(스페이스바)들어가는 것 처리.
+    제목/내용 공백처리 완료.
+    * */
+    function validation(){
+        // $("input[id='title']").val().trim().length == 0
+        // getByte($("input[id='title']").val()) == ""
+        if($("input[id='title']").val().trim().length == 0) {
+
+            return false;
+        }else if(getByte($("input[id='title']").val()) > 200){
+            alert("게시글 제목이 너무 깁니다.");
+            return false;
+        }
+        //getByte($("textarea[id='content']").val()) == ""
+        if($("textarea[id='content']").val().trim().length == 0) {
             alert("내용을 입력해주세요");
             return false;
 
@@ -126,6 +155,9 @@
         }
         return byte;
     }
+
+
+    })//end ready
 </script>
 
 

@@ -236,3 +236,6 @@ span.st_on {
     font-size: 18px;
 
 }
+.fa-heart:before {
+    margin-left: 10px;
+}

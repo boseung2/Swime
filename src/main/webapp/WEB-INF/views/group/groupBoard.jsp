@@ -10,8 +10,8 @@
 <%@include file="../includes/tagLib.jsp" %>
 
 <!-- 게시판  -->
-<hr class="centerHr" id="board">
-<div id="board">
+<%--<hr class="centerHr" id="board">--%>
+<%--<div id="board">--%>
 
     <h4>게시판
         <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
@@ -37,8 +37,8 @@
 
         <div id="boardContent">스프링 초고수만</div>
 
-        <i class='fas fa-comment'>100</i>
-        <i class='fas fa-heart'>100</i>
+        <i class='fas fa-comment'><strong>100</strong></i>
+        <i class='fas fa-heart'><strong>100</strong></i>
     </div>
 
 </div><!--end board-->
@@ -102,6 +102,11 @@
                     //필독 (모임장)나중에 데이터 넣어야함.
                     for(let i = 0, len = list.length || 0; i < len; i++){
 
+                        let dat = "";
+                        //제목 글자가40이상이면 ...찍는다.
+                        if(list[i].title.length >= 40 || list[i].content.length >=40){
+                            dat = "...";
+                        }
                         str += "<div class='boardHeader'>";
                         str += "<span>"+list[i].sn+"번"+"</span>";
                         str += "<span id='boardNotice'>"+"[필독]"+"</span>";
@@ -112,12 +117,14 @@
                         // str += "<span id='grpBrdRole'>"+list[i].grpRole+"</span>";
                         str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";
                         str += "</div>";
-                        str += "<a href='/board/get?sn="+list[i].sn+ "' class='boardMove'><span>"+list[i].title+"</span></a>";
-                        str += "<div id='boardContent'>"+list[i].content+"</div>";
+
+                        str += "<a href='/board/get?sn="+list[i].sn+ "' class='boardMove'><span>"+list[i].title.substring(0,40)+dat+"</span></a>";
+
+                        str += "<div id='boardContent'>"+list[i].content.substring(0,40)+dat+"</div>";
                         str += "<i class='fas fa-comment'>"+list[i].replyCnt+"</i>";
                         str += "<i class='fas fa-heart'>"+list[i].likeCnt+"</i>";
                         str += "</div><hr>";
-                        console.log("dddddddddddddddd"+list[i].content);
+                        console.log("boardList......."+list[i].content);
                     }
                     boardUL.html(str);
 

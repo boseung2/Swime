@@ -8,13 +8,13 @@
 
 <div class="container">
     <h2>게시글 수정하기</h2>
-    <hr/>action="/board/modify"
+
     <form id="modifyForm" role="form"  method="post">
 
 
         <div class="form-group">
-            <!--<label for="name">아이디</label>-->
-            <input type="hidden" class="form-control" id="name" name="name"
+            <label for="name">아이디</label>
+            <input type="text" class="form-control" id="name" name="name"
                    value="${board.userId}" readonly="readonly">
         </div>
 
@@ -97,7 +97,6 @@
                 formObj.submit();
             } else if (operation === 'list') {
                 console.log("list !!!!!!!!!!!!!!");
-                // $(location).attr('href', 'www.naver.com');
                 formObj.attr("action", '/group/get').attr("method", "get");
                 formObj.find("input[name='sn']").remove();
                 formObj.find("input[name='name']").remove();

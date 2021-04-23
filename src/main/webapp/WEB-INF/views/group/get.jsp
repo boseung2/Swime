@@ -137,10 +137,11 @@
 
     <!-- 게시판 -->
     <hr class="centerHr" id="board">
-    <div>
-        <h4>게시판</h4>
-    </div>
+<%--    <div>--%>
+<%--        <h4>게시판</h4>--%>
+<%--    </div>--%>
     <%@include file="groupBoard.jsp"%>
+
     <!-- container -->
 
     <!-- Call to Action Well -->
