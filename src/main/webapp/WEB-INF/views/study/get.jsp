@@ -39,7 +39,13 @@
             <p>${study.attendants} / ${study.capacity}</p>
             <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디</p></c:if>
             <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
-            <p>${study.expense}</p>
+
+            <c:choose>
+                <c:when test="${study.expense == '(선택)'}"></c:when>
+                <c:when test="${study.expense == '없음' || study.expense =='추후공지'}"><p>지참금 : ${study.expense}</p></c:when>
+                <c:otherwise><p>${study.expense}원</p></c:otherwise>
+            </c:choose>
+
 
             <div class="wishButton"></div>
 

@@ -82,7 +82,13 @@
         </div>
         <div class="form-group">
             <label for="expense">지참금</label>
-            <input type="text" class="form-control" id="expense" name="expense">
+            <select class="form-control" id="expenseSelect" name="expenseSelect">
+                <option>(선택)</option>
+                <option value="없음">없음</option>
+                <option value="추후공지">추후공지</option>
+                <option value="직접입력">직접입력</option>
+            </select>
+            <input type="text" class="form-control" id="expense" name="expense" placeholder="원 단위로 숫자만 입력해주세요." hidden="true">
         </div>
         <div class="form-group">
             <label for="capacity">모집 인원</label>
@@ -104,6 +110,21 @@
 
 
 <%@include file="../includes/footer.jsp" %>
+
+<script>
+    $('#expenseSelect').on("change", function(){
+        console.log("expense select clicked = " + $(this).val());
+
+        if($(this).val() === '직접입력') {
+            $('#expense').val("");
+            $('#expense').removeAttr('hidden');
+        }else {
+            // 직접입력이 아닐 경우
+            $('#expense').attr('hidden', 'true');
+            $('#expense').val($(this).val());
+        }
+    })
+</script>
 
 <!-- 유효성검사 -->
 <script>
@@ -140,6 +161,32 @@
         if($('#startTime').val() == "") {
             alert("시작시간을 입력해주세요");
             return false;
+        }
+
+        // 정기스터디이면
+        if($('#repeat').is(":checked")) {
+            // 종료일자 필수
+            if($('#endDate').val() == "") {
+                alert("종료 일자를 선택해주세요.")
+                return false;
+            }else {
+                let date1 = new Date($('#startDate').val());
+                let date2 = new Date($('#endDate').val());
+
+                if(date1 > date2) {
+                    alert('시작 일자가 종료 일자보다 빠를 수 없습니다.');
+                    return false;
+                }
+            }
+
+            // 매주/격주일때 반복요일 하나는 필수
+            if($('#repeatCycle').val() =='STCY01' || $('#repeatCycle').val() =='STCY02') {
+                if($('#repeatDay').val().length < 1) {
+                    alert('반복요일을 선택해주세요.');
+                    return false;
+                }
+            }
+
         }
 
         if($('#endTime').val() == "") {
@@ -190,8 +237,23 @@
         }
 
         if($('#expense').val().length > 10) {
-            alert("지참금 정보가 너무 큽니다.");
+            alert("지참금 정보는 10자 이내여야합니다.");
             return false;
+        }else if($('#expenseSelect').val() === '직접입력') {
+            let str = $('#expense').val();
+            let flag = true;
+
+            for(let i = 0; i < str.length; i ++) {
+                if(isNaN(parseInt(str[i]))) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if(flag == false) {
+                alert("지참금에 숫자만 입력해주세요.");
+                return false;
+            }
         }
 
         if($('#capacity').val() == '') {
@@ -202,7 +264,10 @@
             let flag = true;
 
             for(let i = 0; i < str.length; i ++) {
-                if(isNaN(parseInt(str[i]))) flag = false;
+                if(isNaN(parseInt(str[i]))) {
+                    flag = false;
+                    break;
+                }
             }
 
             if(flag == false) {
@@ -325,7 +390,7 @@
 
     // 반복주기가 매주/격주일때 반복요일 출력
     $('#repeatCycle').on('change', function(){
-        alert('반복주기 선택됨');
+        // alert('반복주기 선택됨');
         console.log("this.val = " + $(this).val());
 
         let cycle = $(this).val();
@@ -394,7 +459,13 @@
             // 정기스터디 취소시 데이터도 모두 지우기
             endDate.val('');
             repeatCycle.val('(선택)');
+
             // select도 모두 hidden 처리
+            $('option[value="STCY01"]').attr('hidden', 'true');
+            $('option[value="STCY02"]').attr('hidden', 'true');
+            $('option[value="STCY03"]').attr('hidden', 'true');
+
+            // 요일 값 제거
             repeatDay.val('');
 
             // 요일 체크박스 제거
@@ -405,6 +476,8 @@
                     dayList[i].checked = false;
                 }
             }
+
+            $('#formRepeatDay').attr('hidden', 'true');
         }
     }
 
