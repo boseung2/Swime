@@ -188,7 +188,7 @@
 
         let wishUL = $('.wishButton');
 
-        if(userId !== '') {
+        if(userId !== '') { // 로그인 되어있으면 찜버튼 출력
             getStudyWish();
         }
 
