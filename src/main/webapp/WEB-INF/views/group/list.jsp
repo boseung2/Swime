@@ -153,3 +153,6 @@
         return tag;
     }
 </script>
+
+
+<%@include file="../includes/footer.jsp" %>
