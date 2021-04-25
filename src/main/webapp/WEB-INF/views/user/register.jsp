@@ -197,5 +197,5 @@
 
 </script>
 
-
+<link href="/resources/css/UserFooterPos.css" rel="stylesheet">
 <%@include file="../includes/footer.jsp" %>

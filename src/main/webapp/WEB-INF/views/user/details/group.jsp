@@ -51,7 +51,7 @@
                                 <div style="display: flex; height: 20px;margin-top: 10px">
                                     <p><i class="fas fa-users"></i> ${GroupVo.attendCount}명</p>
 <%--                                    <p class="card-text ratingPlace" id="stars1323" data-rating='' data-ratingcount="1">(스타)</p>--%>
-                                    <p class="card-text ratingPlace" id="stars${GroupVo.sn}" data-rating='${GroupVo.rating}' data-ratingcount="${GroupVo.ratingCount}"></p>
+                                    <p class="card-text ratingPlace" id="stars${GroupVo.sn}" data-rating='${GroupVo.rating}' data-ratingcount="${GroupVo.ratingCount}">(스타)</p>
                                 </div>
 <%--                            </div>--%>
 <%--                        </div>--%>
@@ -125,12 +125,13 @@
 
 <endPoint id="end" style="width: 0;height: 0;float: left;"/>
 
+<br>---------asdsadasdsd-------------
 <c:forEach var="GroupVo" items="${ownerList}">
     ${GroupVo}
 </c:forEach>
 
 <script>
     if($("#end")[0] !== undefined){
-        $("#height").css("height", $("#end").offset().top - $("#height").offset().top);
+        // $("#height").css("height", $("#end").offset().top - $("#height").offset().top);
     }
 </script>
