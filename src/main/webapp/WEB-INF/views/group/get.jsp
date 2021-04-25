@@ -37,12 +37,12 @@
                         <a class="btn btn-danger" href="#" id="withdrawBtn">모임 탈퇴</a>
                     </c:if>
                     <c:if test="${pinfo.username eq group.userId}">
-                        <button data-oper="modify" class="btn btn-primary">모임 수정</button>
+                        <button data-oper="modify" class="btn btn-secondary">모임 수정</button>
                     </c:if>
                 </sec:authorize>
 
             <sec:authorize access="isAuthenticated()">
-            <a class="btn btn-primary" href="#" id="heartOff"><i class="far fa-heart"></i></a>
+            <a class="btn btn-outline-primary" href="#" id="heartOff"><i class="far fa-heart"></i></a>
             <a class="btn btn-primary" href="#" id="heartOn"><i class="fas fa-heart"></i></a>
             </sec:authorize>
 
