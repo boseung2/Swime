@@ -78,12 +78,14 @@
             let attendBtn = $('#attendBtn');
             let withdrawBtn = $('#withdrawBtn');
 
-            attendBtn.show();
-            withdrawBtn.hide();
             groupAttendService.get(attend, function(result) {
-                alert('hi');
-                attendBtn.hide();
-                withdrawBtn.show();
+                if(result.status === 'GRUS01') {
+                    attendBtn.hide();
+                    withdrawBtn.show();
+                } else {
+                    attendBtn.show();
+                    withdrawBtn.hide();
+                }
             })
 
             showList();
