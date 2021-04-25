@@ -33,7 +33,9 @@
 
                 <sec:authorize access="isAuthenticated()">
                     <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
-                    <a class="btn btn-danger" href="#" id="withdrawBtn">모임 탈퇴</a>
+                    <c:if test="${pinfo.username ne group.userId}">
+                        <a class="btn btn-danger" href="#" id="withdrawBtn">모임 탈퇴</a>
+                    </c:if>
                     <c:if test="${pinfo.username eq group.userId}">
                         <button data-oper="modify" class="btn btn-primary">모임 수정</button>
                     </c:if>
@@ -78,6 +80,8 @@
             let attendBtn = $('#attendBtn');
             let withdrawBtn = $('#withdrawBtn');
 
+            attendBtn.show();
+            withdrawBtn.hide();
             groupAttendService.get(attend, function(result) {
                 if(result.status === 'GRUS01') {
                     attendBtn.hide();
