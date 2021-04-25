@@ -348,7 +348,7 @@
     let repeatDay = $('#repeatDay');
 
 
-    // 종료일자에따라 반복주기 다르게 보여주기
+    // 종료일자 선택될때마다 반복주기 다르게 보여주기
     $('#endDate').on('change', function(){
         let start = new Date($('#startDate').val());
         let end = new Date($('#endDate').val());
@@ -516,6 +516,7 @@
         if(on === true) { // 온라인
             onOff.val("STOF01");
             console.log("온오프 = " + onOff.val());
+            $('#onUrl').val('http://');
 
             $('#onUrl').attr("required", "required");
             $('#placeId').removeAttr("required");
