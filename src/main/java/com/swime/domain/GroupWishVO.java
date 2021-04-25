@@ -6,5 +6,5 @@ import lombok.Data;
 public class GroupWishVO {
     private long sn;
     private long grpSn;
-    private String userId = "";
+    private String userId ;
 }

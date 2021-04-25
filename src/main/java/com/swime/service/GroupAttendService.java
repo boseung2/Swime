@@ -18,13 +18,16 @@ public interface GroupAttendService {
     int withdraw(Long sn);
 
     // 모임에서 영구 추방한다.
-    int ban(GroupAttendVO groupAttend);
+    int ban(Long sn);
 
     // 모임 영구 추방을 취소한다.
-    int cancelBan(GroupAttendVO groupAttend);
+    int cancelBan(Long sn);
 
-    // 모임 역할을 수정한다.
-    int changeRole(GroupAttendVO groupAttend);
+    // 운영진으로 승급한다.
+    int changeManager(Long sn);
+
+    // 모임원으로 강등한다.
+    int changeMember(Long sn);
 
     // 해당 모임 참가인원을 구한다.
     long getAttendCountByGroupSn(Long grpSn);
