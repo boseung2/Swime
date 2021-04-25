@@ -2,8 +2,14 @@
          pageEncoding="UTF-8"%>
 
 <%@include file="../includes/header.jsp" %>
+
+
+
 <c:set var="error" value="${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'] != null ? '유효하지 않은 접근입니다<br>아이디와 비밀번호를 확인하세요' : null}"/>
 <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"></c:remove>
+
+
+
 
 <sec:authorize access="isAuthenticated()">
     <c:set var="isAuthenticated" value="true"/>
@@ -105,5 +111,5 @@
 
 </script>
 
-
+<link href="/resources/css/UserFooterPos.css" rel="stylesheet">
 <%@include file="../includes/footer.jsp" %>
