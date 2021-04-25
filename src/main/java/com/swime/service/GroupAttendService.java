@@ -9,13 +9,17 @@ public interface GroupAttendService {
     //모임에 가입한다.
     int attend(GroupAttendVO groupAttend);
 
+    // sn 으로 해당 멤버를 가져온다.
     GroupAttendVO get(Long sn);
+
+    // grpSn, userId 로 해당 멤버를 가져온다.
+    GroupAttendVO readByGrpSnUserId(GroupAttendVO groupAttend);
 
     // 해당 모임 가입인원들을 보여준다.
     List<GroupAttendVO> getList(Long grpSn);
 
     // 모임에서 탈퇴한다.
-    int withdraw(Long sn);
+    int withdraw(GroupAttendVO groupAttend);
 
     // 모임에서 영구 추방한다.
     int ban(Long sn);

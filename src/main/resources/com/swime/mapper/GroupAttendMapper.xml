@@ -17,6 +17,7 @@
         from tgrp_list l, tuser u
         where l.user_id = u.id
         and l.grp_sn = #{grpSn}
+        and l.status = 'GRUS01'
         order by l.sn asc
     </select>
 
@@ -33,6 +34,7 @@
         select count(*)
         from tgrp_list
         where grp_sn = #{grpSn}
+        and status = 'GRUS01'
     </select>
 
     <select id="read" resultType="com.swime.domain.GroupAttendVO">

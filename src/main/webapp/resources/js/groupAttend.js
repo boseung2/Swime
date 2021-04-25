@@ -38,13 +38,27 @@ let groupAttendService = (function() {
         })
     }
 
-    function withdraw(attend, callback, error) {
+    function get(param, callback, error) {
+        let grpSn = param.grpSn;
+        let userId = param.userId;
 
-        console.log("sn:" + attend.sn);
+        $.getJSON("/groupAttend/" + grpSn + "/" + userId + ".json",
+            function(data) {
+            if(callback) {
+                callback(data);
+            }
+            }).fail(function(xhr, status, err) {
+                if(error) {
+                    error();
+                }
+        })
+    }
+
+    function withdraw(attend, callback, error) {
 
         $.ajax({
             type : 'put',
-            url : '/groupAttend/withdraw/' + attend.sn,
+            url : '/groupAttend/withdraw',
             data : JSON.stringify(attend),
             contentType : "application/json; charset=utf-8",
             success : function(result, status, xhr) {
@@ -62,6 +76,7 @@ let groupAttendService = (function() {
     return {
             add : add,
             getList : getList,
+            get : get,
             withdraw : withdraw
     };
 
