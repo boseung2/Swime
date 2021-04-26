@@ -13,7 +13,7 @@
     <select id="ownerList" resultType="com.swime.domain.GroupVO">
         SELECT sn, category, name, user_id, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, upd_date
         from tgrp
-        where user_id = #{id}
+        where user_id = #{id} and status != 'GRST03'
     </select>
 
     <select id="joinList" resultType="com.swime.domain.GroupVO">
