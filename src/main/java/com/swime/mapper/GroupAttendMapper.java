@@ -15,6 +15,9 @@ public interface GroupAttendMapper {
     // 모임페이지에서 참여한 인원들을 보여준다.
     List<GroupAttendVO> getList(Long grpSn);
 
+    // 멤버관리페이지에서 참여한 인원 + 영구정지 인원들을 보여준다.
+    List<GroupAttendVO> getListWithBan(Long grpSn);
+
     // 모임 역할, 상태 변화를 수정한다.
     int update(GroupAttendVO groupAttend);
 

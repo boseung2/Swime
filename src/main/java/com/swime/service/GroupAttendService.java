@@ -18,6 +18,8 @@ public interface GroupAttendService {
     // 해당 모임 가입인원들을 보여준다.
     List<GroupAttendVO> getList(Long grpSn);
 
+    List<GroupAttendVO> getListWithBan(Long grpSn);
+
     // 모임에서 탈퇴한다.
     int withdraw(GroupAttendVO groupAttend);
 
@@ -29,7 +31,7 @@ public interface GroupAttendService {
     int changeManager(Long sn);
 
     // 모임원으로 강등한다.
-    int cancleManager(Long sn);
+    int cancelManager(Long sn);
 
     // 모임에서 영구 추방한다.
     int banPermanent(Long sn);
