@@ -11,6 +11,7 @@ let replyService = (function() {
             data: JSON.stringify(reply),
             contentType: "application/json; charset=utf-8",
             success: function (result, status, xhr) {
+                console.log("boardReplyJs : "+ result);
                 if (callback) {
                     callback(result);
                 }

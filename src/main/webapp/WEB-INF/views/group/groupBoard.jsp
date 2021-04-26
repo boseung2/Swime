@@ -20,30 +20,28 @@
                 글쓰기
             </button>
         </sec:authorize>
-    </h4>
+    </h4><hr>
 
 
     <div class="boardHeader">
-        <span>1번</span>
-        <span id="boardNotice">[필독]</span>
-        <br>
+<%--        <span>1번</span>--%>
+<%--        <span id="boardNotice">[필독]</span>--%>
+<%--        <br>--%>
 
-        <div id="boardDivBox">
-            <span><img class="avatar" src="../../../resources/img/img_avatar2.png" alt="error"></span>
-            <span id="boardName">이민재</span>
-            <%--                <span id="grpBrdRole">(모임장)</span>--%>
-            <span id="boardRegDate">2021-10-10</span>
-        </div>
+<%--        <div id="boardDivBox">--%>
+<%--            <span><img class="avatar" src="../../../resources/img/img_avatar2.png" alt="error"></span>--%>
+<%--            <span id="boardName">이민재</span>--%>
+<%--            &lt;%&ndash;                <span id="grpBrdRole">(모임장)</span>&ndash;%&gt;--%>
+<%--            <span id="boardRegDate">2021-10-10</span>--%>
+<%--        </div>--%>
 
-        <span>스프링</span>
+<%--        <span>스프링</span>--%>
 
-        <div id="boardContent">스프링 초고수만</div>
+<%--        <div id="boardContent">스프링 초고수만</div>--%>
 
-        <i class='fas fa-comment'><strong>100</strong></i>
-        <i class='fas fa-heart'><strong>100</strong></i>
-    </div>
-
-</div><!--end board-->
+<%--        <i class='fas fa-comment'><strong>100</strong></i>--%>
+<%--        <i class='fas fa-heart'><strong>100</strong></i>--%>
+    </div><!--end board-->
 
 <!--게시판 페이징 처리 -->
 <div class="boardPageFooter panel-footer">

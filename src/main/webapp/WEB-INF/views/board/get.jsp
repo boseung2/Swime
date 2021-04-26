@@ -85,11 +85,11 @@
 
             <div class="form-group" style="display: inline-block">
                 <label>댓글</label>
-                <label><c:out value="${board.replyCnt}"/> </label>
+                <label id="replyCnt"><c:out value="${board.replyCnt}"/> </label>
             </div>
 
             <div id="likeBundle" class="form-group" style="display: inline-block">
-                <i id="likeCnt1" class="far fa-heart" style='font-size:20px;color:red'></i>
+                <i id="likeCnt1" class="fa-heart" style='font-size:20px;color:red'></i>
             </div>
 
                 <label>좋아요</label>
@@ -344,6 +344,8 @@
 
         //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
 
+
+
         //댓글 수정
         $(".chat").on("click", "button[id='replyModifyBtn']", function(e){
             console.log("modify Clicked");
@@ -405,6 +407,8 @@
 
                 replyService.remove(sn, function(result){
                     console.log(result);
+                    console.log(result.getElementsByTagName("Integer"));
+                    document.getElementById("replyCnt").innerHTML = result.getElementsByTagName("Integer")[0].textContent;
                     showList(1);
                 });
             }
@@ -423,7 +427,10 @@
 
             console.log("reply : " + JSON.stringify(reply));
 
-            replyService.add(reply, function(){
+            replyService.add(reply, function(result){
+                console.log(result.getElementsByTagName("Integer"));
+                document.getElementById("replyCnt").innerHTML = result.getElementsByTagName("Integer")[0].textContent;
+
                 alert('댓글이 달렸습니다.');
                 $("textarea[id='replyComment']").val('');
                 showList(1);
@@ -466,20 +473,21 @@
             });
         } // end showlist
 
-        let like = ${board.likeCnt};
-        console.log("like : "+like);
+        // 하트 초기화
+        getBoardLike();
+
         function getBoardLike(){
             console.log("getBoardLike 호출..........")
             boardLikeService.getLike({brdSn : snValue, userId : userId},function(result){
 
-               let str = "";
 
                console.log("brdSn : " + snValue);
                console.log("userId : " + userId);
                console.log("likeResult : "+ result);
 
-               console.log(${board.likeCnt});
-               //$("#likeCnt").val(${board.likeCnt});
+
+
+               // $("#likeCnt").val();
                if(result === "notExist"){
                    //빈하트 r
                    console.log("empty heart");
@@ -498,6 +506,12 @@
 
             });
 
+        }
+
+        function updateLikeCnt(BoardLikeCnt){
+            console.log(BoardLikeCnt.getElementsByTagName("Integer")[0].textContent);
+            //좋아요 개수 동적으로 변경
+            document.getElementById("likeCnt").innerHTML = BoardLikeCnt.getElementsByTagName("Integer")[0].textContent;
         }
 
         <%--let test = '${isLike}';--%>
@@ -528,7 +542,10 @@
             boardLikeService.add(boardLike, function(result){
                console.log("result : " + result);
 
+               // 하트 채워짐 여부
                getBoardLike();
+               // 좋아요 갯수 보여주기
+               updateLikeCnt(result);
             });
 
             // boardLikeService.remove(boardLike, function(){

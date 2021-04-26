@@ -26,16 +26,32 @@ public class ReplyController {
     //생성
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/new")
-    public ResponseEntity<String> create(@RequestBody ReplyVO vo){
+    public ResponseEntity<Integer> create(@RequestBody ReplyVO vo){
 
         log.info("ReplyVO: " + vo);
 
         int insertCount = service.register(vo);
 
         log.info("Reply InsertCount: " + insertCount);
-
+        log.info("registerReplyCnt : "+service.getReplyCnt(vo.getBrdSn()));
+        //string success
         return insertCount == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
+                ? new ResponseEntity<>(service.getReplyCnt(vo.getBrdSn()), HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //댓글 삭제
+    @DeleteMapping(value="/{sn}")
+    public ResponseEntity<Integer> remove(@PathVariable("sn") Long sn){
+        log.info("remove");
+
+        //댓글 개수를 보낼 거임.
+        //ReplyVO reply = new ReplyVO();
+
+        log.info("replyCnt: " + service.getReplyCnt(sn));
+
+        return service.remove(sn) == 1
+                ? new ResponseEntity<>(service.getReplyCnt(sn), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     //특정 댓글 조회
@@ -58,15 +74,6 @@ public class ReplyController {
         return new ResponseEntity<>(service.getList(cri, brdSn), HttpStatus.OK);
     }
 
-    //댓글 삭제
-    @DeleteMapping(value="/{sn}")
-    public ResponseEntity<String> remove(@PathVariable("sn") Long sn){
-        log.info("remove");
-
-        return service.remove(sn) == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
     //댓글 수정 Long
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},

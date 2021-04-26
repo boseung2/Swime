@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import java.util.HashMap;
+import java.util.Map;
 
 //@RestController
 @Controller
@@ -193,7 +195,7 @@ public class BoardController {
     }
 
     @PostMapping("/createLike")
-    public ResponseEntity<String> createLike(@RequestBody BoardLikeVO boardLike) {
+    public ResponseEntity<Integer> createLike(@RequestBody BoardLikeVO boardLike) {
 
         log.info("boardLikeVO : " + boardLike);
         log.info("getBrdSn : " + boardLike.getBrdSn());
@@ -206,17 +208,17 @@ public class BoardController {
 
        log.info("getBoardLike : "+getBoardLike);
 
-
        //좋아요가 존재하면 삭제한다.
        if(boardLikeService.read(getBoardLike) != null){
            return boardLikeService.remove(boardLike.getBrdSn(), boardLike.getUserId()) == 1
-                   ? new ResponseEntity<>("removeLike",HttpStatus.OK)
-                   : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                   //좋아요 개수를 보낸다.
+                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
+                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }else{
            //좋아요가 존재하지 않으면 등록한다.
            return boardLikeService.register(boardLike) == 1
-                   ? new ResponseEntity<>("registerLike",HttpStatus.OK)
-                   : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
+                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }
 
     }
