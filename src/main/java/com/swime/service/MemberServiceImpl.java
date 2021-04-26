@@ -21,8 +21,8 @@ public class MemberServiceImpl implements MemberService{
     @Setter(onMethod_ = @Autowired)
     private MemberMapper mapper;
 
-    //@Setter(onMethod_ = @Autowired)
-    //private PasswordEncoder passwordEncoder;
+    @Setter(onMethod_ = @Autowired)
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -168,7 +168,7 @@ public class MemberServiceImpl implements MemberService{
 
         if(!vo.getPassword().equals("")){
             System.out.println("비밀번호 변경o");
-            //memberVO.setPassword(passwordEncoder.encode(vo.getPassword()));
+            memberVO.setPassword(passwordEncoder.encode(vo.getPassword()));
         }
         else if(vo.getPassword().equals("") || vo.getPassword() == null){
             System.out.println("비밀번호 변경x");
