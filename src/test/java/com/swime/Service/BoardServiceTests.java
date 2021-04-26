@@ -37,7 +37,7 @@ public class BoardServiceTests {
 
         //board.setSn(142L);
         board.setGrpSn(720L);
-        board.setUserId("boseung@naver.com");
+        board.setUserId("toywar94@gmail.com");
         //board.setUserName("새로운 name");
         board.setTitle("자바 고수만 오세요333");
         board.setContent("자바 고수만요~~");
@@ -46,6 +46,7 @@ public class BoardServiceTests {
         board.setStatus("BOST01");
         int result = service.register(board);
         log.info("result" + result);
+
         Assert.assertTrue(result == 2);
 
         log.info("생성된 게시물 번호: " + board.getSn());

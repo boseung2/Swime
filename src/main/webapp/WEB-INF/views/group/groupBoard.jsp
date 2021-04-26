@@ -116,7 +116,7 @@
                         str += "<div id='boardDivBox'>";
                         str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
                         str += "<span id='boardName'>"+list[i].name+"</span>";
-                        // str += "<span id='grpBrdRole'>"+list[i].grpRole+"</span>";
+                        // str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
                         str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";
                         str += "</div>";
 

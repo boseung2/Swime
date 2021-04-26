@@ -4,6 +4,7 @@ import com.swime.domain.BoardLikeVO;
 import com.swime.service.BoardLikeService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,8 @@ public class BoardLikeServiceTests {
         BoardLikeVO boardLike = new BoardLikeVO();
 
         //boardLike.setLikeSn(44L);
-        boardLike.setBrdSn(25L);
-        boardLike.setUserId("boseung@naver.com");
+        boardLike.setBrdSn(212L);
+        boardLike.setUserId("toywar94@gmail.com");
 
         service.register(boardLike);
 
@@ -43,7 +44,6 @@ public class BoardLikeServiceTests {
 
 
     }
-
 
     @Test
     public void testRemove(){
@@ -55,5 +55,19 @@ public class BoardLikeServiceTests {
     @Test
     public void testGetBoardLikeCnt(){
         log.info("getBoardCounting: " + service.getBoardLikeCnt(1L));
+    }
+
+
+    @Test
+    public void testRead(){
+        BoardLikeVO boardLike = new BoardLikeVO();
+        boardLike.setBrdSn(332L);
+        boardLike.setUserId("toywar94@gmail.com");
+
+        BoardLikeVO like = service.read(boardLike);
+        log.info(like);
+
+        //Assert.assertTrue(like == null && like.getBrdSn() == 332L && "toywar94@gmail.com".equals(like.getUserId()));
+        Assert.assertTrue(like != null && like.getBrdSn() == 332L && "toywar94@gmail.com".equals(like.getUserId()));
     }
 }

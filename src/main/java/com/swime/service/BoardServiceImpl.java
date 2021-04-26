@@ -46,8 +46,6 @@ public class BoardServiceImpl implements BoardService{
         //게시판 내용(content)수정
         int count2 = mapper.updateContent(board);
 
-
-
         return mapper.update(board) == 1;
     }
 

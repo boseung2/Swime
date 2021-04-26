@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+
 //@RestController
 @Controller
 //@RequestMapping("/board")
@@ -53,6 +55,8 @@ public class BoardController {
     public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
         log.info(">>>>>>>>>>>>>  " + grpSn);
         BoardCriteria cri = new BoardCriteria(page, 10);
+        log.info("cri>>>>>>>>>>"+cri);
+
         GroupBoardPageDTO list = service.getListWithPaging(cri, grpSn);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -107,9 +111,9 @@ public class BoardController {
         log.info("/get or modify");
         model.addAttribute("board", service.get(sn));
         model.addAttribute("reply", replyService.get(sn));
-        //좋아요 처리 나중에 다시 하기----------
-        model.addAttribute("isLike", true);
-        model.addAttribute("count", boardLikeService.getBoardLikeCnt(1L));
+        //좋아요 처리 나중에 다시 하기--------
+//        model.addAttribute("isLike", true);
+//        model.addAttribute("count", boardLikeService.getBoardLikeCnt(1L));
 
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
 
@@ -127,6 +131,8 @@ public class BoardController {
 
         if (service.modify(board)) {
             rttr.addFlashAttribute("result", "success");
+        }else{
+            //fail처리
         }
 
         rttr.addAttribute("pageNum", cri.getPageNum());
@@ -140,7 +146,7 @@ public class BoardController {
                          RedirectAttributes rttr) {
 
         log.info("remove: " + sn);
-        //변수명 겹쳐서 모달창 다중으로 나온 것.
+
         if (service.remove(sn)) {
             rttr.addFlashAttribute("boardResult", "removeSuccess");
         }else{
@@ -154,19 +160,81 @@ public class BoardController {
 
     }
 
-    //좋아요 기능 구현
-    @PostMapping("/clickLike")
-    public int like(@RequestParam("brdSn") Long brdSn, @RequestParam("userId") String userId){
+    //좋아요 기능 구현중---
+    @GetMapping(value = "/like/{brdSn}/{userId}")
+    public ResponseEntity<String> getLike(@PathVariable("brdSn") long brdSn,
+                                          @PathVariable("userId") String userId){
 
-        BoardLikeVO boardLike = new BoardLikeVO();
+        BoardLikeVO getBoardLike = new BoardLikeVO();
+        getBoardLike.setBrdSn(brdSn);
+        getBoardLike.setUserId(userId);
 
-        boardLike.setBrdSn(brdSn);
-        boardLike.setUserId(userId);
+        log.info("getBoardLike : " + getBoardLike);
 
-        return boardLikeService.register(boardLike);
+        BoardLikeVO boardLike = boardLikeService.read(getBoardLike);
 
+        log.info("boardLike : " + boardLike);
+
+        // 좋아요가 없으면 빈하트
+        // 있으면 채워진 하트
+        if (boardLike == null){
+            return new ResponseEntity<>("notExist",HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("exist", HttpStatus.OK);
+        }
     }
+
+    @PostMapping("/createLike")
+    public ResponseEntity<String> createLike(@RequestBody BoardLikeVO boardLike) {
+
+        log.info("boardLikeVO : " + boardLike);
+        log.info("getBrdSn : " + boardLike.getBrdSn());
+        log.info("getUserId : " + boardLike.getUserId());
+
+        //좋아요 누른 게시물 번호, 유저 아이디를 가져온다.
+       BoardLikeVO getBoardLike = new BoardLikeVO();
+       getBoardLike.setBrdSn(boardLike.getBrdSn());
+       getBoardLike.setUserId(boardLike.getUserId());
+
+       log.info("getBoardLike : "+getBoardLike);
+
+
+       //좋아요가 존재하면 삭제한다.
+       if(boardLikeService.read(getBoardLike) != null){
+           return boardLikeService.remove(boardLike.getBrdSn(), boardLike.getUserId()) == 1
+                   ? new ResponseEntity<>("removeLike",HttpStatus.OK)
+                   : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+       }else{
+           //좋아요가 존재하지 않으면 등록한다.
+           return boardLikeService.register(boardLike) == 1
+                   ? new ResponseEntity<>("registerLike",HttpStatus.OK)
+                   : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+//        int likeCreateCount = boardLikeService.register(boardLike);
+//        log.info("BoardLikeCount : " + likeCreateCount);
+//        return likeCreateCount == 1
+//                ? new ResponseEntity<>("success", HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+//    @PostMapping("/removeLike")
+//    public ResponseEntity<String> removeLike(@RequestParam("brdSn") Long brdSn, @RequestParam("userId") String userId) {
+//
+//        log.info("remove....." + brdSn + " : " + userId);
+//        return boardLikeService.remove(brdSn, userId) == 1
+//                ? new ResponseEntity<>("success", HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+
+
+
 }
+
+
+
+
+
 
 
 //    @PostMapping(value = "/new")

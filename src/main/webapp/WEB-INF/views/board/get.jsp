@@ -196,8 +196,10 @@
 
 </div><!--container-->
 
+<!--boardReply-->
 <script type="text/javascript" src="/resources/js/boardReply.js"></script>
-
+<!--boardLike-->
+<script type="text/javascript" src="/resources/js/boardLike.js"></script>
 
 
 <script>
@@ -465,7 +467,55 @@
         } // end showlist
 
 
-    });
+
+        let test = '${isLike}';
+        // console.log(test === 'true');
+        // ajax로 사용자가 눌렀는지 확인한다
+        let check = test === 'false';//false;
+        // console.log()
+        // 그값으로 트루폴즈를 판단해서 하트를 세팅한다
+        if (check) {
+            $("#likeCnt1").addClass('fas fa-heart'); // 채워진 하트
+        }else{
+            $("#likeCnt1").addClass('far fa-heart'); // 빈 하트
+        }
+
+
+        //누를때마다 하트가 변하고
+        $("#likeCnt1").on("click",function (e) {
+            change(this);
+
+            let boardLike = {
+                brdSn : snValue,
+                userId : userId,
+            };
+
+            console.log("boardLike : "+JSON.stringify(boardLike));
+
+            boardLikeService.add(boardLike, function(){
+               console.log("boardAdd:"+boardLike);
+            });
+
+            boardLikeService.remove(boardLike, function(){
+
+            });
+
+            function change(obj){
+                check = !check;
+                if (check) {
+                    $(obj).removeClass('far fa-heart'); //빈 하트
+                    $(obj).addClass('fas fa-heart');
+                }else{
+                    $(obj).removeClass('fas fa-heart');
+                    $(obj).addClass('far fa-heart');
+                }
+            }
+
+        });//end LikeCnt
+
+
+
+    });// end ready
 
     // //댓글 생성
     // replyService.add(
@@ -475,8 +525,6 @@
     //         alert("댓글이 달렸습니다");
     //     }
     // )
-
-
     // //댓글 조회
     // replyService.getList({brdSn:snValue, page:1}, function(list){
     //
@@ -511,60 +559,6 @@
 
 </script>
 
-<script>
-
-    $(document).ready(function() {
-        let test = '${isLike}';
-        // console.log(test === 'true');
-        // ajax로 사용자가 눌렀는지 확인한다
-        let check = test === 'false';//false;
-        // console.log()
-        // 그값으로 트루폴즈를 판단해서 하트를 세팅한다
-        if (check) {
-            $("#likeCnt1").addClass('fas fa-heart'); // 채워진 하트
-        }else{
-            $("#likeCnt1").addClass('far fa-heart'); // 빈 하트
-        }
-
-        let sendData = {"userId" : "${board.userId}", "sn":"${board.sn}"};
-        //누를때마다 하트가 변하고
-        $("#likeCnt1").click(function (){
-            change(this);
-            // console.log("heart click");
-            $.ajax({
-                type:'POST',
-                url: "/board/clickLike",
-                data: sendData,
-                success : function(result, status, xhr){
-                    if(callback){
-                        callback(result)
-                    }
-                },
-                error : function(xhr, status, er){
-                    if(error){
-                        error(er);
-                    }
-                }
-
-        });
-
-        //db에 반영
-
-        function change(obj){
-            check = !check;
-            if (check) {
-                $(obj).removeClass('far fa-heart'); //빈 하트
-                $(obj).addClass('fas fa-heart');
-            }else{
-                $(obj).removeClass('fas fa-heart');
-                $(obj).addClass('far fa-heart');
-            }
-        }
-
-        });
-    });
-
-</script>
 
 
 <%@include file="../includes/footer.jsp" %>

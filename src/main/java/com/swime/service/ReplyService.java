@@ -19,9 +19,11 @@ public interface ReplyService {
     //댓글 개수(getCountByBrdSn)
     public int getReplyCnt(Long brdSn);
 
+    //댓글 -> 댓글 수 처리, (페이징)
+    public ReplyPageDTO getListPage(BoardCriteria cri, Long brdSn);
+
     //일단 냅두고...해결되면 지우기 *주석하기*
     public List<ReplyVO> getList(BoardCriteria cri, Long brdSn);
 
-    //댓글 -> 댓글 수 처리, (페이징)
-    public ReplyPageDTO getListPage(BoardCriteria cri, Long brdSn);
+
 }

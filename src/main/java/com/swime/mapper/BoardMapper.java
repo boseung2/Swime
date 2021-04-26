@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface BoardMapper {
 
-    // 게시판 전체를 보여준다.
+    // 모임별 게시판
     public List<BoardVO> getList(long grpSn);
 
     // 게시판 생성
     public int insertSelectKey(BoardVO board);
-
+    // 사용x
     public int insert(BoardVO board);
 
     //게시판 읽기
@@ -29,19 +29,24 @@ public interface BoardMapper {
     //게시판 상세내용 업데이트
     public int updateContent(BoardVO board);
 
-    // 댓글 개수
-    public void updateReplyCnt(@Param("sn") long sn, @Param("amount") int amount);
-
     // 게시판 페이징
     public List<BoardVO> getListWithPaging(@Param("cri") BoardCriteria cri,
                                            @Param("grpSn") long grpSn);
 
-    //모임별 게시물 개수()
+    //모임별 게시물 개수 - 게시판 페이징 처리 시 전체 게시물의 숫자를 파악
     public int getCountBySn(long sn);
+
+
+
+    // 댓글 개수
+    public void updateReplyCnt(@Param("sn") long sn, @Param("amount") int amount);
+
+
+
+
 
     //전체 게시물 개수(x)
     public int getTotalCount(BoardCriteria cri);
-
 
     //댓글 개수 (trpl(댓글테이블)의 개수를 가져옴) - 필요없음
     //public int getReplyCnt(Long brdSn);

@@ -16,7 +16,7 @@ public class BoardVO {
     private String title;
     private String content;
     private int likeCnt;
-    private String grpRole;//모임
+    private String grpRole;//모임grp
     private int replyCnt;
     private String topFix="";
     private String status="";

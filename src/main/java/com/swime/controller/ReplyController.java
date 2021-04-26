@@ -38,7 +38,7 @@ public class ReplyController {
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    //댓글 조회
+    //특정 댓글 조회
     @GetMapping(value = "/{sn}")
     public ResponseEntity<ReplyVO> get(@PathVariable("sn") Long sn){
 
@@ -46,7 +46,7 @@ public class ReplyController {
 
         return new ResponseEntity<>(service.get(sn), HttpStatus.OK);
     }
-    //특정 게시물 댓글
+    //게시물 댓글 전체 조회
     @GetMapping(value = "/pages/{brdSn}/{page}")
     public ResponseEntity<List<ReplyVO>> getList(@PathVariable("page") int page,
                                                  @PathVariable("brdSn") Long brdSn){

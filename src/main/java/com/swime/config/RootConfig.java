@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -66,6 +68,11 @@ public class RootConfig {
     @Bean
     public MakeRandomValue makeRandomValue(){
         return new MakeRandomValue();
+    }
+    //민재 : 나는 이거 없으면 테스트 fail나네...
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 
