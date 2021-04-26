@@ -1,9 +1,7 @@
 package com.swime.controller;
 
-import com.swime.domain.GroupVO;
-import com.swime.domain.MailVO;
-import com.swime.domain.MemberHistoryVO;
-import com.swime.domain.MemberVO;
+import com.swime.domain.*;
+import com.swime.mapper.GroupTagMapper;
 import com.swime.service.AuthService;
 import com.swime.service.MemberService;
 import com.swime.service.ProfileService;
@@ -20,35 +18,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
-public class UserCotroller {
+public class UserController {
 
-
-//    @Setter(onMethod_ = @Autowired)
     MemberService service;
-//    @Setter(onMethod_ = @Autowired)
     PasswordEncoder passwordEncoder;
-
     AuthService authService;
-
     GmailSend gmailSend;
-
     MakeRandomValue makeRandomValue;
-
     ProfileService profileService;
+    GroupTagMapper groupTagMapper;
 
 
     @GetMapping("/already")
-    public ResponseEntity isAlready(String id){
+    public ResponseEntity<Boolean> isAlready(String id){
         return service.get(id) != null ?
-                new ResponseEntity(true, HttpStatus.OK) :
-                new ResponseEntity(false, HttpStatus.OK);
+                new ResponseEntity<>(true, HttpStatus.OK) :
+                new ResponseEntity<>(false, HttpStatus.OK);
     }
 
     @GetMapping("/login")
@@ -61,7 +55,7 @@ public class UserCotroller {
 
     @Transactional
     @PostMapping("/register")
-    public ResponseEntity register(MemberVO vo, RedirectAttributes rttr){
+    public ResponseEntity<String> register(MemberVO vo, RedirectAttributes rttr){
         log.info(vo);
         boolean result = false;
         boolean result1 = false;
@@ -78,8 +72,8 @@ public class UserCotroller {
 //        return "redirect:/user/registerSuccess";
         boolean all = result && result1 && result2 && result3;
         return all ?
-                new ResponseEntity("Register Success", HttpStatus.OK) :
-                new ResponseEntity("Register Fail", HttpStatus.BAD_REQUEST);
+                new ResponseEntity<>("Register Success", HttpStatus.OK) :
+                new ResponseEntity<>("Register Fail", HttpStatus.BAD_REQUEST);
     }
 
 
@@ -96,8 +90,8 @@ public class UserCotroller {
         log.info("Modify = " + vo);
         service.modify(vo, hvo);
         return service.modify(vo, hvo) ?
-                new ResponseEntity("Modify Success", HttpStatus.OK) :
-                new ResponseEntity("Modify Fail", HttpStatus.BAD_REQUEST);
+                new ResponseEntity<>("Modify Success", HttpStatus.OK) :
+                new ResponseEntity<>("Modify Fail", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/remove")
@@ -151,11 +145,29 @@ public class UserCotroller {
 
     @GetMapping("/details/group")
     public void group(Model model, String id){
-        List<GroupVO> list = profileService.getOwnerGroupList(id);
-        list.forEach(log::info);
-        model.addAttribute("ownerList", profileService.getOwnerGroupList(id));
-        model.addAttribute("joinList", profileService.getJoinGroupList(id));
-        model.addAttribute("wishList", profileService.getWishGroupList(id));
+        List<GroupVO> ownerList = profileService.getOwnerGroupList(id);
+        List<GroupVO> joinList = profileService.getJoinGroupList(id);
+        List<GroupVO> wishList = profileService.getWishGroupList(id);
+
+        List<List<GroupVO>> list = new ArrayList<>();
+        list.add(ownerList);
+        list.add(joinList);
+        list.add(wishList);
+
+        Iterator<List<GroupVO>> it = list.iterator();
+
+        while (it.hasNext()){
+            List<GroupVO> vo = it.next();
+            vo.forEach(group -> {
+                List<String> tags = new ArrayList<>();
+                groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
+                group.setTags(tags);
+            });
+        }
+
+        model.addAttribute("ownerList", ownerList);
+        model.addAttribute("joinList", joinList);
+        model.addAttribute("wishList", wishList);
 
     }
 
