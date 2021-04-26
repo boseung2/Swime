@@ -69,16 +69,6 @@ public class RootConfig {
     public MakeRandomValue makeRandomValue(){
         return new MakeRandomValue();
     }
-//    //민재 : 나는 이거 있으면 테스트 fail나네...
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
