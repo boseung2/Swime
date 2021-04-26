@@ -105,24 +105,54 @@ public class GroupAttendServiceImpl implements GroupAttendService{
     }
 
     @Override
-    public int ban(Long sn) {
-        return 0;
-    }
-
-    @Override
-    public int cancelBan(Long sn) {
+    public int changeLeader(Long sn) {
+        // 모임장을 위임한다.
+        // 1. 해당 sn 의 유저의 grpRole 을 GRRO01로 바꾼다.
+        // 2. 원래 모임장의 grpRole 을 GRRO02으로 바꾼다.
+        // 끝??
         return 0;
     }
 
     @Override
     public int changeManager(Long sn) {
+        // 운영진으로 임명한다.
+        // 1. 해당 sn 에 해당하는 멤버 grpRole 을 GRRO02로 바꾼다.
+
         return 0;
     }
 
     @Override
-    public int changeMember(Long sn) {
+    public int cancleManager(Long sn) {
+        // 1. 해당 sn 에 해당하는 멤버 grpRole 을 GRRO03으로 바꾼다.
         return 0;
     }
+
+    @Override
+    public int banPermanent(Long sn) {
+        // 영구추방해버린다.
+
+        // 1. 해당 sn 에 해당하는 멤버 status 를 GRUS03으로 바꾼다.
+        // 2. 그룹정보 업데이트해야함
+        return 0;
+    }
+
+    @Override
+    public int ban(Long sn) {
+        // 그냥 추방만한다.(재가입허용)
+
+        // 1. 해당 sn에 해당하는 멤버를 아예 delete
+        return 0;
+    }
+
+    @Override
+    public int cancelBan(Long sn) {
+        // 영구추방을 해제시켜준다.
+
+        // 1. 해당 sn 에 해당하는 멤버를 아예 delete한다.
+        return 0;
+    }
+
+
 //    @Transactional
 //    @Override
 //    public int cancelBan(GroupAttendVO groupAttend) {

@@ -282,7 +282,7 @@
                             str += "<b>"+list[i].name+"</b>\t";
                             str += "<span style='color:gray'>"+list[i].grpRole+"</span></div><div class='attendBtn' data-sn='"+list[i].sn+"' style='text-decoration: underline; color: red;'>"
                             if(userId !== list[i].userId) {
-                                str += "<a href='#' id=''>모임장양도</a>"
+                                str += "<a href='#' class='changeLeader'>모임장양도</a>"
                                 if(list[i].grpRole === "운영진") {
                                     str += "<a href='#' class='cancleManager'>운영진해제</a>"
                                 } else {
@@ -308,10 +308,19 @@
 
                 attend.on("click", "li", function(e) {
                    e.preventDefault();
-                   console.log($(this).find('.changeManager').content);
-                   console.log(e.target);
-                   //if(e.target)
-                   alert('hi');
+
+                   if(e.target === $(this).find('.changeManager')[0]) {
+                       alert($(this).data('sn'));
+                       alert('운영진임명');
+                   } else if(e.target === $(this).find('.cancleManager')[0]) {
+                       alert('운영진해제');
+                   } else if(e.target === $(this).find('.changeLeader')[0]) {
+                       alert('모임장임명');
+                   } else if(e.target === $(this).find('.ban')[0]) {
+                       alert('추방');
+                   } else if(e.target === $(this).find('.cancleBan')[0]) {
+                       alert('영구추방해제');
+                   }
                 });
             })
         </script>
