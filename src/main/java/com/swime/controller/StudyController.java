@@ -58,18 +58,17 @@ public class StudyController {
 
     // 스터디 상세조회
     @GetMapping("/get")
-    public String get(long sn, StudyCriteria cri, String userId, Model model) {
+    public String get(long sn, StudyCriteria cri, Model model) {
 
-        if(userId == "") {
+        // 지도 api 키
+        Environment env = context.getEnvironment();
+        model.addAttribute("key", env.getProperty("key"));
 
-        }
-        log.info("스터디 상세조회 cri = " + cri);
-        log.info("스터디 조회자 = " + userId);
-
+        // 그룹 페이징
         StudyCriteria sendCri = new StudyCriteria(cri.getPageNum(), cri.getAmount());
         model.addAttribute("cri", sendCri);
 
-        log.info("sendCri = " + sendCri);
+        log.info("그룹 페이징 = " + sendCri);
 
         try {
             StudyVO study = service.get(sn);
@@ -85,20 +84,6 @@ public class StudyController {
             // 스터디 정보를 가져오는데 실패하면 에러페이지로 이동
             return "redirect:/study/error";
         }
-
-        // 로그인한 경우
-        StudyParamVO studyParam = new StudyParamVO();
-        studyParam.setUserId(userId);
-        studyParam.setStdSn(sn);
-
-//        model.addAttribute("studyParam", studyParam);
-
-//        // 찜 여부 가져오기 : null이면 찜 아니면 찜취소
-//        log.info("=============================찜 여부 : " + service.getWish(studyParam));
-//        model.addAttribute("wish", service.getWish(studyParam));
-
-        // 참석 여부 가져오기
-        model.addAttribute("attend", service.getAttendant(studyParam));
 
         return "study/get";
     }
@@ -119,10 +104,9 @@ public class StudyController {
     // 스터디 생성
     @PostMapping("/register")
     @PreAuthorize("isAuthenticated()")
-    public String register(StudyVO study, String userId, StudyCriteria cri, RedirectAttributes rttr) {
+    public String register(StudyVO study, StudyCriteria cri, RedirectAttributes rttr) {
 
-        log.info("스터디 생성 cri = " + cri);
-
+        log.info("그룳 페이징 = " + cri);
         log.info("study onOff = " + study.getOnOff());
 
         // 반복 주기 설정
@@ -139,7 +123,6 @@ public class StudyController {
             rttr.addFlashAttribute("result", "register error");
         }
 
-        rttr.addAttribute("userId", userId);
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 
@@ -157,10 +140,9 @@ public class StudyController {
 
     @PostMapping("/modify")
     @PreAuthorize("principal.username == #study.representation")
-    public String modify(StudyVO study, StudyCriteria cri, String userId, RedirectAttributes rttr) {
+    public String modify(StudyVO study, StudyCriteria cri, RedirectAttributes rttr) {
 
         log.info("modify representation " + study.getRepresentation());
-
         log.info("modify study onOff = " + study.getOnOff());
 
         // 반복 주기 설정
@@ -179,7 +161,6 @@ public class StudyController {
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
-        rttr.addAttribute("userId", userId);
 
         // 수정된 스터디의 상세조회 페이지로 이동한다.
         return "redirect:/study/get?sn=" + study.getSn();

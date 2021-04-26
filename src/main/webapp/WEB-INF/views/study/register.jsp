@@ -195,6 +195,7 @@
     }, true);
 </script>
 
+<!-- 지참금 변경시-->
 <script>
     $('#expenseSelect').on("change", function(){
         console.log("expense select clicked = " + $(this).val());

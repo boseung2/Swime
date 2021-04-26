@@ -118,6 +118,15 @@
 
 <%@include file="../includes/footer.jsp" %>
 
+<script>
+    // 엔터키 submit 방지
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+    }, true);
+</script>
+
 <!-- 지참금 보여주기 -->
 <script>
     $(document).ready(function() {
