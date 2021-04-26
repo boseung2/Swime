@@ -111,7 +111,7 @@
                     <option value="LOSI16">안산시</option>
                     <option value="LOSI17">안성시</option>
                     <option value="LOSI18">안양시</option>
-                    <option value="LOSI19">양주시시</option>
+                    <option value="LOSI19">양주시</option>
                     <option value="LOSI20">양주시</option>
                     <option value="LOSI21">여주시</option>
                     <option value="LOSI22">여주시</option>
@@ -230,6 +230,79 @@
         <sec:csrfInput/>
         <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
         <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
+
+        <h2>멤버 관리</h2>
+        <hr/>
+        <!-- 멤버 리스트 -->
+        <div id="groupAttend">
+            <ul class="attend">
+                <li data-sn="12">
+                    <div>
+                        <div class="header">
+                            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
+                            <span>이름</span>
+                            <span>모임장</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- 멤버 관리 -->
+        <script>
+            $(document).ready(function() {
+
+                let grpSnValue = '<c:out value="${group.sn}"/>';
+                let attendUL = $(".attend");
+
+                let userId = null;
+                <sec:authorize access="isAuthenticated()">
+                userId = "${pinfo.username}";
+                </sec:authorize>
+
+                let csrfHeaderName = "${_csrf.headerName}";
+                let csrfTokenValue = "${_csrf.token}";
+
+                // ajax spring security header
+                $(document).ajaxSend(function(e, xhr, options) {
+                    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+                });
+
+                showList();
+
+                function showList() {
+                    groupAttendService.getList({grpSn:grpSnValue}, function(list) {
+                        let str = "";
+                        if(list == null || list.length == 0) {
+                            attendUL.html("");
+                            return;
+                        }
+
+                        for(let i=0, len=list.length || 0; i<len; i++) {
+                            str += "<li data-sn='"+list[i].sn+"'>";
+                            str += "<div><div class='attendCard'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+                            str += "<b>"+list[i].name+"</b>\t";
+                            str += "<span style='color:gray'>"+list[i].grpRole+"</span></div><div class='attendBtn' style='text-decoration: underline; color: red;'>"
+                            if(userId !== list[i].userId) {
+                                str += "<a href='#'>모임장양도</a>"
+                                if(list[i].grpRole === "운영진") {
+                                    str += "<a href='#'>운영진해제</a>"
+                                } else {
+                                    str += "<a href='#'>운영진임명</a>"
+                                }
+                                str += "<a href='#'>강퇴</a>"
+                            }
+                            str += "</div></div></li>"
+                        }
+
+                        attendUL.html(str);
+                    })
+                }
+            })
+        </script>
+
+
+
+        <br>
         <c:if test="${pinfo.username eq group.userId}">
             <button type="submit" class="btn btn-warning" data-oper="modify">수정</button>
             <button type="submit" class="btn btn-danger" data-oper="remove">삭제</button>
@@ -238,6 +311,8 @@
     </form>
 </div>
 
+<!-- GroupAttend Module -->
+<script type="text/javascript" src="/resources/js/groupAttend.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         let formObj = $('form');
