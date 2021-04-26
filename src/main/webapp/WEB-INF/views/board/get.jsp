@@ -405,8 +405,9 @@
 
             if(confirm('댓글을 삭제하시겠습니까?')){
 
-                replyService.remove(sn, function(result){
+                replyService.remove(sn, snValue, function(result){
                     console.log(result);
+
                     console.log(result.getElementsByTagName("Integer"));
                     document.getElementById("replyCnt").innerHTML = result.getElementsByTagName("Integer")[0].textContent;
                     showList(1);

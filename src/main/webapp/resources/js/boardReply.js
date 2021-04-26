@@ -42,10 +42,10 @@ let replyService = (function() {
         });
     }
     //댓글 삭제
-    function remove(sn, callback, error){
+    function remove(sn, brdSn, callback, error){
         $.ajax({
             type : 'delete',
-            url : '/replies/' +sn,
+            url : '/replies/' +sn +'/'+ brdSn,
             success : function(deleteResult, status, xhr){
                 if(callback){
                     callback(deleteResult);

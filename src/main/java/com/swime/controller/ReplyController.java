@@ -41,17 +41,17 @@ public class ReplyController {
     }
 
     //댓글 삭제
-    @DeleteMapping(value="/{sn}")
-    public ResponseEntity<Integer> remove(@PathVariable("sn") Long sn){
+    @DeleteMapping(value="/{sn}/{brdSn}")
+    public ResponseEntity<Integer> remove(@PathVariable("sn") Long sn, @PathVariable("brdSn") Long brdSn){
         log.info("remove");
 
         //댓글 개수를 보낼 거임.
         //ReplyVO reply = new ReplyVO();
 
-        log.info("replyCnt: " + service.getReplyCnt(sn));
+        log.info("replyCnt: " + service.getReplyCnt(brdSn));
 
         return service.remove(sn) == 1
-                ? new ResponseEntity<>(service.getReplyCnt(sn), HttpStatus.OK)
+                ? new ResponseEntity<>(service.getReplyCnt(brdSn), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     //특정 댓글 조회
