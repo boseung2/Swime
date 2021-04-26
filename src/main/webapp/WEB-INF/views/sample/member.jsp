@@ -2,6 +2,9 @@
          pageEncoding="UTF-8"%>
 <h1>member page</h1>
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<link href="/resources/css/spinner.css" rel="stylesheet">
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -106,5 +109,33 @@
         <span class="label">Label</span>
         <span class="focus-bg"></span>
     </label>
+
+    <style>
+
+
+    </style>
+    <%--    <div class="spinner-border" role="status">--%>
+    <%--        <span class="sr-only">Loading...</span>--%>
+    <%--    </div>--%>
+
+
+    aaa
+
+    <button id="submitBtn" class="w-100 btn btn-lg btn-primary">Sign up</button>
+
+    <div id="spinnerBox">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"></circle>
+            </svg>
+        </div>
+    </div>
+    <div id="shadow-box"/>
+
+    <script>
+        $("#submitBtn").on("click", function (e) {
+            console.log("클릭");
+        });
+    </script>
 </body>
 </html>
