@@ -40,6 +40,11 @@ public class GroupAttendServiceTests {
     }
 
     @Test
+    public void testGetListWithBan() {
+        log.info(service.getListWithBan(1040L));
+    }
+
+    @Test
     public void testWithdraw() {
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(1040L);
@@ -53,21 +58,42 @@ public class GroupAttendServiceTests {
     }
 
     @Test
-    public void testBan() {
-        GroupAttendVO vo = new GroupAttendVO();
-        vo.setGrpSn(316L);
-        vo.setUserId("jungbs3726@naver.com");
-        GroupAttendVO groupAttend = service.get(50L);
-        //service.ban(groupAttend);
-    }
-
-    @Test
     public void testGet() {
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(102L);
         groupAttend.setUserId("boseung@naver.com");
 
         service.get(316L);
+    }
+
+    @Test
+    public void testChangeLeader() {
+        service.changeLeader(1275L);
+    }
+
+
+    @Test
+    public void testChangeManager() {
+        service.changeManager(1269L);
+    }
+
+    @Test
+    public void testCancleManager() {
+        service.cancelManager(1269L);
+    }
+    @Test
+    public void testBan() {
+        service.ban(1274L);
+    }
+
+    @Test
+    public void testBanPermanent() {
+        service.banPermanent(1273L);
+    }
+
+    @Test
+    public void testCancleBan() {
+        service.cancelBan(1273L);
     }
 
 
