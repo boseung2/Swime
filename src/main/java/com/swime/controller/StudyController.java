@@ -5,29 +5,29 @@ import com.swime.domain.*;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.AuthenticatedPrincipal;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sun.net.www.protocol.http.AuthenticationInfo;
-
-import javax.servlet.jsp.el.ScopedAttributeELResolver;
-import javax.xml.ws.Response;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
 
 @Controller
 @RequestMapping("/study")
 @Log4j
 @AllArgsConstructor
+@PropertySource("classpath:/map_key.properties")
 public class StudyController {
+
+    @Autowired
+    ApplicationContext context;
 
     private StudyService service;
 
@@ -46,6 +46,14 @@ public class StudyController {
     @GetMapping("/error")
     public void error() {
 
+    }
+
+    @GetMapping("/map")
+    public void map(Model model) {
+        Environment env = context.getEnvironment();
+        log.info("key = " + env.getProperty("key"));
+
+        model.addAttribute("key", env.getProperty("key"));
     }
 
     // 스터디 상세조회
@@ -101,6 +109,11 @@ public class StudyController {
     public void register(@RequestParam("grpSn") long grpSn, StudyCriteria cri, Model model) {
         model.addAttribute("grpSn", grpSn);
         model.addAttribute("cri", cri);
+
+        Environment env = context.getEnvironment();
+        log.info("key = " + env.getProperty("key"));
+
+        model.addAttribute("key", env.getProperty("key"));
     }
 
     // 스터디 생성

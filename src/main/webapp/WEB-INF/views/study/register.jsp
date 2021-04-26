@@ -9,6 +9,60 @@
 
 <%@include file="../includes/header.jsp" %>
 
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    /* 지도 사이즈 */
+    #map {
+        width: 100%;
+        height: 400px;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* 검색창 */
+    .controls {
+        background-color: #fff;
+        border-radius: 2px;
+        border: 1px solid transparent;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        box-sizing: border-box;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        height: 29px;
+        margin-left: 17px;
+        margin-top: 10px;
+        outline: none;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 50%;
+    }
+
+    .controls:focus {
+        border-color: #4d90fe;
+    }
+
+    .title {
+        font-weight: bold;
+    }
+
+    #infowindow-content {
+        display: none;
+    }
+
+    #map #infowindow-content {
+        display: inline;
+    }
+</style>
+
 <div class="container">
     <h2>스터디 만들기</h2>
     <hr/>
@@ -76,10 +130,32 @@
             <label for="onUrl">온라인 스터디 링크 추가</label>
             <input type="text" class="form-control" id="onUrl" name="onUrl" value="http://">
         </div>
+
         <div class="form-group" id="formPlace">
             <label for="placeId">스터디 장소 추가</label>
-            <input type="text" class="form-control" id="placeId" name="placeId" required>
+            <input type="button" value="장소 검색" onclick="showMap()"/>
+            <input type="text" class="form-control" id="placeName" hidden="true" readonly/>
+            <input type="text" class="form-control" id="placeId" name="placeId" hidden="true" required readonly/>
+
         </div>
+
+        <div style="display: none">
+            <input
+                    id="pac-input"
+                    class="controls"
+                    type="text"
+                    placeholder="장소를 입력해주세요"
+            />
+        </div>
+        <div id="map" hidden="true"></div>
+        <div id="infowindow-content">
+            <span id="place-name" class="title"></span><br />
+            <span id="place-id" hidden="true"></span>
+            <strong>주소: </strong><span id="place-address"></span><br />
+            <strong>URL: </strong><a id="url" href="">구글맵 바로가기</a><br />
+            <input type="button" onclick="placeSelected()" value="선택"></input>
+        </div>
+
         <div class="form-group">
             <label for="expense">지참금</label>
             <select class="form-control" id="expenseSelect" name="expenseSelect">
@@ -108,8 +184,16 @@
     </form>
 </div>
 
-
 <%@include file="../includes/footer.jsp" %>
+
+<script>
+    // 엔터키 submit 방지
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+    }, true);
+</script>
 
 <script>
     $('#expenseSelect').on("change", function(){
@@ -141,6 +225,7 @@
             formObj.submit();
         })
     })
+
     function validation() {
 
         if($('#name').val() == "" || $('#name').val().replaceAll(" ", "").length == 0) {
@@ -230,7 +315,7 @@
             if ($('#placeId').val() == '') {
                 alert("장소 정보를 입력해주세요.");
                 return false;
-            } else if (getByte($('#placeId').val()) > 40) {
+            } else if (getByte($('#placeId').val()) > 300) {
                 alert("장소 정보가 너무 큽니다.");
                 return false;
             }
@@ -306,7 +391,6 @@
         return str.replace(/(<([^>]+)>)/ig,"");
     }
 </script>
-
 
 <script type="text/javascript">
 
@@ -534,3 +618,103 @@
         }
     }
 </script>
+
+<!-- 구글맵 -->
+<script>
+    function showMap() {
+        $('#map').removeAttr("hidden");
+    }
+</script>
+
+
+<script>
+    function initMap() {
+        // 지도 설정
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 37.5704121, lng: 126.9853267 },
+            zoom: 13,
+        });
+
+        // 검색창
+        const input = document.getElementById("pac-input");
+        const autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo("bounds", map);
+
+        // Specify just the place data fields that you need.
+        autocomplete.setFields(["place_id", "geometry", "name", "formatted_address", "url"]);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // 말풍선 정보
+        const infowindow = new google.maps.InfoWindow();
+        const infowindowContent = document.getElementById("infowindow-content");
+        infowindow.setContent(infowindowContent);
+
+        // 마커
+        const marker = new google.maps.Marker({ map: map });
+        marker.addListener("click", () => { // 마커 클릭시
+            infowindow.open(map, marker);
+        });
+        autocomplete.addListener("place_changed", () => { // 장소 선택시
+            infowindow.close();
+            const place = autocomplete.getPlace(); // 장소 세부정보 받아오기
+
+            if (!place.geometry || !place.geometry.location) {
+                return;
+            }
+
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+            // Set the position of the marker using the place ID and location.
+            // 장소 세팅
+            marker.setPlace({
+                placeId: place.place_id,
+                location: place.geometry.location,
+            });
+
+            marker.setVisible(true);
+            infowindowContent.children.namedItem("place-name").textContent =
+                place.name;
+            infowindowContent.children.namedItem("place-id").textContent =
+                place.place_id;
+            infowindowContent.children.namedItem("place-address").textContent =
+                place.formatted_address;
+            infowindowContent.children.namedItem("url").href =
+                place.url;
+
+            infowindow.open(map, marker);
+        });
+    }
+</script>
+
+<script>
+    function placeSelected() {
+        console.log('장소가 선택되었음');
+
+        // 선택된 것 보여줌
+        let placeName = document.getElementById("placeName");
+        let placeId = document.getElementById("placeId");
+
+        // let placeName = document.getElementById("place-name");
+        // let placeId = document.getElementById("place-id");
+
+        placeName.value = document.getElementById("place-name").innerText;
+        placeId.value = document.getElementById("place-id").innerText;
+
+        // placeResult 보여주기
+        $('#placeName').removeAttr("hidden");
+
+        console.log("placeId= " + $('#placeId').val());
+
+        // 지도 닫기
+        $('#map').attr("hidden", true);
+
+    }
+</script>
+
+<!-- 월 10만건 이상 유료 -->
+<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+<script src="https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap&libraries=places&v=weekly" async></script>

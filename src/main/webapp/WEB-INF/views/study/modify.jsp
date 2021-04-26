@@ -121,7 +121,8 @@
 <!-- 지참금 보여주기 -->
 <script>
     $(document).ready(function() {
-        if("직접입력" === "${study.expense}") {
+        if("(선택)" !== "${study.expense}" && "없음" !== "${study.expense}" && "추후공지" !== "${study.expense}") {
+            $('option[value="직접입력"]').prop("selected", true);
             $('#expense').removeAttr("hidden");
         }
 
@@ -137,7 +138,7 @@
     })
 </script>
 
-<!-- 지참금 -->
+<!-- 지참금 변경시-->
 <script>
     $('#expenseSelect').on("change", function(){
         console.log("expense select clicked = " + $(this).val());
@@ -328,7 +329,7 @@
             if ($('#placeId').val() == '') {
                 alert("장소 정보를 입력해주세요.");
                 return false;
-            } else if (getByte($('#placeId').val()) > 40) {
+            } else if (getByte($('#placeId').val()) > 300) {
                 alert("장소 정보가 너무 큽니다.");
                 return false;
             }
@@ -482,7 +483,7 @@
         }
     })
 
-    // 정기스터디 클릭시
+    <!-- 정기스터디 버튼 클릭시 -->
     function repeatFunction() {
         let repeatCheck = repeat[0].checked;
 
@@ -503,12 +504,14 @@
 
             console.log("end = " + end);
 
+            // 최소 날짜 설정 (시작날짜 + 1일)
             let endMonth = end.getMonth()+1;
             if(endMonth < 10) endMonth = "0" + endMonth;
             let endDt = end.getDate();
             if(endDt < 10) endDt = "0" + endDt;
 
 
+            // 최대 날짜 설정 (6개월)
             let maxEnd = new Date($('#startDate').val());
             maxEnd.setMonth(maxEnd.getMonth() + 6);
             console.log("maxEnd = " + maxEnd);
@@ -532,7 +535,7 @@
             endDate.val('');
             repeatCycle.val('(선택)');
 
-            // select도 모두 hidden 처리
+            // 반복주기 select도 모두 hidden 처리
             $('option[value="STCY01"]').attr('hidden', 'true');
             $('option[value="STCY02"]').attr('hidden', 'true');
             $('option[value="STCY03"]').attr('hidden', 'true');
