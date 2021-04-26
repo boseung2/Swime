@@ -23,8 +23,8 @@ public class BoardLikeMapperTests {
     public void testInsert(){
         BoardLikeVO boardLike = new BoardLikeVO();
 
-        boardLike.setBrdSn(1L);
-        boardLike.setUserId("toywar1@naver.com");
+        boardLike.setBrdSn(232L);
+        boardLike.setUserId("toywar94@gmail.com");
 
         mapper.insert(boardLike);
 
@@ -48,14 +48,23 @@ public class BoardLikeMapperTests {
     public void testDelete(){
 
         log.info("DELETE COUNT: " +
-                mapper.delete(1L,"toytoy@naver.com"));
+                mapper.delete(1L,"toywar1@naver.com"));
     }
 
     @Test
     public void testGetBoardLikeCnt(){
 
-        int board = mapper.getBoardLikeCnt(44L);
+        int board = mapper.getBoardLikeCnt(232L);
 
         log.info(board);
+    }
+
+    @Test
+    public void testGet(){
+        BoardLikeVO board = new BoardLikeVO();
+        board.setBrdSn(332L);
+        board.setUserId("toywar94@gmail.com");
+
+        log.info(mapper.get(board));
     }
 }
