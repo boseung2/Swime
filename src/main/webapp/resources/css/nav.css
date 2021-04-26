@@ -15,7 +15,7 @@ body {margin:0;}
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
-    border-bottom: 3px solid transparent;
+    border-bottom: 3px solid gray;
 }
 
 .topnav a:hover {
