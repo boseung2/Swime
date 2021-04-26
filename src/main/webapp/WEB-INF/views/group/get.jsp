@@ -33,14 +33,17 @@
 
                 <sec:authorize access="isAuthenticated()">
                     <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
+                    <c:if test="${pinfo.username ne group.userId}">
+                        <a class="btn btn-danger" href="#" id="withdrawBtn">모임 탈퇴</a>
+                    </c:if>
                     <c:if test="${pinfo.username eq group.userId}">
-                        <button data-oper="modify" class="btn btn-primary">모임 수정</button>
+                        <button data-oper="modify" class="btn btn-secondary">모임 수정/관리</button>
                     </c:if>
                 </sec:authorize>
 
             <sec:authorize access="isAuthenticated()">
-            <a class="btn btn-primary" href="#" id="heartOff"><i class="far fa-heart"></i></a>
-            <a class="btn btn-primary" href="#" id="heartOn"><i class="fas fa-heart"></i></a>
+            <a class="btn btn-outline-primary" href="#" id="heartOff"><i class="far fa-heart"></i></a>
+            <a class="btn btn-primary" href="#" id="heartOn"><i class="far fa-heart"></i></a>
             </sec:authorize>
 
         </div>
@@ -60,6 +63,11 @@
             userId = "${pinfo.username}";
             </sec:authorize>
 
+            let attend = {
+                grpSn : grpSnValue,
+                userId : userId
+            }
+
             let csrfHeaderName = "${_csrf.headerName}";
             let csrfTokenValue = "${_csrf.token}";
 
@@ -67,6 +75,22 @@
             $(document).ajaxSend(function(e, xhr, options) {
                 xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
             });
+
+            // 버튼상태 관리
+            let attendBtn = $('#attendBtn');
+            let withdrawBtn = $('#withdrawBtn');
+
+            attendBtn.show();
+            withdrawBtn.hide();
+            groupAttendService.get(attend, function(result) {
+                if(result.status === 'GRUS01') {
+                    attendBtn.hide();
+                    withdrawBtn.show();
+                } else {
+                    attendBtn.show();
+                    withdrawBtn.hide();
+                }
+            })
 
             showList();
 
@@ -91,16 +115,22 @@
                 })
             }
 
-            $("#attendBtn").on("click", function(e) {
-                let attend = {
-                    grpSn : grpSnValue,
-                    userId : userId
-                }
+            attendBtn.on("click", function(e) {
 
                 groupAttendService.add(attend, function(result) {
                     alert("모임에 참여했습니다.");
+                    attendBtn.hide();
+                    withdrawBtn.show();
                     showList();
-                    console.log(this);
+                })
+            })
+
+            withdrawBtn.on("click", function(e) {
+                groupAttendService.withdraw(attend, function(result) {
+                    alert("정상적으로 모임에서 탈퇴되었습니다.");
+                    attendBtn.show();
+                    withdrawBtn.hide();
+                    showList();
                 })
             })
 

@@ -29,14 +29,22 @@ public class GroupAttendServiceTests {
     @Test
     public void testAttend() {
         GroupAttendVO groupAttend = new GroupAttendVO();
-        groupAttend.setGrpSn(630L);
-        groupAttend.setUserId("jungbs3726@naver.com");
+        groupAttend.setGrpSn(1040L);
+        groupAttend.setUserId("jungbs3726@gmail.com");
         service.attend(groupAttend);
     }
 
     @Test
     public void testGetList() {
-        log.info(service.getList(102L));
+        log.info(service.getList(1040L));
+    }
+
+    @Test
+    public void testWithdraw() {
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(1040L);
+        groupAttend.setUserId("jungbs3726@gmail.com");
+        service.withdraw(groupAttend);
     }
 
     @Test
@@ -62,10 +70,7 @@ public class GroupAttendServiceTests {
         service.get(316L);
     }
 
-    @Test
-    public void testWithdraw() {
-        service.withdraw(493L);
-    }
+
 
 
 

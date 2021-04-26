@@ -206,3 +206,19 @@ span.st_on {
     z-index: 10;
     background-position: 0 -690px;
 }
+
+.attendCard {
+    display : inline-block;
+}
+
+.attendBtn {
+    display : inline-block;
+    float : right;
+    margin-top : 12px;
+}
+
+.attendBtn a {
+    margin : 5px;
+    color : red;
+    text-decoration: underline;
+}

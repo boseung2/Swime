@@ -46,23 +46,24 @@ public class GroupAttendController {
         return new ResponseEntity<>(service.getList(grpSn), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{sn}",
+    @GetMapping(value = "/{grpSn}/{userId}",
             produces = {MediaType.APPLICATION_XML_VALUE,
                     MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<GroupAttendVO> get(@PathVariable("sn") Long sn) {
-        log.info("get: " + sn);
-
-        return new ResponseEntity<>(service.get(sn), HttpStatus.OK);
+    public ResponseEntity<GroupAttendVO> get(@PathVariable("grpSn") Long grpSn, @PathVariable("userId") String userId) {
+        GroupAttendVO vo = new GroupAttendVO();
+        vo.setGrpSn(grpSn);
+        vo.setUserId(userId);
+        log.info("vo: " + vo);
+        return new ResponseEntity<>(service.readByGrpSnUserId(vo), HttpStatus.OK);
     }
 
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
-            value = "/withdraw/{sn}",
+            value = "/withdraw",
             consumes = "application/json",
             produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<String> withdraw(
-            @PathVariable("sn") Long sn) {
-
-        return service.withdraw(sn) == 1
+    public ResponseEntity<String> withdraw(@RequestBody GroupAttendVO vo) {
+        log.info("vo: " + vo);
+        return service.withdraw(vo) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

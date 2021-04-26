@@ -3,6 +3,7 @@ package com.swime.service;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.MemberMapper;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class MemberServiceImpl implements MemberService{
     @Setter(onMethod_ = @Autowired)
     private MemberMapper mapper;
 
-    @Setter(onMethod_ = @Autowired)
-    private PasswordEncoder passwordEncoder;
+    //@Setter(onMethod_ = @Autowired)
+    //private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -167,7 +168,7 @@ public class MemberServiceImpl implements MemberService{
 
         if(!vo.getPassword().equals("")){
             System.out.println("비밀번호 변경o");
-            memberVO.setPassword(passwordEncoder.encode(vo.getPassword()));
+            //memberVO.setPassword(passwordEncoder.encode(vo.getPassword()));
         }
         else if(vo.getPassword().equals("") || vo.getPassword() == null){
             System.out.println("비밀번호 변경x");
