@@ -130,7 +130,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public void infotest(){
+    public void infoTest(){
     }
 
     @GetMapping("/infoDetail")
@@ -138,9 +138,9 @@ public class UserController {
         model.addAttribute("MemberVo", service.get(id));
     }
 
-    @GetMapping("/details/info")
-    public void info(Model model, String id){
-        model.addAttribute("MemberVo", service.get(id));
+    @GetMapping("/details/groupWithPaging")
+    public void groupPaging(){
+
     }
 
     @GetMapping("/details/group")
@@ -171,7 +171,23 @@ public class UserController {
 
     }
 
-    @GetMapping("/details/study")
+    @GetMapping("/details/group/joinListWithPaging")
+    public ResponseEntity<List<GroupVO>> joinListWithPaging(String id, ProfileCriteria cri){
+        log.info("cri = " + cri);
+        log.info("id = " + id);
+        List<GroupVO> list = profileService.joinListWithPaging(id,cri);
+        list.forEach(group -> {
+            List<String> tags = new ArrayList<>();
+            groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
+            group.setTags(tags);
+        });
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+
+
+                      @GetMapping("/details/study")
     public void study(Model model, String id){
         model.addAttribute("MemberVo", service.get(id));
     }

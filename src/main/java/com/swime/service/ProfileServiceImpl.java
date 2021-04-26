@@ -3,6 +3,7 @@ package com.swime.service;
 import com.swime.domain.GroupVO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
+import com.swime.domain.ProfileCriteria;
 import com.swime.mapper.MemberMapper;
 import com.swime.mapper.ProfileMapper;
 import lombok.Setter;
@@ -42,6 +43,11 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public List<GroupVO> getWishGroupList(String id) {
         return mapper.wishList(id);
+    }
+
+    @Override
+    public List<GroupVO> joinListWithPaging(String id, ProfileCriteria cri) {
+        return mapper.joinListWithPaging(id, cri);
     }
 }
 

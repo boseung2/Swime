@@ -14,21 +14,69 @@
         SELECT sn, category, name, user_id, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, upd_date
         from tgrp
         where user_id = #{id} and status != 'GRST03'
+        order by sn desc
     </select>
 
     <select id="joinList" resultType="com.swime.domain.GroupVO">
         select t.sn, t.category, t.name, t.picture, t.description, t.attend_count, t.rating, t.rating_count, t.sido, t.sigungu, t.status,
                t.reg_user_id, t.reg_date, t.reg_user_id
-        from Tgrp_list l LEFT OUTER JOIN tgrp t on l.grp_sn = t.sn and l.user_id = #{id} and t.status != 'GRST03'
+        from Tgrp_list l LEFT OUTER JOIN tgrp t ON l.grp_sn = t.sn AND l.user_id = #{id} AND t.status = 'GRST01' AND l.status = 'GRUS01'
         where t.user_id != #{id}
+        order by t.sn desc
     </select>
 
     <select id="wishList" resultType="com.swime.domain.GroupVO">
         select t.sn, t.category, t.name, t.picture, t.description, t.attend_count, t.rating, t.rating_count, t.sido, t.sigungu, t.status,
                t.reg_user_id, t.reg_date, t.reg_user_id
-        from tgrp_wish l left OUTER join tgrp t on l.grp_sn = t.sn and t.status != 'GRST03'
+        from tgrp_wish l LEFT OUTER JOIN tgrp t ON l.grp_sn = t.sn AND t.status = 'GRST01'
         where l.user_id = #{id}
+        order by t.sn desc
     </select>
+
+    <select id="joinListWithPaging" resultType="com.swime.domain.GroupVO">
+        <![CDATA[
+        select sn, category, name, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, reg_user_id
+        from(
+                select rownum rn, sn, category, name, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, reg_user_id
+                from(
+                        select t.sn, t.category, t.name, t.picture, t.description, t.attend_count, t.rating, t.rating_count, t.sido, t.sigungu, t.status,
+                               t.reg_user_id, t.reg_date
+                        from Tgrp_list l LEFT OUTER JOIN tgrp t ON l.grp_sn = t.sn AND l.user_id = #{id} AND t.status = 'GRST01' AND l.status = 'GRUS01'
+                        where t.user_id != #{id}
+                        order by t.sn desc
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <select id="dsfsdffd" resultType="com.swime.domain.GroupVO">
+        <![CDATA[
+        select sn, category, name, user_id, user_name, picture, description, attend_count, rating,
+               rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
+        from(
+                select rownum rn, sn, category, name, user_id, user_name, picture, description, attend_count, rating,
+                       rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
+                from(
+                        select /*+INDEX_DESC(g tgrp_pk) */ g.sn, g.category, g.name, g.user_id, u.name user_name,
+                                                           g.picture, g.description, g.attend_count, g.rating, g.rating_count, g.sido, g.sigungu, g.status,
+                                                           g.reg_date, g.reg_user_id, g.upd_date, g.upd_user_id
+                        from tgrp g, tuser u
+                        where g.user_id = u.id
+                          and g.status != 'GRST03'
+                        order by g.sn desc
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+
+
+
+
 
 
 <!-- 스터디 찾아오기 -->
