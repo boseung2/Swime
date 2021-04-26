@@ -133,10 +133,9 @@
 
         <div class="form-group" id="formPlace">
             <label for="placeId">스터디 장소 추가</label>
-            <input type="button" value="장소 검색" onclick="showMap()"/>
+<%--            <input type="button" value="장소 검색" onclick="showMap()"/>--%>
             <input type="text" class="form-control" id="placeName" hidden="true" readonly/>
             <input type="text" class="form-control" id="placeId" name="placeId" hidden="true" required readonly/>
-
         </div>
 
         <div style="display: none">
@@ -147,14 +146,7 @@
                     placeholder="장소를 입력해주세요"
             />
         </div>
-        <div id="map" hidden="true"></div>
-        <div id="infowindow-content">
-            <span id="place-name" class="title"></span><br />
-            <span id="place-id" hidden="true"></span>
-            <strong>주소: </strong><span id="place-address"></span><br />
-            <strong>URL: </strong><a id="url" href="">구글맵 바로가기</a><br />
-            <input type="button" onclick="placeSelected()" value="선택"></input>
-        </div>
+        <div id="map"></div>
 
         <div class="form-group">
             <label for="expense">지참금</label>
@@ -606,7 +598,22 @@
             $('#onUrl').attr("required", "required");
             $('#placeId').removeAttr("required");
 
+            // place 값 제거
             $('#placeId').val("");
+            $('#placeName').val("");
+
+            // 장소 이름 지우기
+            $('#placeName').attr("hidden", true);
+
+            // 지도 제거
+            $('#map').attr("hidden", true);
+
+            // 검색창 글자 제거
+            $('#pac-input').val("");
+
+            // 말풍선 제거
+            $('button[title="닫기"]').click();
+
         }
         if(on === false) { // 오프라인
             onOff.val("STOF02");
@@ -616,19 +623,16 @@
             $('#onUrl').removeAttr("required");
 
             $('#onUrl').val("");
+
+            // 지도 보여주기
+            $('#map').removeAttr("hidden");
         }
     }
 </script>
 
 <!-- 구글맵 -->
 <script>
-    function showMap() {
-        $('#map').removeAttr("hidden");
-    }
-</script>
 
-
-<script>
     function initMap() {
         // 지도 설정
         const map = new google.maps.Map(document.getElementById("map"), {
@@ -677,14 +681,16 @@
             });
 
             marker.setVisible(true);
-            infowindowContent.children.namedItem("place-name").textContent =
-                place.name;
-            infowindowContent.children.namedItem("place-id").textContent =
-                place.place_id;
-            infowindowContent.children.namedItem("place-address").textContent =
-                place.formatted_address;
-            infowindowContent.children.namedItem("url").href =
-                place.url;
+
+            infowindow.setContent(
+                "<div>" +
+                "<strong><span id='place-name'>" + place.name + "</span></strong><br>" +
+                "<span id='place-id' hidden='true'>" + place.place_id +"</span>" +
+                "<strong>주소: </strong><span>" + place.formatted_address + "</span><br>" +
+                "<strong>URL: </strong><a href='" + place.url + "'>구글맵 바로가기</a><br>" +
+                "<input type='button' onclick='placeSelected()' id='placeSelect' value='선택'></input>" +
+                "</div>"
+            )
 
             infowindow.open(map, marker);
         });
@@ -699,9 +705,6 @@
         let placeName = document.getElementById("placeName");
         let placeId = document.getElementById("placeId");
 
-        // let placeName = document.getElementById("place-name");
-        // let placeId = document.getElementById("place-id");
-
         placeName.value = document.getElementById("place-name").innerText;
         placeId.value = document.getElementById("place-id").innerText;
 
@@ -710,8 +713,8 @@
 
         console.log("placeId= " + $('#placeId').val());
 
-        // 지도 닫기
-        $('#map').attr("hidden", true);
+        // 선택 버튼 없애기
+        $('#placeSelect').attr("hidden", true);
 
     }
 </script>

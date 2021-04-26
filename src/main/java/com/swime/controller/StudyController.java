@@ -136,6 +136,9 @@ public class StudyController {
     public void modify(long sn, StudyCriteria cri, String representation, Model model) {
         model.addAttribute("study", service.get(sn));
         model.addAttribute("cri", cri);
+
+        Environment env = context.getEnvironment();
+        model.addAttribute("key", env.getProperty("key"));
     }
 
     @PostMapping("/modify")
