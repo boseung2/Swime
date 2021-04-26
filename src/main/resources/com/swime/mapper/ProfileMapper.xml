@@ -4,6 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.ProfileMapper">
 
+    <select id="read" resultType="com.swime.domain.GroupVO">
+        SELECT sn, category, name, user_id, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, upd_date
+        from tgrp
+        where user_id = #{id} and sn = #{sn}
+    </select>
 
     <select id="ownerList" resultType="com.swime.domain.GroupVO">
         SELECT sn, category, name, user_id, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, upd_date
@@ -11,23 +16,17 @@
         where user_id = #{id}
     </select>
 
-    <select id="read" resultType="com.swime.domain.GroupVO">
-        SELECT sn, category, name, user_id, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, upd_date
-        from tgrp
-        where user_id = #{id} and sn = #{sn}
-    </select>
-
     <select id="joinList" resultType="com.swime.domain.GroupVO">
         select t.sn, t.category, t.name, t.picture, t.description, t.attend_count, t.rating, t.rating_count, t.sido, t.sigungu, t.status,
                t.reg_user_id, t.reg_date, t.reg_user_id
-        from Tgrp_list l LEFT OUTER JOIN tgrp t on l.grp_sn = t.sn and l.user_id = #{id}
+        from Tgrp_list l LEFT OUTER JOIN tgrp t on l.grp_sn = t.sn and l.user_id = #{id} and t.status != 'GRST03'
         where t.user_id != #{id}
     </select>
 
     <select id="wishList" resultType="com.swime.domain.GroupVO">
         select t.sn, t.category, t.name, t.picture, t.description, t.attend_count, t.rating, t.rating_count, t.sido, t.sigungu, t.status,
                t.reg_user_id, t.reg_date, t.reg_user_id
-        from tgrp_wish l left OUTER join tgrp t on l.grp_sn = t.sn
+        from tgrp_wish l left OUTER join tgrp t on l.grp_sn = t.sn and t.status != 'GRST03'
         where l.user_id = #{id}
     </select>
 
