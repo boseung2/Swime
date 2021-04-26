@@ -445,4 +445,15 @@ public class StudyMapperTests {
         assert (mapper.updateStatus(param) == 1);
         assert (mapper.get(307L) == null);
     }
+
+    @Test
+    public void testUpdateStatus2(){
+        StudyParamVO param = new StudyParamVO();
+
+        param.setStdSn(Integer.valueOf(""));
+        param.setStatus("STST03");
+
+        log.info(mapper.updateStatus(param));
+        assert (mapper.updateStatus(param) != 1);
+    }
 }

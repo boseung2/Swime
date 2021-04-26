@@ -7,18 +7,26 @@ import java.util.List;
 public interface GroupAttendMapper {
 
     // 모임에 참석한다.
-    public int insertSelectKey(GroupAttendVO groupAttend);
+    int insertSelectKey(GroupAttendVO groupAttend);
 
     // sn 으로 해당 정보를 읽는다.
-    public GroupAttendVO read(Long sn);
+    GroupAttendVO read(Long sn);
 
     // 모임페이지에서 참여한 인원들을 보여준다.
-    public List<GroupAttendVO> getList(Long grpSn);
+    List<GroupAttendVO> getList(Long grpSn);
+
+    // 멤버관리페이지에서 참여한 인원 + 영구정지 인원들을 보여준다.
+    List<GroupAttendVO> getListWithBan(Long grpSn);
 
     // 모임 역할, 상태 변화를 수정한다.
-    public int update(GroupAttendVO groupAttend);
+    int update(GroupAttendVO groupAttend);
 
     // 해당 그룹원 수를 센다.
-    public long getAttendCountByGroupSn(Long grpSn);
+    long getAttendCountByGroupSn(Long grpSn);
 
+    // 해당 회원을 삭제한다.
+    int delete(Long sn);
+
+    // grpSn, userId로 회원을 조회한다.
+    GroupAttendVO readByGrpSnUserId(GroupAttendVO groupAttend);
 }

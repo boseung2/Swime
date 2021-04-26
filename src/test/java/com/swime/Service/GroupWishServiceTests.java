@@ -35,23 +35,36 @@ public class GroupWishServiceTests {
     }
 
     @Test
-    public void register(){
-        int random = (int)(Math.random() * 10) + 1;
+    public void registerTest() {
         GroupWishVO vo = new GroupWishVO();
-        vo.setGrpSn((long)random);
-        vo.setUserId(random + "rla123@naver.com");
-        Assert.assertTrue(service.register(vo));
+        vo.setGrpSn(1L);
+        vo.setUserId("jungbs3726@naver.com");
+        log.info(vo);
+        service.register(vo);
     }
 
     @Test
-    public void delete(){
-        int random = (int)(Math.random() * 10000) + 1;
-        log.info(random);
+    public void readTest(){
         GroupWishVO vo = new GroupWishVO();
-        vo.setGrpSn((long)random);
-        vo.setUserId(random + "rla123@naver.com");
-        Assert.assertTrue(service.register(vo));
-        Assert.assertTrue(service.remove(random + "rla123@naver.com", (long)random));
+        vo.setGrpSn(1L);
+        vo.setUserId("jungbs3726@naver.com");
+        log.info(service.read(vo) == null);
+    }
+
+    @Test
+    public void deleteTest(){
+        GroupWishVO vo = new GroupWishVO();
+        vo.setGrpSn(1L);
+        vo.setUserId("jungbs3726@naver.com");
+        service.delete(vo);
+
+//        int random = (int)(Math.random() * 10000) + 1;
+//        log.info(random);
+//        GroupWishVO vo = new GroupWishVO();
+//        vo.setGrpSn((long)random);
+//        vo.setUserId(random + "rla123@naver.com");
+//        Assert.assertTrue(service.register(vo));
+//        Assert.assertTrue(service.remove(random + "rla123@naver.com", (long)random));
     }
 
     @Test

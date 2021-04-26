@@ -49,8 +49,6 @@ public class GroupServiceImpl implements GroupService{
         // 3. 태그들을 등록한다.
         group.getTags().forEach(tag -> groupTagMapper.insert(new GroupTagVO(group.getSn(), tag)));
 
-        // ***** 등록자 id 세션에서 가져와야함 *****
-
         if(group.getAttach() != null) {
             // 첨부파일등록
             GroupAttachVO attach = group.getAttach();

@@ -485,15 +485,15 @@
                    console.log("empty heart");
                    $("#likeCnt1").removeClass('fas');
                    $("#likeCnt1").addClass('far');
-                   str += "<label id='likeCnt'>"${board.likeCnt}"</label>";
+
                }else{
                    //채워진 하트 s
                    console.log("full heart");
                    $("#likeCnt1").removeClass('far');
                    $("#likeCnt1").addClass('fas');
-                   str += "<label id='likeCnt'>"+${board.likeCnt}+"</label>";
+
                }
-               like.html(str);
+               //like.html(str);
 
 
             });

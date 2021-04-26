@@ -148,3 +148,6 @@ buildNumber.properties
 .flattened-pom.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java,java-web,maven
+
+# api keys #
+map_key.properties

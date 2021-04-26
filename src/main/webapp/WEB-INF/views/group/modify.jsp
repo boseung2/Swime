@@ -111,7 +111,7 @@
                     <option value="LOSI16">안산시</option>
                     <option value="LOSI17">안성시</option>
                     <option value="LOSI18">안양시</option>
-                    <option value="LOSI19">양주시시</option>
+                    <option value="LOSI19">양주시</option>
                     <option value="LOSI20">양주시</option>
                     <option value="LOSI21">여주시</option>
                     <option value="LOSI22">여주시</option>
@@ -230,6 +230,131 @@
         <sec:csrfInput/>
         <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
         <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
+
+        <h2>멤버 관리</h2>
+        <hr/>
+        <!-- 멤버 리스트 -->
+        <div id="groupAttend">
+            <ul class="attend">
+                <li data-sn="1203">
+                    <div>
+                        <div class="attendCard">
+                            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar"><b>정보승</b>	<span style="color:gray">회원</span>
+                        </div>
+                        <div class="attendBtn" style="text-decoration: underline; color: red;"><a href="#" id="">모임장양도</a><a href="#" class="changeManager" data-sn="1203">운영진임명</a><a href="#" class="ban">추방</a></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- 멤버 관리 -->
+        <script>
+            $(document).ready(function() {
+
+                let grpSnValue = '<c:out value="${group.sn}"/>';
+                let attendUL = $(".attend");
+
+                let userId = null;
+                <sec:authorize access="isAuthenticated()">
+                userId = "${pinfo.username}";
+                </sec:authorize>
+
+                let csrfHeaderName = "${_csrf.headerName}";
+                let csrfTokenValue = "${_csrf.token}";
+
+                // ajax spring security header
+                $(document).ajaxSend(function(e, xhr, options) {
+                    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+                });
+
+                showList();
+
+                function showList() {
+                    groupAttendService.getListWithBan({grpSn:grpSnValue}, function(list) {
+                        let str = "";
+                        if(list == null || list.length == 0) {
+                            attendUL.html("");
+                            return;
+                        }
+
+                        for(let i=0, len=list.length || 0; i<len; i++) {
+                            str += "<li data-sn='"+list[i].sn+"'>";
+                            str += "<div><div class='attendCard'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+                            str += "<b>"+list[i].name+"</b>\t";
+                            str += "<span style='color:gray'>"+ (list[i].status !== "GRUS03" ? list[i].grpRole : '영구추방회원') +"</span></div><div class='attendBtn' data-sn='"+list[i].sn+"' style='text-decoration: underline; color: red;'>"
+                            if(list[i].status === "GRUS03") {
+                                str += "<a href='#' class='cancelBan'>영구추방해제</a>"
+                            } else if(userId !== list[i].userId) {
+                                str += "<a href='#' class='changeLeader'>모임장양도</a>"
+                                if(list[i].grpRole === "운영진") {
+                                    str += "<a href='#' class='cancelManager'>운영진해제</a>"
+                                } else {
+                                    str += "<a href='#' class='changeManager'>운영진임명</a>"
+                                }
+                                if(list[i].status === "GRUS01") {
+                                    str += "<a href='#' class='ban'>추방</a>"
+                                }
+                            }
+                            str += "</div></div></li>"
+                        }
+                        attendUL.html(str);
+                    })
+                }
+
+                let attend = $('.attend');
+
+                attend.on("click", "li", function(e) {
+                    e.preventDefault();
+
+                    if(e.target === $(this).find('.changeManager')[0]) {
+                        // 운영진 임명 클릭시
+                        groupAttendService.changeManager($(this).data('sn'), function(result) {
+                            alert('운영진임명완료');
+                            showList();
+                        })
+                    } else if(e.target === $(this).find('.cancelManager')[0]) {
+                        // 운영진 해제 클릭시
+                        groupAttendService.cancelManager($(this).data('sn'), function(result) {
+                            alert('운영진해제완료');
+                            showList();
+                        })
+                    } else if(e.target === $(this).find('.changeLeader')[0]) {
+                        // 모임장 임명 클릭시
+                        let result = confirm("정말 모임장을 양도하시겠습니까?(모임장 양도는 되돌릴 수 없습니다.");
+                        if(result === false) {
+                            return;
+                        }
+                        groupAttendService.changeLeader($(this).data('sn'), function(result) {
+                            alert('정상적으로 양도되었습니다.');
+                            // group/get 페이지로 이동해야함
+                            window.location.href="get?sn=" + "<c:out value="${group.sn}"/>";
+                        })
+                    } else if(e.target === $(this).find('.ban')[0]) {
+                        // 추방 버튼 클릭시
+                        let permanent = confirm("사용자를 영구추방하시겠습니까?(취소를 선택하면 추방한 유저는 재가입이 가능합니다.)");
+                        if(permanent) {
+                            groupAttendService.banPermanent($(this).data('sn'), function(result) {
+                                alert('영구추방했습니다');
+                                showList();
+                            })
+                        } else {
+                            groupAttendService.ban($(this).data('sn'), function(result) {
+                                alert('추방했습니다.');
+                                showList();
+                            })
+                        }
+                    } else if(e.target === $(this).find('.cancelBan')[0]) {
+                        groupAttendService.cancelBan($(this).data('sn'), function(result) {
+                            alert('영구추방해제완료');
+                            showList();
+                        })
+                    }
+                });
+            })
+        </script>
+
+
+
+        <br>
         <c:if test="${pinfo.username eq group.userId}">
             <button type="submit" class="btn btn-warning" data-oper="modify">수정</button>
             <button type="submit" class="btn btn-danger" data-oper="remove">삭제</button>
@@ -238,6 +363,8 @@
     </form>
 </div>
 
+<!-- GroupAttend Module -->
+<script type="text/javascript" src="/resources/js/groupAttend.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         let formObj = $('form');

@@ -5,6 +5,7 @@
 
 <script type="text/javascript" src="../../../resources/js/validation.js"></script>
 <link href="/resources/css/user.css" rel="stylesheet">
+<link href="/resources/css/spinner.css" rel="stylesheet">
 
 <div>
     <main class="form-signin">
@@ -46,14 +47,30 @@
                 <sec:csrfInput/>
                 <%--            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
             </form>
-            <button id="submitBtn" class="w-100 btn btn-lg btn-primary">Sign up</button>
+            <button id="submitBtn" class="w-100 btn btn-lg btn-primary">
+                <div style="margin: auto;width: 110px;">
+                    <div id="subDiv" style="display: flex;">
+                        <div class="btn-inner" id="spinnerBox">
+                            <div class="loader" style="width:35px;">
+                                <svg class="circular" viewBox="25 25 50 50">
+                                    <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="btn-inner">
+                            Sign up
+                        </div>
+                    </div>
+                </div>
+            </button>
         </div>
     </main>
 </div>
 
 
 <script>
-    let a;
+    $("#spinnerBox").hide();
+
     $(document).ready(function () {
         let email = $("#id")[0];
         let password = $("#pw")[0];
@@ -124,6 +141,8 @@
         
         function registerForAjax() {
             console.log("ajax 실행");
+            $("#spinnerBox").show();
+            $("#spinnerBox").css("display","flex");
 
             $("#submitBtn").attr("disabled", true);
 
@@ -143,6 +162,8 @@
                 },
                 error : function (msg) {
                     $("#submitBtn").attr("disabled", false);
+                    $("#spinnerBox").hide();
+                    $("#spinnerBox").css("display","");
                 }
             });
         }
@@ -176,5 +197,5 @@
 
 </script>
 
-
+<link href="/resources/css/UserFooterPos.css" rel="stylesheet">
 <%@include file="../includes/footer.jsp" %>

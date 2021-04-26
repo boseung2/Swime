@@ -14,6 +14,10 @@
     .topnav > a {
         cursor: pointer;
     }
+
+    .marginLeft {
+        margin-left: 30px;
+    }
 </style>
 
 

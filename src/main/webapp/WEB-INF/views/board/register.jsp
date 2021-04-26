@@ -94,7 +94,7 @@
             return;
         }else{
             console.log('inserting');
-            // alert("제목을 입력해주세요.");
+            //alert("제목을 입력해주세요.");
             // return;
         }
 
@@ -127,8 +127,9 @@
         // $("input[id='title']").val().trim().length == 0
         // getByte($("input[id='title']").val()) == ""
         if($("input[id='title']").val().trim().length == 0) {
-
+            alert("제목을 입력해주세요.");
             return false;
+
         }else if(getByte($("input[id='title']").val()) > 200){
             alert("게시글 제목이 너무 깁니다.");
             return false;

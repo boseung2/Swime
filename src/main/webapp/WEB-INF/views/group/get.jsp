@@ -31,18 +31,117 @@
             <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
             <p><i class="fas fa-user"></i>모임장 <c:out value="${group.userName}"/></p>
 
-            <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
                 <sec:authorize access="isAuthenticated()">
+                    <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
+                    <c:if test="${pinfo.username ne group.userId}">
+                        <a class="btn btn-danger" href="#" id="withdrawBtn">모임 탈퇴</a>
+                    </c:if>
                     <c:if test="${pinfo.username eq group.userId}">
-                        <button data-oper="modify" class="btn btn-primary">모임 수정</button>
+                        <button data-oper="modify" class="btn btn-secondary">모임 수정/관리</button>
                     </c:if>
                 </sec:authorize>
 
-<%--            <a class="btn btn-primary" href="#">❤</a>--%>
+            <sec:authorize access="isAuthenticated()">
+            <a class="btn btn-outline-primary" href="#" id="heartOff"><i class="far fa-heart"></i></a>
+            <a class="btn btn-primary" href="#" id="heartOn"><i class="far fa-heart"></i></a>
+            </sec:authorize>
+
         </div>
         <!-- /.col-md-4 -->
     </div>
     <!-- /.row -->
+
+    <!-- 모임 참여 -->
+    <script>
+        $(document).ready(function() {
+
+            let grpSnValue = '<c:out value="${group.sn}"/>';
+            let attendUL = $(".attend");
+
+            let userId = null;
+            <sec:authorize access="isAuthenticated()">
+            userId = "${pinfo.username}";
+            </sec:authorize>
+
+            let attend = {
+                grpSn : grpSnValue,
+                userId : userId
+            }
+
+            let csrfHeaderName = "${_csrf.headerName}";
+            let csrfTokenValue = "${_csrf.token}";
+
+            // ajax spring security header
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+            });
+
+            // 버튼상태 관리
+            let attendBtn = $('#attendBtn');
+            let withdrawBtn = $('#withdrawBtn');
+
+            attendBtn.show();
+            withdrawBtn.hide();
+            groupAttendService.get(attend, function(result) {
+                if(result.status === 'GRUS01') {
+                    attendBtn.hide();
+                    withdrawBtn.show();
+                } else {
+                    attendBtn.show();
+                    withdrawBtn.hide();
+                }
+            })
+
+            showList();
+
+            function showList() {
+                groupAttendService.getList({grpSn:grpSnValue}, function(list) {
+                    let str = "";
+                    if(list == null || list.length == 0) {
+                        attendUL.html("");
+                        return;
+                    }
+
+                    for(let i=0, len=list.length || 0; i<len; i++) {
+                        str += "<li data-sn='"+list[i].sn+"'>";
+                        str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+                        str += "<span><b>"+list[i].name+"</b></span>\t";
+                        str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
+                    }
+
+                    attendUL.html(str);
+
+                    //showRatingPage(ratingCnt);
+                })
+            }
+
+            attendBtn.on("click", function(e) {
+                groupAttendService.get(attend, function(result) {
+                    if(result.status === 'GRUS03') {
+                        alert("영구추방당한 모임입니다. 모임가입이 불가합니다.");
+                        return false;
+                    }
+                })
+
+                groupAttendService.add(attend, function(result) {
+                    alert("모임에 참여했습니다.");
+                    attendBtn.hide();
+                    withdrawBtn.show();
+                    showList();
+                })
+            })
+
+            withdrawBtn.on("click", function(e) {
+                groupAttendService.withdraw(attend, function(result) {
+                    alert("정상적으로 모임에서 탈퇴되었습니다.");
+                    attendBtn.show();
+                    withdrawBtn.hide();
+                    showList();
+                })
+            })
+
+        })
+    </script>
 
     <!-- nav -->
     <div class="topnav">
@@ -52,30 +151,6 @@
         <a href="#board">게시판</a>
     </div>
     <!-- /nav -->
-
-    <!-- topnav javascript -->
-    <script>
-        let topnav = document.getElementsByClassName("topnav")[0];
-        let sticky = topnav.offsetTop;
-
-        $(document).ready(function() {
-            $('.topnav').on("click", "a", function(e) {
-                $(".topnav > a").removeClass('active');
-                console.dir(e.target);
-                $(this).attr("class", "active");
-            })
-        })
-
-        window.onscroll = function() {myFunction()};
-
-        function myFunction() {
-            if(window.pageYOffset >= sticky) {
-                topnav.classList.add("sticky");
-            } else {
-                topnav.classList.remove("sticky");
-            }
-        }
-    </script>
 
     <div class="main-contents">
     <div id="info" >
@@ -124,7 +199,18 @@
 
     <!-- 스터디 만들기 버튼-->
     <hr class="centerHr" id="study">
-        <h4>스터디<sec:authorize access="isAuthenticated()"><a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a></sec:authorize></h4>
+        <h4>스터디</h4>
+        <c:set var="done" value="false"/>
+
+        <c:forEach var = "attendant" items="${attendList}">
+            <c:if test="${not done}">
+                <c:if test="${attendant.userId == pinfo.username}">
+                    <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a>
+                    <c:set var="done" value="true"/>
+                </c:if>
+            </c:if>
+        </c:forEach>
+
 
     <!-- 스터디 리스트 -->
     <div class="studyList row">
@@ -140,7 +226,7 @@
 <%--    <div>--%>
 <%--        <h4>게시판</h4>--%>
 <%--    </div>--%>
-    <%@include file="groupBoard.jsp"%>
+        <%@include file="groupBoard.jsp"%>
 
     <!-- container -->
 
@@ -169,11 +255,11 @@
                     <input type="text" class="form-control" name="userId" id="userId">
                 </div>
                 <div class="form-group">
-                    <label for="rating">별점</label>
+                    <label for="rating">모임평점(0~5점)</label>
                     <input type="number" class="form-control" name="rating" id="rating">
                 </div>
                 <div class="form-group">
-                    <label for="review">내용</label>
+                    <label for="review">후기</label>
                     <input type="text" class="form-control" name="review" id="review">
                 </div>
                 <div class="form-group">
@@ -205,115 +291,21 @@
             </div>
             <div class="studyModalBody modal-body">정상적으로 처리되었습니다.</div>
             <div class = "modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+<%--                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>--%>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- GroupRating Module -->
-<script type="text/javascript" src="/resources/js/groupRating.js"></script>
-
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        <!-- 스터디 삭제 후 모달 창-->
-        let result = '<c:out value="${result}"/>';
-
-        console.log("스터디 삭제 result = " + result);
-
-        checkModal(result);
-
-        history.replaceState({}, null, null);
-
-
-        function checkModal(result) {
-
-            if(result === '' || history.state) {
-                return;
-            }
-
-            if("success" === result) {
-                $(".studyModalBody").html("스터디가 정상적으로 삭제되었습니다.");
-            }
-            if("error" === result) {
-                $(".studyModalBody").html("스터디 삭제를 실패하였습니다.");
-            }
-
-            $("#studyModal").modal("show");
-        }
-    });
-</script>
 <!-- GroupAttend Module -->
 <script type="text/javascript" src="/resources/js/groupAttend.js"></script>
 <!-- StudyList Module -->
 <script type="text/javascript" src="/resources/js/studyList.js"></script>
-
-
-
-
-<!-- 모임 참여 -->
-<script>
-    $(document).ready(function() {
-
-        let grpSnValue = '<c:out value="${group.sn}"/>';
-        let attendUL = $(".attend");
-
-        let userId = null;
-<%--        <sec:authorize access="isAuthenticated()">--%>
-<%--            userId = '<sec:authentication property="principal.userName"/>';--%>
-<%--        </sec:authorize>--%>
-<%--        userId = "${pinfo.username}";--%>
-//         console.log(userId);
-
-        let csrfHeaderName = "${_csrf.headerName}";
-        let csrfTokenValue = "${_csrf.token}";
-
-        // ajax spring security header
-        $(document).ajaxSend(function(e, xhr, options) {
-            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-        });
-
-        showList();
-
-        function showList() {
-            groupAttendService.getList({grpSn:grpSnValue}, function(list) {
-                let str = "";
-                if(list == null || list.length == 0) {
-                    attendUL.html("");
-                    return;
-                }
-
-                for(let i=0, len=list.length || 0; i<len; i++) {
-                    str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
-                    str += "<span><b>"+list[i].name+"</b></span>\t";
-                    str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
-                }
-
-                attendUL.html(str);
-
-                //showRatingPage(ratingCnt);
-            })
-        }
-
-        $("#attendBtn").on("click", function(e) {
-            let attend = {
-                grpSn : grpSnValue,
-                userId : userId
-            }
-
-            groupAttendService.add(attend, function(result) {
-                alert("모임에 참여했습니다.");
-                showList();
-                console.log(this);
-            })
-        })
-
-    })
-</script>
+<!-- GroupRating Module -->
+<script type="text/javascript" src="/resources/js/groupRating.js"></script>
+<!-- GroupWish Module -->
+<script type="text/javascript" src="/resources/js/groupWish.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -323,12 +315,12 @@
 
         <%--let snValue = '<c:out value="${group.sn}"/>';--%>
 
-    //     {"grpSn" : snValue, "userId" : "jungbs3726@naver.com", "grpRole" : "GRRO02", "status" : "GRST01"}
-    // ,
-    //     function(result) {
-    //         alert("RESULT: " + result);
-    //     }
-    // )groupAttendService.add(
+        //     {"grpSn" : snValue, "userId" : "jungbs3726@naver.com", "grpRole" : "GRRO02", "status" : "GRST01"}
+        // ,
+        //     function(result) {
+        //         alert("RESULT: " + result);
+        //     }
+        // )groupAttendService.add(
 
 
         // groupAttendService.getList({grpSn:snValue}, function(list) {
@@ -345,9 +337,6 @@
 
     })
 </script>
-
-
-
 
 
 
@@ -520,6 +509,36 @@
         //     showStudyList(studyPageNum);
         // })
     })
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        <!-- 스터디 삭제 후 모달 창-->
+        let result = '<c:out value="${result}"/>';
+
+        console.log("스터디 삭제 result = " + result);
+
+        checkModal(result);
+
+        history.replaceState({}, null, null);
+
+
+        function checkModal(result) {
+
+            if(result === '' || history.state) {
+                return;
+            }
+
+            if("success" === result) {
+                $(".studyModalBody").html("스터디가 정상적으로 삭제되었습니다.");
+            }
+            if("error" === result) {
+                $(".studyModalBody").html("스터디 삭제를 실패하였습니다.");
+            }
+
+            $("#studyModal").modal("show");
+        }
+    });
 </script>
 
 
@@ -912,6 +931,84 @@
         return byte;
     }
 
+</script>
+
+
+<!-- topnav javascript -->
+<script>
+    let topnav = document.getElementsByClassName("topnav")[0];
+    let sticky = topnav.offsetTop;
+
+    $(document).ready(function() {
+        $('.topnav').on("click", "a", function(e) {
+            $(".topnav > a").removeClass('active');
+            console.dir(e.target);
+            $(this).attr("class", "active");
+        })
+    })
+
+    window.onscroll = function() {myFunction()};
+
+    function myFunction() {
+        if(window.pageYOffset >= sticky) {
+            topnav.classList.add("sticky");
+        } else {
+            topnav.classList.remove("sticky");
+        }
+    }
+</script>
+
+
+
+
+
+
+<!-- 모임 찜 -->
+<script>
+    $(document).ready(function() {
+        let grpSn = <c:out value="${group.sn}"/>
+            let userId = null;
+        <sec:authorize access="isAuthenticated()">
+        userId = "${pinfo.username}";
+        </sec:authorize>
+
+        let groupWish = {
+            grpSn : grpSn,
+            userId : userId
+        };
+
+        let heartOn = $('#heartOn');
+        let heartOff = $('#heartOff');
+
+        heartOn.hide();
+        heartOff.show();
+        groupWishService.get(groupWish, function(result) {
+            heartOn.show();
+            heartOff.hide();
+        })
+
+        heartOff.on("click", function(e) {
+            e.preventDefault();
+
+            groupWishService.add(groupWish, function(result) {
+                alert(result);
+
+                heartOff.hide();
+                heartOn.show();
+            })
+        })
+
+        heartOn.on("click", function(e) {
+            e.preventDefault();
+
+            groupWishService.remove(groupWish, function(result) {
+                alert(result);
+
+                heartOff.show();
+                heartOn.hide();
+            })
+        })
+    })
 </script>
 
 

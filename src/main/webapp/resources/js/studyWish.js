@@ -7,9 +7,9 @@ let studyWishService = (function(){
         console.log("getwish stdSn = " + param.stdSn);
         console.log("getwish userId = " + param.userId);
 
-        $.get("/study/wish/" + param.stdSn + "/" + param.userId, function (result) {
+        $.get("/study/wish/" + param.userId + "/" + param.stdSn, function (result) {
             if (callback) {
-                console.log("studyWishService result = " + result);
+                console.log("getWish result = " + result);
                 callback(result);
             }
         }).fail(function (xhr, status, err) {
