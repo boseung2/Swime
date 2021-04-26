@@ -39,7 +39,13 @@
             <p>${study.attendants} / ${study.capacity}</p>
             <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디</p></c:if>
             <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
-            <p>${study.expense}</p>
+
+            <c:choose>
+                <c:when test="${study.expense == '(선택)'}"></c:when>
+                <c:when test="${study.expense == '없음' || study.expense =='추후공지'}"><p>지참금 : ${study.expense}</p></c:when>
+                <c:otherwise><p>${study.expense}원</p></c:otherwise>
+            </c:choose>
+
 
             <div class="wishButton"></div>
 
@@ -153,7 +159,7 @@
                 </div>
                 <div class="modal-body">정상적으로 처리되었습니다.</div>
                 <div class = "modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+<%--                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>--%>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
                 </div>
             </div>
@@ -174,6 +180,13 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
+
+        // ajax spring security header
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        });
 
         let stdSn = ${study.sn};
         let userId = "${pinfo.username}"; // 로그인중인 id
@@ -181,8 +194,8 @@
 
         let wishUL = $('.wishButton');
 
-        if(userId !== '') {
-            // getStudyWish();
+        if(userId !== '') { // 로그인 되어있으면 찜버튼 출력
+            getStudyWish();
         }
 
         <!--찜 버튼 출력-->
@@ -195,7 +208,7 @@
 
                 if(result === "not exist") {
                     str += "<a class='wish btn btn-primary' href=''>♡</a>";
-                }else {
+                } else {
                     str += "<a class='wish btn btn-primary' href=''>❤</a>";
                 }
 
@@ -204,9 +217,8 @@
         }
 
         <!--찜 버튼 눌렸을 때-->
-        $(".wish").on("click", function(e) {
+        $(".wishButton").on("click", function(e) {
             e.preventDefault();
-            console.log("찜버튼 눌림");
 
             studyWishService.wish({stdSn : stdSn, userId : userId}, function(result) {
                 console.log("찜버튼 눌린 result = " + result);
@@ -218,7 +230,7 @@
                 }else if(result === "cancelWish"){
                     alert("스터디를 찜을 취소했습니다.");
                 }else if(result === "fail") {
-                    alert("찜하기를 실패했습니다.")
+                    alert("찜 서비스가 실패했습니다.")
                 }
 
                 wishUL.html(str);
@@ -289,11 +301,15 @@
         $(".remove").on("click", function(e) {
             e.preventDefault();
 
-            actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
-            actionForm.append("<input type='hidden' name = 'representation' value='${study.representation}'>");
-            actionForm.attr("action", "/study/remove");
-            actionForm.attr("method", "post");
-            actionForm.submit();
+            if (confirm('글을 삭제하시겠습니까?')) {
+
+                actionForm.append("<input type='hidden' name = 'sn' value='" + ${study.sn} + "'>");
+                actionForm.append("<input type='hidden' name = 'representation' value='${study.representation}'>");
+                actionForm.attr("action", "/study/remove");
+                actionForm.attr("method", "post");
+                actionForm.submit();
+            }
+
         });
 
         <!-- 스터디 수정 버튼 눌렀을 때-->

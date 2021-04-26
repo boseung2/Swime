@@ -199,7 +199,18 @@
 
     <!-- 스터디 만들기 버튼-->
     <hr class="centerHr" id="study">
-        <h4>스터디<sec:authorize access="isAuthenticated()"><a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a></sec:authorize></h4>
+        <h4>스터디</h4>
+        <c:set var="done" value="false"/>
+
+        <c:forEach var = "attendant" items="${attendList}">
+            <c:if test="${not done}">
+                <c:if test="${attendant.userId == pinfo.username}">
+                    <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a>
+                    <c:set var="done" value="true"/>
+                </c:if>
+            </c:if>
+        </c:forEach>
+
 
     <!-- 스터디 리스트 -->
     <div class="studyList row">
@@ -279,7 +290,7 @@
             </div>
             <div class="studyModalBody modal-body">정상적으로 처리되었습니다.</div>
             <div class = "modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+<%--                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>--%>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
             </div>
         </div>

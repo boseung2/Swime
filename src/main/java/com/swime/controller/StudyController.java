@@ -5,27 +5,29 @@ import com.swime.domain.*;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.AuthenticatedPrincipal;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sun.net.www.protocol.http.AuthenticationInfo;
-
-import javax.xml.ws.Response;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 
 @Controller
 @RequestMapping("/study")
 @Log4j
 @AllArgsConstructor
+@PropertySource("classpath:/map_key.properties")
 public class StudyController {
+
+    @Autowired
+    ApplicationContext context;
 
     private StudyService service;
 
@@ -40,9 +42,27 @@ public class StudyController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    // 에러페이지
+    @GetMapping("/error")
+    public void error() {
+
+    }
+
+    @GetMapping("/map")
+    public void map(Model model) {
+        Environment env = context.getEnvironment();
+        log.info("key = " + env.getProperty("key"));
+
+        model.addAttribute("key", env.getProperty("key"));
+    }
+
     // 스터디 상세조회
     @GetMapping("/get")
-    public void get(long sn, StudyCriteria cri, String userId, Model model) {
+    public String get(long sn, StudyCriteria cri, String userId, Model model) {
+
+        if(userId == "") {
+
+        }
         log.info("스터디 상세조회 cri = " + cri);
         log.info("스터디 조회자 = " + userId);
 
@@ -51,23 +71,36 @@ public class StudyController {
 
         log.info("sendCri = " + sendCri);
 
-        model.addAttribute("study", service.get(sn));
-        model.addAttribute("members", service.getAttendantList(sn));
+        try {
+            StudyVO study = service.get(sn);
+            model.addAttribute("study", study);
+
+            if(study == null) {
+                // 해당스터디가 존재하지 않으면 에러페이지로 이동
+                return "redirect:/study/error";
+            }
+            model.addAttribute("members", service.getAttendantList(sn));
+
+        }catch (Exception e) {
+            // 스터디 정보를 가져오는데 실패하면 에러페이지로 이동
+            return "redirect:/study/error";
+        }
 
         // 로그인한 경우
-        // 찜 여부 가져오기
         StudyParamVO studyParam = new StudyParamVO();
         studyParam.setUserId(userId);
         studyParam.setStdSn(sn);
 
-        model.addAttribute("studyParam", studyParam);
+//        model.addAttribute("studyParam", studyParam);
 
-        // 찜 여부 : null이면 찜 아니면 찜취소
-        log.info("=============================찜 여부 : " + service.getWish(studyParam));
-        model.addAttribute("wish", service.getWish(studyParam));
+//        // 찜 여부 가져오기 : null이면 찜 아니면 찜취소
+//        log.info("=============================찜 여부 : " + service.getWish(studyParam));
+//        model.addAttribute("wish", service.getWish(studyParam));
 
         // 참석 여부 가져오기
         model.addAttribute("attend", service.getAttendant(studyParam));
+
+        return "study/get";
     }
 
     // 스터디 생성 페이지
@@ -76,6 +109,11 @@ public class StudyController {
     public void register(@RequestParam("grpSn") long grpSn, StudyCriteria cri, Model model) {
         model.addAttribute("grpSn", grpSn);
         model.addAttribute("cri", cri);
+
+        Environment env = context.getEnvironment();
+        log.info("key = " + env.getProperty("key"));
+
+        model.addAttribute("key", env.getProperty("key"));
     }
 
     // 스터디 생성
@@ -84,76 +122,6 @@ public class StudyController {
     public String register(StudyVO study, String userId, StudyCriteria cri, RedirectAttributes rttr) {
 
         log.info("스터디 생성 cri = " + cri);
-        
-        // 유효성 검사
-        // 스터디명 30자 이하
-//        if(study.getName().length() > 30) {
-//            rttr.addFlashAttribute("result", "스터디명은 30자 이하여야합니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 시작/종료날짜 유효성 검사
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        try {
-//            dateFormat.parse(study.getStartDate());
-//        }catch (Exception e) {
-//            rttr.addFlashAttribute("result", "시작 날짜가 유효하지 않습니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 시작일자 < 종료일자인지 확인
-//
-//        // 매주일경우 종료 - 시작 > 7
-//        // 격주일 경우 종료 - 시작 > 14
-//        // 매달일 경우 종료일자가 다음달 같은 날짜 보다 클 때
-//
-//        // 시작/종료시간 유효성 검사
-//        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-//        try {
-//            timeFormat.parse(study.getStartDate());
-//        }catch (Exception e) {
-//            rttr.addFlashAttribute("result", "시작 시간이 유효하지 않습니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//        try {
-//            timeFormat.parse(study.getEndTime());
-//        }catch (Exception e) {
-//            rttr.addFlashAttribute("result", "종료 시간이 유효하지 않습니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 상세정보 400자 이하
-//        if(study.getInformation().length() > 400) {
-//            rttr.addFlashAttribute("result", "스터디명은 400자 이하여야합니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 비용 10자 이하
-//        if(study.getExpense().length() > 10) {
-//            rttr.addFlashAttribute("result", "지참금은 10자 이하여야합니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
-//
-//        // 온라인일경우 url(300바이트), 오프라인일 경우 장소 id(40바이트) 존재
-//        if ("STOF01".equals(study.getOnOff())) {
-//            if(study.getOnUrl().getBytes(StandardCharsets.UTF_8).length > 300) {
-//                rttr.addFlashAttribute("result", "url이 너무 큽니다.");
-//                return "redirect:/study/get?sn=" + study.getSn();
-//            }
-//        }
-//
-//        if("STOF02".equals(study.getOnOff())) {
-//            if(study.getOnUrl().getBytes(StandardCharsets.UTF_8).length > 40) {
-//                rttr.addFlashAttribute("result", "장소 id가 너무 큽니다.");
-//                return "redirect:/study/get?sn=" + study.getSn();
-//            }
-//        }
-//
-//        // 모집인원 99명까지
-//        if(study.getCapacity() > 99) {
-//            rttr.addFlashAttribute("result", "모집인원은 99명 이하여야합니다.");
-//            return "redirect:/study/get?sn=" + study.getSn();
-//        }
 
         log.info("study onOff = " + study.getOnOff());
 
@@ -249,32 +217,38 @@ public class StudyController {
     }
 
     // 스터디 찜 여부 반환
-    @GetMapping(value = "/wish/{stdSn}/{userId}")
-    public ResponseEntity<String> getWish(@PathVariable("stdSn") long stdSn, @PathVariable("userId") String userId) {
+    @GetMapping(value = "/wish/{userId}/{stdSn}")
+    public ResponseEntity<String> getWish(@PathVariable String userId, @PathVariable long stdSn) {
 
         // 로그인 되어있는 경우만 반환 가능
         StudyParamVO studyParam = new StudyParamVO();
         studyParam.setStdSn(stdSn);
         studyParam.setUserId(userId);
 
-        WishStudyVO wish = service.getWish(studyParam);
+        log.info("스터디 찜 여부 stdSn = " + stdSn);
+        log.info("스터디 찜 여부 userId = " + userId);
 
-        log.info("=====================================스터디 찜 여부" + wish);
+        try {
+            WishStudyVO wishResult = service.getWish(studyParam);
 
-        if(wish == null) {
-            log.info("not exist");
-            return new ResponseEntity<>("not exist", HttpStatus.OK);
-        }else if (wish != null){
-            log.info("exist");
-            return new ResponseEntity<>("exist", HttpStatus.OK);
+            log.info("스터디 찜 여부 =======================================");
+
+            if(wishResult == null) {
+                log.info("not exist");
+                return new ResponseEntity<>("not exist", HttpStatus.OK);
+            }else{
+                log.info("exist");
+                return new ResponseEntity<>("exist", HttpStatus.OK);
+            }
+
+        }catch (Exception e) {
+            log.info("fail");
+            return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
         }
-        log.info("fail");
-        return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
-
     }
 
     // 스터디 찜/취소
-    @PostMapping("/wish")
+    @PostMapping(value = "/wish", consumes = "application/json")
     public ResponseEntity<String> wish(@RequestBody WishStudyVO wish) {
         // 1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
         log.info("스터디 찜/취소 stdSn = " + wish.getStdSn());
@@ -286,21 +260,40 @@ public class StudyController {
         studyParam.setStdSn(wish.getStdSn());
         studyParam.setUserId(wish.getUserId());
 
-        // 2. 해당 wish가 존재하면 삭제
-        if(service.getWish(studyParam) != null) {
-            return service.removeWish(studyParam) == 1
-                ? new ResponseEntity<>("cancelWish", HttpStatus.OK)
-                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-        }else {
-            // 3. 해당 wish가 없으면 등록
-            return service.registerWish(wish) == 1
-                ? new ResponseEntity<>("wish", HttpStatus.OK)
-                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+        try{
+            // 해당 스터디를 찜한 기록 불러오기
+            WishStudyVO wishState = service.getWish(studyParam);
+
+            if(wishState != null) {
+                // 해당 스터디를 찜한 기록이 있으면
+                try {
+                    if (service.removeWish(studyParam) == 1) { // 찜 취소
+                        return new ResponseEntity<>("cancelWish", HttpStatus.OK);
+                    }else {// 찜 취소 실패
+                        return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
+                } catch (Exception e) { // 찜 취소 실패
+                    return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }else {
+                // 찜한 기록이 있으면
+                try {
+                    if (service.registerWish(wish) == 1) { // 찜
+                        return new ResponseEntity<>("wish", HttpStatus.OK);
+                    }else {// 찜 실패
+                        return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
+                } catch (Exception e) { // 찜 실패
+                    return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+        } catch (Exception e) { // 찜 기록 불러오기 실패
+            return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         // 4. get 페이지에서 하트가 바뀌어있어야함
     }
-//
+
 //    // 스터디 참가
 //    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
 //    @ResponseBody
