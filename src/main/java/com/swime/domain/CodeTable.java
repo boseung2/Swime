@@ -127,7 +127,7 @@ public enum CodeTable {
 
     GRRO01("모임장"),
     GRRO02("운영진"),
-    GRRO03("모임원"),
+    GRRO03("회원"),
     GRRO04("영구강퇴")
     ;
 
