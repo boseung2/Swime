@@ -171,18 +171,35 @@ public class UserController {
 
     }
 
-    @GetMapping("/details/group/joinListWithPaging")
-    public ResponseEntity<List<GroupVO>> joinListWithPaging(String id, ProfileCriteria cri){
-        log.info("cri = " + cri);
-        log.info("id = " + id);
-        List<GroupVO> list = profileService.joinListWithPaging(id,cri);
-        list.forEach(group -> {
-            List<String> tags = new ArrayList<>();
-            groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
-            group.setTags(tags);
-        });
-
-        return new ResponseEntity<>(list, HttpStatus.OK);
+    @GetMapping("/test")
+    public void joinListWithPaging(Model model, String id, ProfileCriteriaList list){
+        log.info(id);
+        log.info(list == null);
+        log.info(list.getList().get(1));
+        list.getList().forEach(log::info);
+//        List<GroupVO> ownerList = profileService.getOwnerGroupList(id);
+//        List<GroupVO> joinList = profileService.getJoinGroupList(id);
+//        List<GroupVO> wishList = profileService.getWishGroupList(id);
+//
+//        List<List<GroupVO>> list = new ArrayList<>();
+//        list.add(ownerList);
+//        list.add(joinList);
+//        list.add(wishList);
+//
+//        Iterator<List<GroupVO>> it = list.iterator();
+//
+//        while (it.hasNext()){
+//            List<GroupVO> vo = it.next();
+//            vo.forEach(group -> {
+//                List<String> tags = new ArrayList<>();
+//                groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
+//                group.setTags(tags);
+//            });
+//        }
+//
+//        model.addAttribute("ownerList", ownerList);
+//        model.addAttribute("joinList", joinList);
+//        model.addAttribute("wishList", wishList);
     }
 
 
