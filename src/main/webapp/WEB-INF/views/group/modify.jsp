@@ -269,7 +269,7 @@
                 showList();
 
                 function showList() {
-                    groupAttendService.getList({grpSn:grpSnValue}, function(list) {
+                    groupAttendService.getListWithBan({grpSn:grpSnValue}, function(list) {
                         let str = "";
                         if(list == null || list.length == 0) {
                             attendUL.html("");
@@ -280,19 +280,18 @@
                             str += "<li data-sn='"+list[i].sn+"'>";
                             str += "<div><div class='attendCard'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
                             str += "<b>"+list[i].name+"</b>\t";
-                            str += "<span style='color:gray'>"+list[i].grpRole+"</span></div><div class='attendBtn' data-sn='"+list[i].sn+"' style='text-decoration: underline; color: red;'>"
-                            if(userId !== list[i].userId) {
+                            str += "<span style='color:gray'>"+ (list[i].status !== "GRUS03" ? list[i].grpRole : '영구추방회원') +"</span></div><div class='attendBtn' data-sn='"+list[i].sn+"' style='text-decoration: underline; color: red;'>"
+                            if(list[i].status === "GRUS03") {
+                                str += "<a href='#' class='cancelBan'>영구추방해제</a>"
+                            } else if(userId !== list[i].userId) {
                                 str += "<a href='#' class='changeLeader'>모임장양도</a>"
                                 if(list[i].grpRole === "운영진") {
-                                    str += "<a href='#' class='cancleManager'>운영진해제</a>"
+                                    str += "<a href='#' class='cancelManager'>운영진해제</a>"
                                 } else {
                                     str += "<a href='#' class='changeManager'>운영진임명</a>"
                                 }
-
                                 if(list[i].status === "GRUS01") {
                                     str += "<a href='#' class='ban'>추방</a>"
-                                } else if(list[i].status === "GRUS03") {
-                                    str += "<a href='#' class='cancleBan'>영구추방해제</a>"
                                 }
                             }
                             str += "</div></div></li>"
@@ -300,30 +299,59 @@
                         attendUL.html(str);
                     })
                 }
-            })
-        </script>
-        <script>
-            $(document).ready(function() {
+
                 let attend = $('.attend');
 
                 attend.on("click", "li", function(e) {
-                   e.preventDefault();
+                    e.preventDefault();
 
-                   if(e.target === $(this).find('.changeManager')[0]) {
-                       alert($(this).data('sn'));
-                       alert('운영진임명');
-                   } else if(e.target === $(this).find('.cancleManager')[0]) {
-                       alert('운영진해제');
-                   } else if(e.target === $(this).find('.changeLeader')[0]) {
-                       alert('모임장임명');
-                   } else if(e.target === $(this).find('.ban')[0]) {
-                       alert('추방');
-                   } else if(e.target === $(this).find('.cancleBan')[0]) {
-                       alert('영구추방해제');
-                   }
+                    if(e.target === $(this).find('.changeManager')[0]) {
+                        // 운영진 임명 클릭시
+                        groupAttendService.changeManager($(this).data('sn'), function(result) {
+                            alert('운영진임명완료');
+                            showList();
+                        })
+                    } else if(e.target === $(this).find('.cancelManager')[0]) {
+                        // 운영진 해제 클릭시
+                        groupAttendService.cancelManager($(this).data('sn'), function(result) {
+                            alert('운영진해제완료');
+                            showList();
+                        })
+                    } else if(e.target === $(this).find('.changeLeader')[0]) {
+                        // 모임장 임명 클릭시
+                        let result = confirm("정말 모임장을 양도하시겠습니까?(모임장 양도는 되돌릴 수 없습니다.");
+                        if(result === false) {
+                            return;
+                        }
+                        groupAttendService.changeLeader($(this).data('sn'), function(result) {
+                            alert('정상적으로 양도되었습니다.');
+                            // group/get 페이지로 이동해야함
+                            window.location.href="get?sn=" + "<c:out value="${group.sn}"/>";
+                        })
+                    } else if(e.target === $(this).find('.ban')[0]) {
+                        // 추방 버튼 클릭시
+                        let permanent = confirm("사용자를 영구추방하시겠습니까?(취소를 선택하면 추방한 유저는 재가입이 가능합니다.)");
+                        if(permanent) {
+                            groupAttendService.banPermanent($(this).data('sn'), function(result) {
+                                alert('영구추방했습니다');
+                                showList();
+                            })
+                        } else {
+                            groupAttendService.ban($(this).data('sn'), function(result) {
+                                alert('추방했습니다.');
+                                showList();
+                            })
+                        }
+                    } else if(e.target === $(this).find('.cancelBan')[0]) {
+                        groupAttendService.cancelBan($(this).data('sn'), function(result) {
+                            alert('영구추방해제완료');
+                            showList();
+                        })
+                    }
                 });
             })
         </script>
+
 
 
         <br>

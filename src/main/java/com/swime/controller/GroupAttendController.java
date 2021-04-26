@@ -45,6 +45,19 @@ public class GroupAttendController {
 
         log.info("getList.......");
 
+        return new ResponseEntity<>(service.getList(grpSn), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/pageWithBan/{grpSn}",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<List<GroupAttendVO>> getListWithBan(
+            @PathVariable("grpSn") Long grpSn) {
+
+        log.info("getListWithBan.......");
+
         return new ResponseEntity<>(service.getListWithBan(grpSn), HttpStatus.OK);
     }
 

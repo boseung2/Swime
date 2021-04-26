@@ -116,6 +116,12 @@
             }
 
             attendBtn.on("click", function(e) {
+                groupAttendService.get(attend, function(result) {
+                    if(result.status === 'GRUS03') {
+                        alert("영구추방당한 모임입니다. 모임가입이 불가합니다.");
+                        return false;
+                    }
+                })
 
                 groupAttendService.add(attend, function(result) {
                     alert("모임에 참여했습니다.");

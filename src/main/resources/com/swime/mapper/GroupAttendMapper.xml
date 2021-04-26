@@ -27,7 +27,7 @@
         where l.user_id = u.id
           and l.grp_sn = #{grpSn}
           and l.status != 'GRUS02'
-        order by l.grp_role asc, l.sn asc
+        order by l.status asc, l.grp_role asc, l.sn asc
     </select>
 
     <update id="update">
