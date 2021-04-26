@@ -80,5 +80,10 @@ public class RootConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
 }
