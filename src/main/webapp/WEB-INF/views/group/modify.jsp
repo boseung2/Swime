@@ -236,13 +236,12 @@
         <!-- 멤버 리스트 -->
         <div id="groupAttend">
             <ul class="attend">
-                <li data-sn="12">
+                <li data-sn="1203">
                     <div>
-                        <div class="header">
-                            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
-                            <span>이름</span>
-                            <span>모임장</span>
+                        <div class="attendCard">
+                            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar"><b>정보승</b>	<span style="color:gray">회원</span>
                         </div>
+                        <div class="attendBtn" style="text-decoration: underline; color: red;"><a href="#" id="">모임장양도</a><a href="#" class="changeManager" data-sn="1203">운영진임명</a><a href="#" class="ban">추방</a></div>
                     </div>
                 </li>
             </ul>
@@ -281,25 +280,41 @@
                             str += "<li data-sn='"+list[i].sn+"'>";
                             str += "<div><div class='attendCard'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
                             str += "<b>"+list[i].name+"</b>\t";
-                            str += "<span style='color:gray'>"+list[i].grpRole+"</span></div><div class='attendBtn' style='text-decoration: underline; color: red;'>"
+                            str += "<span style='color:gray'>"+list[i].grpRole+"</span></div><div class='attendBtn' data-sn='"+list[i].sn+"' style='text-decoration: underline; color: red;'>"
                             if(userId !== list[i].userId) {
-                                str += "<a href='#'>모임장양도</a>"
+                                str += "<a href='#' id=''>모임장양도</a>"
                                 if(list[i].grpRole === "운영진") {
-                                    str += "<a href='#'>운영진해제</a>"
+                                    str += "<a href='#' class='cancleManager'>운영진해제</a>"
                                 } else {
-                                    str += "<a href='#'>운영진임명</a>"
+                                    str += "<a href='#' class='changeManager'>운영진임명</a>"
                                 }
-                                str += "<a href='#'>강퇴</a>"
+
+                                if(list[i].status === "GRUS01") {
+                                    str += "<a href='#' class='ban'>추방</a>"
+                                } else if(list[i].status === "GRUS03") {
+                                    str += "<a href='#' class='cancleBan'>영구추방해제</a>"
+                                }
                             }
                             str += "</div></div></li>"
                         }
-
                         attendUL.html(str);
                     })
                 }
             })
         </script>
+        <script>
+            $(document).ready(function() {
+                let attend = $('.attend');
 
+                attend.on("click", "li", function(e) {
+                   e.preventDefault();
+                   console.log($(this).find('.changeManager').content);
+                   console.log(e.target);
+                   //if(e.target)
+                   alert('hi');
+                });
+            })
+        </script>
 
 
         <br>
