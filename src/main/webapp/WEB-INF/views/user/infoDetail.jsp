@@ -25,16 +25,16 @@
         margin-top: 30px;
     }
 
-    .card-cat {
-        background-color: #f1f1f1;
-        margin: 2px;
-        padding: 2px;
-        font-size: 15px;
-        border-radius: 0.5rem;
-        width: 80px;
-        height: 25px;
-        text-align:center;
-    }
+    /*.card-cat {*/
+    /*    background-color: #f1f1f1;*/
+    /*    margin: 2px;*/
+    /*    padding: 2px;*/
+    /*    font-size: 15px;*/
+    /*    border-radius: 0.5rem;*/
+    /*    width: 80px;*/
+    /*    height: 25px;*/
+    /*    text-align:center;*/
+    /*}*/
 
     .uploadResult > img {
         height: 70px;
@@ -67,8 +67,8 @@
 
     $(".topnav > a").click(function() {
         $(".topnav > a").removeClass('active');
-        $(this).addClass('active')
-        console.log(this.id +" click!!")
+        $(this).addClass('active');
+        console.log(this.id +" click!!");
 
         contentAjax(this);
     });

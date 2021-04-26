@@ -1,0 +1,23 @@
+.mini-card-tag {
+    /*background-color: #fccaca;*/
+    /*margin: 2px;*/
+    /*padding: 2px;*/
+    /*font-size: 15px;*/
+    /*border-radius: 0.5rem;*/
+    /*width: 80px;*/
+    /*height: 25px;*/
+    /*text-align:center;*/
+}
+
+.card-body-bottom {
+    display: flex;
+    height: 20px;
+    margin-top: 10px;
+}
+.card-body-top {
+    display: flex;
+}
+
+.card-body {
+    cursor : pointer;
+}
