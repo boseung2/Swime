@@ -61,13 +61,13 @@ public class BoardLikeServiceTests {
     @Test
     public void testRead(){
         BoardLikeVO boardLike = new BoardLikeVO();
-        boardLike.setBrdSn(332L);
+        boardLike.setBrdSn(352L);
         boardLike.setUserId("toywar94@gmail.com");
 
         BoardLikeVO like = service.read(boardLike);
-        log.info(like);
+        log.info("like : " + like);
 
         //Assert.assertTrue(like == null && like.getBrdSn() == 332L && "toywar94@gmail.com".equals(like.getUserId()));
-        Assert.assertTrue(like != null && like.getBrdSn() == 332L && "toywar94@gmail.com".equals(like.getUserId()));
+        Assert.assertTrue(like != null && like.getBrdSn() == 352L && "toywar94@gmail.com".equals(like.getUserId()));
     }
 }

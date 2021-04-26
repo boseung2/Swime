@@ -95,7 +95,7 @@
                 <label>좋아요</label>
 <%--                <label><c:out value="${board.likeCnt}"/> </label>--%>
 <%--                <label>${count}</label>--%>
-                <label><c:out value="${board.likeCnt}"/> </label>
+                <label id="likeCnt"><c:out value="${board.likeCnt}"/> </label>
 
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
@@ -466,24 +466,57 @@
             });
         } // end showlist
 
+        let like = ${board.likeCnt};
+        console.log("like : "+like);
+        function getBoardLike(){
+            console.log("getBoardLike 호출..........")
+            boardLikeService.getLike({brdSn : snValue, userId : userId},function(result){
+
+               let str = "";
+
+               console.log("brdSn : " + snValue);
+               console.log("userId : " + userId);
+               console.log("likeResult : "+ result);
+
+               console.log(${board.likeCnt});
+               //$("#likeCnt").val(${board.likeCnt});
+               if(result === "notExist"){
+                   //빈하트 r
+                   console.log("empty heart");
+                   $("#likeCnt1").removeClass('fas');
+                   $("#likeCnt1").addClass('far');
+                   str += "<label id='likeCnt'>"${board.likeCnt}"</label>";
+               }else{
+                   //채워진 하트 s
+                   console.log("full heart");
+                   $("#likeCnt1").removeClass('far');
+                   $("#likeCnt1").addClass('fas');
+                   str += "<label id='likeCnt'>"+${board.likeCnt}+"</label>";
+               }
+               like.html(str);
 
 
-        let test = '${isLike}';
-        // console.log(test === 'true');
-        // ajax로 사용자가 눌렀는지 확인한다
-        let check = test === 'false';//false;
-        // console.log()
-        // 그값으로 트루폴즈를 판단해서 하트를 세팅한다
-        if (check) {
-            $("#likeCnt1").addClass('fas fa-heart'); // 채워진 하트
-        }else{
-            $("#likeCnt1").addClass('far fa-heart'); // 빈 하트
+            });
+
         }
 
+        <%--let test = '${isLike}';--%>
+        <%--// console.log(test === 'true');--%>
+        <%--// ajax로 사용자가 눌렀는지 확인한다--%>
+        <%--let check = test === 'false';//false;--%>
+        <%--// console.log()--%>
+        <%--// 그값으로 트루폴즈를 판단해서 하트를 세팅한다--%>
+        <%--if (check) {--%>
+        <%--    $("#likeCnt1").addClass('fas fa-heart'); // 채워진 하트--%>
+        <%--}else{--%>
+        <%--    $("#likeCnt1").addClass('far fa-heart'); // 빈 하트--%>
+        <%--}--%>
 
-        //누를때마다 하트가 변하고
+
+        //좋아요 클릭 시
         $("#likeCnt1").on("click",function (e) {
-            change(this);
+            //e.preventDefault();
+            //change(this);
 
             let boardLike = {
                 brdSn : snValue,
@@ -492,24 +525,26 @@
 
             console.log("boardLike : "+JSON.stringify(boardLike));
 
-            boardLikeService.add(boardLike, function(){
-               console.log("boardAdd:"+boardLike);
+            boardLikeService.add(boardLike, function(result){
+               console.log("result : " + result);
+
+               getBoardLike();
             });
 
-            boardLikeService.remove(boardLike, function(){
+            // boardLikeService.remove(boardLike, function(){
+            //
+            // });
 
-            });
-
-            function change(obj){
-                check = !check;
-                if (check) {
-                    $(obj).removeClass('far fa-heart'); //빈 하트
-                    $(obj).addClass('fas fa-heart');
-                }else{
-                    $(obj).removeClass('fas fa-heart');
-                    $(obj).addClass('far fa-heart');
-                }
-            }
+            // function change(obj){
+            //     check = !check;
+            //     if (check) {
+            //         $(obj).removeClass('far fa-heart'); //빈 하트
+            //         $(obj).addClass('fas fa-heart');
+            //     }else{
+            //         $(obj).removeClass('fas fa-heart');
+            //         $(obj).addClass('far fa-heart');
+            //     }
+            // }
 
         });//end LikeCnt
 

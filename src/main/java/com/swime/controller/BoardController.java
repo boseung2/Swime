@@ -160,28 +160,36 @@ public class BoardController {
 
     }
 
-    //좋아요 기능 구현중---
-    @GetMapping(value = "/like/{brdSn}/{userId}")
+    //좋아요 눌렀는지 여부 판단
+    // userId:.+ => 아이디 가져 올 때 .com 안가져와서 넣어주면 가져옴
+    @GetMapping(value = "/like/{brdSn}/{userId:.+}")
     public ResponseEntity<String> getLike(@PathVariable("brdSn") long brdSn,
                                           @PathVariable("userId") String userId){
 
-        BoardLikeVO getBoardLike = new BoardLikeVO();
-        getBoardLike.setBrdSn(brdSn);
-        getBoardLike.setUserId(userId);
+        BoardLikeVO boardLike = new BoardLikeVO();
+        boardLike.setBrdSn(brdSn);
+        boardLike.setUserId(userId);
+        //boardLike.setUserId("toywar94@gmail.com");
+        log.info("brdSn>>>>>>>>"+brdSn);
+        log.info("userId>>>>>>>>"+userId);
 
-        log.info("getBoardLike : " + getBoardLike);
+        log.info("....boardLike>>>>>>> : " + boardLike);
 
-        BoardLikeVO boardLike = boardLikeService.read(getBoardLike);
+        BoardLikeVO getBoardLike = boardLikeService.read(boardLike);
 
-        log.info("boardLike : " + boardLike);
+
+        log.info("....getBoardLike>>>>>> " + getBoardLike);
 
         // 좋아요가 없으면 빈하트
         // 있으면 채워진 하트
-        if (boardLike == null){
+        if (getBoardLike == null){
+            log.info("....null>>>>>> ");
             return new ResponseEntity<>("notExist",HttpStatus.OK);
         }else{
+            log.info("... else>>>>>> ");
             return new ResponseEntity<>("exist", HttpStatus.OK);
         }
+
     }
 
     @PostMapping("/createLike")
@@ -210,22 +218,9 @@ public class BoardController {
                    ? new ResponseEntity<>("registerLike",HttpStatus.OK)
                    : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
        }
-//        int likeCreateCount = boardLikeService.register(boardLike);
-//        log.info("BoardLikeCount : " + likeCreateCount);
-//        return likeCreateCount == 1
-//                ? new ResponseEntity<>("success", HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
-
-//    @PostMapping("/removeLike")
-//    public ResponseEntity<String> removeLike(@RequestParam("brdSn") Long brdSn, @RequestParam("userId") String userId) {
-//
-//        log.info("remove....." + brdSn + " : " + userId);
-//        return boardLikeService.remove(brdSn, userId) == 1
-//                ? new ResponseEntity<>("success", HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
 
 
 
