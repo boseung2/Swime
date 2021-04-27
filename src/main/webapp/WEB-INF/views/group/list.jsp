@@ -95,8 +95,8 @@
                 </select>
             </div>
             <div class="form__group">
-                <label for="groupName">모임이름</label>
-                <input id="groupName" name="groupName" placeholder="모임명을 입력해주세요">
+                <label for="groupName">모임명</label>
+                <input id="groupName" name="groupName" placeholder="모임명">
             </div>
 
             <button type="submit" class="btn">검색&nbsp;&nbsp;&nbsp;<i class="fas fa-search"></i></button>
@@ -262,6 +262,14 @@
 
 
     <!-- Content Row -->
+    <div>
+        <h4>N개의 모임</h4>
+        <select>
+            <option>최신순</option>
+            <option>평점순</option>
+            <option>모임원순</option>
+        </select>
+    </div>
     <div class="row">
         <c:forEach items="${list}" var="group">
             <div class="col-md-4 mb-5">

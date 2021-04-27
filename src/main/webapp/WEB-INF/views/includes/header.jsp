@@ -44,7 +44,19 @@
     <!-- fontawsome icon -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                width: 750px;
+            }
+        }
 
+        @media (min-width: 992px) {
+            .container {
+                width: 1000px;
+            }
+        }
+    </style>
 
 </head>
 
