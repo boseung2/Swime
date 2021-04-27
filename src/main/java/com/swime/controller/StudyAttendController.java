@@ -142,4 +142,26 @@ public class StudyAttendController {
         // 그 외의 상태 (가입, 검토중, 영구탈퇴)는 참가 실패
         return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
     }
+
+    // 스터디 영구탈퇴
+    @PostMapping(value = "/ban", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<String> ban(@RequestBody StudyParamVO studyParam) {
+        //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
+        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+
+        //2. 이미 참가명단에 있는지 확인
+        StudyListVO attendant = service.getAttendant(studyParam);
+
+        // 3. 참가명단에 있고, 가입상태이면 영구탈퇴로 update
+        if(attendant != null && "STUS01".equals(attendant.getStatus())) {
+            studyParam.setStatus("STUS04");
+            service.modifyAttendant(studyParam);
+
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        }
+
+        // 그 외의 상태 (미가입, 가입, 검토중, 탈퇴)는 영구강퇴 실패
+        return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
+    }
 }

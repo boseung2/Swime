@@ -16,25 +16,44 @@
 <!-- /nav -->
 
 <div id="member">
+    <ul id="attendList">
+
+    </ul>
 </div>
 
 <div id="waitingMember">
+    <ul id="waitingList">
+
+    </ul>
 </div>
 
 <%@include file="../includes/footer.jsp" %>
 
 <script type="text/javascript" src="/resources/js/studyMember.js"></script>
+<script type="text/javascript" src="/resources/js/studyAttend.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
+
+        // ajax spring security header
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        });
+
+    })
+</script>
 
 <script>
     $(document).ready(function() {
 
         getAttendList();
-
         getWaitingList();
 
     })
 </script>
-
 
 <script>
 
@@ -47,14 +66,13 @@
             }
 
             if(result == null || result.length == 0) {
-                $('#member').html("");
+                $('#attendList').html("");
                 return;
             }
 
             let str = "";
 
             for(let i = 0; i < result.length; i++) {
-                str += '<ul>';
                 str += '<li>';
                 str += '<div class="attendCard">';
                 str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
@@ -67,14 +85,13 @@
                 str += '</div>';
 
                 str += '<div class="attendBtn">';
-                str += '<a id ="cancel" href="">강퇴</a>'
-                str += '<a id = "ban" href="">영구강퇴</a>'
+                str += '<a id ="cancel" class="' + result[i].userId + '" href="">강퇴</a>'
+                str += '<a id = "ban" class="' + result[i].userId + '" href="">영구강퇴</a>'
                 str += '</div>';
                 str += '</li>';
-                str += '</ul>';
             }
 
-            $('#member').html(str);
+            $('#attendList').html(str);
         });
     }
 
@@ -87,14 +104,13 @@
             }
 
             if(result == null || result.length == 0) {
-                $('#waitingMember').html("");
+                $('#waitingList').html("");
                 return;
             }
 
             let str = "";
 
             for(let i = 0; i < result.length; i++) {
-                str += '<ul>';
                 str += '<li>';
                 str += '<div class="attendCard">';
                 str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
@@ -110,10 +126,52 @@
                 str += '<a id ="getAnswer" href="" style="color: blue;">답변보기</a>';
                 str += '</div>';
                 str += '</li>';
-                str += '</ul>';
             }
 
-            $('#waitingMember').html(str);
+            $('#waitingList').html(str);
         })
     }
+</script>
+
+
+<script>
+    $('#attendList').on("click", "li", function(e) {
+        e.preventDefault();
+
+        console.log("userId = " + e.target.className);
+        console.log("userId = " + e.target.id);
+
+        let userId = e.target.className;
+        let method = e.target.id;
+
+        if(method === 'cancel') {
+            if (confirm("해당 회원을 정말로 강퇴하겠습니까?")) {
+                studyAttendService.cancel({stdSn : ${stdSn}, userId : userId}, function(result) {
+
+                    if(result === 'success') {
+                        alert('해당 회원을 성공적으로 강퇴시켰습니다.');
+                        getAttendList();
+
+                    }else if (result === 'fail') {
+                        alert('해당 회원을 강퇴시키지 못했습니다.');
+                    }
+                })
+            }
+        } else if(method === 'ban') {
+            if (confirm("해당 회원을 정말로 영구탈퇴시키겠습니까? (해당 회원은 다시 스터디에 참석할 수 없습니다.)")) {
+                studyAttendService.ban({stdSn : ${stdSn}, userId : userId}, function(result) {
+
+                    if(result === 'success') {
+                        alert('해당 회원을 성공적으로 강퇴시켰습니다.');
+                        getAttendList();
+
+                    }else if (result === 'fail') {
+                        alert('해당 회원을 강퇴시키지 못했습니다.');
+                    }
+                })
+            }
+        }
+
+
+    })
 </script>
