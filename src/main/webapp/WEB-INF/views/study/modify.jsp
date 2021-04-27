@@ -455,6 +455,9 @@
                 }else if (parseInt(str) > 99) {
                     alert("모집인원은 99명 이하이어야합니다.");
                     return false;
+                }else if(parseInt(str) < parseInt("${study.attendants}")) {
+                    alert("모집인원이 참가인원보다 적을 수 없습니다.");
+                    return false;
                 }
             }
         }

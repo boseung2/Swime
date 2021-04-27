@@ -65,7 +65,7 @@
 
             <c:if test="${study.representation != pinfo.username}">
                 <c:choose>
-                    <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
+                    <c:when test="${pinfo.username == null && study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
                     <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>
                 </c:choose>
             </c:if>
