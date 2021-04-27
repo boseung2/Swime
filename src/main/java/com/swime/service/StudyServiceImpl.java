@@ -167,6 +167,11 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
+    public List<StudyVO> getStudiesOfGroup(long grpSn, String userId) {
+        return listMapper.getStudiesOfGroup(grpSn, userId);
+    }
+
+    @Override
     public int registerAttendant(StudyParamVO param) {
         return listMapper.insert(param);
     }
