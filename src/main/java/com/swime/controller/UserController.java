@@ -18,10 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
@@ -130,16 +127,11 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public void infotest(){
+    public void infoTest(){
     }
 
     @GetMapping("/infoDetail")
     public void infoDetail(Model model, String id){
-        model.addAttribute("MemberVo", service.get(id));
-    }
-
-    @GetMapping("/details/info")
-    public void info(Model model, String id){
         model.addAttribute("MemberVo", service.get(id));
     }
 
@@ -171,6 +163,60 @@ public class UserController {
 
     }
 
+    @GetMapping("/details/groupWithPaging")
+    public void groupWithPaging(Model model, String id
+            ,@RequestParam(value = "pageNum1", defaultValue = "1") int pageNum1
+            ,@RequestParam(value = "pageNum2", defaultValue = "1") int pageNum2
+            ,@RequestParam(value = "pageNum3", defaultValue = "1") int pageNum3
+            ,@RequestParam(value = "amount1", defaultValue = "6") int amount1
+            ,@RequestParam(value = "amount2", defaultValue = "6") int amount2
+            ,@RequestParam(value = "amount3", defaultValue = "6") int amount3){
+        ProfileCriteria[] cris;
+        log.info("groupWithPaging...");
+        log.info(id);
+        log.info(pageNum1 + pageNum2 + pageNum3);
+        log.info(amount1 + amount3 + amount3);
+
+
+        cris = new ProfileCriteria[]{
+            new ProfileCriteria(pageNum1, amount1),
+            new ProfileCriteria(pageNum2, amount2),
+            new ProfileCriteria(pageNum3, amount3)
+        };
+
+
+        model.addAttribute("pageMaker1", new ProfileGroupPageDTO(cris[0], profileService.ownerListCount(id)));
+        model.addAttribute("pageMaker2", new ProfileGroupPageDTO(cris[1], profileService.joinListCount(id)));
+        model.addAttribute("pageMaker3", new ProfileGroupPageDTO(cris[2], profileService.wishListCount(id)));
+
+        List<GroupVO> ownerList = profileService.ownerListWithPaging(id, cris[0]);
+        List<GroupVO> joinList = profileService.joinListWithPaging(id, cris[1]);
+        List<GroupVO> wishList = profileService.wishListWithPaging(id, cris[2]);
+
+        List<List<GroupVO>> list = new ArrayList<>();
+        list.add(ownerList);
+        list.add(joinList);
+        list.add(wishList);
+
+        Iterator<List<GroupVO>> it = list.iterator();
+
+        while (it.hasNext()){
+            List<GroupVO> vo = it.next();
+            vo.forEach(group -> {
+                List<String> tags = new ArrayList<>();
+                groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
+                group.setTags(tags);
+            });
+        }
+
+        model.addAttribute("ownerList", ownerList);
+        model.addAttribute("joinList", joinList);
+        model.addAttribute("wishList", wishList);
+        model.addAttribute("id", id);
+    }
+
+
+
     @GetMapping("/details/study")
     public void study(Model model, String id){
         model.addAttribute("MemberVo", service.get(id));
@@ -187,12 +233,6 @@ public class UserController {
     @GetMapping("/details/profile")
     public void profile(Model model, String id){
         model.addAttribute("MemberVo", service.get(id));
-    }
-
-
-    String dateFormat(Date date){
-
-        return null;
     }
 
 

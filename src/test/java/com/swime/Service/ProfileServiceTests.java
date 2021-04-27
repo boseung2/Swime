@@ -46,4 +46,6 @@ public class ProfileServiceTests {
         Assert.assertNotNull(groupVO);
         log.info(groupVO);
     }
+
+
 }
