@@ -64,10 +64,11 @@
             <div class="wishButton" style="width: max-content; height: max-content"></div>
 
             <c:if test="${study.representation != pinfo.username}">
-                <c:choose>
-                    <c:when test="${pinfo.username == null && study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
-                    <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>
-                </c:choose>
+                <div id="attendButton" style="width: max-content; height: max-content"></div>
+<%--                <c:choose>--%>
+<%--                    <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>--%>
+<%--                    <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>--%>
+<%--                </c:choose>--%>
             </c:if>
 
             <br>
@@ -229,7 +230,12 @@
                     str += "";
 
                 } else if(result === "not attend"){
-                    str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
+                    if (parseInt("${study.attendants}") >= parseInt("${study.capacity}")) {
+
+                        str += "<a class='btn btn-dark'>모집마감</a>";
+                    }else {
+                        str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
+                    }
 
                 } else if(result === "attend"){
                     str += "<a id='cancel' class='btn btn-danger' href=''>탈퇴하기</a>";
