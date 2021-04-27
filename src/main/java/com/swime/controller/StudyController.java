@@ -190,13 +190,14 @@ public class StudyController {
 
         return "redirect:/group/get?sn=" + grpSn;
     }
-    
-    // 스터디 멤버 관리 페이지 - 참여멤버/ 대기멤버 가져오기 - 아직 구현 x
-//    @GetMapping("/members")
-//    @PreAuthorize("principal.username == #study.representation")
-//    public void members(long stdSn, Model model) {
-//        model.addAttribute("study", service.get(stdSn));
-//        model.addAttribute("attendantList", service.getAttendantList(stdSn));
-//        model.addAttribute("waitingList", service.getWaitingList(stdSn));
-//    }
+
+    // 스터디 멤버 관리 페이지
+    @GetMapping("/members")
+    @PreAuthorize("principal.username == #representation")
+    public void members(long stdSn, String representation, Model model) {
+        // 스터디장만 멤버관리페이지에 접근할 수 있음
+
+        // 참여멤버와 대기멤버를 호출하기위해 stdSn 필요
+        model.addAttribute("stdSn", stdSn);
+    }
 }

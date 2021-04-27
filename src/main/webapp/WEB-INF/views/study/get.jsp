@@ -50,7 +50,7 @@
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
             <p><i class="fas fa-user"></i> 스터디장 : ${study.representationName}</p>
-            <p><i class="fas fa-users"></i> ${study.attendants} / ${study.capacity}</p>
+            <p><i class="fas fa-users"></i> 참여인원 : ${study.attendants} / ${study.capacity}</p>
             <c:if test="${study.onOff eq 'STOF01'}"><p><i class="fas fa-video"></i>온라인 스터디</p></c:if>
             <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디</p></c:if>
 
@@ -67,20 +67,16 @@
                 <c:choose>
                     <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
                     <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>
-<%--                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>--%>
-<%--                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>--%>
-<%--                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>--%>
-<%--                    <c:otherwise><a class="attend btn btn-primary" href="">참석하기</a></c:otherwise>--%>
                 </c:choose>
             </c:if>
 
-            <br><br>
+            <br>
             <c:if test="${study.representation eq pinfo.username}">
-            <a class="modify btn btn-primary" href="">스터디 수정</a>
-            <a class="remove btn btn-primary" href="">스터디 삭제</a>
-<%--            <br><br>--%>
+                <a class="modify btn btn-primary" href="">스터디 수정</a>
+                <a class="remove btn btn-primary" href="">스터디 삭제</a>
+                <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}&representation=${study.representation}">멤버 관리</a>
+                <br><br>
 <%--            <a class="btn btn-primary" href="#">참가 신청 마감</a>--%>
-<%--            <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>--%>
 <%--            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>--%>
 <%--            <br><br>--%>
             </c:if>
