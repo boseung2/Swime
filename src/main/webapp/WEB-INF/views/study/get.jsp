@@ -62,12 +62,12 @@
             </c:choose>
 
 
-            <div class="wishButton"></div>
+            <div class="wishButton" style="width: max-content; height: max-content"></div>
 
             <c:if test="${study.representation != pinfo.username}">
                 <c:choose>
                     <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
-                    <c:otherwise><div id="attendButton"></div></c:otherwise>
+                    <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>
 <%--                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>--%>
 <%--                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>--%>
 <%--                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>--%>
