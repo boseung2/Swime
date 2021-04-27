@@ -234,16 +234,16 @@
                     str += "";
 
                 } else if(result === "not attend"){
-                    str += "<a class='attend btn btn-primary' href=''>참석하기</a>";
+                    str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
 
                 } else if(result === "attend"){
-                    str += "<a class='attend btn btn-primary' href=''>취소하기</a>";
+                    str += "<a id='cancel' class='btn btn-primary' href=''>취소하기</a>";
 
                 } else if(result === "waiting"){
-                    str += "<a class='attend btn btn-primary' href=''>검토중</a>";
+                    str += "<a class='btn btn-primary'>검토중</a>";
 
                 } else if(result === "kicked"){
-                    str += "<a class='attend btn btn-primary' href=''>가입불가</a>";
+                    str += "<a class='btn btn-primary'>가입불가</a>";
 
                 } else if(result === "fail"){
                     alert('가입상태를 불러오는데 실패하였습니다.');
@@ -252,6 +252,34 @@
                 $('#attendButton').html(str);
             })
         }
+
+        <!-- 참석 버튼 눌렀을 때-->
+        $('#attendButton').on("click", function(e) {
+            e.preventDefault();
+
+            // 참석 div안의 a태그의 id가 attend이면 참석을 수행하는 ajax 호출
+            if($('#attendButton').children()[0].id === 'attend') {
+                console.log('참석');
+                studyAttendService.attend({stdSn : stdSn, userId : userId}, function(result) {
+                    console.log("attend > result = " + result);
+
+                    if(result === "success") {
+                        alert("스터디에 참석했습니다.");
+                    }else if(result === "fail") {
+                        alert("스터디에 참석하지 못했습니다.");
+                    }
+
+                    // 참석버튼 reload
+                    getStudyAttend();
+                })
+
+
+            } else if($('#attendButton').children()[0].id === 'cancel') {
+                // cancel이면 탈퇴를 수행하는 ajax 호출
+                console.log('탈퇴');
+            }
+
+        });
 
         <!--찜 버튼 출력-->
         function getStudyWish() {
@@ -271,7 +299,7 @@
             })
         }
 
-        <!--찜 버튼 눌렸을 때-->
+        <!--찜 버튼 눌렀을 때-->
         $(".wishButton").on("click", function(e) {
             e.preventDefault();
 

@@ -83,43 +83,43 @@ public class StudyAttendController {
         }
     }
 
-//    // 스터디 참가
-//    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
-//    @ResponseBody
-//    public ResponseEntity<String> attend(@RequestBody StudyParamVO studyParam) {
-//        //1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-//        log.info("======================================stdSn = " + studyParam.getStdSn());
-//        log.info("======================================UserId = " + studyParam.getUserId());
-//
-//        //2. 이미 참가명단에 있는지 확인
-//        // 가입한적x : 1/ 탈퇴 : 2/ 가입,검토중,영구탈퇴 : -1
-//        int result = service.checkAttendantForRegister(studyParam);
-//        log.info("======================================result = " + result);
-//
-//        if (result == -1) return new ResponseEntity<>("failAttend", HttpStatus.BAD_GATEWAY);
-//
-//        //3. 해당 스터디에 설문이 있는지 확인
-//        // 3-1. 설문 없는 경우
-//        if(service.getSurveyList(studyParam.getStdSn()).size() == 0) {
-//
-//            studyParam.setStatus("STUS01");
-//
-//            // 가입한적 없는 경우
-//            if(result == 1) {
-//                return service.registerAttendant(studyParam) == 1
-//                    ? new ResponseEntity<>("attend", HttpStatus.OK)
-//                    : new ResponseEntity<>("failAttend", HttpStatus.INTERNAL_SERVER_ERROR);
-//                }
-//            }else {
-//                // 전에 탈퇴한 경우
-//                return service.modifyAttendant(studyParam) == 1
-//                    ? new ResponseEntity<>("attend", HttpStatus.OK)
-//                    : new ResponseEntity<>("failAttend", HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        // 3-2. 설문 있는 경우 -> 설문 뿌려주기
-//        // 아직 처리 안함
-//        return new ResponseEntity<>("", HttpStatus.OK);
-//    }
+    // 스터디 참가
+    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<String> attend(@RequestBody StudyParamVO studyParam) {
+        //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
+        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+
+        //2. 이미 참가명단에 있는지 확인
+        StudyListVO attendant = service.getAttendant(studyParam);
+
+        // 3-1. 없으면 참석상태로 추가
+        if(attendant == null) {
+            studyParam.setStatus("STUS01");
+            service.registerAttendant(studyParam);
+
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        }else {
+            // 3-2. 있고, 탈퇴상태면 참석상태로 update
+            if("STUS02".equals(attendant.getStatus())) {
+                studyParam.setStatus("STUS01");
+                service.modifyAttendant(studyParam);
+
+                return new ResponseEntity<>("success", HttpStatus.OK);
+            }
+
+            // 3-3. 있고, 검토중이면 참석상태로 update
+            if("STUS03".equals(attendant.getStatus())) {
+                studyParam.setStatus("STUS01");
+                service.modifyAttendant(studyParam);
+
+                return new ResponseEntity<>("success", HttpStatus.OK);
+            }
+
+            // 그 외의 상태 (가입, 검토중, 영구탈퇴)는 참가 실패
+            return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
+        }
+    }
 //
 //    // 스터디 탈퇴
 //    @PostMapping(value = "/cancelAttend", produces = "text/plain; charset =UTF-8")

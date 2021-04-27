@@ -20,7 +20,34 @@ let studyAttendService = (function(){
         })
     }
 
+    function attend(param, callback, error){
+
+        console.log('attend 호출됨');
+
+        console.log("attend stdSn = " + param.stdSn);
+        console.log("attend userId = " + param.userId);
+
+        $.ajax({
+            type:'post',
+            url : '/study/attend',
+            data : JSON.stringify(param),
+            contentType : "application/json; charset = utf-8",
+            success : function(result, status, xhr) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error : function(xhr, status, er) {
+                if(error) {
+                    error(er);
+                }
+            }
+        })
+    }
+
     return {
-        get : get
+        get : get,
+        attend : attend,
+
     };
 })();
