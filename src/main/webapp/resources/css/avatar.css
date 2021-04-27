@@ -218,7 +218,32 @@ span.st_on {
 }
 
 .attendBtn a {
-    margin : 5px;
-    color : red;
+    margin: 5px;
+    color: red;
     text-decoration: underline;
+}
+
+/*↓↓↓board↓↓↓*/
+
+.boardHeader {
+    height: 20%;
+    background-color: #efefef;
+    border-radius: 2%;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+#boardNotice{
+    margin-left: 38px;
+}
+
+#boardName{
+    margin-left: 10px;
+}
+#grpBrdRole{
+    margin-left: 1px;
+}
+#boardRegDate{
+    float: right;
+    margin-right: 100px;
+    margin-top: 13px;
 }
