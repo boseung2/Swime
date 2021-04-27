@@ -14,12 +14,69 @@
         width: 15px;
         height: 15px;
     }
+    .uploadResult {
+        width: 100%;
+        background-color: white;
+    }
+
+    .uploadResult ul{
+        display:flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .uploadResult ul li {
+        list-style: none;
+        padding: 10px;
+        align-items: center;
+    }
+
+    .uploadResult ul li {
+        list-style: one;
+        padding: 10px;
+        align-content: center;
+        text-align: center;
+    }
+
+    .uploadResult ul li img {
+        width: 100px;
+    }
+
+    .uploadResult ul li span {
+        color: white;
+    }
+
+    .bigPictureWrapper {
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        top: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: gray;
+        z-index: 100;
+        background:rgba(255,255,255,0.5);
+    }
+
+    .bigPicture {
+        position: relative;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bigPicture img {
+        width: 600px;
+    }
 </style>
+
 
 <div class="container">
     <h2>게시글 작성</h2>
     <hr/>
-    <form id="registerForm"role="form" action="/board/register" method="post">
+    <form id="registerForm"role="form" action="/board/register" method="post" enctype="multipart/form-data">
 
         <div class="form-group">
             <label for="userId">아이디</label>
@@ -50,7 +107,7 @@
 
         <div class="form-group uploadDiv">
             <label for="uploadFile">첨부파일</label>
-            <input type="file" class="form-control" id="uploadFile" name="uploadFile" multiple>
+            <input multiple="multiple" type="file" class="form-control" id="uploadFile" name="uploadFile" >
             <div class="uploadResult">
                 <ul>
 
@@ -95,18 +152,24 @@
 
             e.preventDefault();
 
-            console.log("submit clicked");
-
             if(!validation()) {
+                console.log('no validataion');
                 return;
+            }else{
+                console.log('inserting');
+                //alert("제목을 입력해주세요.");
+                // return;
             }
+
+            console.log('hi');
+            objForm.submit();
 
             let str = "";
 
             $('.uploadResult ul li').each(function(i, obj) {
 
                 let jobj = $(obj);
-
+                console.log('kkkkkk');
                 console.dir(jobj);
 
                 str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
@@ -125,36 +188,38 @@
         //
         //     formObj.attr("action", '/group/get=').attr('method', 'get');
         //     formObj.submit();
-        // })
-        //------------------
+        //})
+
 
         // 파일버튼누르면 업로드하는 fileInput $("input[type='file']")
-        $("input[name='uploadFile']").change(function(e) {
+        $("input[type='file']").change(function(e) {
 
             let formData = new FormData();
 
             let inputFile = $("input[name='uploadFile']");
 
-            let file = inputFile[0].files[0];
+            //let file = inputFile[0].files[0]; 함정카드 찾았다. 여기 밑에
+            let files = inputFile[0].files;
 
-            console.log(file);
+            console.log(files);
 
-            //let files = inputFile[0].files;
+            for(let i=0; i<files.length; i++) {
 
-            if(!checkExtension(file.name, file.size)) {
-                return false;
+                if(!checkExtension(files[i].name, files[i].size)) {
+                    return false;
+                }
+                formData.append("uploadFile", files[i]);
             }
 
-            formData.append("uploadFile", file);
 
-            // for(let i=0; i<files.length; i++) {
-            //
-            //     if(!checkExtension(files[i].name, files[i].size)) {
-            //         return false;
-            //     }
-            //     formData.append("uploadFile", files[i]);
+            // if(!checkExtension(file.name, file.size)) {
+            //     return false;
             // }
+            //
+            // formData.append("uploadFile", file);
 
+
+            //여기수정
             $.ajax({
                 url: '/uploadAjaxAction',
                 processData: false,
@@ -168,8 +233,10 @@
                 success: function(result) {
                     console.log(">>>>>>>" + result);
                     showUploadResult(result);
+                    console.log("done")
                 }
-            })
+            }) //end ajax
+
 
         })
 
@@ -212,16 +279,19 @@
 
         function showUploadResult(uploadResult) {
 
-            if(!uploadResult) {
+            //수정부분
+            if(!uploadResult || uploadResult.length == 0) {
                 return;
             }
 
             let uploadUL = $('.uploadResult ul');
 
-            let str = "";
+            //첨부파일 한개만 나온 거 해결! "" -> 아래 코드
+            let str = $('.uploadResult ul').html();
 
+            console.log(str);
             $(uploadResult).each(function(i, obj) {
-
+                console.log("each");
                 if(obj.image) {
                     let fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
                     str += "<li data-path='"+obj.uploadPath+"'";
@@ -240,7 +310,7 @@
                     str += "><div>";
                     str += "<span> "+obj.fileName+"</span>";
                     str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
-                    str += "<img src='/resources/img/attach.png'>";
+                    str += "<img src='/resources/img/1.png'>";
                     str += "</div>";
                     str += "</li>";
 
@@ -248,9 +318,9 @@
             })
 
             uploadUL.html(str);
-        }
+        } // end showUploadResult
 
-
+/////////////////////////////////////////////////////////
 
 
     $("#back").on("click", function(){
@@ -259,23 +329,11 @@
 
     let objForm = $('#registerForm');
 
-    $('button[type="submit"]').on("click", function(e) {
-        e.preventDefault();
+    // $('button[type="submit"]').on("click", function(e) {
+    //
+    //
+    // });
 
-        if(!validation()) {
-            console.log('no validataion');
-
-            return;
-        }else{
-            console.log('inserting');
-            //alert("제목을 입력해주세요.");
-            // return;
-        }
-
-        console.log('hi');
-        objForm.submit();
-
-    });
     //내용이 입력되면 글자 개수 증가
      $('textarea').keyup(function(){
             //정규식 숫자 영어 특수문자 한글

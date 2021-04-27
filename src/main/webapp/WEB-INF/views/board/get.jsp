@@ -11,6 +11,71 @@
     <sec:authentication property="principal.memberVO" var="mv"/>
 </sec:authorize>
 <link rel="stylesheet" href="/resources/css/board-get.css">
+<style>
+    .uploadResult {
+        width: 150%;
+        background-color: white;
+        display:flex;
+    }
+
+    .uploadResult ul{
+        display:flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .uploadResult ul li {
+        list-style: none;
+        padding: 10px;
+        align-items: center;
+    }
+    /*one -> none으로바꿈*/
+    .uploadResult ul li {
+        list-style: none;
+        padding: 10px;
+        align-content: center;
+        text-align: center;
+    }
+
+    ul.uploadResult > li > img{
+        width: 100px;
+    }
+
+    ul.uploadResult > li > div> img{
+        width: 100px;
+        margin-right:1em;
+        height: 100px;
+    }
+
+    .uploadResult ul li span {
+        color: white;
+    }
+
+    .bigPictureWrapper {
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        top: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        z-index: 100;
+        background:rgba(255,255,255,0.5);
+    }
+
+    .bigPicture {
+        position: relative;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bigPicture img {
+        width: 400px;
+    }
+</style>
 
 <div class="container">
     <div class="row">
@@ -81,11 +146,9 @@
             <!--class = form-group -> uploadResult -->
             <div class="form-group">
                 <label>첨부파일</label>
-                <div class="uploadResult">
-                    <ul>
+                <ul class="uploadResult">
 
-                    </ul>
-                </div>
+                </ul>
             </div>
 
             <div class="form-group" style="display: inline-block">
@@ -105,6 +168,7 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
             <hr>
+
 
             <!--panel-->
 
@@ -345,21 +409,35 @@
             let str = "";
 
             $(arr).each(function(i, attach) {
-            if(attach.fileType){
+
+            console.log(attach.fileType);
+
+            console.log(attach.uploadPath);
+            console.log(attach.uuid);
+            console.log(attach.fileName);
+
+            //https://dev-timero.tistory.com/96 참고 자료
+                //이미지면 true 첨부면 false이다. attach.filetype이 첨부면 false찍히는데
+                //if문에서는 true로 간다. 해결방법은 위에 참고 자료 봐가지고 해결.
+            let attachFileType = (attach.fileType === 'true');
+
+            if(attachFileType){
+                console.log("if");
                 let fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
-                str += "<div data-path='"+attach.uploadPath+"'";
-                str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
-                str += "><div>";
-                str += "<img src='/display?fileName="+fileCallPath+"' style='width:400px; height:200px;'>";
-                str += "</div>";
-                str += "</div>";
-            } else {
-                //return;
                 str += "<li data-path='"+attach.uploadPath+"'";
                 str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
                 str += "><div>";
-                str += "<span> "+attach.fileName+"</span>";
-                str += "<img src='/resources/img/attach.png' style='width:400px; height:200px;'>";
+                str += "<img src='/display?fileName="+fileCallPath+"'>";
+                str += "</div>";
+                str += "</li>";
+            } else {
+                //return;
+                console.log("else");
+                str += "<li data-path='"+attach.uploadPath+"'";
+                str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
+                str += "><div>";
+                str += "<div> "+attach.fileName+"</div>";
+                str += "<img src='../../../resources/img/1.png'>";
                 str += "</div>";
                 str += "</li>";
 
@@ -380,9 +458,22 @@
 
         }).fail(function() {
             $(".uploadResult").html("<img src=/resources/img/group.jpg style='width:400px; height:200px;'>");
-        });
+        }); // end getJSON
 
-        // end getJSON
+        //첨부파일 클릭 시 다운로드
+        $(".uploadResult").on("click", "li", function(e) {
+            console.log("view image");
+
+            let liObj = $(this);
+
+            let path = encodeURIComponent(liObj.data("path")+ "/" + liObj.data("uuid") + "_" + liObj.data("filename"));
+
+            if(liObj.data("type")) {
+                showImage(path.replace(new RegExp(/\\/g),"/"));
+            } else {
+                self.location = "/download?fileName=" + path
+            }
+        })
 
 
         //userid = 이메일,  id = 이름

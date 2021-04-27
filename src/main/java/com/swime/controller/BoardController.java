@@ -98,7 +98,7 @@ public class BoardController {
 
         log.info("-----------------------------");
         if(board.getAttachList() != null){
-            log.info(board.getAttachList());
+            board.getAttachList().forEach(attach-> log.info(attach));
         }
 
         log.info("register...." + board);
