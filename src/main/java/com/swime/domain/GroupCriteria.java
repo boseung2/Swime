@@ -12,6 +12,18 @@ public class GroupCriteria {
     private int pageNum;
     private int amount;
 
+    private String category;
+    private String categoryVal;
+
+    private String sigungu;
+    private String sigunguVal;
+
+    private String groupName;
+    private String groupNameVal;
+
+    private String order;
+    private String orderVal;
+
     public GroupCriteria() {
         this(1, 6);
     }
@@ -30,4 +42,8 @@ public class GroupCriteria {
 
         return builder.toUriString();
     }
+
+//    public String[] getTypeArr() {
+//        return type == null ? new String[] {} : type.split("");
+//    }
 }
