@@ -75,12 +75,17 @@
                           id="content" name="content" readonly="readonly"><c:out value="${board.content}"/></textarea>
             </div>
 
-            <div class="form-group">
-                <label>사진</label>
-            </div>
-
+<%--            <div class="form-group">--%>
+<%--                <label>사진</label>--%>
+<%--            </div>--%>
+            <!--class = form-group -> uploadResult -->
             <div class="form-group">
                 <label>첨부파일</label>
+                <div class="uploadResult">
+                    <ul>
+
+                    </ul>
+                </div>
             </div>
 
             <div class="form-group" style="display: inline-block">
@@ -309,14 +314,15 @@
         console.log(".......................")
         console.log("JS TEST")
 
+
+
         let snValue = '<c:out value="${board.sn}"/> ';
         let replyUL = $(".chat");
+
         //boseung@naver.com
         //let userId = 'qwer6786@naver.com'; //일단 이렇게 해야함..
         <%--let name = '<c:out value="${board.name}"/> ';--%>
         //let realname = '{mv.name}'
-
-
         // console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
 
         let replyComment = $('#replyComment'); //댓글 내용
@@ -330,6 +336,54 @@
 
         let modalModBtn = $('#modalModBtn');
         let modalCloseBtn = $('#modalCloseBtn');
+
+        //게시판 상세 조회 시 첨부파일
+        $.getJSON("/board/getAttachList", {brdSn : snValue}, function(arr){
+            console.log("게시판 brdSn" + snValue)
+            console.log(arr);
+
+            let str = "";
+
+            $(arr).each(function(i, attach) {
+            if(attach.fileType){
+                let fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
+                str += "<div data-path='"+attach.uploadPath+"'";
+                str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
+                str += "><div>";
+                str += "<img src='/display?fileName="+fileCallPath+"' style='width:400px; height:200px;'>";
+                str += "</div>";
+                str += "</div>";
+            } else {
+                //return;
+                str += "<li data-path='"+attach.uploadPath+"'";
+                str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
+                str += "><div>";
+                str += "<span> "+attach.fileName+"</span>";
+                str += "<img src='/resources/img/attach.png' style='width:400px; height:200px;'>";
+                str += "</div>";
+                str += "</li>";
+
+            }
+
+                // if(attach.fileType) {
+                //     let fileCallPath = encodeURIComponent(attach.uploadPath+"/"+attach.uuid+"_"+attach.fileName);
+                //     str = "<img id='attach' src='/display?fileName="+fileCallPath+"' style='width:200px; height:100px;'>";
+                // } else {
+                //
+                //     str = "<img id='attach' src='/resources/img/attach.png' style='width:200px; height:100px;'>";
+                // }
+
+            })
+
+            $(".uploadResult").html(str);
+
+
+        }).fail(function() {
+            $(".uploadResult").html("<img src=/resources/img/group.jpg style='width:400px; height:200px;'>");
+        });
+
+        // end getJSON
+
 
         //userid = 이메일,  id = 이름
         //댓글 등록할 때 insert는 userid로 get은 id로

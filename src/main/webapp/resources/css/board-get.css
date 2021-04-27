@@ -1,7 +1,11 @@
-img{
+img.profile{
     border-radius: 70%;
     width: 40px;
     height: 40px;
+}
+img #attach{
+    width: 200px;
+    height: 200px;
 }
 .inline{
     display: inline-block;

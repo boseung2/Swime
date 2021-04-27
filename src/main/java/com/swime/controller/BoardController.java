@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //@RestController
@@ -94,6 +95,12 @@ public class BoardController {
     @PostMapping("/register")
     public String register(BoardVO board, long grpSn, RedirectAttributes rttr) {
 
+
+        log.info("-----------------------------");
+        if(board.getAttachList() != null){
+            log.info(board.getAttachList());
+        }
+
         log.info("register...." + board);
 
         service.register(board);
@@ -113,9 +120,6 @@ public class BoardController {
         log.info("/get or modify");
         model.addAttribute("board", service.get(sn));
         model.addAttribute("reply", replyService.get(sn));
-        //좋아요 처리 나중에 다시 하기--------
-//        model.addAttribute("isLike", true);
-//        model.addAttribute("count", boardLikeService.getBoardLikeCnt(1L));
 
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
 
@@ -222,6 +226,17 @@ public class BoardController {
        }
 
     }
+
+    @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<BoardAttachVO>> getAttachList(Long brdSn){
+
+        log.info("getAttach>>>>>>>>>" + brdSn);
+
+        return new ResponseEntity<>(service.getAttachList(brdSn), HttpStatus.OK);
+    }
+
+
 
 
 

@@ -1,9 +1,7 @@
 package com.swime.service;
 
-import com.swime.domain.BoardCriteria;
-import com.swime.domain.BoardPageDTO;
-import com.swime.domain.BoardVO;
-import com.swime.domain.GroupBoardPageDTO;
+import com.swime.domain.*;
+import com.swime.mapper.BoardAttachMapper;
 import com.swime.mapper.BoardMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -18,16 +16,31 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
 
     private BoardMapper mapper;
+    private BoardAttachMapper boardAttachMapper;
 
     @Override
     public List<BoardVO> getList(long grpSn) {
         return mapper.getList(grpSn);
     }
 
+
+    @Transactional
     @Override
     public int register(BoardVO board) {
 
-        return mapper.insertSelectKey(board);
+        log.info("board>>>>>>" + board);
+
+        mapper.insertSelectKey(board);
+
+        //두개의 테이블(tbrd, tbrd_atch(첨부파일))을 동시에 넣기 때문에 transaction사용
+        if (board.getAttachList() != null){
+            //파일 등록
+            board.getAttachList().forEach(attach ->{
+                attach.setBrdSn(board.getSn());
+                boardAttachMapper.insert(attach);
+            });
+        }
+        return 1;
     }
 
     @Override
@@ -79,6 +92,12 @@ public class BoardServiceImpl implements BoardService{
         return mapper.getTotalCount(cri);
     }
 
+    @Override
+    public List<BoardAttachVO> getAttachList(Long brdSn) {
+
+        log.info("get Attach>>>>>>>>>" + brdSn);
+        return boardAttachMapper.findByBrdSn(brdSn);
+    }
 
 
 //    @Override
