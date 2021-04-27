@@ -68,7 +68,7 @@
     }
 
     .bigPicture img {
-        width: 600px;
+        width: 400px;
     }
 </style>
 
@@ -236,8 +236,6 @@
                     console.log("done")
                 }
             }) //end ajax
-
-
         })
 
         $(".uploadResult").on("click", "button", function(e) {

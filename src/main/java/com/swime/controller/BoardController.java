@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -153,7 +156,11 @@ public class BoardController {
 
         log.info("remove: " + sn);
 
+        List<BoardAttachVO> attachList = service.getAttachList(sn);
+
         if (service.remove(sn)) {
+            //파일 삭제 함수 호출
+            deleteFiles(attachList);
             rttr.addFlashAttribute("boardResult", "removeSuccess");
         }else{
             rttr.addFlashAttribute("boardResult", "removefail");
@@ -234,6 +241,35 @@ public class BoardController {
         log.info("getAttach>>>>>>>>>" + brdSn);
 
         return new ResponseEntity<>(service.getAttachList(brdSn), HttpStatus.OK);
+    }
+
+    //파일삭제
+    private void deleteFiles(List<BoardAttachVO> attachList) {
+
+        if(attachList == null || attachList.size() == 0) {
+            return;
+        }
+
+        log.info("delete attach file..........");
+        log.info(attachList);
+
+       attachList.forEach(attach ->{
+
+           try{
+               Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
+
+               Files.deleteIfExists(file);
+
+               if(Files.probeContentType(file).startsWith("image")) {
+                   Path thumbNail = Paths.get("C:\\upload||"+attach.getUploadPath()+"\\s_"+attach.getUuid()+"_"+attach.getFileName());
+                   Files.delete(thumbNail);
+               }
+
+           }catch (Exception e){
+               log.info("delete file error : " + e.getMessage());
+           }//end catch
+       });//end foreach
+
     }
 
 

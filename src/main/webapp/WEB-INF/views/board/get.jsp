@@ -60,7 +60,7 @@
         top: 0%;
         width: 100%;
         height: 100%;
-        background-color: white;
+        background-color: gray;
         z-index: 100;
         background:rgba(255,255,255,0.5);
     }
@@ -436,7 +436,7 @@
                 str += "<li data-path='"+attach.uploadPath+"'";
                 str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
                 str += "><div>";
-                str += "<div> "+attach.fileName+"</div>";
+                //str += "<div> "+attach.fileName+"</div>";
                 str += "<img src='../../../resources/img/1.png'>";
                 str += "</div>";
                 str += "</li>";
@@ -473,7 +473,17 @@
             } else {
                 self.location = "/download?fileName=" + path
             }
-        })
+        });
+        //이미지 확대.
+        // function showImage(fileCallPath){
+        //     console.log(fileCallPath);
+        //     $('.bigPictureWrapper').css("display", "flex").show();
+        //
+        //     $('.bigPicture')
+        //     .html("<img src='/display?fileName="+fileCallPath+"'>")
+        //     .animate({width:'100%', height: '100%'},1000);
+        //
+        // }
 
 
         //userid = 이메일,  id = 이름

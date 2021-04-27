@@ -62,11 +62,15 @@ public class BoardServiceImpl implements BoardService{
         return mapper.update(board) == 1;
     }
 
+    //게시판 삭제시 첨부파일도 같이 삭제시켜야함.
     @Transactional
     @Override
     public boolean remove(Long sn) {
 
         log.info("remove: " + sn);
+
+        boardAttachMapper.deleteAll(sn);
+
         return mapper.delete(sn) == 1;
     }
 
