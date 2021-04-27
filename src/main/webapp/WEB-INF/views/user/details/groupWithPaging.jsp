@@ -63,7 +63,7 @@
 
             <c:forEach var="num" begin="${pageMaker1.startPage}" end="${pageMaker1.endPage}">
                 <li class="paginate_button">
-                    <a href="${num}" class="${pageMaker1.cri.pageNum == num ? "active" : ""}">${num}</a>
+                    <a href="#" data-kind="pageNum1" class="${pageMaker1.cri.pageNum == num ? "active" : ""}">${num}</a>
                 </li>
             </c:forEach>
 
@@ -73,8 +73,8 @@
                 </li>
             </c:if>
         </div>
-        <input type="hidden" name="page" value="1">
-        <input type="hidden" name="amount" value="6">
+        <input type="hidden" name="pageNum" id="pageNum1" value="${pageMaker1.cri.pageNum}">
+        <input type="hidden" name="amount" id="amount1" value="${pageMaker1.cri.amount}">
 
         <h2>가입한 모임</h2>
         <div class="row">
@@ -121,7 +121,7 @@
 
             <c:forEach var="num" begin="${pageMaker2.startPage}" end="${pageMaker2.endPage}">
                 <li class="paginate_button">
-                    <a href="${num}" class="${pageMaker2.cri.pageNum == num ? "active" : ""}">${num}</a>
+                    <a href="#" data-kind="pageNum2" class="${pageMaker2.cri.pageNum == num ? "active" : ""}">${num}</a>
                 </li>
             </c:forEach>
 
@@ -131,8 +131,8 @@
                 </li>
             </c:if>
         </div>
-        <input type="hidden" name="page" value="1">
-        <input type="hidden" name="amount" value="6">
+        <input type="hidden" name="pageNum" id="pageNum2" value="${pageMaker2.cri.pageNum}">
+        <input type="hidden" name="amount" id="amount2" value="${pageMaker2.cri.amount}">
 
         <h2>관심 모임</h2>
         <div class="row">
@@ -179,7 +179,7 @@
 
             <c:forEach var="num" begin="${pageMaker3.startPage}" end="${pageMaker3.endPage}">
                 <li class="paginate_button">
-                    <a href="${num}" class="${pageMaker3.cri.pageNum == num ? "active" : ""}">${num}</a>
+                    <a href="#" data-kind="pageNum3" class="${pageMaker3.cri.pageNum == num ? "active" : ""}">${num}</a>
                 </li>
             </c:forEach>
 
@@ -189,8 +189,9 @@
                 </li>
             </c:if>
         </div>
-        <input type="hidden" name="page" value="1">
-        <input type="hidden" name="amount" value="6">
+        <input type="hidden" name="pageNum" id="pageNum3" value="${pageMaker3.cri.pageNum}">
+        <input type="hidden" name="amount" id="amount3" value="${pageMaker3.cri.amount}">
+
 
     </form>
 
@@ -208,6 +209,66 @@
         for (let i = 0; i < list.length; i++) {
             $(list[i]).html(star($(list[i]).data("rating")));
         }
+    });
+
+    $(".paginate_button a").on("click", function(e) {
+
+        e.preventDefault();
+
+        console.log('click');
+        console.dir($("#paging")[0]);
+
+        // actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+        // actionForm.submit();
+        // console.dir($(this)[0]);
+        // console.log($(this)[0].innerHTML);
+        // console.log($(this)[0].dataset.kind);
+
+        $("#"+$(this)[0].dataset.kind)[0].value = $(this)[0].innerHTML;
+        // console.log($("#"+$(this)[0].dataset.kind)[0].value);
+
+        console.log($("#pageNum1")[0].value);
+        console.log($("#pageNum2")[0].value);
+
+
+
+        $.ajax({
+            url:"/user/details/groupWithPaging",
+            data : {
+                pageNum1 : $("#pageNum1")[0].value,
+                pageNum2 : $("#pageNum2")[0].value,
+                pageNum3 : $("#pageNum3")[0].value,
+                amount1 : $("#amount1")[0].value,
+                amount2 : $("#amount2")[0].value,
+                amount3 : $("#amount3")[0].value,
+                id : '${id}'
+            },
+            success:function(result) {
+                $("#content").html(result);
+            }
+        });
+
+
+        <%--$.ajax({--%>
+        <%--    url:"/user/details/groupWithPaging",--%>
+        <%--    data : {--%>
+        <%--        id : '${id}',--%>
+        <%--        pageNum : [--%>
+        <%--            $("#pageNum1")[0].value,--%>
+        <%--            $("#pageNum2")[0].value,--%>
+        <%--            $("#pageNum3")[0].value--%>
+        <%--        ],--%>
+        <%--        amount : [--%>
+        <%--            $("#amount1")[0].value,--%>
+        <%--            $("#amount2")[0].value,--%>
+        <%--            $("#amount3")[0].value--%>
+        <%--        ],--%>
+        <%--        test : '1234'--%>
+        <%--    },--%>
+        <%--    success:function(result) {--%>
+        <%--        $("#content").html(result);--%>
+        <%--    }--%>
+        <%--});--%>
     });
 
     function star(rating){

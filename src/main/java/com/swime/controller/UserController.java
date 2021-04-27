@@ -164,23 +164,27 @@ public class UserController {
     }
 
     @GetMapping("/details/groupWithPaging")
-    public void groupWithPaging(Model model, String id, int[] pageNum, int[] amount){
+    public void groupWithPaging(Model model, String id
+            ,@RequestParam(value = "pageNum1", defaultValue = "1") int pageNum1
+            ,@RequestParam(value = "pageNum2", defaultValue = "1") int pageNum2
+            ,@RequestParam(value = "pageNum3", defaultValue = "1") int pageNum3
+            ,@RequestParam(value = "amount1", defaultValue = "6") int amount1
+            ,@RequestParam(value = "amount2", defaultValue = "6") int amount2
+            ,@RequestParam(value = "amount3", defaultValue = "6") int amount3){
         ProfileCriteria[] cris;
-        if(pageNum == null && amount == null){
-            cris = new ProfileCriteria[]{
-                new ProfileCriteria(),
-                new ProfileCriteria(),
-                new ProfileCriteria()
-            };
-        }else{
-            cris = new ProfileCriteria[]{
-                new ProfileCriteria(pageNum[0], amount[0]),
-                new ProfileCriteria(pageNum[1], amount[1]),
-                new ProfileCriteria(pageNum[2], amount[2])
-            };
-        }
+        log.info("groupWithPaging...");
+        log.info(id);
+        log.info(pageNum1 + pageNum2 + pageNum3);
+        log.info(amount1 + amount3 + amount3);
 
-        int total = 0;
+
+        cris = new ProfileCriteria[]{
+            new ProfileCriteria(pageNum1, amount1),
+            new ProfileCriteria(pageNum2, amount2),
+            new ProfileCriteria(pageNum3, amount3)
+        };
+
+
         model.addAttribute("pageMaker1", new ProfileGroupPageDTO(cris[0], profileService.ownerListCount(id)));
         model.addAttribute("pageMaker2", new ProfileGroupPageDTO(cris[1], profileService.joinListCount(id)));
         model.addAttribute("pageMaker3", new ProfileGroupPageDTO(cris[2], profileService.wishListCount(id)));
@@ -208,6 +212,7 @@ public class UserController {
         model.addAttribute("ownerList", ownerList);
         model.addAttribute("joinList", joinList);
         model.addAttribute("wishList", wishList);
+        model.addAttribute("id", id);
     }
 
 
@@ -228,12 +233,6 @@ public class UserController {
     @GetMapping("/details/profile")
     public void profile(Model model, String id){
         model.addAttribute("MemberVo", service.get(id));
-    }
-
-
-    String dateFormat(Date date){
-
-        return null;
     }
 
 
