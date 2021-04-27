@@ -30,7 +30,6 @@ public class ReplyServiceImpl implements ReplyService{
         *   1-2 댓글의 댓글인 경우 -> 그룹번호가 댓글의 그룹번호가 된다.
         * */
 
-
         int seq = replyMapper.getSequence(); // sequence를 가져온다.
         reply.setSn(seq); // 가져온 sequence를 sn에 set한다.
 
@@ -40,7 +39,6 @@ public class ReplyServiceImpl implements ReplyService{
         //부모(댓글)
         if(parentComment) {
             reply.setCommentGroup(reply.getSn());
-        //자식(대댓글)--이게 맞나...생각해보기(프론트가..)
         //부모의 com_grp읽어서 자식 com_grp로 쏴주면...
         }else{
             reply.setCommentGroup(commentGroup);
@@ -50,12 +48,13 @@ public class ReplyServiceImpl implements ReplyService{
         log.info("parentComment:" + parentComment);
         log.info("register: " + reply);
 
+
         //댓글 개수 업데이트
         boardMapper.updateReplyCnt(reply.getBrdSn(), 1);
 
+
+
         replyMapper.insert(reply);
-
-
 
         /*
         2.댓글이 추가 될 때 게시판의 댓글 수가 증가한다.
@@ -98,8 +97,10 @@ public class ReplyServiceImpl implements ReplyService{
         log.info("remove........" + sn);
 
         //댓글 번호를 읽어온다.
+        // 댓글 등록은 ReplyVo 안에 번호가 존재 했지만 삭제는 번호만 받기 때문에
+        // 해당 게시물을 읽어와서 삭제 처리 해준다.
         ReplyVO reply = replyMapper.read(sn);
-
+        //댓글 개수 감소
         boardMapper.updateReplyCnt(reply.getBrdSn(), -1);
 
         return replyMapper.delete(sn);
@@ -112,13 +113,13 @@ public class ReplyServiceImpl implements ReplyService{
         log.info("getReplyCnt.........."+brdSn);
         return replyMapper.getCountByBrdSn(brdSn);
     }
+    //*주석하기*
+    @Override
+    public List<ReplyVO> getList(BoardCriteria cri, Long brdSn) {
 
-//    @Override
-//    public List<ReplyVO> getList(BoardCriteria cri, Long brd_sn) {
-//
-//        log.info("get Reply List of Board");
-//        return replyMapper.getListWithPaging(cri, brd_sn);
-//    }
+        log.info("get Reply List of Board");
+        return replyMapper.getListWithPaging(cri, brdSn);
+    }
 
     @Override
     public ReplyPageDTO getListPage(BoardCriteria cri, Long brdSn) {

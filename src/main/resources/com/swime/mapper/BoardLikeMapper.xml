@@ -17,6 +17,12 @@
                                     user_id = #{userId}
     </delete>
 
+    <select id="get" resultType="com.swime.domain.BoardLikeVO">
+        select *
+        from tbrd_like
+        where brd_sn = #{brdSn} and user_id = #{userId}
+    </select>
+
     <select id="getBoardLikeCnt" resultType="int">
         select count(brd_sn) from tbrd_like where brd_sn = #{brdSn}
     </select>

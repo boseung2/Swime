@@ -7,8 +7,10 @@ public interface BoardLikeService {
 
     public int register(BoardLikeVO boardLike);
 
-    public int remove(@Param("brdSn")Long brdSn, @Param("userId") String userId);
+    public int remove(@Param("brdSn") long brdSn, @Param("userId") String userId);
 
-    public int getBoardLikeCnt(Long brdSn);
+    public BoardLikeVO read(BoardLikeVO boardLike);
+
+    public int getBoardLikeCnt(long brdSn);
 
 }

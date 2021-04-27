@@ -29,28 +29,32 @@ public class GroupAttendServiceTests {
     @Test
     public void testAttend() {
         GroupAttendVO groupAttend = new GroupAttendVO();
-        groupAttend.setGrpSn(630L);
-        groupAttend.setUserId("jungbs3726@naver.com");
+        groupAttend.setGrpSn(1040L);
+        groupAttend.setUserId("jungbs3726@gmail.com");
         service.attend(groupAttend);
     }
 
     @Test
     public void testGetList() {
-        log.info(service.getList(102L));
+        log.info(service.getList(1040L));
+    }
+
+    @Test
+    public void testGetListWithBan() {
+        log.info(service.getListWithBan(1040L));
+    }
+
+    @Test
+    public void testWithdraw() {
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(1040L);
+        groupAttend.setUserId("jungbs3726@gmail.com");
+        service.withdraw(groupAttend);
     }
 
     @Test
     public void testGetAttendCountByGroupSn() {
         service.getAttendCountByGroupSn(100L);
-    }
-
-    @Test
-    public void testBan() {
-        GroupAttendVO vo = new GroupAttendVO();
-        vo.setGrpSn(316L);
-        vo.setUserId("jungbs3726@naver.com");
-        GroupAttendVO groupAttend = service.get(50L);
-        service.ban(groupAttend);
     }
 
     @Test
@@ -63,9 +67,36 @@ public class GroupAttendServiceTests {
     }
 
     @Test
-    public void testWithdraw() {
-        service.withdraw(493L);
+    public void testChangeLeader() {
+        service.changeLeader(1275L);
     }
+
+
+    @Test
+    public void testChangeManager() {
+        service.changeManager(1269L);
+    }
+
+    @Test
+    public void testCancleManager() {
+        service.cancelManager(1269L);
+    }
+    @Test
+    public void testBan() {
+        service.ban(1274L);
+    }
+
+    @Test
+    public void testBanPermanent() {
+        service.banPermanent(1273L);
+    }
+
+    @Test
+    public void testCancleBan() {
+        service.cancelBan(1273L);
+    }
+
+
 
 
 

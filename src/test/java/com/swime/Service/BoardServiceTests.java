@@ -1,17 +1,20 @@
 package com.swime.Service;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.BoardPageDTO;
 import com.swime.domain.BoardVO;
+import com.swime.domain.GroupBoardPageDTO;
 import com.swime.service.BoardService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class})
@@ -25,57 +28,74 @@ public class BoardServiceTests {
     public void testExist(){
 
         log.info(service);
-        assertNotNull(service);
+        Assert.assertNotNull(service);
     }
 
     @Test
     public void TestRegister(){
         BoardVO board = new BoardVO();
 
-        board.setGrpSn(1L);
-        board.setUserId("toywar12@naver.com");
+        //board.setSn(142L);
+        board.setGrpSn(720L);
+        board.setUserId("toywar94@gmail.com");
         //board.setUserName("새로운 name");
-        board.setTitle("스프링 고수만 오세요");
-        board.setContent("스프링 고수만요~~");
+        board.setTitle("자바 고수만 오세요333");
+        board.setContent("자바 고수만요~~");
         //board.setLikeCnt(500);
-        //board.setTopFix("BOFI01");
-        //board.setStatus("BOST01");
+        board.setTopFix("BOFI01");
+        board.setStatus("BOST01");
+        int result = service.register(board);
+        log.info("result" + result);
 
-        service.register(board);
+        Assert.assertTrue(result == 2);
 
         log.info("생성된 게시물 번호: " + board.getSn());
     }
 
     @Test
     public void testGetListWithPaging(){
-        service.getListWithPaging(new BoardCriteria(1,10)).forEach(board -> log.info(board));
+        BoardCriteria cri = new BoardCriteria(1,10);
+
+        GroupBoardPageDTO boardPageDTO = service.getListWithPaging(cri,720);
+
+        List<BoardVO> list = boardPageDTO.getList();
+
+        list.forEach(board -> log.info(board));
+
+        log.info(boardPageDTO.getBoardCnt());
     }
 
     @Test
     public void testGetList(){
-        service.getList().forEach(board -> log.info(board));
+        //service.getList().forEach(board -> log.info(board));
+        List<BoardVO> list = service.getList(720);
+        Assert.assertNotNull(list);
+        list.forEach(board -> log.info(board));
+
     }
 
     @Test
     public void testGet(){
+
         log.info(service.get(6L));
     }
 
     @Test
     public void testDelete(){
 
-        log.info("REMOVE RESULT: " + service.remove(15L));
+        log.info("REMOVE RESULT: " + service.remove(9L));
     }
-
 
     @Test
     public void testUpdate(){
 
-        BoardVO board = service.get(4L);
+        BoardVO board = service.get(108L);
+        log.info(board);
 
         if(board == null) return;
 
-        board.setTitle("Last Test 제목 수정 : Spring 게임 만들기");
+        board.setTitle("와 놓치고 지나갈뻔..");
+        board.setContent("바뀌나요?");
 
         log.info("MODIFY RESULT: " + service.modify(board));
     }

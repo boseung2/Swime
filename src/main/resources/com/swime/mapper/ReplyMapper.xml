@@ -36,22 +36,20 @@
         and sn = #{sn}
     </select>
 
-    <delete id="delete">
-        delete from trpl where sn = #{sn}
-    </delete>
+    <update id="delete">
+        update trpl set status = 'RPST02' where sn = #{sn}
+    </update>
 
     <update id="update">
         update trpl
         set
-            user_id = #{userId},
             content = #{content},
-            cnt = #{cnt},
             status = #{status},
             upd_date = current_date
         where sn = #{sn}
     </update>
 
-    <select id="getListWithPaging" resultType="com.swime.domain.ReplyVO">
+    <select id="getListWithPaging11111" resultType="com.swime.domain.ReplyVO">
         <![CDATA[
         select sn,
                brd_sn,
@@ -79,12 +77,28 @@
                    r.upd_date
             from trpl r, tuser u
             where brd_sn = #{brdSn}
-              and r.user_id = u.id
-              and sn > 0
-              and rownum <= #{cri.pageNum} * #{cri.amount}
+            and r.status != 'RPST02'
+            and r.user_id = u.id
+            and sn > 0
+            and rownum <= #{cri.pageNum} * #{cri.amount}
             )
         where rn > (#{cri.pageNum} -1) * #{cri.amount}
         order by comment_group asc, sn asc
+        ]]>
+
+    </select>
+
+    <select id="getListWithPaging" resultType="com.swime.domain.ReplyVO">
+        <![CDATA[
+        select sn, brd_sn, comment_group, user_id, name, content, cnt, status, reg_date, upd_date
+        from ( select /*+INDEX(trpl idx_reply) */ rownum rn, r.sn, r.brd_sn, r.comment_group, r.user_id, u.name, r.content, r.cnt, r.status, r.reg_date, r.upd_date
+               from trpl r LEFT OUTER JOIN tuser u on r.user_id = u.id  --TUSER u LEFT OUTER JOIN TUSER_ROLE a on u.id = a.id
+               where brd_sn = #{brdSn}
+                 and r.status != 'RPST02'
+                 --and r.user_id = u.id
+                 and sn > 0
+                 and rownum <= #{cri.pageNum} * #{cri.amount})
+        where rn > (#{cri.pageNum} -1) * #{cri.amount} order by comment_group asc, sn asc
         ]]>
 
     </select>

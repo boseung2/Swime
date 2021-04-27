@@ -6,84 +6,103 @@
 
     <select id="getList" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
     <![CDATA[
-        select b.sn,
-               b.grp_sn,
-               b.user_id,
-               u.name,
-               u.picture,
-               b.title,
-               d.content,
-               b.like_cnt,
-               gl.grp_role,
-               b.reply_cnt,
-               b.top_fix,
-               b.status,
-               b.reg_date,
-               b.upd_date
-        from
-             tgrp_list gl, tgrp g,
-             tuser u, tbrd b, tbrd_det d
-        where
-            b.sn = d.brd_sn
-        and
-            u.id = b.user_id
-        and
-            b.grp_sn = g.sn
-        and
-            g.sn = gl.grp_sn
-        and
-            b.sn > 0
-        order by top_fix desc,
-                 reg_date desc
+
+    select
+        b.sn,
+        b.grp_sn,
+        b.user_id,
+        u.name,
+        u.picture,
+        b.title,
+        d.content,
+        b.like_cnt,
+        b.reply_cnt,
+        b.top_fix,
+        b.status,
+        b.reg_date,
+        b.upd_date
+    from
+        tuser u, tbrd b, tbrd_det d
+    where
+        b.status != 'BOST02'
+    and
+        b.sn = d.brd_sn
+    and
+        u.id = b.user_id
+    and
+        b.grp_sn = #{grpSn}
+    and
+        b.sn > 0
+    order by top_fix desc,
+        reg_date desc
+
+    --         select b.sn,
+--                b.grp_sn,
+--                b.user_id,
+--                u.name,
+--                u.picture,
+--                b.title,
+--                d.content,
+--                b.like_cnt,
+--                gl.grp_role,
+--                b.reply_cnt,
+--                b.top_fix,
+--                b.status,
+--                b.reg_date,
+--                b.upd_date
+--         from
+--              tgrp_list gl, tgrp g,
+--              tuser u, tbrd b, tbrd_det d
+--         where
+--             b.status != 'BOST02'
+--         and
+--             b.sn = d.brd_sn
+--         and
+--             u.id = b.user_id
+--         and
+--             b.grp_sn = g.sn
+--         and
+--             g.sn = gl.grp_sn
+--         and
+--             b.sn > 0
+--         order by top_fix desc,
+--                  reg_date desc
+
         ]]>
     </select>
+
     <select id="getListWithPaging" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
     <![CDATA[
         select
-            sn,
-            grp_sn,
-            user_id,
-            name,
-            title,
-            content,
-            like_cnt,
-            reply_cnt,
-            top_fix,
-            status,
-            reg_date,
-            upd_date
+            sn,grp_sn,user_id,name,picture,title,content,
+            like_cnt,reply_cnt, top_fix,status,reg_date,upd_date
         from
             (
-            select /*+INDEX_DESC(tbrd pk_tbrd) */
-                rownum rn,
-                b.sn,
-                b.grp_sn,
-                b.user_id,
-                u.name,
-                b.title,
-                d.content,
-                b.like_cnt,
-                b.reply_cnt,
-                b.top_fix,
-                b.status,
-                b.reg_date,
-                b.upd_date
-            from
-                tuser u,
-                tbrd b,
-                tbrd_det d
-            where
-                b.sn = d.brd_sn
-            and
-                u.id = b.user_id
-            and
-                rownum <= #{pageNum} * #{amount}
+                select /*+INDEX_DESC(tbrd pk_tbrd) */
+                    rownum rn,b.sn,b.grp_sn,b.user_id,u.name,u.picture,b.title,d.content,
+                    b.like_cnt,b.reply_cnt,b.status,b.reg_date,b.upd_date, substr(top_fix, 6, 1) top_fix
+                from
+                    tuser u,
+                    tbrd b,
+                    tbrd_det d
+                where
+                    b.status != 'BOST02'
+                and
+                    b.sn = d.brd_sn
+                and
+                    u.id = b.user_id
+                and
+                    b.grp_sn = #{grpSn}
+                and
+                rownum <= #{cri.pageNum} * #{cri.amount}
+                order by
+                    top_fix desc,
+                    reg_date desc
             )
-            where rn > (#{pageNum} - 1) * #{amount}
-            order by top_fix desc,
-                     reg_date desc
-        ]]>
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+    ]]>
     </select>
+
 
     <insert id="insert">
         insert ALL
@@ -120,12 +139,12 @@
         title
         )
         values
-        (seq_tbrd.nextval, #{grpSn}, #{userId}, #{title}
+        (#{sn}, #{grpSn}, #{userId}, #{title}
         )
         into
         tbrd_det(brd_sn, content)
         values
-        (seq_tbrd.nextval, #{content})
+        (#{sn}, #{content})
         select * from dual
     </insert>
 
@@ -154,13 +173,13 @@
         ]]>
     </select>
 
-    <delete id="delete">
-        delete from tbrd where sn = #{sn} </delete>
+    <update id="delete">
+        update tbrd set status = 'BOST02' where sn = #{sn}
+    </update>
 
     <update id="update">
         update tbrd
         set
-            user_id = #{userId},
             title = #{title},
             like_cnt = #{likeCnt},
             reply_cnt = #{replyCnt},
@@ -181,6 +200,18 @@
         set reply_cnt = reply_cnt + #{amount}
         where sn = #{sn}
     </update>
+
+    <select id="getCountBySn" resultType="int">
+        <![CDATA[
+            select count(sn)
+            from tbrd
+            where grp_sn = #{grpSn}
+        ]]>
+    </select>
+
+    <select id="getTotalCount" resultType="int">
+        select count(*) from tbrd where sn > 0
+    </select>
 
 
 <!--    <select id="getCountByBrdSn" resultType="int">-->

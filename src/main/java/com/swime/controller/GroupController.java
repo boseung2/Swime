@@ -29,7 +29,6 @@ public class GroupController {
 
     private GroupService groupService;
     private GroupAttendService groupAttendService;
-    private GroupRatingService groupRatingService;
 
     @GetMapping(value = "/list")
     public void list(GroupCriteria cri, Model model) {

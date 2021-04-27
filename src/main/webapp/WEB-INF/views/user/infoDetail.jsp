@@ -4,13 +4,6 @@
 <%@include file="../includes/header.jsp" %>
 
 <style>
-    .content {
-        min-height: calc(100vh - 96px);
-    }
-    footer {
-        margin-top: 30px;
-    }
-
     @media screen and (max-width: 500px) {
         .topnav a {
             float: none;
@@ -23,7 +16,28 @@
         .header-right {
             float: none;
         }
+    }
+    .content {
+        min-height: calc(100vh - 26vh);
+    }
 
+    footer {
+        margin-top: 30px;
+    }
+
+    /*.card-cat {*/
+    /*    background-color: #f1f1f1;*/
+    /*    margin: 2px;*/
+    /*    padding: 2px;*/
+    /*    font-size: 15px;*/
+    /*    border-radius: 0.5rem;*/
+    /*    width: 80px;*/
+    /*    height: 25px;*/
+    /*    text-align:center;*/
+    /*}*/
+
+    .uploadResult > img {
+        height: 70px;
     }
 </style>
 
@@ -53,8 +67,8 @@
 
     $(".topnav > a").click(function() {
         $(".topnav > a").removeClass('active');
-        $(this).addClass('active')
-        console.log(this.id +" click!!")
+        $(this).addClass('active');
+        console.log(this.id +" click!!");
 
         contentAjax(this);
     });
