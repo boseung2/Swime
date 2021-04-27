@@ -111,7 +111,7 @@ public class StudyController {
 
         // 반복 주기 설정
         if("(선택)".equals(study.getRepeatCycle())) {
-            study.setRepeatCycle(null);
+            study.setRepeatCycle("");
         }else {
             study.setRepeatCycle(study.getRepeatCycle());
         }
@@ -151,7 +151,7 @@ public class StudyController {
         // 반복 주기 설정
         log.info("====================================repeatCycle" + study.getRepeatCycle()); //STCY01
         if("(선택)".equals(study.getRepeatCycle())) {
-            study.setRepeatCycle(null);
+            study.setRepeatCycle("");
         }else {
             study.setRepeatCycle(study.getRepeatCycle());
         }
@@ -192,147 +192,11 @@ public class StudyController {
     }
     
     // 스터디 멤버 관리 페이지 - 참여멤버/ 대기멤버 가져오기 - 아직 구현 x
-    @GetMapping("/members")
-    @PreAuthorize("principal.username == #study.representation")
-    public void members(long stdSn, Model model) {
-        model.addAttribute("study", service.get(stdSn));
-        model.addAttribute("attendantList", service.getAttendantList(stdSn));
-        model.addAttribute("waitingList", service.getWaitingList(stdSn));
-    }
-
-    // 스터디 찜 여부 반환
-    @GetMapping(value = "/wish/{userId}/{stdSn}")
-    public ResponseEntity<String> getWish(@PathVariable String userId, @PathVariable long stdSn) {
-
-        // 로그인 되어있는 경우만 반환 가능
-        StudyParamVO studyParam = new StudyParamVO();
-        studyParam.setStdSn(stdSn);
-        studyParam.setUserId(userId);
-
-        log.info("스터디 찜 여부 stdSn = " + stdSn);
-        log.info("스터디 찜 여부 userId = " + userId);
-
-        try {
-            WishStudyVO wishResult = service.getWish(studyParam);
-
-            log.info("스터디 찜 여부 =======================================");
-
-            if(wishResult == null) {
-                log.info("not exist");
-                return new ResponseEntity<>("not exist", HttpStatus.OK);
-            }else{
-                log.info("exist");
-                return new ResponseEntity<>("exist", HttpStatus.OK);
-            }
-
-        }catch (Exception e) {
-            log.info("fail");
-            return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
-        }
-    }
-
-    // 스터디 찜/취소
-    @PostMapping(value = "/wish", consumes = "application/json")
-    public ResponseEntity<String> wish(@RequestBody WishStudyVO wish) {
-        // 1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-        log.info("스터디 찜/취소 stdSn = " + wish.getStdSn());
-        log.info("스터디 찜/취소 userId = " + wish.getUserId());
-
-        wish.setUserId(wish.getUserId());
-
-        StudyParamVO studyParam = new StudyParamVO();
-        studyParam.setStdSn(wish.getStdSn());
-        studyParam.setUserId(wish.getUserId());
-
-        try{
-            // 해당 스터디를 찜한 기록 불러오기
-            WishStudyVO wishState = service.getWish(studyParam);
-
-            if(wishState != null) {
-                // 해당 스터디를 찜한 기록이 있으면
-                try {
-                    if (service.removeWish(studyParam) == 1) { // 찜 취소
-                        return new ResponseEntity<>("cancelWish", HttpStatus.OK);
-                    }else {// 찜 취소 실패
-                        return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                } catch (Exception e) { // 찜 취소 실패
-                    return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }else {
-                // 찜한 기록이 있으면
-                try {
-                    if (service.registerWish(wish) == 1) { // 찜
-                        return new ResponseEntity<>("wish", HttpStatus.OK);
-                    }else {// 찜 실패
-                        return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                } catch (Exception e) { // 찜 실패
-                    return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } catch (Exception e) { // 찜 기록 불러오기 실패
-            return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        // 4. get 페이지에서 하트가 바뀌어있어야함
-    }
-
-//    // 스터디 참가
-//    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
-//    @ResponseBody
-//    public ResponseEntity<String> attend(@RequestBody StudyParamVO studyParam) {
-//        //1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-//        log.info("======================================stdSn = " + studyParam.getStdSn());
-//        log.info("======================================UserId = " + studyParam.getUserId());
-//
-//        //2. 이미 참가명단에 있는지 확인
-//        // 가입한적x : 1/ 탈퇴 : 2/ 가입,검토중,영구탈퇴 : -1
-//        int result = service.checkAttendantForRegister(studyParam);
-//        log.info("======================================result = " + result);
-//
-//        if (result == -1) return new ResponseEntity<>("failAttend", HttpStatus.BAD_GATEWAY);
-//
-//        //3. 해당 스터디에 설문이 있는지 확인
-//        // 3-1. 설문 없는 경우
-//        if(service.getSurveyList(studyParam.getStdSn()).size() == 0) {
-//
-//            studyParam.setStatus("STUS01");
-//
-//            // 가입한적 없는 경우
-//            if(result == 1) {
-//                return service.registerAttendant(studyParam) == 1
-//                    ? new ResponseEntity<>("attend", HttpStatus.OK)
-//                    : new ResponseEntity<>("failAttend", HttpStatus.INTERNAL_SERVER_ERROR);
-//                }
-//            }else {
-//                // 전에 탈퇴한 경우
-//                return service.modifyAttendant(studyParam) == 1
-//                    ? new ResponseEntity<>("attend", HttpStatus.OK)
-//                    : new ResponseEntity<>("failAttend", HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        // 3-2. 설문 있는 경우 -> 설문 뿌려주기
-//        // 아직 처리 안함
-//        return new ResponseEntity<>("", HttpStatus.OK);
-//    }
-//
-//    // 스터디 탈퇴
-//    @PostMapping(value = "/cancelAttend", produces = "text/plain; charset =UTF-8")
-//    @ResponseBody
-//    public ResponseEntity<String> cancelAttend(StudyParamVO studyParam) {
-//        //1. get.jsp에서 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-//        studyParam.setUserId("boseung@naver.com"); //임의의 유저
-//
-//        //2. 가입 상태 확인
-//        // 가입 : 1/ 검토중 : 2/그 외 : -1
-//        int result = service.checkAttendantForRemove(studyParam);
-//
-//        if(result == -1) return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
-//
-//        studyParam.setStatus("STUS02");
-//
-//        return service.modifyAttendant(studyParam) == 1
-//                ? new ResponseEntity<>("success", HttpStatus.OK)
-//                : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+//    @GetMapping("/members")
+//    @PreAuthorize("principal.username == #study.representation")
+//    public void members(long stdSn, Model model) {
+//        model.addAttribute("study", service.get(stdSn));
+//        model.addAttribute("attendantList", service.getAttendantList(stdSn));
+//        model.addAttribute("waitingList", service.getWaitingList(stdSn));
 //    }
 }
