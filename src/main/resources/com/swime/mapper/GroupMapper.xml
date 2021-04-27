@@ -66,10 +66,8 @@
                        <include refid="criteria"></include>
                         order by
                         <trim suffix=",">
-                            <if test="order != null">
-                                 <if test="order != ''.toString()">
-                                     'g.'||#{order} desc
-                                 </if>
+                            <if test="order != null and order != ''.toString()">
+                                     g.${order} desc
                             </if>
                         </trim>
                         g.sn desc
