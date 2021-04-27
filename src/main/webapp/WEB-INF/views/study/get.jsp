@@ -277,6 +277,18 @@
             } else if($('#attendButton').children()[0].id === 'cancel') {
                 // cancel이면 탈퇴를 수행하는 ajax 호출
                 console.log('탈퇴');
+                studyAttendService.cancel({stdSn : stdSn, userId : userId}, function(result) {
+                    console.log("cancel > result = " + result);
+
+                    if(result === "success") {
+                        alert("스터디를 탈퇴했습니다.");
+                    }else if(result === "fail") {
+                        alert("스터디를 탈퇴하지 못했습니다.");
+                    }
+
+                    // 참석버튼 reload
+                    getStudyAttend();
+                })
             }
 
         });
