@@ -51,6 +51,75 @@
         ]]>
     </select>
 
+    <select id="ownerListWithPaging" resultType="com.swime.domain.GroupVO">
+        <![CDATA[
+        select sn, category, name, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date
+        from(
+                select rownum rn, sn, category, name, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date
+                from(
+                        SELECT sn, category, name, user_id, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, upd_date
+                        from tgrp
+                        where user_id = #{id} and status != 'GRST03'
+                        order by sn desc
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <select id="wishListWithPaging" resultType="com.swime.domain.GroupVO">
+        <![CDATA[
+        select sn, category, name, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, reg_user_id
+        from(
+                select rownum rn, sn, category, name, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, reg_user_id
+                from(
+                        select t.sn, t.category, t.name, t.picture, t.description, t.attend_count, t.rating, t.rating_count, t.sido, t.sigungu, t.status,
+                               t.reg_user_id, t.reg_date
+                        from tgrp_wish l LEFT OUTER JOIN tgrp t ON l.grp_sn = t.sn AND t.status = 'GRST01'
+                        where l.user_id = #{id}
+                        order by t.sn desc
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+
+    <select id="ownerListCount" resultType="int">
+        SELECT count(*)
+        from tgrp
+        where user_id = #{id} and status != 'GRST03'
+    </select>
+
+    <select id="joinListCount" resultType="int">
+        select count(*)
+        from Tgrp_list l LEFT OUTER JOIN tgrp t ON l.grp_sn = t.sn AND l.user_id = #{id} AND t.status = 'GRST01' AND l.status = 'GRUS01'
+        where t.user_id != #{id}
+    </select>
+
+    <select id="wishListCount" resultType="int">
+        select count(*)
+        from tgrp_wish l LEFT OUTER JOIN tgrp t ON l.grp_sn = t.sn AND t.status = 'GRST01'
+        where l.user_id = #{id}
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <select id="dsfsdffd" resultType="com.swime.domain.GroupVO">
         <![CDATA[
         select sn, category, name, user_id, user_name, picture, description, attend_count, rating,

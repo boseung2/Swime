@@ -18,10 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
@@ -138,11 +135,6 @@ public class UserController {
         model.addAttribute("MemberVo", service.get(id));
     }
 
-    @GetMapping("/details/groupWithPaging")
-    public void groupPaging(){
-
-    }
-
     @GetMapping("/details/group")
     public void group(Model model, String id){
         List<GroupVO> ownerList = profileService.getOwnerGroupList(id);
@@ -171,40 +163,56 @@ public class UserController {
 
     }
 
-    @GetMapping("/test")
-    public void joinListWithPaging(Model model, String id, ProfileCriteriaList list){
-        log.info(id);
-        log.info(list == null);
-        log.info(list.getList().get(1));
-        list.getList().forEach(log::info);
-//        List<GroupVO> ownerList = profileService.getOwnerGroupList(id);
-//        List<GroupVO> joinList = profileService.getJoinGroupList(id);
-//        List<GroupVO> wishList = profileService.getWishGroupList(id);
-//
-//        List<List<GroupVO>> list = new ArrayList<>();
-//        list.add(ownerList);
-//        list.add(joinList);
-//        list.add(wishList);
-//
-//        Iterator<List<GroupVO>> it = list.iterator();
-//
-//        while (it.hasNext()){
-//            List<GroupVO> vo = it.next();
-//            vo.forEach(group -> {
-//                List<String> tags = new ArrayList<>();
-//                groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
-//                group.setTags(tags);
-//            });
-//        }
-//
-//        model.addAttribute("ownerList", ownerList);
-//        model.addAttribute("joinList", joinList);
-//        model.addAttribute("wishList", wishList);
+    @GetMapping("/details/groupWithPaging")
+    public void groupWithPaging(Model model, String id, int[] pageNum, int[] amount){
+        ProfileCriteria[] cris;
+        if(pageNum == null && amount == null){
+            cris = new ProfileCriteria[]{
+                new ProfileCriteria(),
+                new ProfileCriteria(),
+                new ProfileCriteria()
+            };
+        }else{
+            cris = new ProfileCriteria[]{
+                new ProfileCriteria(pageNum[0], amount[0]),
+                new ProfileCriteria(pageNum[1], amount[1]),
+                new ProfileCriteria(pageNum[2], amount[2])
+            };
+        }
+
+        int total = 0;
+        model.addAttribute("pageMaker1", new ProfileGroupPageDTO(cris[0], profileService.ownerListCount(id)));
+        model.addAttribute("pageMaker2", new ProfileGroupPageDTO(cris[1], profileService.joinListCount(id)));
+        model.addAttribute("pageMaker3", new ProfileGroupPageDTO(cris[2], profileService.wishListCount(id)));
+
+        List<GroupVO> ownerList = profileService.ownerListWithPaging(id, cris[0]);
+        List<GroupVO> joinList = profileService.joinListWithPaging(id, cris[1]);
+        List<GroupVO> wishList = profileService.wishListWithPaging(id, cris[2]);
+
+        List<List<GroupVO>> list = new ArrayList<>();
+        list.add(ownerList);
+        list.add(joinList);
+        list.add(wishList);
+
+        Iterator<List<GroupVO>> it = list.iterator();
+
+        while (it.hasNext()){
+            List<GroupVO> vo = it.next();
+            vo.forEach(group -> {
+                List<String> tags = new ArrayList<>();
+                groupTagMapper.getList(group.getSn()).forEach(tag -> tags.add(CodeTable.valueOf(tag.getName()).getValue()));
+                group.setTags(tags);
+            });
+        }
+
+        model.addAttribute("ownerList", ownerList);
+        model.addAttribute("joinList", joinList);
+        model.addAttribute("wishList", wishList);
     }
 
 
 
-                      @GetMapping("/details/study")
+    @GetMapping("/details/study")
     public void study(Model model, String id){
         model.addAttribute("MemberVo", service.get(id));
     }

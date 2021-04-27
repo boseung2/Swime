@@ -19,5 +19,15 @@ public interface ProfileService {
 
     List<GroupVO> getWishGroupList(String id);
 
+    List<GroupVO> ownerListWithPaging(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
     List<GroupVO> joinListWithPaging(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    List<GroupVO> wishListWithPaging(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    int ownerListCount(String id);
+
+    int joinListCount(String id);
+
+    int wishListCount(String id);
 }

@@ -58,4 +58,36 @@ public class ProfileMapperTests {
         Assert.assertNotNull(list);
         list.forEach(log::info);
     }
+
+    @Test
+    public void joinTotal(){
+        int count = mapper.joinListCount(id);
+        log.info(count);
+    }
+
+    @Test
+    public void ownerListWithPaging(){
+        List<GroupVO> list = mapper.ownerListWithPaging(id, profileCriteria);
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void wishListWithPaging(){
+        List<GroupVO> list = mapper.wishListWithPaging(id, profileCriteria);
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void ownerTotal(){
+        int count = mapper.ownerListCount(id);
+        log.info(count);
+    }
+
+    @Test
+    public void wishTotal(){
+        int count = mapper.wishListCount(id);
+        log.info(count);
+    }
 }
