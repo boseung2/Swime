@@ -8,6 +8,21 @@
 
 <%@include file="../includes/header.jsp" %>
 
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<style type="text/css">
+    #map {
+        width : 100%;
+        height: 400px;
+    }
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
 <!-- Page Content -->
 <div class="container">
 
@@ -20,38 +35,38 @@
     <div class="row align-items-center my-5">
         <div class="col-lg-7">
 
-            <h3>${study.name}</h3>
+            <h1>${study.name}</h1><br>
             <c:if test="${study.repeatCycle eq 'STCY01'}"><span>매주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY02'}"><span>격주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY03'}"><span>매월</span></c:if>
 
             <c:if test="${study.repeatDay != null}"><span>${study.repeatDay}</span></c:if>
             <br>
-            <span>${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
+            <span><i class="fas fa-clock"></i> 시간 : ${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
             <br>
-            <c:if test="${endDate != null}"><span>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
-            <c:if test="${endDate == null}"><span>${fn:substring(startDate,0,10)}</span></c:if>
+            <c:if test="${endDate != null}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
+            <c:if test="${endDate == null}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)}</span></c:if>
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
-            <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
-            <p>스터디장 : ${study.representationName}</p>
-            <p>${study.attendants} / ${study.capacity}</p>
-            <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디</p></c:if>
-            <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
+            <p><i class="fas fa-user"></i> 스터디장 : ${study.representationName}</p>
+            <p><i class="fas fa-users"></i> ${study.attendants} / ${study.capacity}</p>
+            <c:if test="${study.onOff eq 'STOF01'}"><p><i class="fas fa-video"></i>온라인 스터디</p></c:if>
+            <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디</p></c:if>
 
             <c:choose>
                 <c:when test="${study.expense == '(선택)'}"></c:when>
-                <c:when test="${study.expense == '없음' || study.expense =='추후공지'}"><p>지참금 : ${study.expense}</p></c:when>
-                <c:otherwise><p>${study.expense}원</p></c:otherwise>
+                <c:when test="${study.expense == '없음' || study.expense =='추후공지'}"><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}</p></c:when>
+                <c:otherwise><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}원</p></c:otherwise>
             </c:choose>
 
 
-            <div class="wishButton"></div>
+            <div class="wishButton" style="width: max-content; height: max-content"></div>
 
             <c:if test="${study.representation != pinfo.username}">
                 <c:choose>
                     <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
+                    <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>
 <%--                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>--%>
 <%--                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>--%>
 <%--                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>--%>
@@ -143,8 +158,7 @@
 
         <c:if test="${study.onOff eq 'STOF02'}">
             <h4>장소</h4>
-            <p>구글맵</p>
-            <p>${study.placeId}</p>
+            <div id="map"></div>
         </c:if>
     </div>
 
@@ -177,6 +191,7 @@
 </div>
 
 <script type="text/javascript" src="/resources/js/studyWish.js"></script>
+<script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -190,33 +205,112 @@
 
         let stdSn = ${study.sn};
         let userId = "${pinfo.username}"; // 로그인중인 id
+        let grpSn = ${study.grpSn};
+
+        console.log("grpSn = " + grpSn);
         console.log("userId = " + userId);
+        console.log("stdSn = " + stdSn);
 
         let wishUL = $('.wishButton');
 
-        if(userId !== '') { // 로그인 되어있으면 찜버튼 출력
+        if(userId !== '') { // 로그인 되어있으면
+
+            // 찜버튼 출력
             getStudyWish();
+
+            // 참석버튼 출력
+            getStudyAttend();
         }
+
+        <!-- 참석버튼 출력 -->
+        function getStudyAttend() {
+            studyAttendService.get({grpSn : grpSn, stdSn : stdSn, userId : userId}, function(result) {
+                console.log("getStudyAttend > result = " + result);
+
+                let str = "";
+
+                if(result === "group not attend") {
+                    str += "";
+
+                } else if(result === "not attend"){
+                    str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
+
+                } else if(result === "attend"){
+                    str += "<a id='cancel' class='btn btn-danger' href=''>탈퇴하기</a>";
+
+                } else if(result === "waiting"){
+                    str += "<a class='btn btn-primary'>검토중</a>";
+
+                } else if(result === "kicked"){
+                    str += "<a class='btn btn-danger'>가입불가</a>";
+
+                } else if(result === "fail"){
+                    alert('가입상태를 불러오는데 실패하였습니다.');
+                }
+
+                $('#attendButton').html(str);
+            })
+        }
+
+        <!-- 참석 버튼 눌렀을 때-->
+        $('#attendButton').on("click", function(e) {
+            e.preventDefault();
+
+            // 참석 div안의 a태그의 id가 attend이면 참석을 수행하는 ajax 호출
+            if($('#attendButton').children()[0].id === 'attend') {
+                console.log('참석');
+                studyAttendService.attend({stdSn : stdSn, userId : userId}, function(result) {
+                    console.log("attend > result = " + result);
+
+                    if(result === "success") {
+                        alert("스터디에 참석했습니다.");
+                    }else if(result === "fail") {
+                        alert("스터디에 참석하지 못했습니다.");
+                    }
+
+                    // 참석버튼 reload
+                    getStudyAttend();
+                })
+
+
+            } else if($('#attendButton').children()[0].id === 'cancel') {
+                // cancel이면 탈퇴를 수행하는 ajax 호출
+                console.log('탈퇴');
+                studyAttendService.cancel({stdSn : stdSn, userId : userId}, function(result) {
+                    console.log("cancel > result = " + result);
+
+                    if(result === "success") {
+                        alert("스터디를 탈퇴했습니다.");
+                    }else if(result === "fail") {
+                        alert("스터디를 탈퇴하지 못했습니다.");
+                    }
+
+                    // 참석버튼 reload
+                    getStudyAttend();
+                })
+            }
+
+        });
 
         <!--찜 버튼 출력-->
         function getStudyWish() {
 
             studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
-                console.log("get > getWish > result = " + result);
+                console.log("getWish > result = " + result);
 
                 let str = "";
 
                 if(result === "not exist") {
-                    str += "<a class='wish btn btn-primary' href=''>♡</a>";
+                    str += "<a class='wish btn btn-outline-primary' href=''>♡</a>";
                 } else {
-                    str += "<a class='wish btn btn-primary' href=''>❤</a>";
+                    str += "<a class='wish btn btn-outline-primary' href=''>❤</a>";
                 }
 
                 wishUL.html(str);
             })
         }
 
-        <!--찜 버튼 눌렸을 때-->
+        <!--찜 버튼 눌렀을 때-->
         $(".wishButton").on("click", function(e) {
             e.preventDefault();
 
@@ -326,5 +420,66 @@
     });
 
 </script>
+
+<!--구글 맵 -->
+
+<script>
+    window.onload = function() {
+        if("${study.placeId}" !== "") { // placeId가 null이 아니면 지도 출력
+            initMap();
+        }
+    }
+</script>
+
+<script>
+    function initMap() {
+
+        const request = {
+            placeId: "${study.placeId}",
+            fields: ["name", "formatted_address", "place_id", "geometry", "url"],
+        };
+
+        // 말풍선
+        const infowindow = new google.maps.InfoWindow();
+        const service = new google.maps.places.PlacesService(map);
+
+        service.getDetails(request, (place, status) => { // 세부정보 가져오기
+            if (
+                status === google.maps.places.PlacesServiceStatus.OK &&
+                place &&
+                place.geometry &&
+                place.geometry.location
+            ) {
+
+                // 지도
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    center: place.geometry.location,
+                    zoom: 15,
+                });
+
+                const marker = new google.maps.Marker({ // 마커 위치 설정
+                    map,
+                    position: place.geometry.location,
+                });
+
+                marker.setVisible(true);
+
+                infowindow.setContent(
+                    "<div><strong style='font-weight: bold;'>" + place.name + "</strong><br>" +
+                        "<strong style='font-weight: bold;'>주소: </strong><span>" + place.formatted_address + "</span><br>" +
+                        "<strong style='font-weight: bold;'>URL: </strong><a href='" + place.url + "'>구글맵 바로가기</a><br>" +
+                    "</div>"
+                )
+
+                infowindow.open(map, marker);
+            }
+        });
+    }
+</script>
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&v=weekly"
+    async
+></script>
 
 <%@include file="../includes/footer.jsp" %>
