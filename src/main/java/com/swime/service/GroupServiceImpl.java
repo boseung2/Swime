@@ -28,7 +28,6 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public int register(GroupVO group) {
         //모임을 생성한다.
-        log.info("here!!!!");
 
         // 사진 경로 불러옴
         if(group.getAttach() != null) {

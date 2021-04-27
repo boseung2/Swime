@@ -35,13 +35,28 @@
     <!-- avatar -->
     <link href="/resources/css/avatar.css" rel="stylesheet">
 
+    <!-- filter -->
+    <link href="/resources/css/filter.css" rel="stylesheet">
+
     <!-- jquery -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <!-- fontawsome icon -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                width: 750px;
+            }
+        }
 
+        @media (min-width: 992px) {
+            .container {
+                width: 1000px;
+            }
+        }
+    </style>
 
 </head>
 
