@@ -35,6 +35,9 @@
     <!-- avatar -->
     <link href="/resources/css/avatar.css" rel="stylesheet">
 
+    <!-- filter -->
+    <link href="/resources/css/filter.css" rel="stylesheet">
+
     <!-- jquery -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 

@@ -145,7 +145,7 @@
 
     <!-- nav -->
     <div class="topnav">
-        <a href="#info" class="active">정보</a>
+        <a href="#groupInfo" class="active">정보</a>
         <a href="#groupRating">후기</a>
         <a href="#study">스터디</a>
         <a href="#board">게시판</a>
@@ -153,12 +153,6 @@
     <!-- /nav -->
 
     <div class="main-contents">
-    <div id="info" >
-        <h4>모임정보</h4>
-        <p><pre><c:out value="${group.info}"/></pre></p>
-    </div>
-    <br>
-
     <!-- 멤버 리스트 -->
     <div id="groupAttend">
         <h4>모임멤버</h4>
@@ -173,6 +167,13 @@
                 </div>
             </li>
         </ul>
+    </div>
+    <br>
+
+    <hr class="centerHr" id="groupInfo">
+    <div id="info" >
+        <h4>모임정보</h4>
+        <p><pre><c:out value="${group.info}"/></pre></p>
     </div>
     <br>
 
@@ -223,9 +224,6 @@
 
     <!-- 게시판 -->
     <hr class="centerHr" id="board">
-<%--    <div>--%>
-<%--        <h4>게시판</h4>--%>
-<%--    </div>--%>
         <%@include file="groupBoard.jsp"%>
 
     <!-- container -->
