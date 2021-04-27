@@ -12,17 +12,11 @@ public class GroupCriteria {
     private int pageNum;
     private int amount;
 
+    // 검색조건
     private String category;
-    private String categoryVal;
-
     private String sigungu;
-    private String sigunguVal;
-
     private String groupName;
-    private String groupNameVal;
-
     private String order;
-    private String orderVal;
 
     public GroupCriteria() {
         this(1, 6);

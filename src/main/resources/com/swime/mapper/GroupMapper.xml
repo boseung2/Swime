@@ -27,17 +27,23 @@
     <sql id="criteria">
         <trim prefix="AND">
             <if test="category != null">
-                g.category = #{category}
+                <if test="category != ''.toString()">
+                    g.category = #{category}
+                </if>
             </if>
         </trim>
         <trim prefix="AND">
             <if test="sigungu != null">
-                g.sigungu = #{sigungu}
+                <if test="sigungu != ''.toString()">
+                    g.sigungu = #{sigungu}
+                </if>
             </if>
         </trim>
         <trim prefix="AND">
             <if test="groupName != null">
-                g.name like '%'||#{groupName}||'%'
+                <if test="groupName != ''.toString()">
+                    g.name like '%'||#{groupName}||'%'
+                </if>
             </if>
         </trim>
     </sql>
@@ -55,13 +61,15 @@
                                                            g.reg_date, g.reg_user_id, g.upd_date, g.upd_user_id
                         from tgrp g, tuser u
                         where g.user_id = u.id
-                        and g.status != 'GRST03'
+                        and g.status = 'GRST01'
         ]]>
                        <include refid="criteria"></include>
                         order by
                         <trim suffix=",">
                             <if test="order != null">
-                                'g.'||#{order} desc
+                                 <if test="order != ''.toString()">
+                                     'g.'||#{order} desc
+                                 </if>
                             </if>
                         </trim>
                         g.sn desc
@@ -110,20 +118,26 @@
         select count(*)
         from tgrp
         where sn > 0
-        and status != 'GRST03'
+        and status = 'GRST01'
         <trim prefix="AND">
             <if test="category != null">
-                category = #{category}
+                <if test="category != ''.toString()">
+                    category = #{category}
+                </if>
             </if>
         </trim>
         <trim prefix="AND">
             <if test="sigungu != null">
+                <if test="sigungu != ''.toString()">
                 sigungu = #{sigungu}
+                </if>
             </if>
         </trim>
         <trim prefix="AND">
             <if test="groupName != null">
+                <if test="groupName != ''.toString()">
                 name like '%'||#{groupName}||'%'
+                </if>
             </if>
         </trim>
     </select>
