@@ -67,6 +67,7 @@
             <c:if test="${study.representation != pinfo.username}">
                 <c:choose>
                     <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
+                    <c:otherwise><div id="attendButton"></div></c:otherwise>
 <%--                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>--%>
 <%--                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>--%>
 <%--                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>--%>
@@ -191,6 +192,7 @@
 </div>
 
 <script type="text/javascript" src="/resources/js/studyWish.js"></script>
+<script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -204,19 +206,58 @@
 
         let stdSn = ${study.sn};
         let userId = "${pinfo.username}"; // 로그인중인 id
+        let grpSn = ${study.grpSn};
+
+        console.log("grpSn = " + grpSn);
         console.log("userId = " + userId);
+        console.log("stdSn = " + stdSn);
 
         let wishUL = $('.wishButton');
 
-        if(userId !== '') { // 로그인 되어있으면 찜버튼 출력
+        if(userId !== '') { // 로그인 되어있으면
+
+            // 찜버튼 출력
             getStudyWish();
+
+            // 참석버튼 출력
+            getStudyAttend();
+        }
+
+        <!-- 참석버튼 출력 -->
+        function getStudyAttend() {
+            studyAttendService.get({grpSn : grpSn, stdSn : stdSn, userId : userId}, function(result) {
+                console.log("getStudyAttend > result = " + result);
+
+                let str = "";
+
+                if(result === "group not attend") {
+                    str += "";
+
+                } else if(result === "not attend"){
+                    str += "<a class='attend btn btn-primary' href=''>참석하기</a>";
+
+                } else if(result === "attend"){
+                    str += "<a class='attend btn btn-primary' href=''>취소하기</a>";
+
+                } else if(result === "waiting"){
+                    str += "<a class='attend btn btn-primary' href=''>검토중</a>";
+
+                } else if(result === "kicked"){
+                    str += "<a class='attend btn btn-primary' href=''>가입불가</a>";
+
+                } else if(result === "fail"){
+                    alert('가입상태를 불러오는데 실패하였습니다.');
+                }
+
+                $('#attendButton').html(str);
+            })
         }
 
         <!--찜 버튼 출력-->
         function getStudyWish() {
 
             studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
-                console.log("get > getWish > result = " + result);
+                console.log("getWish > result = " + result);
 
                 let str = "";
 
