@@ -35,30 +35,29 @@
     <div class="row align-items-center my-5">
         <div class="col-lg-7">
 
-            <h3>${study.name}</h3>
+            <h1>${study.name}</h1><br>
             <c:if test="${study.repeatCycle eq 'STCY01'}"><span>매주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY02'}"><span>격주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY03'}"><span>매월</span></c:if>
 
             <c:if test="${study.repeatDay != null}"><span>${study.repeatDay}</span></c:if>
             <br>
-            <span>${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
+            <span><i class="fas fa-clock"></i> 시간 : ${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
             <br>
-            <c:if test="${endDate != null}"><span>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
-            <c:if test="${endDate == null}"><span>${fn:substring(startDate,0,10)}</span></c:if>
+            <c:if test="${endDate != null}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
+            <c:if test="${endDate == null}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)}</span></c:if>
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
-            <h1 class="font-weight-light"><c:out value="${group.name}"/></h1>
-            <p>스터디장 : ${study.representationName}</p>
-            <p>${study.attendants} / ${study.capacity}</p>
-            <c:if test="${study.onOff eq 'STOF01'}"><p>온라인 스터디</p></c:if>
-            <c:if test="${study.onOff eq 'STOF02'}"><p>오프라인 스터디</p></c:if>
+            <p><i class="fas fa-user"></i> 스터디장 : ${study.representationName}</p>
+            <p><i class="fas fa-users"></i> ${study.attendants} / ${study.capacity}</p>
+            <c:if test="${study.onOff eq 'STOF01'}"><p><i class="fas fa-video"></i>온라인 스터디</p></c:if>
+            <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디</p></c:if>
 
             <c:choose>
                 <c:when test="${study.expense == '(선택)'}"></c:when>
-                <c:when test="${study.expense == '없음' || study.expense =='추후공지'}"><p>지참금 : ${study.expense}</p></c:when>
-                <c:otherwise><p>${study.expense}원</p></c:otherwise>
+                <c:when test="${study.expense == '없음' || study.expense =='추후공지'}"><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}</p></c:when>
+                <c:otherwise><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}원</p></c:otherwise>
             </c:choose>
 
 
@@ -237,13 +236,13 @@
                     str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
 
                 } else if(result === "attend"){
-                    str += "<a id='cancel' class='btn btn-primary' href=''>취소하기</a>";
+                    str += "<a id='cancel' class='btn btn-danger' href=''>탈퇴하기</a>";
 
                 } else if(result === "waiting"){
                     str += "<a class='btn btn-primary'>검토중</a>";
 
                 } else if(result === "kicked"){
-                    str += "<a class='btn btn-primary'>가입불가</a>";
+                    str += "<a class='btn btn-danger'>가입불가</a>";
 
                 } else if(result === "fail"){
                     alert('가입상태를 불러오는데 실패하였습니다.');
@@ -302,9 +301,9 @@
                 let str = "";
 
                 if(result === "not exist") {
-                    str += "<a class='wish btn btn-primary' href=''>♡</a>";
+                    str += "<a class='wish btn btn-outline-primary' href=''>♡</a>";
                 } else {
-                    str += "<a class='wish btn btn-primary' href=''>❤</a>";
+                    str += "<a class='wish btn btn-outline-primary' href=''>❤</a>";
                 }
 
                 wishUL.html(str);
