@@ -52,13 +52,11 @@
 
 
 <script>
-
     $(document).ready(function () {
         getMakeList("make");
         getMakeList("before");
         getMakeList("after");
-        pagiActive();
-
+        // pagiActive();
     });
 
     function cardClick() {
@@ -67,7 +65,6 @@
             $(location).attr('href', '/study/get?sn=' + this.dataset.sn + '&userId=' + '${MemberVo.id}');
         });
     }
-    var c;
 
     function getMakeList(obj) {
         let url, pageNum, amount;
@@ -119,6 +116,7 @@
 
                 htmlByajax(result, place, pagiPlace, type, pageNum);
                 cardClick();
+                pagiActive();
             },
             error : function (msg) {
 
@@ -140,7 +138,7 @@
 
         $(obj).html(cardstr);
         $(obj2).html(pagiStr);
-        pagiActive();
+
     }
 
     function makeCard(obj) {
@@ -171,6 +169,7 @@
 
         onOff = onOff === 'STOF02' ? '오프라인' : '온라인';
         name = name.length > 9 ? name.slice(0,8) + '...' : name;
+
         startDate = startDate.slice(0, 10);
         if(endDate !== null){
             endDate = endDate.slice(0, 10);
@@ -253,17 +252,20 @@
 
         str += "</ul></div>";
 
-        return str === '<ul class="pagination"></ul></div>' ? "스터디가 존재 하지 않습니다" : str;
+        return str;
     }
 
     function pagiActive(){
+
+        $("#rating-item > #rating-link").unbind("click");
+
         $("#rating-item > #rating-link").on("click", function (e) {
             e.preventDefault();
             // console.log("click");
             // console.log(this.dataset.pagenum);
             // console.log(this.dataset.type);
             // console.dir(this);
-
+            btnSwitch = true;
 
             let type;
             if(this.dataset.type === 'make'){
@@ -286,8 +288,8 @@
                 $("#"+type)[0].value = this.dataset.pagenum;
             }
 
-            // console.log(this.dataset.type);
             getMakeList(this.dataset.type);
+            return;
         });
     }
 
