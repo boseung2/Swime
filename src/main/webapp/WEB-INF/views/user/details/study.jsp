@@ -55,6 +55,8 @@
 
     $(document).ready(function () {
         getMakeList("make");
+        getMakeList("before");
+        getMakeList("after");
         pagiActive();
 
     });
@@ -80,9 +82,27 @@
             place = $("#make")[0];
             pagiPlace = $("#makepagi")[0];
             type = obj;
-
         }
+        else if(obj === 'before'){
+            // ajax 통신을 위한 변수
+            url = "beforeStudy";
+            pageNum = $("#pageNum2")[0].value;
+            amount = $("#amount2")[0].value;
 
+            place = $("#before")[0];
+            pagiPlace = $("#beforepagi")[0];
+            type = obj;
+        }
+        else if(obj === 'after'){
+            // ajax 통신을 위한 변수
+            url = "afterStudy";
+            pageNum = $("#pageNum3")[0].value;
+            amount = $("#amount3")[0].value;
+
+            place = $("#after")[0];
+            pagiPlace = $("#afterpagi")[0];
+            type = obj;
+        }
 
 
 
@@ -233,8 +253,7 @@
 
         str += "</ul></div>";
 
-
-        return str;
+        return str === '<ul class="pagination"></ul></div>' ? "스터디가 존재 하지 않습니다" : str;
     }
 
     function pagiActive(){
@@ -249,6 +268,12 @@
             let type;
             if(this.dataset.type === 'make'){
                 type = "pageNum1";
+            }
+            else if(this.dataset.type === 'before'){
+                type = "pageNum2";
+            }
+            else if(this.dataset.type === 'after'){
+                type = "pageNum3";
             }
 
             if(this.dataset.btn === 'prev'){

@@ -155,7 +155,7 @@
     <![CDATA[
         select count(*)
         from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
-        where l.user_id = 'wlgh52725@gmail.com' and l.status ='STUS01' and (s.start_date - current_date) > 0
+        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) > 0
     ]]>
     </select>
 
@@ -182,7 +182,7 @@
     <![CDATA[
         select count(*)
         from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
-        where l.user_id = 'wlgh52725@gmail.com' and l.status ='STUS01' and (s.start_date - current_date) < 0
+        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) < 0
     ]]>
     </select>
 
