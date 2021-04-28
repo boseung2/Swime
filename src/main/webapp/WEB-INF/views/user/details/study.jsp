@@ -43,9 +43,6 @@
 
         <input type="hidden" name="pageNum" id="pageNum4" value="1">
         <input type="hidden" name="amount" id="amount4" value="6">
-
-
-
     </form>
 
 </div>
@@ -56,6 +53,7 @@
         getMakeList("make");
         getMakeList("before");
         getMakeList("after");
+        getMakeList("wish");
         // pagiActive();
     });
 
@@ -98,6 +96,17 @@
 
             place = $("#after")[0];
             pagiPlace = $("#afterpagi")[0];
+            type = obj;
+        }
+        else if(obj === 'wish'){
+            // ajax 통신을 위한 변수
+            console.log("wish");
+            url = "wishStudy";
+            pageNum = $("#pageNum4")[0].value;
+            amount = $("#amount4")[0].value;
+
+            place = $("#wish")[0];
+            pagiPlace = $("#wishpagi")[0];
             type = obj;
         }
 
@@ -200,7 +209,8 @@
             "            <div class='card-body-bottom' style='flex-direction: column;height: 70px;'>" +
             "                <p style='margin-bottom: 3px;'><i class='fas fa-users'></i> " + attendants + " / " + capacity + "명</p>" +
             "                <p style='margin-bottom: 3px;'><i class='far fa-calendar-check'></i> " + startDate + "</p>" +
-            "                <p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" +
+            (endDate !== null ? "<p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" : "<i class='far fa-calendar-times'> 종료일이 없습니다</i>") +
+            // "                <p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" +
             // "                <p class='card-text ratingPlace' id='stars' data-rating='' data-ratingcount=''>(스타)</p>\n" +
             "            </div>" +
             "        </div>" +
@@ -276,6 +286,9 @@
             }
             else if(this.dataset.type === 'after'){
                 type = "pageNum3";
+            }
+            else if(this.dataset.type === 'wish'){
+                type = "pageNum4";
             }
 
             if(this.dataset.btn === 'prev'){

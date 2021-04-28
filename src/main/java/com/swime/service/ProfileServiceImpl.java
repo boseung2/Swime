@@ -131,7 +131,16 @@ public class ProfileServiceImpl implements ProfileService{
 
     @Override
     public GroupStudyListDTO wishBoth(String id, ProfileCriteria cri) {
-        return null;
+        GroupStudyListDTO dto = new GroupStudyListDTO();
+        List<StudyVO> list = mapper.wishStudyList(id, cri);
+
+        list.forEach(study -> {
+            study.setAttendants(listMapper.count(study.getSn()));
+        });
+
+        dto.setCount(mapper.wishStudyCount(id));
+        dto.setList(list);
+        return dto;
     }
 }
 
