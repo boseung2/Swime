@@ -8,6 +8,7 @@
         select sn, std_sn, question_sn, question
         from tstd_survey
         where std_sn = #{stdSn}
+        order by question_sn
     </select>
 
     <insert id="insert">

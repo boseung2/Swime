@@ -172,13 +172,21 @@ public class StudyController {
         model.addAttribute("study", service.get(sn));
         model.addAttribute("cri", cri);
 
+        List<StudySurveyVO> qList = service.getSurveyList(sn);
+
+        for(int i = 0; i < qList.size(); i++) {
+            log.info((i+1) + "번째 질문 = " + qList.get(i));
+            model.addAttribute("question" + (i+1), qList.get(i));
+        }
+
+        // api key
         Environment env = context.getEnvironment();
         model.addAttribute("key", env.getProperty("key"));
     }
 
     @PostMapping("/modify")
     @PreAuthorize("principal.username == #study.representation")
-    public String modify(StudyVO study, StudyCriteria cri, RedirectAttributes rttr) {
+    public String modify(StudyVO study, StudyCriteria cri, StudyQuestionVO questions, RedirectAttributes rttr) {
 
         log.info("modify representation " + study.getRepresentation());
         log.info("modify study onOff = " + study.getOnOff());
@@ -195,6 +203,40 @@ public class StudyController {
             rttr.addFlashAttribute("result", "update");
         }else {
             rttr.addFlashAttribute("result", "update error");
+        }
+
+        // 이전 질문 모두 지우기
+        service.removeSurvey(study.getSn());
+
+        log.info("첫번째 질문 = " + questions.getQuestion1());
+        log.info("두번째 질문 = " + questions.getQuestion2());
+        log.info("세번째 질문 = " + questions.getQuestion3());
+
+        // 설문 새로 등록
+        if(!"".equals(questions.getQuestion1()) || !"".equals(questions.getQuestion2()) || !"".equals(questions.getQuestion3())) {
+
+            List<String> qList = new ArrayList<>();
+            qList.add(questions.getQuestion1());
+            qList.add(questions.getQuestion2());
+            qList.add(questions.getQuestion3());
+
+            int order = 1;
+            long stdSn = study.getSn();
+
+            // 질문이 있으면 surveyVO 객체만들어서 등록해주기
+            for(int i = 0; i < qList.size(); i++) {
+
+                if(!"".equals(qList.get(i))) {
+                    StudySurveyVO survey= new StudySurveyVO();
+                    survey.setStdSn(stdSn);
+                    survey.setQuestionSn(order++);
+                    survey.setQuestion(qList.get(i));
+
+                    service.registerSurvey(survey);
+
+                    log.info(order-1 + "번째 질문 등록 완료!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
+            }
         }
 
         rttr.addAttribute("pageNum", cri.getPageNum());

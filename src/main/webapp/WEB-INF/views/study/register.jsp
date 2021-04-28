@@ -198,6 +198,7 @@
 <%@include file="../includes/footer.jsp" %>
 
 <script>
+    <!-- 설문 사용 클릭시 -->
     $('#surveyCheck').on("click", function() {
 
         if($('#surveyCheck')[0].checked) { // 가입질문 사용시
@@ -220,7 +221,6 @@
             $('#question2').val("");
             $('#question3').val("");
         }
-
 
     })
 </script>
