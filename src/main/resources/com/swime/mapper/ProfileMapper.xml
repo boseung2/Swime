@@ -132,6 +132,63 @@
         where s.representation = u.id and s.status in ('STST01', 'STST03') and u.id = #{id}
     </select>
 
+    <select id="beforeStudyList" resultType="com.swime.domain.StudyVO">
+        <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
+                        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) > 0
+                        order by s.start_date
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <select id="beforeStudyCount" resultType="int">
+    <![CDATA[
+        select count(*)
+        from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
+        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) > 0
+    ]]>
+    </select>
+
+    <select id="afterStudyList" resultType="com.swime.domain.StudyVO">
+        <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
+                        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) < 0
+                        order by s.start_date
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <select id="afterStudyCount" resultType="int">
+    <![CDATA[
+        select count(*)
+        from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
+        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) < 0
+    ]]>
+    </select>
+
+    <select id="wishStudyList" resultType="com.swime.domain.StudyVO"></select>
+    <select id="wishStudyCount" resultType="int"></select>
+
 
 
 

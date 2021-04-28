@@ -34,6 +34,35 @@ public class ProfileDataController {
         return new ResponseEntity<>(service.makeBoth(id, cri), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/beforeStudy",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public ResponseEntity<GroupStudyListDTO> getBeforeStudyList(String id, ProfileCriteria cri){
+        return new ResponseEntity<>(service.beforeBoth(id, cri), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/afterStudy",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public ResponseEntity<GroupStudyListDTO> getAfterStudyList(String id, ProfileCriteria cri){
+        return new ResponseEntity<>(service.afterBoth(id, cri), HttpStatus.OK);
+    }
+
+
+
+
+
+
+
+
+
+
     // 스터디 리스트 페이징처리
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody

@@ -34,6 +34,16 @@ public interface ProfileMapper {
 
     int makeStudyCount(String id);
 
+    List<StudyVO> beforeStudyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
 
+    int beforeStudyCount(String id);
+
+    List<StudyVO> afterStudyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    int afterStudyCount(String id);
+
+    List<StudyVO> wishStudyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    int wishStudyCount(String id);
 
 }

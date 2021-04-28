@@ -103,4 +103,10 @@ public class ProfileMapperTests {
         List<StudyVO> list = mapper.makeStudyList(id, new ProfileCriteria(2,6));
         list.forEach(log::info);
     }
+
+    @Test
+    public void beforeStudy(){
+        List<StudyVO> list = mapper.beforeStudyList(id, profileCriteria);
+        list.forEach(log::info);
+    }
 }

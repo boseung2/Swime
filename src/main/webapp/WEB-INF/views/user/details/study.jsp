@@ -24,10 +24,25 @@
         <input type="hidden" name="amount" id="amount1" value="6">
 
         <h2>예정된 스터디</h2>
+        <div class="row" id="before"></div>
+        <div id="beforepagi"></div>
+
+        <input type="hidden" name="pageNum" id="pageNum2" value="1">
+        <input type="hidden" name="amount" id="amount2" value="6">
 
         <h2>종료된 스터디</h2>
+        <div class="row" id="after"></div>
+        <div id="afterpagi"></div>
+
+        <input type="hidden" name="pageNum" id="pageNum3" value="1">
+        <input type="hidden" name="amount" id="amount3" value="6">
 
         <h2>관심 스터디</h2>
+        <div class="row" id="wish"></div>
+        <div id="wishpagi"></div>
+
+        <input type="hidden" name="pageNum" id="pageNum4" value="1">
+        <input type="hidden" name="amount" id="amount4" value="6">
 
 
 
@@ -37,11 +52,11 @@
 
 
 <script>
-
     $(document).ready(function () {
         getMakeList("make");
-        pagiActive();
-
+        getMakeList("before");
+        getMakeList("after");
+        // pagiActive();
     });
 
     function cardClick() {
@@ -50,7 +65,6 @@
             $(location).attr('href', '/study/get?sn=' + this.dataset.sn + '&userId=' + '${MemberVo.id}');
         });
     }
-    var c;
 
     function getMakeList(obj) {
         let url, pageNum, amount;
@@ -65,9 +79,27 @@
             place = $("#make")[0];
             pagiPlace = $("#makepagi")[0];
             type = obj;
-
         }
+        else if(obj === 'before'){
+            // ajax 통신을 위한 변수
+            url = "beforeStudy";
+            pageNum = $("#pageNum2")[0].value;
+            amount = $("#amount2")[0].value;
 
+            place = $("#before")[0];
+            pagiPlace = $("#beforepagi")[0];
+            type = obj;
+        }
+        else if(obj === 'after'){
+            // ajax 통신을 위한 변수
+            url = "afterStudy";
+            pageNum = $("#pageNum3")[0].value;
+            amount = $("#amount3")[0].value;
+
+            place = $("#after")[0];
+            pagiPlace = $("#afterpagi")[0];
+            type = obj;
+        }
 
 
 
@@ -84,6 +116,7 @@
 
                 htmlByajax(result, place, pagiPlace, type, pageNum);
                 cardClick();
+                pagiActive();
             },
             error : function (msg) {
 
@@ -105,7 +138,7 @@
 
         $(obj).html(cardstr);
         $(obj2).html(pagiStr);
-        pagiActive();
+
     }
 
     function makeCard(obj) {
@@ -136,8 +169,11 @@
 
         onOff = onOff === 'STOF02' ? '오프라인' : '온라인';
         name = name.length > 9 ? name.slice(0,8) + '...' : name;
+
         startDate = startDate.slice(0, 10);
-        // endDate = endDate.slice(0, 10);
+        if(endDate !== null){
+            endDate = endDate.slice(0, 10);
+        }
 
 
         let str = "" +
@@ -176,25 +212,28 @@
 
 
     function makePagi(Cnt, pageNum, kind) {
-
         let endNum = Math.ceil(pageNum / 5.0) * 5;
+
         let startNum = endNum - 4;
 
         let prev = startNum != 1;
         let next = false;
 
-        if(endNum * 5 >= Cnt) {
-            endNum = Math.ceil(Cnt / 5.0);
+        if(endNum * 6 >= Cnt) {
+            endNum = Math.ceil(Cnt / 6.0);
         }
 
-        if(endNum * 5 < Cnt) {
+        if(endNum * 6 < Cnt) {
             next = true;
         }
+
+        // console.log("startNum = " + startNum + ", endNum = " + endNum + ", prev = " + prev + ", next = " + next);
+        // console.log(pageNum + "/" + "5" + "*" + " 5 = " + (pageNum / 5.0 * 5));
 
         let str = '<ul class="pagination">';
 
         if(prev) {
-            str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='"+(startNum - 1)+"'>Previous</a></li>"
+            str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='#' data-type='" + kind + "' data-btn='prev'>Previous</a></li>"
         }
 
         for(let i= startNum ; i <= endNum; i++) {
@@ -208,30 +247,49 @@
         }
 
         if(next) {
-            str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+            str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='#' data-type='" + kind + "' data-btn='next'>Next</a></li>";
         }
 
         str += "</ul></div>";
-
 
         return str;
     }
 
     function pagiActive(){
+
+        $("#rating-item > #rating-link").unbind("click");
+
         $("#rating-item > #rating-link").on("click", function (e) {
             e.preventDefault();
             // console.log("click");
             // console.log(this.dataset.pagenum);
             // console.log(this.dataset.type);
             // console.dir(this);
+            btnSwitch = true;
+
             let type;
             if(this.dataset.type === 'make'){
                 type = "pageNum1";
             }
+            else if(this.dataset.type === 'before'){
+                type = "pageNum2";
+            }
+            else if(this.dataset.type === 'after'){
+                type = "pageNum3";
+            }
 
-            $("#"+type)[0].value = this.dataset.pagenum;
-            // console.log(this.dataset.type);
+            if(this.dataset.btn === 'prev'){
+                $("#"+type)[0].value = parseInt($("#"+type)[0].value) - 1;
+            }
+            else if(this.dataset.btn === 'next'){
+                $("#"+type)[0].value = parseInt($("#"+type)[0].value) + 1;
+            }
+            else{
+                $("#"+type)[0].value = this.dataset.pagenum;
+            }
+
             getMakeList(this.dataset.type);
+            return;
         });
     }
 
