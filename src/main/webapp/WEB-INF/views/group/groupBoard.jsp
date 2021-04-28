@@ -7,6 +7,7 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+
 <%@include file="../includes/tagLib.jsp" %>
 
 <!-- 게시판  -->
@@ -70,11 +71,15 @@
 <script type="text/javascript" src="/resources/js/boardList.js"></script>
 
 <script type="text/javascript">
+
     // 게시판
     $(document).ready(function(){
 
         let grpSnValue = "${group.sn}";
         let boardUL = $(".boardHeader");
+
+        let boardPageNum = 1;
+        let boardPageFooter = $('.boardPageFooter');
 
         showBoardList(1);
 
@@ -97,13 +102,14 @@
                     let str="";
 
                     if(list == null || list.length == 0){
+                        //boardUL.html("");
                         return;
                     }
                     //필독 (모임장)나중에 데이터 넣어야함.
                     for(let i = 0, len = list.length || 0; i < len; i++){
 
                         let dat = "";
-                        //제목 글자가40이상이면 ...찍는다.
+                        //제목 글자가40이상이면 ...찍는다. 글자가 너무 길면 칸을 초과함
                         if(list[i].title.length >= 40 || list[i].content.length >=40){
                             dat = "...";
                         }
@@ -114,7 +120,7 @@
                         str += "<div id='boardDivBox'>";
                         str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
                         str += "<span id='boardName'>"+list[i].name+"</span>";
-                        // str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
+                        //str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
                         str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";
                         str += "</div>";
 
@@ -134,9 +140,9 @@
         }//end showList
 
         <!--게시글 페이지-->
+
+
         function showBoardPage(boardCnt) {
-            let boardPageNum = 1;
-            let boardPageFooter = $('.boardPageFooter');
 
             console.log('boardCnt'+boardCnt+"개");
             let endNum = Math.ceil(boardPageNum / 10.0) * 10;
@@ -163,18 +169,18 @@
             let str = "<ul class ='pagination'>";
 
             if(prev) {
-                str += "<li class = 'page-item'><a class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
+                str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
             }
 
             for(let i = startNum; i <= endNum; i++) {
                 console.log("i=" + i);
                 let active = boardPageNum == i ? "active" : "";
 
-                str += "<li class = 'page-item " + active +" '><a class='page-link' href='" + i + "'>" + i + "</a></li>";
+                str += "<li id='board-item' class = 'page-item " + active +" '><a id='board-link' class='page-link' href='" + i + "'>" + i + "</a></li>";
             }
 
             if(next) {
-                str += "<li class = 'page-item'><a class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
+                str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
             }
 
             str += "</ul></div>";
@@ -183,7 +189,9 @@
 
             boardPageFooter.html(str);
 
-            boardPageFooter.on("click", "li a", function(e) {
+
+            //여기 좀 이상한 부분
+            boardPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function(e) {
 
                 e.preventDefault();
 
@@ -199,12 +207,10 @@
 
             });
 
-
         }
 
 
-
-    });
+    });//end ready
 
 
 </script>

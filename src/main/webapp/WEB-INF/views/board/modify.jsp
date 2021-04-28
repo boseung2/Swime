@@ -31,11 +31,11 @@
         text-align: center;
     }
 
-    ul.uploadResult > li > img{
+    .uploadResult > li > img{
         width: 100px;
     }
 
-    ul.uploadResult > li > div> img{
+    .uploadResult > li > div> img{
         width: 100px;
         margin-right:1em;
         height: 100px;
@@ -109,6 +109,7 @@
         <div class="form-group uploadDiv">
             <label for="uploadFile">첨부파일</label>
             <input multiple="multiple" type="file" class="form-control" id="uploadFile" name="uploadFile" >
+
             <ul class="uploadResult">
 
             </ul>
@@ -128,9 +129,14 @@
 <%--        <input type="text" name="amount" value="${cri.amount}">--%>
         <input type="hidden" class="form-control" id="grpSn" name="grpSn" value="${board.grpSn}">
 
-        <button id='modifyBtn' type="submit" data-oper="modify" class="btn btn-primary">수정</button>
-        <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
-        <button type="submit" data-oper="list" class="btn btn-dark">목록</button>
+        <sec:authentication property="principal" var="pinfo"/>
+        <sec:authorize access="isAuthenticated()">
+            <c:if test="${pinfo.username eq board.userId}">
+                <button id='modifyBtn' type="submit" data-oper="modify" class="btn btn-primary">수정</button>
+                <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
+            </c:if>
+        </sec:authorize>
+                <button type="submit" data-oper="list" class="btn btn-dark">목록</button>
 <%--        <a id="back" class="btn btn-dark">취소</a>--%>
 
         <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
@@ -142,17 +148,9 @@
 
     $(document).ready(function(){
 
-
         // $("#back").on("click", function(){
         //     window.history.back();
         // });
-        //
-        //
-        // $("button[id='modifyBtn']").on("click", function(e) {
-        //
-        //
-        // })
-
         let formObj = $("#modifyForm");
 
         $("button").on("click", function(e){
@@ -185,8 +183,24 @@
                 // formObj.empty();
                 // formObj.append(pageNumTag);
                 // formObj.append(amountTag);
-            } else {
+            } else if(operation === 'modify'){
                 //e.preventDefault();
+                console.log("submit clicked.........");
+
+                let str = "";
+
+                $('uploadResult ul li').each(function(i,obj){
+
+                    let jobj = $(obj);
+                    console.log("uploadResult.each()........");
+                    console.dir(jobj);
+
+                    str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+                    str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+                    str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+                    str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+                });
+                formObj.append(str).submit();
 
                 if(!validation()) {
                     return;
@@ -236,11 +250,12 @@
         let maxSize = 5242880;
         let csrfHeaderName = "${_csrf.headerName}";
         let csrfTokenValue = "${_csrf.token}";
-        let brdSn = ${board.sn};
 
-        console.log(brdSn);
+
         (function(){
 
+        let brdSn = '<c:out value="${board.sn}"/>';
+        console.log(brdSn);
             //게시판 상세 조회 시 첨부파일
             $.getJSON("/board/getAttachList", {brdSn : brdSn}, function(arr){
                 console.log("게시판 brdSn" + brdSn)
@@ -249,11 +264,10 @@
 
                 let str = "";
 
-                console.log(str);
 
                 $(arr).each(function(i, attach) {
 
-                    console.log(attach.fileType);
+                    console.log(attach.fileType);//true.false 이미지 첨부 판단
 
                     console.log(attach.uploadPath);
                     console.log(attach.uuid);
@@ -330,7 +344,7 @@
                 formData.append("uploadFile", files[i]);
             }
 
-            /////////////////////////내일 수정부터 하면 됨..////////////////
+
             //여기수정
             $.ajax({
                 url: '/uploadAjaxAction',
@@ -372,14 +386,11 @@
             if(!uploadResult || uploadResult.length == 0) {
                 return;
             }
-            if(!uploadResult || uploadResult.length == 0) {
-                return;
-            }
 
-            let uploadUL = $('.uploadResult ul');
+            let uploadUL = $('.uploadResult');
 
             //첨부파일 한개만 나온 거 해결! "" -> 아래 코드
-            let str = $('.uploadResult ul').html();
+            let str = $('.uploadResult').html();
 
             console.log(str);
             $(uploadResult).each(function(i, obj) {
@@ -401,7 +412,7 @@
                     str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'";
                     str += "><div>";
                     str += "<span> "+obj.fileName+"</span>";
-                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
+                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='file'>X</button><br>";
                     str += "<img src='/resources/img/1.png'>";
                     str += "</div>";
                     str += "</li>";

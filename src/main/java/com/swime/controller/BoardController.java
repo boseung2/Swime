@@ -122,12 +122,16 @@ public class BoardController {
 
         log.info("/get or modify");
         model.addAttribute("board", service.get(sn));
+
+
         model.addAttribute("reply", replyService.get(sn));
 
+
+        log.info("replyServiceGet : "+replyService.get(sn));
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
 
     }
-
+    @PreAuthorize("principal.username == #board.userId")
     @PostMapping("/modify")
     public String modify(BoardVO board, @ModelAttribute("cri") BoardCriteria cri,
                          RedirectAttributes rttr) {
@@ -150,6 +154,7 @@ public class BoardController {
         return "redirect:/board/get?sn="+board.getSn();
     }
 
+    @PreAuthorize("principal.username == #userId")
     @PostMapping("/remove")
     public String remove(@RequestParam("sn") Long sn, long grpSn, @ModelAttribute("cri") BoardCriteria cri,
                          RedirectAttributes rttr) {

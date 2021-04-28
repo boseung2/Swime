@@ -41,9 +41,12 @@ public class ReplyController {
     }
 
     //댓글 삭제
+    @PreAuthorize("principal.username == #reply.userId")
     @DeleteMapping(value="/{sn}/{brdSn}")
-    public ResponseEntity<Integer> remove(@PathVariable("sn") Long sn, @PathVariable("brdSn") Long brdSn){
+    public ResponseEntity<Integer> remove(@RequestBody ReplyVO reply, @PathVariable("sn") Long sn, @PathVariable("brdSn") Long brdSn){
+
         log.info("remove");
+        log.info("removeUserId : " + reply.getUserId());
 
         //댓글 개수를 보낼 거임.
         //ReplyVO reply = new ReplyVO();
@@ -76,6 +79,7 @@ public class ReplyController {
 
 
     //댓글 수정 Long
+    @PreAuthorize("principal.username == #vo.userId")
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
                     value = "/{sn}")
     public ResponseEntity<String> modify(@RequestBody ReplyVO vo, @PathVariable("sn") int sn){

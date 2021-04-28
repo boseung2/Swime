@@ -114,6 +114,11 @@ div #date{
     background: transparent;
     float: right;
 }
+.boardUserRepot{
+    border: none;
+    background: transparent;
+    float: right;
+}
 .replySubmit{
     border: none;
     background: transparent;

@@ -59,7 +59,25 @@ public class BoardServiceImpl implements BoardService{
         //게시판 내용(content)수정
         int count2 = mapper.updateContent(board);
 
-        return mapper.update(board) == 1;
+        //파일을 수정 할 때 추가된 파일과 삭제된 파일이 있으므로
+        // 전체 파일을 삭제시키고 추가된 부분을 insert
+        boardAttachMapper.deleteAll(board.getSn());
+
+        boolean modifyResult = mapper.update(board) == 1;
+        log.info("modifyResult >>>>>>>>>> "+modifyResult);
+
+        if(modifyResult && board.getAttachList() != null &&
+        board.getAttachList().size() > 0){
+
+            board.getAttachList().forEach(attach ->{
+                attach.setBrdSn(board.getSn());
+                boardAttachMapper.insert(attach);
+            });
+        }
+
+//        mapper.update(board) == 1;
+
+        return modifyResult;
     }
 
     //게시판 삭제시 첨부파일도 같이 삭제시켜야함.

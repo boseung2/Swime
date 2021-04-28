@@ -86,15 +86,16 @@
             <div id="inline3">
                 <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>
                 <div class="inline" id="name"><c:out value="${board.name}" /></div>
-                <div class="inline" id="role">모임장</div>
+                <div class="inline" id="role"></div>
             </div>
 
 
             <div id="inline2">
-                <!--principal.MemberVo > mv.name 접근해서 이름 가져온다. 위에 참고-->
-                <c:if test="${mv.name eq board.name}">
+                <!--principal.MemberVo > mv.name board.name접근해서 이름 가져온다. 위에 참고-->
+                <c:if test="${mv.id eq board.userId}">
                     <button data-oper='modify' class="btn btn-primary">수정</button>
                 </c:if>
+
 
                 <button data-oper="list" class="btn btn-dark">취소</button>
 
@@ -136,8 +137,7 @@
 
             <div class="form-group">
                 <label for="content">내용</label>
-                <textarea class="form-control" rows="5"
-                          id="content" name="content" readonly="readonly"><c:out value="${board.content}"/></textarea>
+                <textarea class="form-control" rows="5" id="content" name="content" readonly="readonly"><c:out value="${board.content}"/></textarea>
             </div>
 
 <%--            <div class="form-group">--%>
@@ -186,15 +186,17 @@
                     <ul class="chat">
 
 
-                        <!-- 댓글 시작 -->
+                        <!-- 댓글 시작 .........................-->
                         <li class="left clearfix" data-sn="12">
                             <div>
                                 <div class="header2">
                                     <strong class="primary-font"></strong>
                                     <small class="pull-right text-muted"></small>
-                                    <!--내 글이면 수정 삭제 / 다른 사람 글이면 ...표시 -> 신고하기-->
+
                                     <button id='replyDeleteBtn' type="button" class="replyDelete"></button>
                                     <button id='replyModifyBtn'type="button" class="replyModify"></button>
+                                    <button id='boardUserRepot' type="button" class="boardUserRepot"></button>
+
                                 </div>
                                 <p></p>
                                 <button class="replySubmit" type="submit"></button>
@@ -206,19 +208,24 @@
 <%--            </div> <!--end reply box-->--%>
 
         <!--댓글 입력 창(로그인 안하면 댓글 창 안보이게 함.)-->
-        <c:if test="${mv.name eq board.name}">
             <div class="commentWriter">
                 <div class="comment_inbox">
-            <textarea id='replyComment' placeholder="댓글을 입력해주세요" rows="1"
-                      class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px"
-                      required></textarea>
-                </div>
+
+            <sec:authorize access="isAuthenticated()">
+            <textarea id='replyComment' placeholder="댓글을 입력해주세요" rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
                 <div class="register_box">
                     <button id='replyRegisterBtn' role="button" class="button btn_register is_active">등록</button>
                 </div>
-            </div>
+            </sec:authorize>
+            <sec:authorize access="isAnonymous()">
+            <textarea id='replyComment' placeholder="로그인 후 댓글을 입력할 수 있습니다." rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
+            </sec:authorize>
+                </div><!-- end comment_inbox-->
+
+            </div><!-- end commentWriter-->
             <!--end 댓글 입력 창-->
-        </c:if>
+
+
         </div> <!-- ./col-lg-12-->
 
     </div><!-- row -->
@@ -487,7 +494,7 @@
 
 
         //userid = 이메일,  id = 이름
-        //댓글 등록할 때 insert는 userid로 get은 id로
+        //댓글 등록할 때 insert는 userid로 get은 id로 mv.id 이메일
         let userId = 'null';
         <sec:authorize access="isAuthenticated()">
                 userId = '${mv.id}';
@@ -534,6 +541,7 @@
                     let modReply = {
                         sn : modal.data("sn"),
                         content : modalInputContent.val(),
+                        userId : userId,
                         status  : "RPST01"
                     }
                     replyService.update(modReply, function(result){
@@ -557,10 +565,10 @@
 
             let sn = $(this).data("sn")
             console.log("replySn : " + sn);
-
+            console.log("replyUserId : " + userId)
             if(confirm('댓글을 삭제하시겠습니까?')){
 
-                replyService.remove(sn, snValue, function(result){
+                replyService.remove(sn, snValue, userId, function(result){
                     console.log(result);
 
                     console.log(result.getElementsByTagName("Integer"));
@@ -619,8 +627,25 @@
                     str += "<div><div class='header2'><strong id='userName' class='primary-" +
                         "font'>"+list[i].name+"</strong>";
                     str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
-                    str += "<button id='replyDeleteBtn' class='replyDelete' data-sn='"+list[i].sn+"'>삭제</button>";
-                    str += "<button id='replyModifyBtn' class='replyModify' data-sn='"+list[i].sn+"'>수정</button></div>";
+                    <sec:authorize access="isAuthenticated()">
+
+                        let p_username = "${pinfo.username}";
+                        // 내가 쓴 글이면 수정 삭제
+                        if(p_username == list[i].userId){
+                            console.log("equal");
+                            console.log("${pinfo.username}");
+                            console.log(list[i].userId);
+                            str += "<button id='replyDeleteBtn' class='replyDelete' data-sn='"+list[i].sn+"'>삭제</button>";
+                            str += "<button id='replyModifyBtn' class='replyModify' data-sn='"+list[i].sn+"'>수정</button></div>";
+                        // 내가 쓴 글이 아니면 신고 버튼
+                        }else{
+                            console.log("ne");
+                            console.log("${pinfo.username}");
+                            console.log(list[i].userId);
+                            str += "<button id='boardUserRepot' class='boardUserRepot' data-sn='"+list[i].sn+"'>신고</button>"
+                        }
+
+                    </sec:authorize>
                     str += "<p id='replyContent'>"+list[i].content+"</p>";
                     str += "<button class='replySubmit'>답글 쓰기</button></div></li><hr>"
 
@@ -659,7 +684,6 @@
                }
                //like.html(str);
 
-
             });
 
         }
@@ -670,23 +694,19 @@
             document.getElementById("likeCnt").innerHTML = BoardLikeCnt.getElementsByTagName("Integer")[0].textContent;
         }
 
-        <%--let test = '${isLike}';--%>
-        <%--// console.log(test === 'true');--%>
-        <%--// ajax로 사용자가 눌렀는지 확인한다--%>
-        <%--let check = test === 'false';//false;--%>
-        <%--// console.log()--%>
-        <%--// 그값으로 트루폴즈를 판단해서 하트를 세팅한다--%>
-        <%--if (check) {--%>
-        <%--    $("#likeCnt1").addClass('fas fa-heart'); // 채워진 하트--%>
-        <%--}else{--%>
-        <%--    $("#likeCnt1").addClass('far fa-heart'); // 빈 하트--%>
-        <%--}--%>
-
 
         //좋아요 클릭 시
         $("#likeCnt1").on("click",function (e) {
             //e.preventDefault();
             //change(this);
+            let isLogin = "";
+            <sec:authorize access="isAuthenticated()">
+                isLogin = '<sec:authentication property="principal.username"/>'
+            </sec:authorize>
+            if(!isLogin){
+                alert("로그인 해주세요");
+                return;
+            }
 
             let boardLike = {
                 brdSn : snValue,
@@ -704,26 +724,17 @@
                updateLikeCnt(result);
             });
 
-            // boardLikeService.remove(boardLike, function(){
-            //
-            // });
-
-            // function change(obj){
-            //     check = !check;
-            //     if (check) {
-            //         $(obj).removeClass('far fa-heart'); //빈 하트
-            //         $(obj).addClass('fas fa-heart');
-            //     }else{
-            //         $(obj).removeClass('fas fa-heart');
-            //         $(obj).addClass('far fa-heart');
-            //     }
-            // }
-
         });//end LikeCnt
+
+        $(".chat").on("click", "button[id='boardUserRepot']", function(e){
+            alert('구현 중 입니다 조금 많이 기다려주세요~♡')
+        });
 
 
 
     });// end ready
+
+
 
     // //댓글 생성
     // replyService.add(

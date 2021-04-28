@@ -113,6 +113,11 @@
 
                 </ul>
             </div>
+            <div class="uploadResult2">
+                <ul>
+
+                </ul>
+            </div>
 
         </div>
 
@@ -121,13 +126,11 @@
 <%--            <label for="topFix">게시물 상위고정</label>--%>
 <%--            <input type="checkbox" class="form-control" name="topFix" id="topFix">--%>
 <%--        </div>--%>
-
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="BOFI02" id="topFix">
-            <label class="form-check-label" for="topFix">
-                게시물 상위고정
-            </label>
+                <label class="form-check-label" for="topFix">게시물 상위고정</label>
         </div>
+
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <button id='registerBtn' type="submit" class="btn btn-primary">등록</button>
@@ -140,6 +143,7 @@
 
 <script>
     $(document).ready(function(){
+
         //exe|sh|zip|alz|  png|jpg|jpeg|bmp|
         let fileInput = $("#registerForm > .form-group > input[id='uploadFile']");
         let formObj = $("form[role='form']");
@@ -198,7 +202,7 @@
 
             let inputFile = $("input[name='uploadFile']");
 
-            //let file = inputFile[0].files[0]; 함정카드 찾았다. 여기 밑에
+
             let files = inputFile[0].files;
 
             console.log(files);
@@ -276,6 +280,7 @@
         }
 
         function showUploadResult(uploadResult) {
+            console.log(uploadResult);
 
             //수정부분
             if(!uploadResult || uploadResult.length == 0) {
@@ -283,9 +288,13 @@
             }
 
             let uploadUL = $('.uploadResult ul');
+            //이미지와 첨부파일을 구별하기.. 나중에 하자
+            //let uploadUL2 = $('.uploadResult2 ul');
 
             //첨부파일 한개만 나온 거 해결! "" -> 아래 코드
             let str = $('.uploadResult ul').html();
+
+            //let str2 = $('.uploadResult ul').html();
 
             console.log(str);
             $(uploadResult).each(function(i, obj) {
@@ -307,7 +316,7 @@
                     str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'";
                     str += "><div>";
                     str += "<span> "+obj.fileName+"</span>";
-                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
+                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='file'>X</button><br>";
                     str += "<img src='/resources/img/1.png'>";
                     str += "</div>";
                     str += "</li>";
@@ -316,6 +325,7 @@
             })
 
             uploadUL.html(str);
+            //uploadUL2.html(str2);
         } // end showUploadResult
 
 /////////////////////////////////////////////////////////
