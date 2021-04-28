@@ -75,7 +75,7 @@
             <c:if test="${study.representation eq pinfo.username}">
                 <a class="modify btn btn-primary" href="">스터디 수정</a>
                 <a class="remove btn btn-primary" href="">스터디 삭제</a>
-                <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}&representation=${study.representation}">멤버 관리</a>
+                <a class="btn btn-primary" href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}">멤버 관리</a>
                 <br><br>
 <%--            <a class="btn btn-primary" href="#">참가 신청 마감</a>--%>
 <%--            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>--%>

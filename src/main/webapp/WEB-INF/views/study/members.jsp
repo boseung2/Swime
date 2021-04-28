@@ -4,9 +4,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
 <%@include file="../includes/header.jsp" %>
 
 <h2>멤버 관리</h2>
+<a class="btn btn-primary" href="/study/get?pageNum=${cri.pageNum}&amount=${cri.amount}&sn=${stdSn}">스터디로 돌아가기</a>
+
 
 <!-- nav -->
 <div class="topnav" style="margin-bottom: 10px;">
@@ -35,10 +39,10 @@
 <script>
     $(document).ready(function() {
 
+        // post방식 처리
         let csrfHeaderName = "${_csrf.headerName}";
         let csrfTokenValue = "${_csrf.token}";
 
-        // ajax spring security header
         $(document).ajaxSend(function(e, xhr, options) {
             xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
         });
@@ -78,16 +82,22 @@
                 str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
                 str += '<strong> ' + result[i].userName + '</strong>';
 
+                if("${representation}" === result[i].userId) str += '<span style="color:gray;"> 스터디장</span>';
+
                 if(result[i].grpRole === 'GRRO01') str += '<span style="color:gray;"> 모임장</span>';
                 if(result[i].grpRole === 'GRRO02') str += '<span style="color:gray;"> 운영진</span>';
                 if(result[i].grpRole === 'GRRO03') str += '<span style="color:gray;"> 일반회원</span>';
 
                 str += '</div>';
 
-                str += '<div class="attendBtn">';
-                str += '<a id ="cancel" class="' + result[i].userId + '" href="">강퇴</a>'
-                str += '<a id = "ban" class="' + result[i].userId + '" href="">영구강퇴</a>'
-                str += '</div>';
+                // 로그인한 사용자가 스터디장이고, 본인이 아닌 사람들만 강퇴 가능
+                if("${pinfo.username}" !== "" && "${representation}" === "${pinfo.username}" && "${representation}" !== result[i].userId) {
+                    str += '<div class="attendBtn">';
+                    str += '<a id ="cancel" class="' + result[i].userId + '" href="">강퇴</a>'
+                    str += '<a id = "ban" class="' + result[i].userId + '" href="">영구강퇴</a>'
+                    str += '</div>';
+                }
+
                 str += '</li>';
             }
 
