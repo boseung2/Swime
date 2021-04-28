@@ -3,6 +3,7 @@ package com.swime.mapper;
 
 import com.swime.domain.GroupVO;
 import com.swime.domain.ProfileCriteria;
+import com.swime.domain.StudyVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -29,10 +30,20 @@ public interface ProfileMapper {
 
     int wishListCount(String id);
 
-//    List<GroupVO> joinList(String id);
-//
-//    List<GroupVO> wishList(String id);
+    List<StudyVO> makeStudyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
 
+    int makeStudyCount(String id);
 
+    List<StudyVO> beforeStudyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    int beforeStudyCount(String id);
+
+    List<StudyVO> afterStudyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    int afterStudyCount(String id);
+
+    List<StudyVO> wishStudyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    int wishStudyCount(String id);
 
 }

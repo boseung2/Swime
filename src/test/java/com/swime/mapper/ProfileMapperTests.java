@@ -3,6 +3,7 @@ package com.swime.mapper;
 import com.swime.domain.AuthVO;
 import com.swime.domain.GroupVO;
 import com.swime.domain.ProfileCriteria;
+import com.swime.domain.StudyVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -89,5 +90,23 @@ public class ProfileMapperTests {
     public void wishTotal(){
         int count = mapper.wishListCount(id);
         log.info(count);
+    }
+
+    @Test
+    public void makeStudy(){
+        List<StudyVO> list = mapper.makeStudyList(id, profileCriteria);
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void makeStudy2(){
+        List<StudyVO> list = mapper.makeStudyList(id, new ProfileCriteria(2,6));
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void beforeStudy(){
+        List<StudyVO> list = mapper.beforeStudyList(id, profileCriteria);
+        list.forEach(log::info);
     }
 }

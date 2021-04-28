@@ -56,6 +56,11 @@
 
 
 <script>
+    let test = 0;
+
+    let btnSwitch = false;
+
+
     $(document).ready(function (){
         let profileImg = $("#imgPlace")[0];
 
