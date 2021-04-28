@@ -19,6 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/study")
 @Log4j
@@ -104,7 +107,7 @@ public class StudyController {
     // 스터디 생성
     @PostMapping("/register")
     @PreAuthorize("isAuthenticated()")
-    public String register(StudyVO study, StudyCriteria cri, RedirectAttributes rttr) {
+    public String register(StudyVO study, StudyCriteria cri, StudyQuestionVO questions, RedirectAttributes rttr) {
 
         log.info("그룳 페이징 = " + cri);
         log.info("study onOff = " + study.getOnOff());
@@ -117,10 +120,42 @@ public class StudyController {
         }
 
         try {
+            // 스터디 등록
             service.register(study);
             rttr.addFlashAttribute("result", "register");
         }catch (Exception e) {
             rttr.addFlashAttribute("result", "register error");
+        }
+        
+        log.info("첫번째 질문 = " + questions.getQuestion1());
+        log.info("두번째 질문 = " + questions.getQuestion2());
+        log.info("세번째 질문 = " + questions.getQuestion3());
+
+        // 질문이 하나라도 있으면 설문 등록
+        if(!"".equals(questions.getQuestion1()) || !"".equals(questions.getQuestion2()) || !"".equals(questions.getQuestion3())) {
+            
+            List<String> qList = new ArrayList<>();
+            qList.add(questions.getQuestion1());
+            qList.add(questions.getQuestion2());
+            qList.add(questions.getQuestion3());
+            
+            int order = 1;
+            long stdSn = study.getSn();
+            
+            // 질문이 있으면 surveyVO 객체만들어서 등록해주기
+            for(int i = 0; i < qList.size(); i++) {
+
+                if(!"".equals(qList.get(i))) {
+                    StudySurveyVO survey= new StudySurveyVO();
+                    survey.setStdSn(stdSn);
+                    survey.setQuestionSn(order++);
+                    survey.setQuestion(qList.get(i));
+
+                    service.registerSurvey(survey);
+                    
+                    log.info(order-1 + "번째 질문 등록 완료!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
+            }
         }
 
         rttr.addAttribute("pageNum", cri.getPageNum());
