@@ -181,7 +181,7 @@ ul {
 }
 
 .centerHr {
-    width : 90%;
+    width : 100%;
     margin-top : 60px;
     margin-bottom : 60px;
 }
@@ -218,11 +218,10 @@ span.st_on {
 }
 
 .attendBtn a {
-    margin : 5px;
-    color : red;
+    margin: 5px;
+    color: red;
     text-decoration: underline;
 }
-
 
 /*↓↓↓board↓↓↓*/
 
@@ -247,14 +246,4 @@ span.st_on {
     float: right;
     margin-right: 100px;
     margin-top: 13px;
-}
-.fas fa-comment{
-    font-size: 18px;
-}
-.fas fa-heart{
-    font-size: 18px;
-
-}
-.fa-heart:before {
-    margin-left: 10px;
 }

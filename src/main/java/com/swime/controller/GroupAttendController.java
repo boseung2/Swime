@@ -78,6 +78,11 @@ public class GroupAttendController {
             produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> withdraw(@RequestBody GroupAttendVO vo) {
         log.info("vo: " + vo);
+
+        // 참가한 스터디 상태를 탈퇴로 바꾸기
+        String userId = vo.getUserId();
+
+
         return service.withdraw(vo) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -124,6 +129,9 @@ public class GroupAttendController {
 
         log.info("banPermanent: " + sn);
 
+        // 참가한 스터디 상태를 탈퇴로 바꾸기
+        String userId = service.get(sn).getUserId();
+
         return service.banPermanent(sn) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -133,6 +141,9 @@ public class GroupAttendController {
     public ResponseEntity<String> ban(@PathVariable("sn") Long sn) {
 
         log.info("ban: " + sn);
+
+        // 참가한 스터디 상태를 탈퇴로 바꾸기
+        String userId = service.get(sn).getUserId();
 
         return service.ban(sn) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)

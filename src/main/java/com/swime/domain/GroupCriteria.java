@@ -12,6 +12,12 @@ public class GroupCriteria {
     private int pageNum;
     private int amount;
 
+    // 검색조건
+    private String category;
+    private String sigungu;
+    private String groupName;
+    private String order;
+
     public GroupCriteria() {
         this(1, 6);
     }
@@ -30,4 +36,8 @@ public class GroupCriteria {
 
         return builder.toUriString();
     }
+
+//    public String[] getTypeArr() {
+//        return type == null ? new String[] {} : type.split("");
+//    }
 }

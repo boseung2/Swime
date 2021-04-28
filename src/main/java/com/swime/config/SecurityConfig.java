@@ -63,9 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .key("remember-id")
                 .tokenRepository(persistentTokenRepository())
                 .tokenValiditySeconds(604800)
-//        .and()
-//            .csrf()
-//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+            .csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //                    .disable()
         ;
 //        http

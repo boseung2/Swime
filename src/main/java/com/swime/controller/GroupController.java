@@ -29,7 +29,6 @@ public class GroupController {
 
     private GroupService groupService;
     private GroupAttendService groupAttendService;
-    private GroupRatingService groupRatingService;
 
     @GetMapping(value = "/list")
     public void list(GroupCriteria cri, Model model) {
@@ -39,6 +38,7 @@ public class GroupController {
         int total = groupService.getTotal(cri);
         log.info(">>>>>>>>>>>>>>>total" + total);
         model.addAttribute("pageMaker", new GroupPageDTO(cri, total));
+
     }
 
     @GetMapping("/register")
