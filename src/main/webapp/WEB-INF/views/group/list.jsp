@@ -12,10 +12,10 @@
         <!-- 검색필터 -->
         <div class="filter">
             <h4 style="font-family: 'Roboto', sans-serif;">Filter</h4><br>
-            <form id="actionForm" class="form" action="/group/list" method="get">
+            <form id="searchForm" class="form" action="/group/list" method="get">
             <div class="form__group">
                 <label for="category">카테고리</label>
-                <select id="category" name="category" data-dropdown>
+                <select id="category" name="category" data-dropdown1>
                     <option value="">전체</option>
                     <option value="GRCA01">프론트엔드</option>
                     <option value="GRCA02">백엔드</option>
@@ -32,7 +32,7 @@
             </div>
             <div class="form__group">
                 <label for="sigungu">지역</label>
-                <select id="sigungu" name="sigungu" data-dropdown>
+                <select id="sigungu" name="sigungu" data-dropdown2>
                     <option value="">전체</option>
                     <option value="LOGU01" hidden="hidden">서울시 강남구</option>
                     <option value="LOGU02" hidden="hidden">서울시 강동구</option>
@@ -114,11 +114,11 @@
 
     <!-- Content Row -->
     <div>
-        <h4>N개의 모임</h4>
+        <h4>${pageMaker.total}개의 모임</h4>
         <select>
-            <option>최신순</option>
-            <option>평점순</option>
-            <option>모임원순</option>
+            <option value="rating">평점순</option>
+            <option value="reg_date">최신순</option>
+            <option value="attend_count">모임원순</option>
         </select>
     </div>
     <div class="row">
@@ -203,6 +203,13 @@
 
         history.replaceState({}, null, null);
 
+        // 검색버튼 누른 후 검색조건 유지
+        let groupName = '<c:out value="${pageMaker.cri.groupName}"/>';
+        let order = '<c:out value="${pageMaker.cri.order}"/>';
+
+        $('#groupName').val(groupName);
+        //$('#order > option').select(order);
+
         function checkModal(result) {
 
             if (result === '' || history.state) {
@@ -220,7 +227,15 @@
             self.location = "/group/register";
         })
 
-        let actionForm = $("#actionForm");
+        let searchForm = $("#searchForm");
+
+        $("#searchForm button").on("click", function(e) {
+            searchForm.find("input[name='pageNum']").val("1");
+            e.preventDefault();
+
+
+            searchForm.submit();
+        })
 
         $(".paginate_button a").on("click", function(e) {
 
@@ -228,15 +243,15 @@
 
             console.log('click');
 
-            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-            actionForm.submit();
+            searchForm.find("input[name='pageNum']").val($(this).attr("href"));
+            searchForm.submit();
         })
 
         $('.move').on("click", function(e) {
             e.preventDefault();
-            actionForm.append("<input type='hidden' name='sn' value='" + $(this).attr("href") + "'>");
-            actionForm.attr("action", "/group/get");
-            actionForm.submit();
+            searchForm.append("<input type='hidden' name='sn' value='" + $(this).attr("href") + "'>");
+            searchForm.attr("action", "/group/get");
+            searchForm.submit();
         })
     })
 </script>
@@ -265,13 +280,21 @@
 <!-- filter 검색 기능 -->
 <script>
     // Get dropdowns and form
-    const dropdowns = document.querySelectorAll('[data-dropdown]');
+    const dropdowns1 = document.querySelectorAll('[data-dropdown1]');
+    const dropdowns2 = document.querySelectorAll('[data-dropdown2]');
     const form = document.querySelector('form');
 
     // Check if dropdowns exist on page
-    if(dropdowns.length > 0) {
+    if(dropdowns1.length > 0) {
         // Loop through dropdowns and create custom dropdown for each select element
-        dropdowns.forEach(dropdown => {
+        dropdowns1.forEach(dropdown => {
+            createCustomDropdown(dropdown);
+        });
+    }
+
+    if(dropdowns2.length > 0) {
+        // Loop through dropdowns and create custom dropdown for each select element
+        dropdowns2.forEach(dropdown => {
             createCustomDropdown(dropdown);
         });
     }
@@ -301,7 +324,24 @@
         // Add class to this element, text from the first option in select field and append it to custom dropdown
         const selected = document.createElement('div');
         selected.classList.add('dropdown__selected');
-        selected.textContent = optionsArr[0].textContent;
+        let category = '<c:out value="${pageMaker.cri.category}"/>';
+        let sigungu = '<c:out value="${pageMaker.cri.sigungu}"/>';
+        console.log(category);
+        console.log(sigungu);
+        console.log(optionsArr);
+        let content = '전체';
+        optionsArr.forEach(option => {
+            if(option.value === category) {
+                content = option.textContent;
+                option.setAttribute("selected", true);
+            }
+            if(option.value === sigungu) {
+                content = option.textContent;
+                option.setAttribute("selected", true);
+            }
+        })
+        //selected.textContent = optionsArr[0].textContent;
+        selected.textContent = content;
         customDropdown.appendChild(selected);
 
         // Create element for dropdown menu, add class to it and append it to custom dropdown

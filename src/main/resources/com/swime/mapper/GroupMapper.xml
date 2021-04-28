@@ -26,24 +26,18 @@
 
     <sql id="criteria">
         <trim prefix="AND">
-            <if test="category != null">
-                <if test="category != ''.toString()">
+            <if test="category != null and category != ''.toString()">
                     g.category = #{category}
-                </if>
             </if>
         </trim>
         <trim prefix="AND">
-            <if test="sigungu != null">
-                <if test="sigungu != ''.toString()">
+            <if test="sigungu != null and sigungu != ''.toString()">
                     g.sigungu = #{sigungu}
-                </if>
             </if>
         </trim>
         <trim prefix="AND">
-            <if test="groupName != null">
-                <if test="groupName != ''.toString()">
+            <if test="groupName != null and groupName != ''.toString()">
                     g.name like '%'||#{groupName}||'%'
-                </if>
             </if>
         </trim>
     </sql>
@@ -118,24 +112,18 @@
         where sn > 0
         and status = 'GRST01'
         <trim prefix="AND">
-            <if test="category != null">
-                <if test="category != ''.toString()">
+            <if test="category != null and category != ''.toString()">
                     category = #{category}
-                </if>
             </if>
         </trim>
         <trim prefix="AND">
-            <if test="sigungu != null">
-                <if test="sigungu != ''.toString()">
+            <if test="sigungu != null and sigungu != ''.toString()">
                 sigungu = #{sigungu}
-                </if>
             </if>
         </trim>
         <trim prefix="AND">
-            <if test="groupName != null">
-                <if test="groupName != ''.toString()">
+            <if test="groupName != null and groupName != ''.toString()">
                 name like '%'||#{groupName}||'%'
-                </if>
             </if>
         </trim>
     </select>
