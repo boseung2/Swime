@@ -33,8 +33,8 @@ public class ReplyServiceTests {
 
         ReplyVO reply = new ReplyVO();
 
-        reply.setBrdSn(720L);
-        reply.setUserId("toywar1@naver.com");
+        reply.setBrdSn(415L);
+        reply.setUserId("toywar94@gmail.com");
         reply.setContent("replyTest22222");
         reply.setStatus("RPST01");
 
@@ -78,7 +78,7 @@ public class ReplyServiceTests {
 
     @Test
     public void testDelete(){
-        service.remove(16L);
+        service.remove(653L);
 
     }
 

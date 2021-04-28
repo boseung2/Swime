@@ -1,9 +1,6 @@
 package com.swime.service;
 
-import com.swime.domain.BoardCriteria;
-import com.swime.domain.BoardPageDTO;
-import com.swime.domain.BoardVO;
-import com.swime.domain.GroupBoardPageDTO;
+import com.swime.domain.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,12 +10,16 @@ public interface BoardService {
     //모임별 게시글 리스트
     public List<BoardVO> getList(long grpSn);
 
+    //게시글 생성
     public int register(BoardVO board);
 
+    //게시글 상세 조회
     public BoardVO get(Long sn);
 
+    //게시글 수정
     public boolean modify(BoardVO board);
 
+    //게시글 삭제
     public boolean remove(Long sn);
 
     //댓글 개수
@@ -30,6 +31,9 @@ public interface BoardService {
 
 
     public int getTotal(BoardCriteria cri);
+
+    // 첨부파일
+    public List<BoardAttachVO> getAttachList(Long brdSn);
 
 
 

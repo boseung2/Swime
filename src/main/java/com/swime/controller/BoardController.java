@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //@RestController
 @Controller
@@ -92,6 +98,12 @@ public class BoardController {
     @PostMapping("/register")
     public String register(BoardVO board, long grpSn, RedirectAttributes rttr) {
 
+
+        log.info("-----------------------------");
+        if(board.getAttachList() != null){
+            board.getAttachList().forEach(attach-> log.info(attach));
+        }
+
         log.info("register...." + board);
 
         service.register(board);
@@ -110,15 +122,16 @@ public class BoardController {
 
         log.info("/get or modify");
         model.addAttribute("board", service.get(sn));
-        model.addAttribute("reply", replyService.get(sn));
-        //좋아요 처리 나중에 다시 하기--------
-//        model.addAttribute("isLike", true);
-//        model.addAttribute("count", boardLikeService.getBoardLikeCnt(1L));
 
+
+        model.addAttribute("reply", replyService.get(sn));
+
+
+        log.info("replyServiceGet : "+replyService.get(sn));
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
 
     }
-
+    @PreAuthorize("principal.username == #board.userId")
     @PostMapping("/modify")
     public String modify(BoardVO board, @ModelAttribute("cri") BoardCriteria cri,
                          RedirectAttributes rttr) {
@@ -141,13 +154,18 @@ public class BoardController {
         return "redirect:/board/get?sn="+board.getSn();
     }
 
+    @PreAuthorize("principal.username == #userId")
     @PostMapping("/remove")
     public String remove(@RequestParam("sn") Long sn, long grpSn, @ModelAttribute("cri") BoardCriteria cri,
                          RedirectAttributes rttr) {
 
         log.info("remove: " + sn);
 
+        List<BoardAttachVO> attachList = service.getAttachList(sn);
+
         if (service.remove(sn)) {
+            //파일 삭제 함수 호출
+            deleteFiles(attachList);
             rttr.addFlashAttribute("boardResult", "removeSuccess");
         }else{
             rttr.addFlashAttribute("boardResult", "removefail");
@@ -193,7 +211,7 @@ public class BoardController {
     }
 
     @PostMapping("/createLike")
-    public ResponseEntity<String> createLike(@RequestBody BoardLikeVO boardLike) {
+    public ResponseEntity<Integer> createLike(@RequestBody BoardLikeVO boardLike) {
 
         log.info("boardLikeVO : " + boardLike);
         log.info("getBrdSn : " + boardLike.getBrdSn());
@@ -206,20 +224,60 @@ public class BoardController {
 
        log.info("getBoardLike : "+getBoardLike);
 
-
        //좋아요가 존재하면 삭제한다.
        if(boardLikeService.read(getBoardLike) != null){
            return boardLikeService.remove(boardLike.getBrdSn(), boardLike.getUserId()) == 1
-                   ? new ResponseEntity<>("removeLike",HttpStatus.OK)
-                   : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                   //좋아요 개수를 보낸다.
+                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
+                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }else{
            //좋아요가 존재하지 않으면 등록한다.
            return boardLikeService.register(boardLike) == 1
-                   ? new ResponseEntity<>("registerLike",HttpStatus.OK)
-                   : new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
+                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }
 
     }
+
+    @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<BoardAttachVO>> getAttachList(Long brdSn){
+
+        log.info("getAttach>>>>>>>>>" + brdSn);
+
+        return new ResponseEntity<>(service.getAttachList(brdSn), HttpStatus.OK);
+    }
+
+    //파일삭제
+    private void deleteFiles(List<BoardAttachVO> attachList) {
+
+        if(attachList == null || attachList.size() == 0) {
+            return;
+        }
+
+        log.info("delete attach file..........");
+        log.info(attachList);
+
+       attachList.forEach(attach ->{
+
+           try{
+               Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
+
+               Files.deleteIfExists(file);
+
+               if(Files.probeContentType(file).startsWith("image")) {
+                   Path thumbNail = Paths.get("C:\\upload||"+attach.getUploadPath()+"\\s_"+attach.getUuid()+"_"+attach.getFileName());
+                   Files.delete(thumbNail);
+               }
+
+           }catch (Exception e){
+               log.info("delete file error : " + e.getMessage());
+           }//end catch
+       });//end foreach
+
+    }
+
+
 
 
 

@@ -8,12 +8,13 @@ import java.util.Date;
 public class BoardAttachVO {
 
     private String uuid;
-
     private Long brdSn;
-
+    private String userId;
     private String uploadPath;
     private String fileName;
     private String fileType;
-    private Long fileSize;
     private Date regDate;
+
+
+    //private Long fileSize;
 }
