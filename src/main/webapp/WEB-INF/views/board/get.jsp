@@ -12,6 +12,7 @@
 </sec:authorize>
 <link rel="stylesheet" href="/resources/css/board-get.css">
 <style>
+
     .uploadResult {
         width: 150%;
         background-color: white;
