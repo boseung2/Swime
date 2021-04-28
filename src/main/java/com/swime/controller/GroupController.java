@@ -38,6 +38,7 @@ public class GroupController {
         int total = groupService.getTotal(cri);
         log.info(">>>>>>>>>>>>>>>total" + total);
         model.addAttribute("pageMaker", new GroupPageDTO(cri, total));
+
     }
 
     @GetMapping("/register")

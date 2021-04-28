@@ -61,6 +61,20 @@ public class GroupMapperTests {
     }
 
     @Test
+    public void testGetListWithSearch() {
+        GroupCriteria cri = new GroupCriteria();
+        cri.setPageNum(1);
+        cri.setAmount(12);
+        cri.setCategory("GRCA01");
+        cri.setSigungu("LOGU01");
+        cri.setGroupName("a");
+        //cri.setOrder("name");
+        List<GroupVO> list = mapper.getListWithPaging(cri);
+        list.forEach(group -> log.info(group.getSn()));
+
+    }
+
+    @Test
     public void testUpdate() {
         GroupVO group = mapper.read(98L);
         group.setCategory("GRCA02");
