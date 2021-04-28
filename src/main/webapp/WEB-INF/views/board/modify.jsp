@@ -37,12 +37,12 @@
 
     .uploadResult > li > div> img{
         width: 100px;
-        margin-right:1em;
+        margin-right: 50px;
         height: 100px;
     }
 
     .uploadResult ul li span {
-        color: white;
+        color: black;
     }
 
     .bigPictureWrapper {
@@ -186,10 +186,10 @@
             } else if(operation === 'modify'){
                 //e.preventDefault();
                 console.log("submit clicked.........");
-
+                formObj.attr("action", "/board/modify");
                 let str = "";
 
-                $('uploadResult ul li').each(function(i,obj){
+                $('ul.uploadResult li').each(function(i,obj){
 
                     let jobj = $(obj);
                     console.log("uploadResult.each()........");
@@ -284,6 +284,7 @@
                         str += "<li data-path='"+attach.uploadPath+"'";
                         str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
                         str += "><div>";
+                        str += "<span> "+attach.fileName+"</span>";
                         str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
                         str += "<img src='/display?fileName="+fileCallPath+"'>";
                         str += "</div>";
@@ -295,7 +296,7 @@
                         str += "<li data-path='"+attach.uploadPath+"'";
                         str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
                         str += "><div>";
-                        //str += "<div> "+attach.fileName+"</div>";
+                        str += "<span> "+attach.fileName+"</span>";
                         str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
                         str += "<img src='../../../resources/img/1.png'>";
                         str += "</div>";

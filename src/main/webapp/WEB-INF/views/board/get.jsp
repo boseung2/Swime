@@ -16,6 +16,7 @@
         width: 150%;
         background-color: white;
         display:flex;
+        margin-bottom: 25px;
     }
 
     .uploadResult ul{
@@ -49,6 +50,46 @@
     }
 
     .uploadResult ul li span {
+        color: white;
+    }
+
+    .uploadResult2 {
+        width: 150%;
+        background-color: white;
+        display:flex;
+    }
+
+    .uploadResult2 ul{
+        display:flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .uploadResult2 ul li {
+        list-style: none;
+        padding: 10px;
+        align-items: center;
+    }
+    /*one -> none으로바꿈*/
+    .uploadResult2 ul li {
+        list-style: none;
+        padding: 10px;
+        align-content: center;
+        text-align: center;
+    }
+
+    ul.uploadResult2 > li > img{
+        width: 100px;
+    }
+
+    ul.uploadResult2 > li > div> img{
+        width: 100px;
+        margin-right:1em;
+        height: 100px;
+    }
+
+    .uploadResult2 ul li span {
         color: white;
     }
 
@@ -145,10 +186,17 @@
 <%--            </div>--%>
             <!--class = form-group -> uploadResult -->
             <div class="form-group">
-                <label>첨부파일</label>
+                <p>이미지</p>
+
                 <ul class="uploadResult">
 
                 </ul>
+                <hr>
+                <p>첨부파일</p>
+                <ul class="uploadResult2">
+
+                </ul>
+
             </div>
 
             <div class="form-group" style="display: inline-block">
@@ -312,6 +360,7 @@
 
         // <!--유효성 검사-->
         $('button[id="replyRegisterBtn"]').on("click", function(e) {
+
             e.preventDefault();
 
             if(!validation()) {
@@ -322,8 +371,9 @@
 
 
         function validation(){
-
-            if(getByte($("textarea[id='replyComment']").val()) == "") {
+            //$("textarea[id='replyComment']").val().trim().length == 0
+            //getByte($("textarea[id='replyComment']").val()) == ""
+            if($("textarea[id='replyComment']").val().trim().length == 0) {
                 alert("댓글을 입력해주세요");
                 return false;
 
@@ -342,39 +392,7 @@
             return byte;
         }
 
-
-
-
     });
-
-
-
-    //*좋아요 기능 구현*
-    //아이디가 likeCnt인 하트를 가져온다.
-    <%--let likeBundle = document.getElementById("likeBundle")--%>
-    <%--let like1 = document.getElementById("likeCnt1");--%>
-    <%--let like2 = document.getElementById("likeCnt2");--%>
-    <%--//좋아요 클릭시 좋아요 함수 호출--%>
-    <%--likeBundle.onclick = function(){--%>
-    <%--    let sendData = {"userId" : "${board.userId}", "sn":"${board.sn}"};--%>
-    <%--    console.log(sendData);--%>
-    <%--    clickLike(sendData);--%>
-    <%--}--%>
-    <%--//기능 구현--%>
-    <%--function clickLike(sendData){--%>
-    <%--    $.ajax({--%>
-    <%--        type: "post",--%>
-    <%--        url: "/clickLike",--%>
-    <%--        data : sendData,--%>
-    <%--        success : function(data){--%>
-    <%--            if(data == 1){--%>
-
-    <%--            }else{--%>
-
-    <%--            }--%>
-    <%--        }--%>
-    <%--    })--%>
-    <%--}--%>
 
 </script>
 
@@ -414,7 +432,7 @@
             console.log(arr);
 
             let str = "";
-
+            let str2 = "";
             $(arr).each(function(i, attach) {
 
             console.log(attach.fileType);
@@ -440,27 +458,20 @@
             } else {
                 //return;
                 console.log("else");
-                str += "<li data-path='"+attach.uploadPath+"'";
-                str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
-                str += "><div>";
-                //str += "<div> "+attach.fileName+"</div>";
-                str += "<img src='../../../resources/img/1.png'>";
-                str += "</div>";
-                str += "</li>";
+                str2 += "<li data-path='"+attach.uploadPath+"'";
+                str2 += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
+                str2 += "><div>";
+                str2 += "<div> "+attach.fileName+"</div>";
+                str2 += "<img src='../../../resources/img/1.png'>";
+                str2 += "</div>";
+                str2 += "</li>";
 
             }
 
-                // if(attach.fileType) {
-                //     let fileCallPath = encodeURIComponent(attach.uploadPath+"/"+attach.uuid+"_"+attach.fileName);
-                //     str = "<img id='attach' src='/display?fileName="+fileCallPath+"' style='width:200px; height:100px;'>";
-                // } else {
-                //
-                //     str = "<img id='attach' src='/resources/img/attach.png' style='width:200px; height:100px;'>";
-                // }
-
-            })
+        })
 
             $(".uploadResult").html(str);
+            $(".uploadResult2").html(str2);
 
 
         }).fail(function() {
@@ -468,7 +479,7 @@
         }); // end getJSON
 
         //첨부파일 클릭 시 다운로드
-        $(".uploadResult").on("click", "li", function(e) {
+        $(".uploadResult2").on("click", "li", function(e) {
             console.log("view image");
 
             let liObj = $(this);
@@ -581,6 +592,7 @@
 
         //댓글 생성,    name : {mv.name}
         replyRegisterBtn.on("click", function(e){
+
             console.log("replyRegisterBtnClicked");
             let reply = {
                 brdSn : snValue,

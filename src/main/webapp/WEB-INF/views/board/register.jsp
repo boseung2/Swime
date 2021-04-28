@@ -44,32 +44,64 @@
     }
 
     .uploadResult ul li span {
-        color: white;
+        color: black;
     }
+    /*.uploadResult2 {*/
+    /*    width: 100%;*/
+    /*    background-color: white;*/
+    /*}*/
 
-    .bigPictureWrapper {
-        position: absolute;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        top: 0%;
-        width: 100%;
-        height: 100%;
-        background-color: gray;
-        z-index: 100;
-        background:rgba(255,255,255,0.5);
-    }
+    /*.uploadResult2 ul{*/
+    /*    display:flex;*/
+    /*    flex-flow: row;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .bigPicture {
-        position: relative;
-        display:flex;
-        justify-content: center;
-        align-items: center;
-    }
+    /*.uploadResult2 ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .bigPicture img {
-        width: 400px;
-    }
+    /*.uploadResult2 ul li {*/
+    /*    list-style: one;*/
+    /*    padding: 10px;*/
+    /*    align-content: center;*/
+    /*    text-align: center;*/
+    /*}*/
+
+    /*.uploadResult2 ul li img {*/
+    /*    width: 100px;*/
+    /*}*/
+
+    /*.uploadResult2 ul li span {*/
+    /*    color: black;*/
+    /*}*/
+
+    /*.bigPictureWrapper {*/
+    /*    position: absolute;*/
+    /*    display: none;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*    top: 0%;*/
+    /*    width: 100%;*/
+    /*    height: 100%;*/
+    /*    background-color: gray;*/
+    /*    z-index: 100;*/
+    /*    background:rgba(255,255,255,0.5);*/
+    /*}*/
+
+    /*.bigPicture {*/
+    /*    position: relative;*/
+    /*    display:flex;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
+
+    /*.bigPicture img {*/
+    /*    width: 400px;*/
+    /*}*/
 </style>
 
 
@@ -108,11 +140,13 @@
         <div class="form-group uploadDiv">
             <label for="uploadFile">첨부파일</label>
             <input multiple="multiple" type="file" class="form-control" id="uploadFile" name="uploadFile" >
+
             <div class="uploadResult">
                 <ul>
 
                 </ul>
             </div>
+
             <div class="uploadResult2">
                 <ul>
 
@@ -241,7 +275,7 @@
                 }
             }) //end ajax
         })
-
+        //, .uploadResult2
         $(".uploadResult").on("click", "button", function(e) {
             console.log("delete file");
 
@@ -294,7 +328,7 @@
             //첨부파일 한개만 나온 거 해결! "" -> 아래 코드
             let str = $('.uploadResult ul').html();
 
-            //let str2 = $('.uploadResult ul').html();
+            //let str2 = $('.uploadResult2 ul').html();
 
             console.log(str);
             $(uploadResult).each(function(i, obj) {
@@ -315,7 +349,7 @@
                     str += "<li data-path='"+obj.uploadPath+"'";
                     str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'";
                     str += "><div>";
-                    str += "<span> "+obj.fileName+"</span>";
+                    str += "<span>"+obj.fileName+"</span>";
                     str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='file'>X</button><br>";
                     str += "<img src='/resources/img/1.png'>";
                     str += "</div>";
