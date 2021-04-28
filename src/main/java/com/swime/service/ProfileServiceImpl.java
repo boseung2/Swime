@@ -1,9 +1,6 @@
 package com.swime.service;
 
-import com.swime.domain.GroupVO;
-import com.swime.domain.MemberHistoryVO;
-import com.swime.domain.MemberVO;
-import com.swime.domain.ProfileCriteria;
+import com.swime.domain.*;
 import com.swime.mapper.MemberMapper;
 import com.swime.mapper.ProfileMapper;
 import lombok.Setter;
@@ -73,6 +70,24 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public int wishListCount(String id) {
         return mapper.wishListCount(id);
+    }
+
+    @Override
+    public List<StudyVO> makeStudyList(String id, ProfileCriteria cri) {
+        return mapper.makeStudyList(id, cri);
+    }
+
+    @Override
+    public int makeStudyCount(String id) {
+        return mapper.makeStudyCount(id);
+    }
+
+    @Override
+    public GroupStudyListDTO makeBoth(String id, ProfileCriteria cri) {
+        GroupStudyListDTO dto = new GroupStudyListDTO();
+        dto.setCount(mapper.makeStudyCount(id));
+        dto.setList(makeStudyList(id, cri));
+        return dto;
     }
 }
 
