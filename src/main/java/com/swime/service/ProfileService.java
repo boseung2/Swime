@@ -33,4 +33,10 @@ public interface ProfileService {
     int makeStudyCount(String id);
 
     GroupStudyListDTO makeBoth(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    GroupStudyListDTO beforeBoth(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    GroupStudyListDTO afterBoth(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    GroupStudyListDTO wishBoth(@Param("id") String id, @Param("cri") ProfileCriteria cri);
 }

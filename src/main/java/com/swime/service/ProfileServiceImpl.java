@@ -3,6 +3,7 @@ package com.swime.service;
 import com.swime.domain.*;
 import com.swime.mapper.MemberMapper;
 import com.swime.mapper.ProfileMapper;
+import com.swime.mapper.StudyListMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class ProfileServiceImpl implements ProfileService{
 
     @Setter(onMethod_ = @Autowired)
     private ProfileMapper mapper;
+    @Setter(onMethod_ = @Autowired)
+    private StudyListMapper listMapper;
 
     @Override
     public List<GroupVO> getOwnerGroupList(String id) {
@@ -85,9 +88,50 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public GroupStudyListDTO makeBoth(String id, ProfileCriteria cri) {
         GroupStudyListDTO dto = new GroupStudyListDTO();
+
+        List<StudyVO> list = mapper.makeStudyList(id, cri);
+
+        list.forEach(study -> {
+            study.setAttendants(listMapper.count(study.getSn()));
+        });
+
         dto.setCount(mapper.makeStudyCount(id));
-        dto.setList(makeStudyList(id, cri));
+        dto.setList(list);
         return dto;
+    }
+
+    @Override
+    public GroupStudyListDTO beforeBoth(String id, ProfileCriteria cri) {
+        GroupStudyListDTO dto = new GroupStudyListDTO();
+        List<StudyVO> list = mapper.beforeStudyList(id, cri);
+
+        list.forEach(study -> {
+            study.setAttendants(listMapper.count(study.getSn()));
+        });
+
+        dto.setCount(mapper.beforeStudyCount(id));
+        dto.setList(list);
+
+        return dto;
+    }
+
+    @Override
+    public GroupStudyListDTO afterBoth(String id, ProfileCriteria cri) {
+        GroupStudyListDTO dto = new GroupStudyListDTO();
+        List<StudyVO> list = mapper.afterStudyList(id, cri);
+
+        list.forEach(study -> {
+            study.setAttendants(listMapper.count(study.getSn()));
+        });
+
+        dto.setCount(mapper.afterStudyCount(id));
+        dto.setList(list);
+        return dto;
+    }
+
+    @Override
+    public GroupStudyListDTO wishBoth(String id, ProfileCriteria cri) {
+        return null;
     }
 }
 
