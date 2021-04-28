@@ -98,7 +98,7 @@
                 <label for="groupName">모임명</label>
                 <input id="groupName" name="groupName" placeholder="모임명">
             </div>
-            <input type="hidden" name="order" value="rating">
+            <input type="hidden" name="order" value="rating" id="order">
             <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
             <input type="hidden" name="amount" value="${pageMaker.cri.amount}">
 
@@ -115,10 +115,10 @@
     <!-- Content Row -->
     <div>
         <h4>${pageMaker.total}개의 모임</h4>
-        <select>
-            <option value="rating">평점순</option>
-            <option value="reg_date">최신순</option>
-            <option value="attend_count">모임원순</option>
+        <select id="orderSelect">
+            <option value="rating" <c:out value="${pageMaker.cri.order eq 'rating' ? 'selected' : ''}"/>>평점순</option>
+            <option value="reg_date" <c:out value="${pageMaker.cri.order eq 'reg_date' ? 'selected' : ''}"/>>최신순</option>
+            <option value="attend_count" <c:out value="${pageMaker.cri.order eq 'attend_count' ? 'selected' : ''}"/>>모임원순</option>
         </select>
     </div>
     <div class="row">
@@ -205,7 +205,6 @@
 
         // 검색버튼 누른 후 검색조건 유지
         let groupName = '<c:out value="${pageMaker.cri.groupName}"/>';
-        let order = '<c:out value="${pageMaker.cri.order}"/>';
 
         $('#groupName').val(groupName);
         //$('#order > option').select(order);
@@ -231,6 +230,10 @@
 
         $("#searchForm button").on("click", function(e) {
             searchForm.find("input[name='pageNum']").val("1");
+            // 정렬기준 가져와서 order input 에 넣기
+            let orderValue = $('#orderSelect option:selected').val();
+            $('#order').prop("value", orderValue);
+
             e.preventDefault();
 
 
