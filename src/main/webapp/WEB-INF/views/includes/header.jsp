@@ -64,7 +64,7 @@
 
 <!-- header -->
 <div class="header">
-    <a href="/" class="logo">Swime</a>
+    <a href="/" class="logo"><img src="../../../resources/img/logo2.png"</a>
     <a href="/group/list">모임찾기</a>
     <a href="/group/register">모임만들기</a>
 
@@ -87,5 +87,5 @@
 
 <hr style="
     margin-top: 0px;
-    margin-bottom: 50px;">
+    margin-bottom: 0px;">
 
