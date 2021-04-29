@@ -201,7 +201,7 @@
 
         <sec:csrfInput/>
         <button type="submit" class="btn btn-primary">등록</button>
-        <button type="reset" class="btn btn-primary">목록</button>
+        <button type="reset" class="btn btn-secondary">목록</button>
     </form>
 </div>
 
@@ -309,8 +309,9 @@
         $("button[type='reset']").on("click", function(e) {
             e.preventDefault();
 
-            formObj.attr("action", '/group/list').attr('method', 'get');
-            formObj.submit();
+            window.location.href = "/group/list";
+            //formObj.attr("action", '/group/list').attr('method', 'get');
+            //formObj.submit();
         })
 
         $("input[type='file']").change(function(e) {
