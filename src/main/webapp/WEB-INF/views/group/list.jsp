@@ -145,15 +145,17 @@
                             <img class="img-fluid rounded mb-4 mb-lg-0" src="${!empty group.picture ? '/display?fileName=' += group.picture :'../resources/img/default_img.jpg'}" alt="">
                         </div>
 
-<%--                        <div class="flex-container" style="display: flex; margin : auto;">--%>
-<%--                            <c:forEach items="${group.tags}" var="tag">--%>
-<%--                                <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">--%>
-<%--                                    <b><c:out value="${tag}"/></b>--%>
-<%--                                </div>--%>
-<%--                            </c:forEach>--%>
-<%--                        </div>--%>
-<%--                        <p class="card-text"><c:out value="${group.description}"/></p>--%>
-
+                        <div class="caption">
+                        <p class="card-text" style="font-size : 25px"><c:out value="${group.name}"/></p>
+                        <p class="card-text" style="margin-top : 50px;"><c:out value="${group.description}"/></p>
+                        <div class="flex-container" style="display: flex;;">
+                            <c:forEach items="${group.tags}" var="tag">
+                                <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
+                                    <b><c:out value="${tag}"/></b>
+                                </div>
+                            </c:forEach>
+                        </div>
+                        </div>
                     </div>
 <%--                    <div class="card-footer">--%>
 <%--                        <a href="<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm move">More Info</a>--%>

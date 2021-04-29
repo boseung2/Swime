@@ -30,9 +30,11 @@ public class GroupCriteria {
     public String getListLink() {
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
                 .queryParam("pageNum", this.pageNum)
-                .queryParam("amount", this.getAmount());
-                //.queryParam("type", this.getType())
-                //.queryparam("keyowrd", this.getKeyword());
+                .queryParam("amount", this.getAmount())
+                .queryParam("category", this.getCategory())
+                .queryParam("sigungu", this.getSigungu())
+                .queryParam("groupName", this.getGroupName())
+                .queryParam("order", this.getOrder());
 
         return builder.toUriString();
     }

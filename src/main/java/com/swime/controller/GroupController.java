@@ -78,10 +78,8 @@ public class GroupController {
         if(groupService.modify(group) == 1) {
             rttr.addFlashAttribute("result", "success");
         }
-        rttr.addAttribute("pageNum", cri.getPageNum());
-        rttr.addAttribute("amount", cri.getAmount());
 
-        return "redirect:/group/list" + cri.getListLink();
+        return "redirect:/group/get?sn=" + group.getSn();
     }
 
     @PreAuthorize("principal.username == #userId")
@@ -97,10 +95,8 @@ public class GroupController {
             rttr.addFlashAttribute("result", "success");
 
         }
-        rttr.addAttribute("pageNum", cri.getPageNum());
-        rttr.addAttribute("amount", cri.getAmount());
 
-        return "redirect:/group/list" + cri.getListLink();
+        return "redirect:/group/list";
     }
 
     @GetMapping(value = "/getAttach", produces = MediaType.APPLICATION_JSON_VALUE)
