@@ -515,7 +515,6 @@
         // 유효성 검사 통과하면 등록 버튼 눌리면 닫히게하기
         $('#surveyRegisterBtn').attr("data-dismiss", "modal");
 
-
         // 답변 배열
         let answerList = [];
 

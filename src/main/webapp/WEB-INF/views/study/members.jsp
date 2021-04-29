@@ -56,8 +56,8 @@
                 <input style="width:465px;margin-left: 16px;" class="form-control answer" readonly>
             </div>
             <div class = "modal-footer">
-                <button id= "surveyRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">승인</button>
-                <button id= "surveyCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">거절</button>
+                <button id= "permitBtn" type="button" class="btn btn-primary">승인</button>
+                <button id= "rejectBtn" type="button" class="btn btn-default">거절</button>
             </div>
         </div>
     </div>
@@ -244,8 +244,12 @@
                     // 질문을 모달에 등록
                     $('.questionLabel')[i].innerText = result[i].question;
 
-                    // 답변을 모달에 등록록
+                    // 답변을 모달에 등록
                     $('.answer')[i].value = result[i].answer;
+
+                    // 해당 신청자의 id를 승인과 거절버튼에 넣어주기
+                    $('#permitBtn').attr('data-userId', userId);
+                    $('#rejectBtn').attr('data-userId', userId);
 
                     // form의 hidden 처리를 풀어준다.
                     $('.questionForm')[i].hidden = false;
@@ -255,6 +259,45 @@
                 $('#answerModal').modal("show");
             })
 
+        }
+    })
+</script>
+
+<!-- 대기멤버 승인/거절 처리 -->
+<script>
+    // 승인 버튼 눌렸을 때
+    $('#permitBtn').on("click", function() {
+
+        if(confirm('선택한 신청자의 스터디 참석을 승인하시겠습니까?')) {
+            $('#answerModal').modal("hide");
+
+            //
+
+            alert('참석 승인 처리가 완료되었습니다.');
+        }
+    })
+
+
+    // 거절 버튼 눌렸을 때
+    $('#rejectBtn').on("click", function() {
+
+        if(confirm('선택한 신청자의 스터디 참석을 거절하시겠습니까?')) {
+            $('#answerModal').modal("hide");
+
+            let userId = $('#rejectBtn').data('userid');
+
+            // reject ajax 호출 - 선택한 신청자를 참여명단에서 지우고, 답변도 모두 삭제
+            studyAttendService.reject({stdSn : ${stdSn}, userId : userId}, function(result) {
+
+                if(result === "success") {
+                    alert('참석 거절 처리가 완료되었습니다.');
+
+                    // 대기 멤버 reload
+                    getWaitingList();
+                }else {
+                    alert('참석 거절 처리를 실패했습니다.');
+                }
+            })
         }
     })
 </script>
