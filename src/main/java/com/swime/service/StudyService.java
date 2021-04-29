@@ -74,7 +74,8 @@ public interface StudyService {
     //StudyAnswer
     public List<StudyAnswerVO> getAnswer(StudyParamVO param);
 
-    public int registerAnswer(StudyAnswerVO answer);
+    // 답변들을 등록하고 해당 멤버를 검토중인 상태로 등록 또는 수정
+    public void registerAnswers(List<StudyAnswerVO> answers);
     
     public int removeAnswer(StudyParamVO param);
 }

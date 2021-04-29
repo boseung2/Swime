@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -351,24 +352,34 @@ public class StudyServiceTests {
     @Test
     public void testRegisterAnswer() {
         StudyAnswerVO answer = new StudyAnswerVO();
-        answer.setStdSn(222L);
+        answer.setStdSn(223L);
         answer.setUserId("aaa@naver.com");
         answer.setQuestionSn(1);
         answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
         answer.setAnswer("네. 괜찮습니다.");
 
+        List<StudyAnswerVO> answers = new ArrayList<>();
+        answers.add(answer);
+
         StudyParamVO param = new StudyParamVO();
-        param.setStdSn(222L);
+        param.setStdSn(223L);
         param.setUserId("aaa@naver.com");
 
         int before=  service.getAnswer(param).size();
 
-        int result = service.registerAnswer(answer);
+        String result = "";
 
-        assert(result == 2 || result == -1);
+        try {
+            service.registerAnswers(answers);
+            result =  "success";
+        }catch (Exception e) {
+            result =  "fail";
+        }
 
-        if(result == 2) assert(service.getAnswer(param).size() > before);
-        if(result == -1) assert (service.getAnswer(param).size() == before);
+        assert("success".equals(result));
+
+        if("success".equals(result)) assert(service.getAnswer(param).size() > before);
+        if("fail".equals(result)) assert (service.getAnswer(param).size() == before);
     }
 
     @Test
@@ -379,7 +390,11 @@ public class StudyServiceTests {
         answer.setQuestionSn(1);
         answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
         answer.setAnswer("네. 괜찮습니다.");
-        service.registerAnswer(answer);
+
+        List<StudyAnswerVO> answers = new ArrayList<>();
+        answers.add(answer);
+
+        service.registerAnswers(answers);
 
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(84L);

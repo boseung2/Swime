@@ -193,23 +193,23 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body"><span style="color: gray; font-size: small">스터디 참석을 위한 정보를 입력해주세요.</span></div>
-                    <div class="question form-group">
+                    <div class="questionForm form-group" hidden="true">
                         <label style="padding-left: 16px;">질문 1. </label>
                         <label class="questionLabel"></label>
-                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question1">
+                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
-                    <div class="question form-group" hidden="true" >
+                    <div class="questionForm form-group" hidden="true">
                         <label style="padding-left: 16px;">질문 2. </label>
                         <label class="questionLabel"></label>
-                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question2">
+                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
-                    <div class="question form-group" class="questionLabel" hidden="true">
+                    <div class="questionForm form-group" hidden="true">
                         <label style="padding-left: 16px;">질문 3. </label>
                         <label class="questionLabel"></label>
-                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question3">
+                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
                 <div class = "modal-footer">
-                    <button id= "surveyRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">승인</button>
+                    <button id= "surveyRegisterBtn" type="button" class="btn btn-primary">등록</button>
                     <button id= "surveyCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                 </div>
             </div>
@@ -222,16 +222,77 @@
 <script type="text/javascript" src="/resources/js/studyWish.js"></script>
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript" src="/resources/js/studySurvey.js"></script>
+<script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
 
 <script>
-    $(document).ready(function() {
-        let surveyModal = $('#surveyModal');
+
+    // 설문 등록 버튼 눌리면
+    $('#surveyRegisterBtn').on("click", function() {
+        console.log("등록 버튼 클릭");
+
+        // 유효성 검사
+        let qForms = $('.questionForm');
+
+        for(let i = 0; i < qForms.length; i++){
+            if(qForms[i].hidden == false){ // 질문이 존재하고
+
+                if($('.answer')[i].value === '') { // 답변이 없으면
+                    alert(i+1 + '번째 답변을 등록해주세요.');
+                    return;
+                }else if ($('.answer')[i].value.length > 100) {
+                    alert(i+1 + '번째 답변 정보가 너무 큽니다. 100자 이내로 작성해주세요.');
+                    return;
+                }
+            }
+        }
+
+        // 유효성 검사 통과하면 등록 버튼 눌리면 닫히게하기
+        $('#surveyRegisterBtn').attr("data-dismiss", "modal");
+
+
+        // 답변 배열
+        let answerList = [];
+
+        // 답변 input을 모두 돌면서 value가 ""이 아니면 answerList에 추가
+        for(let i = 0; i < $('.answer').length; i++) {
+            if($('.answer')[i].value === "") break;
+
+            let answer = {
+                stdSn : ${study.sn},
+                userId : "${pinfo.username}",
+                questionSn : i+1,
+                question : $('.questionLabel')[i].innerText,
+                answer : $('.answer')[i].value
+            };
+
+            answerList.push(answer);
+        }
+
+        // 답변 출력
+        console.log(answerList);
+
+        // ajax에 answerList 보내고 호출
+        studyAnswerService.register(answerList, function(result) {
+            console.log("result = " + result);
+
+            if(result === 'success') {
+                alert('설문을 등록하였습니다. 스터디장이 승인하면 스터디에 참석됩니다.');
+
+                // attend 버튼 reload
+                getStudyAttend();
+            }else {
+                alert('설문을 등록하는데 문제가 발생했습니다. 다시 시도해주세요.');
+            }
+        })
+
     })
 </script>
 
 <script type="text/javascript">
 
     $(document).ready(function(){
+
+        // post, ajax 시큐리티 적용
         let csrfHeaderName = "${_csrf.headerName}";
         let csrfTokenValue = "${_csrf.token}";
 
@@ -314,7 +375,7 @@
                             $('.questionLabel')[i].innerText = result[i].question;
 
                             // 질문 form hidden처리 풀기
-                            $('.question')[i].hidden = false;
+                            $('.questionForm')[i].hidden = false;
                         }
 
                         // 모달 띄우기
