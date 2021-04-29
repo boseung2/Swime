@@ -19,6 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/study")
 @Log4j
@@ -104,7 +107,7 @@ public class StudyController {
     // 스터디 생성
     @PostMapping("/register")
     @PreAuthorize("isAuthenticated()")
-    public String register(StudyVO study, StudyCriteria cri, RedirectAttributes rttr) {
+    public String register(StudyVO study, StudyCriteria cri, StudyQuestionVO questions, RedirectAttributes rttr) {
 
         log.info("그룳 페이징 = " + cri);
         log.info("study onOff = " + study.getOnOff());
@@ -117,10 +120,42 @@ public class StudyController {
         }
 
         try {
+            // 스터디 등록
             service.register(study);
             rttr.addFlashAttribute("result", "register");
         }catch (Exception e) {
             rttr.addFlashAttribute("result", "register error");
+        }
+        
+        log.info("첫번째 질문 = " + questions.getQuestion1());
+        log.info("두번째 질문 = " + questions.getQuestion2());
+        log.info("세번째 질문 = " + questions.getQuestion3());
+
+        // 질문이 하나라도 있으면 설문 등록
+        if(!"".equals(questions.getQuestion1()) || !"".equals(questions.getQuestion2()) || !"".equals(questions.getQuestion3())) {
+            
+            List<String> qList = new ArrayList<>();
+            qList.add(questions.getQuestion1());
+            qList.add(questions.getQuestion2());
+            qList.add(questions.getQuestion3());
+            
+            int order = 1;
+            long stdSn = study.getSn();
+            
+            // 질문이 있으면 surveyVO 객체만들어서 등록해주기
+            for(int i = 0; i < qList.size(); i++) {
+
+                if(!"".equals(qList.get(i))) {
+                    StudySurveyVO survey= new StudySurveyVO();
+                    survey.setStdSn(stdSn);
+                    survey.setQuestionSn(order++);
+                    survey.setQuestion(qList.get(i));
+
+                    service.registerSurvey(survey);
+                    
+                    log.info(order-1 + "번째 질문 등록 완료!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
+            }
         }
 
         rttr.addAttribute("pageNum", cri.getPageNum());
@@ -137,13 +172,21 @@ public class StudyController {
         model.addAttribute("study", service.get(sn));
         model.addAttribute("cri", cri);
 
+        List<StudySurveyVO> qList = service.getSurveyList(sn);
+
+        for(int i = 0; i < qList.size(); i++) {
+            log.info((i+1) + "번째 질문 = " + qList.get(i));
+            model.addAttribute("question" + (i+1), qList.get(i));
+        }
+
+        // api key
         Environment env = context.getEnvironment();
         model.addAttribute("key", env.getProperty("key"));
     }
 
     @PostMapping("/modify")
     @PreAuthorize("principal.username == #study.representation")
-    public String modify(StudyVO study, StudyCriteria cri, RedirectAttributes rttr) {
+    public String modify(StudyVO study, StudyCriteria cri, StudyQuestionVO questions, RedirectAttributes rttr) {
 
         log.info("modify representation " + study.getRepresentation());
         log.info("modify study onOff = " + study.getOnOff());
@@ -160,6 +203,40 @@ public class StudyController {
             rttr.addFlashAttribute("result", "update");
         }else {
             rttr.addFlashAttribute("result", "update error");
+        }
+
+        // 이전 질문 모두 지우기
+        service.removeSurvey(study.getSn());
+
+        log.info("첫번째 질문 = " + questions.getQuestion1());
+        log.info("두번째 질문 = " + questions.getQuestion2());
+        log.info("세번째 질문 = " + questions.getQuestion3());
+
+        // 설문 새로 등록
+        if(!"".equals(questions.getQuestion1()) || !"".equals(questions.getQuestion2()) || !"".equals(questions.getQuestion3())) {
+
+            List<String> qList = new ArrayList<>();
+            qList.add(questions.getQuestion1());
+            qList.add(questions.getQuestion2());
+            qList.add(questions.getQuestion3());
+
+            int order = 1;
+            long stdSn = study.getSn();
+
+            // 질문이 있으면 surveyVO 객체만들어서 등록해주기
+            for(int i = 0; i < qList.size(); i++) {
+
+                if(!"".equals(qList.get(i))) {
+                    StudySurveyVO survey= new StudySurveyVO();
+                    survey.setStdSn(stdSn);
+                    survey.setQuestionSn(order++);
+                    survey.setQuestion(qList.get(i));
+
+                    service.registerSurvey(survey);
+
+                    log.info(order-1 + "번째 질문 등록 완료!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
+            }
         }
 
         rttr.addAttribute("pageNum", cri.getPageNum());
@@ -190,13 +267,19 @@ public class StudyController {
 
         return "redirect:/group/get?sn=" + grpSn;
     }
-    
-    // 스터디 멤버 관리 페이지 - 참여멤버/ 대기멤버 가져오기 - 아직 구현 x
-//    @GetMapping("/members")
-//    @PreAuthorize("principal.username == #study.representation")
-//    public void members(long stdSn, Model model) {
-//        model.addAttribute("study", service.get(stdSn));
-//        model.addAttribute("attendantList", service.getAttendantList(stdSn));
-//        model.addAttribute("waitingList", service.getWaitingList(stdSn));
-//    }
+
+    // 스터디 멤버 관리 페이지
+    @GetMapping("/members")
+    @PreAuthorize("principal.username == #representation")
+    public void members(long stdSn, String representation, StudyCriteria cri, Model model) {
+        // 스터디장만 멤버관리페이지에 접근할 수 있음
+
+        // 참여멤버와 대기멤버를 호출하기위해 stdSn 필요
+        model.addAttribute("stdSn", stdSn);
+        model.addAttribute("representation", representation);
+
+        // 그룹 페이징
+        StudyCriteria newCri = new StudyCriteria(cri.getPageNum(), cri.getAmount());
+        model.addAttribute("cri", newCri);
+    }
 }

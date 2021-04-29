@@ -162,9 +162,28 @@
             <label for="capacity">모집 인원</label>
             <input type="text" class="form-control" id="capacity" name="capacity" required>
         </div>
-<%--        <a class="btn btn-outline-dark" href="#">설문 등록하기</a>--%>
-<%--        <a class="btn btn-outline-dark" href="#">설문 수정하기</a>--%>
-        <br>
+
+        <!-- 설문 등록 -->
+        <div class="form-group">
+            <input type="checkbox" id="surveyCheck"> 가입 질문 사용하기
+        </div>
+        <div class="form-group questionForm" hidden="true">
+            <label for="question1">질문 1.</label>
+            <input type="text" class="form-control" id="question1" name="question1">
+        </div>
+        <div class="form-group  questionForm" hidden="true">
+            <label for="question2">질문 2.</label>
+            <input type="text" class="form-control" id="question2" name="question2">
+        </div>
+        <div class="form-group  questionForm" hidden="true">
+            <label for="question3">질문 3.</label>
+            <input type="text" class="form-control" id="question3" name="question3">
+            <br>
+            <span style="color:gray; font-size: small">- 가입 질문은 3개까지 가능합니다.</span><br>
+            <span style="color:gray; font-size: small">- 멤버의 개인정보(성명, 연락처, 주소, 학교, 직장명, 출생지 등)를 확인할 수 있는 질문은 타인의 사생활을 침해할 수 있으며, 스터디 운영 목적과 무관하게 임의로 수집 및 이용한 개인정보는 법률적 문제가 발생할 수 있으므로 스터디 가입 질문은 최소한의 내용으로 작성해주시기 바랍니다.</span>
+        </div>
+
+        <hr/>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <input type="hidden" name="userId" value="${pinfo.username}">
@@ -177,6 +196,34 @@
 </div>
 
 <%@include file="../includes/footer.jsp" %>
+
+<script>
+    <!-- 설문 사용 클릭시 -->
+    $('#surveyCheck').on("click", function() {
+
+        if($('#surveyCheck')[0].checked) { // 가입질문 사용시
+
+            // 질문 form 보여주기
+            let formList = $('.questionForm');
+            for(let i = 0; i < formList.length; i ++) {
+                formList[i].hidden = false;
+            }
+        } else { // 가입질문 사용 안하면
+
+            // 질문 form 숨기기
+            let formList = $('.questionForm');
+            for(let i = 0; i < formList.length; i ++) {
+                formList[i].hidden = true;
+            }
+
+            // 질문 값 삭제하기
+            $('#question1').val("");
+            $('#question2').val("");
+            $('#question3').val("");
+        }
+
+    })
+</script>
 
 <script>
     // 엔터키 submit 방지
@@ -359,6 +406,18 @@
                     alert("모집인원은 99명 이하이어야합니다.");
                     return false;
                 }
+            }
+        }
+
+        // 가입질문 사용하는 경우
+        if($('#surveyCheck')[0].checked) {
+
+            if($('#question1').val() === '' && $('#question2').val() === '' && $('#question3').val() === '') {
+                alert('가입 질문은 최소 한개 이상 입력되어야합니다.');
+                return false;
+            }else if($('#question1').val().length > 50 || $('#question2').val().length > 50 || $('#question3').val().length > 50) {
+                alert('가입 질문은 50자 이내여야합니다.');
+                return false;
             }
         }
 
@@ -718,6 +777,7 @@
 
     }
 </script>
+
 
 <!-- 월 10만건 이상 유료 -->
 <!-- Async script executes immediately and must be after any DOM elements used in callback. -->

@@ -136,6 +136,7 @@ public class StudyServiceImpl implements StudyService{
         return listMapper.getList(param);
     }
 
+    // 참여멤버 페이징처리
     @Override
     public List<StudyListVO> getAttendantList(StudyCriteria cri, long stdSn) {
         StudyParamVO param = new StudyParamVO();
@@ -163,6 +164,11 @@ public class StudyServiceImpl implements StudyService{
     @Override
     public StudyListVO getAttendant(StudyParamVO param) {
         return listMapper.getAttendant(param);
+    }
+
+    @Override
+    public List<StudyVO> getStudiesOfGroup(long grpSn, String userId) {
+        return listMapper.getStudiesOfGroup(grpSn, userId);
     }
 
     @Override
