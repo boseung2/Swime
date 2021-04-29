@@ -219,15 +219,17 @@ public class UserController {
 
     @GetMapping("/details/study")
     public void study(Model model, String id){
-        model.addAttribute("MemberVo", service.get(id));
+        model.addAttribute("id", id);
     }
 
     @GetMapping("/details/written")
-    public void written(){
+    public void written(Model model, String id){
+        model.addAttribute("id", id);
     }
 
     @GetMapping("/details/reply")
-    public void reply(){
+    public void reply(Model model, String id){
+        model.addAttribute("id", id);
     }
 
     @GetMapping("/details/profile")
