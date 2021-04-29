@@ -165,13 +165,13 @@
                 <label class="form-check-label" for="topFix">게시물 상위고정</label>
         </div>
 
-
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+<sec:csrfInput/>
+<%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
         <button id='registerBtn' type="submit" class="btn btn-primary">등록</button>
         <button id="back" type="reset" class="btn btn-dark">취소</button>
 
 
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+<%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
     </form>
 </div>
 
