@@ -186,31 +186,93 @@
     ]]>
     </select>
 
-    <select id="wishStudyList" resultType="com.swime.domain.StudyVO"></select>
-    <select id="wishStudyCount" resultType="int"></select>
+    <select id="wishStudyList" resultType="com.swime.domain.StudyVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from TSTD_WISH w LEFT OUTER JOIN tstd s on w.std_sn = s.sn
+                        where w.user_id = #{id} and s.status in ('STST01', 'STST03')
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+    ]]>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 스터디 찾아오기 -->
-    <select id="gesadasdast" resultType="com.swime.domain.WishStudyVO">
-        select sn, std_sn, user_id, reg_date
-        from tstd_wish
-        where std_sn = #{stdSn} and user_id = #{userId}
     </select>
+
+    <select id="wishStudyCount" resultType="int">
+        select count(*)
+        from TSTD_WISH w LEFT OUTER JOIN tstd s on w.std_sn = s.sn
+        where w.user_id = 'tht1234551@gmail.com' and s.status in ('STST01', 'STST03')
+    </select>
+
+    <select id="writeContentsList" resultType="com.swime.domain.BoardVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, user_id, title, content, like_cnt, reply_cnt status, top_fix
+                from
+                    (
+                        select /*+INDEX_DESC(tbrd pk_tbrd) */ b.sn, b.grp_sn, b.user_id, b.title, d.content, b.like_cnt, b.reply_cnt, b.status, b.reg_date, b.upd_date, substr(top_fix, 6, 1) top_fix
+                        from tbrd b LEFT OUTER JOIN tbrd_det d on b.sn = d.brd_sn
+                        where b.status != 'BOST02' and b.user_id = #{id}
+                        order by reg_date desc
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+    ]]>
+    </select>
+    <select id="writeContentsCount" resultType="int">
+        select count(*)
+        from tbrd b LEFT OUTER JOIN tbrd_det d on b.sn = d.brd_sn
+        where b.status != 'BOST02' and b.user_id = #{id}
+    </select>
+
+    <select id="writeReplyList" resultType="com.swime.domain.ReplyVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, brd_sn, user_id, comment_group, content, cnt, status
+                from
+                    (
+                        select *
+                        from trpl
+                        where status != 'RPST02' and user_id = #{id}
+                        order by sn
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+    ]]>
+    </select>
+    <select id="writeReplyCount" resultType="int">
+        select count(*)
+        from trpl
+        where status != 'RPST02' and user_id = #{id}
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     <!--    <select id="getListWithPaging" resultType="com.swime.domain.GroupVO">-->

@@ -177,8 +177,8 @@
             </c:choose>
         </sec:authorize>
 
-
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <sec:csrfInput/>
+<%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
         <button id='registerBtn' type="submit" class="btn btn-primary">등록</button>
         <button id="back" type="reset" class="btn btn-dark">취소</button>
 

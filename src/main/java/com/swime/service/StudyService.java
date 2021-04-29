@@ -49,6 +49,9 @@ public interface StudyService {
 
     public StudyListVO getAttendant(StudyParamVO param);
 
+    // 해당 모임의 해당 유저가 참가한 스터디를 모두 가져온다.
+    public List<StudyVO> getStudiesOfGroup(long grpSn, String userId);
+
     public int registerAttendant(StudyParamVO param);
 
     public int modifyAttendant(StudyParamVO param);

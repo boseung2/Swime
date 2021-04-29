@@ -1,9 +1,6 @@
 package com.swime.mapper;
 
-import com.swime.domain.AuthVO;
-import com.swime.domain.GroupVO;
-import com.swime.domain.ProfileCriteria;
-import com.swime.domain.StudyVO;
+import com.swime.domain.*;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -107,6 +104,12 @@ public class ProfileMapperTests {
     @Test
     public void beforeStudy(){
         List<StudyVO> list = mapper.beforeStudyList(id, profileCriteria);
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void writeContents(){
+        List<BoardVO> list = mapper.writeContentsList(id, profileCriteria);
         list.forEach(log::info);
     }
 }

@@ -3,6 +3,7 @@ package com.swime.mapper;
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyListVO;
 import com.swime.domain.StudyParamVO;
+import com.swime.domain.StudyVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public interface StudyListMapper {
 
     // 해당 스터디, 해당 회원의 참여 정보를 가져오기
     public StudyListVO getAttendant(StudyParamVO param);
+
+    public List<StudyVO> getStudiesOfGroup(@Param("grpSn")long grpSn, @Param("userId")String userId);
 
     // 등록 : 사용자 가입/검토
     public int insert(StudyParamVO param);

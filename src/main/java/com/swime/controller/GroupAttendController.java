@@ -2,7 +2,9 @@ package com.swime.controller;
 
 import com.swime.domain.GroupAttendVO;
 import com.swime.domain.GroupRatingVO;
+import com.swime.domain.StudyParamVO;
 import com.swime.service.GroupAttendService;
+import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
 import java.util.List;
 
 @RequestMapping("/groupAttend/")
@@ -20,6 +23,7 @@ import java.util.List;
 public class GroupAttendController {
 
     private GroupAttendService service;
+    private StudyService studyService;
 
     @PostMapping(value= "/new",
             consumes = "application/json",
@@ -82,6 +86,15 @@ public class GroupAttendController {
         // 참가한 스터디 상태를 탈퇴로 바꾸기
         String userId = vo.getUserId();
 
+        studyService.getStudiesOfGroup(vo.getGrpSn(), userId).forEach(study -> {
+            StudyParamVO studyParamVO = new StudyParamVO();
+            studyParamVO.setUserId(userId);
+            studyParamVO.setStdSn(study.getSn());
+            studyParamVO.setStatus("STUS02");
+
+            studyService.modifyAttendant(studyParamVO);
+        });
+
 
         return service.withdraw(vo) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
@@ -132,6 +145,15 @@ public class GroupAttendController {
         // 참가한 스터디 상태를 탈퇴로 바꾸기
         String userId = service.get(sn).getUserId();
 
+        studyService.getStudiesOfGroup(sn, userId).forEach(study -> {
+            StudyParamVO studyParamVO = new StudyParamVO();
+            studyParamVO.setUserId(userId);
+            studyParamVO.setStdSn(study.getSn());
+            studyParamVO.setStatus("STUS02");
+
+            studyService.modifyAttendant(studyParamVO);
+        });
+
         return service.banPermanent(sn) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -144,6 +166,15 @@ public class GroupAttendController {
 
         // 참가한 스터디 상태를 탈퇴로 바꾸기
         String userId = service.get(sn).getUserId();
+
+        studyService.getStudiesOfGroup(sn, userId).forEach(study -> {
+            StudyParamVO studyParamVO = new StudyParamVO();
+            studyParamVO.setUserId(userId);
+            studyParamVO.setStdSn(study.getSn());
+            studyParamVO.setStatus("STUS02");
+
+            studyService.modifyAttendant(studyParamVO);
+        });
 
         return service.ban(sn) == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)

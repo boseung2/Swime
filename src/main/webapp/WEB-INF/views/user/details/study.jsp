@@ -14,40 +14,34 @@
 
 <div class="container">
     <!-- Content Row -->
-    <form id="paging" action="/user/details/groupWithPaging" method="get">
-        <h2>생성한 스터디</h2>
+    <h2>생성한 스터디</h2>
 
-        <div class="row" id="make"></div>
-        <div id="makepagi"></div>
+    <div class="row" id="make"></div>
+    <div id="makepagi"></div>
 
-        <input type="hidden" name="pageNum" id="pageNum1" value="1">
-        <input type="hidden" name="amount" id="amount1" value="6">
+    <input type="hidden" name="pageNum" id="pageNum1" value="1">
+    <input type="hidden" name="amount" id="amount1" value="6">
 
-        <h2>예정된 스터디</h2>
-        <div class="row" id="before"></div>
-        <div id="beforepagi"></div>
+    <h2>예정된 스터디</h2>
+    <div class="row" id="before"></div>
+    <div id="beforepagi"></div>
 
-        <input type="hidden" name="pageNum" id="pageNum2" value="1">
-        <input type="hidden" name="amount" id="amount2" value="6">
+    <input type="hidden" name="pageNum" id="pageNum2" value="1">
+    <input type="hidden" name="amount" id="amount2" value="6">
 
-        <h2>종료된 스터디</h2>
-        <div class="row" id="after"></div>
-        <div id="afterpagi"></div>
+    <h2>종료된 스터디</h2>
+    <div class="row" id="after"></div>
+    <div id="afterpagi"></div>
 
-        <input type="hidden" name="pageNum" id="pageNum3" value="1">
-        <input type="hidden" name="amount" id="amount3" value="6">
+    <input type="hidden" name="pageNum" id="pageNum3" value="1">
+    <input type="hidden" name="amount" id="amount3" value="6">
 
-        <h2>관심 스터디</h2>
-        <div class="row" id="wish"></div>
-        <div id="wishpagi"></div>
+    <h2>관심 스터디</h2>
+    <div class="row" id="wish"></div>
+    <div id="wishpagi"></div>
 
-        <input type="hidden" name="pageNum" id="pageNum4" value="1">
-        <input type="hidden" name="amount" id="amount4" value="6">
-
-
-
-    </form>
-
+    <input type="hidden" name="pageNum" id="pageNum4" value="1">
+    <input type="hidden" name="amount" id="amount4" value="6">
 </div>
 
 
@@ -56,6 +50,7 @@
         getMakeList("make");
         getMakeList("before");
         getMakeList("after");
+        getMakeList("wish");
         // pagiActive();
     });
 
@@ -100,6 +95,17 @@
             pagiPlace = $("#afterpagi")[0];
             type = obj;
         }
+        else if(obj === 'wish'){
+            // ajax 통신을 위한 변수
+            // console.log("wish");
+            url = "wishStudy";
+            pageNum = $("#pageNum4")[0].value;
+            amount = $("#amount4")[0].value;
+
+            place = $("#wish")[0];
+            pagiPlace = $("#wishpagi")[0];
+            type = obj;
+        }
 
 
 
@@ -107,7 +113,7 @@
             url: '/profile/' + url + ".json",
             type: 'GET',
             data: {
-                id : '${MemberVo.id}',
+                id : '${id}',
                 pageNum : pageNum,
                 amount : amount
             },
@@ -200,7 +206,8 @@
             "            <div class='card-body-bottom' style='flex-direction: column;height: 70px;'>" +
             "                <p style='margin-bottom: 3px;'><i class='fas fa-users'></i> " + attendants + " / " + capacity + "명</p>" +
             "                <p style='margin-bottom: 3px;'><i class='far fa-calendar-check'></i> " + startDate + "</p>" +
-            "                <p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" +
+            (endDate !== null ? "<p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" : "<i class='far fa-calendar-times'> 종료일이 없습니다</i>") +
+            // "                <p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" +
             // "                <p class='card-text ratingPlace' id='stars' data-rating='' data-ratingcount=''>(스타)</p>\n" +
             "            </div>" +
             "        </div>" +
@@ -276,6 +283,9 @@
             }
             else if(this.dataset.type === 'after'){
                 type = "pageNum3";
+            }
+            else if(this.dataset.type === 'wish'){
+                type = "pageNum4";
             }
 
             if(this.dataset.btn === 'prev'){
