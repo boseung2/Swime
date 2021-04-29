@@ -271,9 +271,33 @@
         if(confirm('선택한 신청자의 스터디 참석을 승인하시겠습니까?')) {
             $('#answerModal').modal("hide");
 
-            //
+            let userId = $('#permitBtn').data('userid');
 
-            alert('참석 승인 처리가 완료되었습니다.');
+            // 해당 신청자의 답변을 모두 삭제
+            studyAnswerService.remove({stdSn : ${stdSn}, userId : userId}, function (result) {
+
+                if(result === 'success') {
+                    // 성공하면 신청자의 스터디 참석을 진행
+                    studyAttendService.attend({stdSn : ${stdSn}, userId : userId}, function(result) {
+                        if(result === 'success') {
+                            alert('참석 승인 처리가 완료되었습니다.');
+
+                            // 참여 멤버 reload
+                            getAttendList();
+
+                            // 대기 멤버 reload
+                            getWaitingList();
+
+                        }else {
+                            alert('참석 승인 처리를 실패했습니다.');
+                        }
+                    })
+
+                }else {
+                    // 실패하면 실패했다고 띄우고 돌아가기
+                    alert('참석 승인 처리를 실패했습니다.');
+                }
+            })
         }
     })
 

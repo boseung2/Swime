@@ -225,15 +225,6 @@
     })
 </script>
 
-<script>
-    // 엔터키 submit 방지
-    document.addEventListener('keydown', function(event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-        }
-    }, true);
-</script>
-
 <!-- 지참금 변경시-->
 <script>
     $('#expenseSelect').on("change", function(){
