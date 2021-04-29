@@ -3,14 +3,15 @@
 
 <%@include file="../includes/header.jsp" %>
 
-<!-- Page Content -->
+<!-- container -->
 <div class="container">
-
     <!-- Heading Row -->
     <div class="row align-items-center my-5">
+
         <div class="uploadResult">
 
         </div>
+
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
             <form id="operForm" action="group/modify" method="get">
@@ -35,210 +36,131 @@
             <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
             <p><i class="fas fa-user"></i>모임장 <c:out value="${group.userName}"/></p>
 
-                <sec:authorize access="isAuthenticated()">
-                    <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
-                    <c:if test="${pinfo.username ne group.userId}">
-                        <a class="btn btn-danger" href="#" id="withdrawBtn">모임 탈퇴</a>
-                    </c:if>
-                    <c:if test="${pinfo.username eq group.userId}">
-                        <button data-oper="modify" class="btn btn-secondary">모임 수정/관리</button>
-                    </c:if>
-                </sec:authorize>
+            <sec:authorize access="isAuthenticated()">
+                <a class="btn btn-primary" href="#" id="attendBtn">모임 가입</a>
+                <c:if test="${pinfo.username ne group.userId}">
+                    <a class="btn btn-danger" href="#" id="withdrawBtn">모임 탈퇴</a>
+                </c:if>
+                <c:if test="${pinfo.username eq group.userId}">
+                    <button data-oper="modify" class="btn btn-secondary">모임 수정/관리</button>
+                </c:if>
+            </sec:authorize>
 
             <sec:authorize access="isAuthenticated()">
-            <a class="btn btn-outline-primary" href="#" id="heartOff"><i class="far fa-heart"></i></a>
-            <a class="btn btn-primary" href="#" id="heartOn"><i class="far fa-heart"></i></a>
+                <a class="btn btn-outline-primary" href="#" id="heartOff"><i class="far fa-heart"></i></a>
+                <a class="btn btn-primary" href="#" id="heartOn"><i class="far fa-heart"></i></a>
             </sec:authorize>
 
         </div>
         <!-- /.col-md-4 -->
     </div>
     <!-- /.row -->
-
-    <!-- 모임 참여 -->
-    <script>
-        $(document).ready(function() {
-
-            let grpSnValue = '<c:out value="${group.sn}"/>';
-            let attendUL = $(".attend");
-
-            let userId = null;
-            <sec:authorize access="isAuthenticated()">
-            userId = "${pinfo.username}";
-            </sec:authorize>
-
-            let attend = {
-                grpSn : grpSnValue,
-                userId : userId
-            }
-
-            let csrfHeaderName = "${_csrf.headerName}";
-            let csrfTokenValue = "${_csrf.token}";
-
-            // ajax spring security header
-            $(document).ajaxSend(function(e, xhr, options) {
-                xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-            });
-
-            // 버튼상태 관리
-            let attendBtn = $('#attendBtn');
-            let withdrawBtn = $('#withdrawBtn');
-
-            attendBtn.show();
-            withdrawBtn.hide();
-            groupAttendService.get(attend, function(result) {
-                if(result.status === 'GRUS01') {
-                    attendBtn.hide();
-                    withdrawBtn.show();
-                } else {
-                    attendBtn.show();
-                    withdrawBtn.hide();
-                }
-            })
-
-            showList();
-
-            function showList() {
-                groupAttendService.getList({grpSn:grpSnValue}, function(list) {
-                    let str = "";
-                    if(list == null || list.length == 0) {
-                        attendUL.html("");
-                        return;
-                    }
-
-                    for(let i=0, len=list.length || 0; i<len; i++) {
-                        str += "<li data-sn='"+list[i].sn+"'>";
-                        str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
-                        str += "<span><b>"+list[i].name+"</b></span>\t";
-                        str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
-                    }
-
-                    attendUL.html(str);
-
-                    //showRatingPage(ratingCnt);
-                })
-            }
-
-            attendBtn.on("click", function(e) {
-                groupAttendService.get(attend, function(result) {
-                    if(result.status === 'GRUS03') {
-                        alert("영구추방당한 모임입니다. 모임가입이 불가합니다.");
-                        return false;
-                    }
-                })
-
-                groupAttendService.add(attend, function(result) {
-                    alert("모임에 참여했습니다.");
-                    attendBtn.hide();
-                    withdrawBtn.show();
-                    showList();
-                })
-            })
-
-            withdrawBtn.on("click", function(e) {
-                groupAttendService.withdraw(attend, function(result) {
-                    alert("정상적으로 모임에서 탈퇴되었습니다.");
-                    attendBtn.show();
-                    withdrawBtn.hide();
-                    showList();
-                })
-            })
-
-        })
-    </script>
-
-    <!-- nav -->
-    <div class="topnav">
-        <a href="#groupInfo" class="active">정보</a>
-        <a href="#groupRating">후기</a>
-        <a href="#study">스터디</a>
-        <a href="#board">게시판</a>
     </div>
-    <!-- /nav -->
+<!-- container -->
 
-    <div class="main-contents">
-    <!-- 멤버 리스트 -->
-    <div id="groupAttend">
-        <h4>모임멤버</h4>
-        <ul class="attend">
-            <li data-sn="12">
-                <div>
-                    <div class="header">
-                        <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
-                        <span>이름</span>
-                        <span>모임장</span>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <br>
-
-    <hr class="centerHr" id="groupInfo">
-    <div id="info" >
-        <h4>모임정보</h4>
-        <p><pre><c:out value="${group.info}"/></pre></p>
-    </div>
-    <br>
-
-    <hr class="centerHr" id="groupRating">
-    <div>
-        <h4>후기<sec:authorize access="isAuthenticated()">
-            <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
-        </sec:authorize></h4>
-
-
-        <ul class="rating">
-            <li data-sn="12">
-                <div>
-                </div>
-            </li>
-        </ul>
-    </div>
-
-    <!-- rating pagination button -->
-    <div class="paging-footer panel-footer">
-
-    </div>
-
-
-    <!-- 스터디 만들기 버튼-->
-    <hr class="centerHr" id="study">
-        <h4>스터디</h4>
-        <c:set var="done" value="false"/>
-
-        <c:forEach var = "attendant" items="${attendList}">
-            <c:if test="${not done}">
-                <c:if test="${attendant.userId == pinfo.username}">
-                    <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a>
-                    <c:set var="done" value="true"/>
-                </c:if>
-            </c:if>
-        </c:forEach>
-
-
-    <!-- 스터디 리스트 -->
-    <div class="studyList row">
-    </div>
-
-    <!-- 스터디 페이징 처리 -->
-    <div class="studyPageFooter panel-footer">
-
-    </div>
-
-    <!-- 게시판 -->
-    <hr class="centerHr" id="board">
-        <%@include file="groupBoard.jsp"%>
-
+<div class="gray-background">
     <!-- container -->
+    <div class="container">
 
-    <!-- Call to Action Well -->
-    <div class="card text-white bg-secondary my-5 py-4 text-center">
-        <div class="card-body">
-            <p class="text-white m-0">This call to action card is a great place to showcase some important information or display a clever tagline!</p>
+        <!-- nav -->
+        <div class="topnav">
+            <a href="#groupInfo" class="active">정보</a>
+            <a href="#groupRating">후기</a>
+            <a href="#study">스터디</a>
+            <a href="#board">게시판</a>
         </div>
+        <!-- /nav -->
+
+        <div class="main-contents">
+        <!-- 멤버 리스트 -->
+        <div id="groupAttend">
+            <h4>모임멤버</h4>
+            <ul class="attend">
+                <li data-sn="12">
+                    <div>
+                        <div class="header">
+                            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
+                            <span>이름</span>
+                            <span>모임장</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <br>
+
+        <hr class="centerHr" id="groupInfo">
+        <div id="info" >
+            <h4>모임정보</h4>
+            <p><pre><c:out value="${group.info}"/></pre></p>
+        </div>
+        <br>
+
+        <hr class="centerHr" id="groupRating">
+        <div>
+            <h4>후기<sec:authorize access="isAuthenticated()">
+                <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
+            </sec:authorize></h4>
+
+
+            <ul class="rating">
+                <li data-sn="12">
+                    <div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- rating pagination button -->
+        <div class="paging-footer panel-footer">
+
+        </div>
+
+
+        <!-- 스터디 만들기 버튼-->
+        <hr class="centerHr" id="study">
+        <div>
+            <h4>스터디</h4>
+            <c:set var="done" value="false"/>
+
+            <c:forEach var = "attendant" items="${attendList}">
+                <c:if test="${not done}">
+                    <c:if test="${attendant.userId == pinfo.username}">
+                        <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a>
+                        <c:set var="done" value="true"/>
+                    </c:if>
+                </c:if>
+            </c:forEach>
+        </div>
+
+
+        <!-- 스터디 리스트 -->
+        <div class="studyList row">
+        </div>
+
+        <!-- 스터디 페이징 처리 -->
+        <div class="studyPageFooter panel-footer">
+        </div>
+
+        <!-- 게시판 -->
+        <hr class="centerHr" id="board">
+        <div>
+        <%@include file="groupBoard.jsp"%>
+        </div>
+
+
+
+        <!-- Call to Action Well -->
+        <div class="card text-white bg-secondary my-5 py-4 text-center">
+            <div class="card-body">
+                <p class="text-white m-0">This call to action card is a great place to showcase some important information or display a clever tagline!</p>
+            </div>
+        </div>
+
+        </div>
+        <!-- main-contents -->
     </div>
-    </div>
+    <!-- container -->
 </div>
 
 <!-- 후기 작성/수정 모달 -->
@@ -308,38 +230,6 @@
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
 <!-- GroupWish Module -->
 <script type="text/javascript" src="/resources/js/groupWish.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        <%--console.log("============");--%>
-        <%--console.log("js test");--%>
-
-        <%--let snValue = '<c:out value="${group.sn}"/>';--%>
-
-        //     {"grpSn" : snValue, "userId" : "jungbs3726@naver.com", "grpRole" : "GRRO02", "status" : "GRST01"}
-        // ,
-        //     function(result) {
-        //         alert("RESULT: " + result);
-        //     }
-        // )groupAttendService.add(
-
-
-        // groupAttendService.getList({grpSn:snValue}, function(list) {
-        //     for(let i=0, len = list.length||0; i<len; i++) {
-        //         console.log(list[i]);
-        //     }
-        // })
-
-        // groupAttendService.withdraw({
-        //     sn : 493
-        // }, function(result) {
-        //     alert("수정완료");
-        // })
-
-    })
-</script>
-
 
 
 
@@ -1013,6 +903,99 @@
     })
 </script>
 
+
+
+<!-- 모임 참여 -->
+<script>
+    $(document).ready(function() {
+
+        let grpSnValue = '<c:out value="${group.sn}"/>';
+        let attendUL = $(".attend");
+
+        let userId = null;
+        <sec:authorize access="isAuthenticated()">
+        userId = "${pinfo.username}";
+        </sec:authorize>
+
+        let attend = {
+            grpSn : grpSnValue,
+            userId : userId
+        }
+
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
+
+        // ajax spring security header
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        });
+
+        // 버튼상태 관리
+        let attendBtn = $('#attendBtn');
+        let withdrawBtn = $('#withdrawBtn');
+
+        attendBtn.show();
+        withdrawBtn.hide();
+        groupAttendService.get(attend, function(result) {
+            if(result.status === 'GRUS01') {
+                attendBtn.hide();
+                withdrawBtn.show();
+            } else {
+                attendBtn.show();
+                withdrawBtn.hide();
+            }
+        })
+
+        showList();
+
+        function showList() {
+            groupAttendService.getList({grpSn:grpSnValue}, function(list) {
+                let str = "";
+                if(list == null || list.length == 0) {
+                    attendUL.html("");
+                    return;
+                }
+
+                for(let i=0, len=list.length || 0; i<len; i++) {
+                    str += "<li data-sn='"+list[i].sn+"'>";
+                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+                    str += "<span><b>"+list[i].name+"</b></span>\t";
+                    str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
+                }
+
+                attendUL.html(str);
+
+                //showRatingPage(ratingCnt);
+            })
+        }
+
+        attendBtn.on("click", function(e) {
+            groupAttendService.get(attend, function(result) {
+                if(result.status === 'GRUS03') {
+                    alert("영구추방당한 모임입니다. 모임가입이 불가합니다.");
+                    return false;
+                }
+            })
+
+            groupAttendService.add(attend, function(result) {
+                alert("모임에 참여했습니다.");
+                attendBtn.hide();
+                withdrawBtn.show();
+                showList();
+            })
+        })
+
+        withdrawBtn.on("click", function(e) {
+            groupAttendService.withdraw(attend, function(result) {
+                alert("정상적으로 모임에서 탈퇴되었습니다.");
+                attendBtn.show();
+                withdrawBtn.hide();
+                showList();
+            })
+        })
+
+    })
+</script>
 
 
 
