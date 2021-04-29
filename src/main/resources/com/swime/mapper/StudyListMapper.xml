@@ -30,6 +30,14 @@
         ]]>
     </select>
 
+
+    <select id="getStudiesOfGroup" resultType="com.swime.domain.StudyVO">
+        select gl.grp_sn, sl.std_sn sn, sl.status, sl.user_id
+        from tstd s, tstd_list sl, tgrp_list gl
+        where s.sn = sl.std_sn and s.grp_sn = gl.grp_sn and gl.user_id = sl.user_id
+          and gl.grp_sn = #{grpSn} and gl.user_id = #{userId} and sl.status = 'STUS01'
+    </select>
+
     <select id="getAttendant" resultType="com.swime.domain.StudyListVO">
         select std_sn, user_id, status
         from tstd_list

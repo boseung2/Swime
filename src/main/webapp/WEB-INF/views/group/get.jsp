@@ -17,6 +17,10 @@
                 <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">
                 <input type="hidden" id="pageNum" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
                 <input type="hidden" id="amount" name="amount" value="<c:out value="${cri.amount}"/>">
+                <input type="hidden" name="category" value="<c:out value="${cri.category}"/>">
+                <input type="hidden" name="sigungu" value="<c:out value="${cri.sigungu}"/>">
+                <input type="hidden" name="groupName" value="<c:out value="${cri.groupName}"/>">
+                <input type="hidden" name="order" value="<c:out value="${cri.order}"/>">
             </form>
             <h1 class="font-weight-light"><c:out value="${group.name}"/><span style="color:gray;font-size:20px;">[<c:out value="${group.category}"/>]</span></h1>
             <div class="ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></div>
@@ -403,18 +407,18 @@
                     str += "<div class='card-body'>";
                     str += "<h2 class='card-title'>" + list[i].name + "</h2>";
 
-                    if(list[i].endDate != null) str += "<p class='card-text'>" + list[i].startDate.substring(0,10) + " ~ " + list[i].endDate.substring(0,10) + "</p>";
-                    else str += "<p class='card-text'>" + list[i].startDate.substring(0,10) + "</p>"
-                    str += "<p class='card-text'>" + list[i].startTime.substring(0,5) + " ~ " + list[i].endTime.substring(0,5) + "</p>";
+                    if(list[i].endDate != null) str += "<p class='card-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + " ~ " + list[i].endDate.substring(0,10) + "</p>";
+                    else str += "<p class='card-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + "</p>"
+                    str += "<p class='card-text'><i class='fas fa-clock'></i> " + list[i].startTime.substring(0,5) + " ~ " + list[i].endTime.substring(0,5) + "</p>";
 
-                    if(list[i].onOff === 'STOF01') str += "<p class='card-text'>온라인 스터디</p>";
-                    if(list[i].onOff === 'STOF02') str += "<p class='card-text'>오프라인 스터디</p>";
+                    if(list[i].onOff === 'STOF01') str += "<p class='card-text'><i class='fas fa-video'></i> 온라인 스터디</p>";
+                    if(list[i].onOff === 'STOF02') str += "<p class='card-text'><i class='fas fa-map-marker-alt'></i> 오프라인 스터디</p>";
 
                     <c:if test="list[i].expense == null">str += "<p class='card-text'></p>"; </c:if>
-                    <c:if test="list[i].expense != null">str += "<p class='card-text'>" + list[i].expense + "</p>"; </c:if>
+                    <c:if test="list[i].expense != null">str += "<p class='card-text'><i class='fas fa-won-sign'></i> " + list[i].expense + "</p>"; </c:if>
 
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
-                    else str += "<p class='card-text'>" + list[i].attendants + "/" +  list[i].capacity + "</p>";
+                    else str += "<p class='card-text'><i class='fas fa-users'></i> " + list[i].attendants + "/" +  list[i].capacity + "</p>";
                     str += "</div>";
                     str += "<div class='card-footer'>";
                     str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";

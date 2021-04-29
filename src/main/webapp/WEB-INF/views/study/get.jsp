@@ -50,7 +50,7 @@
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
             <p><i class="fas fa-user"></i> 스터디장 : ${study.representationName}</p>
-            <p><i class="fas fa-users"></i> ${study.attendants} / ${study.capacity}</p>
+            <p><i class="fas fa-users"></i> 참여인원 : ${study.attendants} / ${study.capacity}</p>
             <c:if test="${study.onOff eq 'STOF01'}"><p><i class="fas fa-video"></i>온라인 스터디</p></c:if>
             <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디</p></c:if>
 
@@ -64,23 +64,20 @@
             <div class="wishButton" style="width: max-content; height: max-content"></div>
 
             <c:if test="${study.representation != pinfo.username}">
-                <c:choose>
-                    <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>
-                    <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>
-<%--                    <c:when test="${attend.status eq 'STUS01'}"><a class="cancelAttend btn btn-primary" href="">참석 취소하기</a></c:when>--%>
-<%--                    <c:when test="${attend.status eq 'STUS03'}"><a class="btn btn-primary" href="#">검토중</a></c:when>--%>
-<%--                    <c:when test="${attend.status eq 'STUS04'}"><a class="btn btn-primary" href="#">가입불가</a></c:when>--%>
-<%--                    <c:otherwise><a class="attend btn btn-primary" href="">참석하기</a></c:otherwise>--%>
-                </c:choose>
+                <div id="attendButton" style="width: max-content; height: max-content"></div>
+<%--                <c:choose>--%>
+<%--                    <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>--%>
+<%--                    <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>--%>
+<%--                </c:choose>--%>
             </c:if>
 
-            <br><br>
+            <br>
             <c:if test="${study.representation eq pinfo.username}">
-            <a class="modify btn btn-primary" href="">스터디 수정</a>
-            <a class="remove btn btn-primary" href="">스터디 삭제</a>
-<%--            <br><br>--%>
+                <a class="modify btn btn-primary" href="">스터디 수정</a>
+                <a class="remove btn btn-primary" href="">스터디 삭제</a>
+                <a class="btn btn-primary" href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}">멤버 관리</a>
+                <br><br>
 <%--            <a class="btn btn-primary" href="#">참가 신청 마감</a>--%>
-<%--            <a class="btn btn-primary" href="/study/members?stdSn=${study.sn}">멤버 관리</a>--%>
 <%--            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>--%>
 <%--            <br><br>--%>
             </c:if>
@@ -187,11 +184,51 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     </form>
 
+    <!-- 설문 등록 모달창 -->
+    <div class="surveyModal modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="surveyModalLabel">스터디 설문 등록</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body"><span style="color: gray; font-size: small">스터디 참석을 위한 정보를 입력해주세요.</span></div>
+                    <div class="question form-group">
+                        <label style="padding-left: 16px;">질문 1. </label>
+                        <label class="questionLabel"></label>
+                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question1">
+                    </div>
+                    <div class="question form-group" hidden="true" >
+                        <label style="padding-left: 16px;">질문 2. </label>
+                        <label class="questionLabel"></label>
+                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question2">
+                    </div>
+                    <div class="question form-group" class="questionLabel" hidden="true">
+                        <label style="padding-left: 16px;">질문 3. </label>
+                        <label class="questionLabel"></label>
+                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question3">
+                    </div>
+                <div class = "modal-footer">
+                    <button id= "surveyRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">승인</button>
+                    <button id= "surveyCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
 <script type="text/javascript" src="/resources/js/studyWish.js"></script>
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
+<script type="text/javascript" src="/resources/js/studySurvey.js"></script>
+
+<script>
+    $(document).ready(function() {
+        let surveyModal = $('#surveyModal');
+    })
+</script>
+
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -233,7 +270,12 @@
                     str += "";
 
                 } else if(result === "not attend"){
-                    str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
+                    if (parseInt("${study.attendants}") >= parseInt("${study.capacity}")) {
+
+                        str += "<a class='btn btn-dark'>모집마감</a>";
+                    }else {
+                        str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
+                    }
 
                 } else if(result === "attend"){
                     str += "<a id='cancel' class='btn btn-danger' href=''>탈퇴하기</a>";
@@ -252,42 +294,68 @@
             })
         }
 
-        <!-- 참석 버튼 눌렀을 때-->
+
+        <!-- attend 버튼 눌렀을 때-->
         $('#attendButton').on("click", function(e) {
             e.preventDefault();
 
-            // 참석 div안의 a태그의 id가 attend이면 참석을 수행하는 ajax 호출
+            // 참석버튼이 눌리면
             if($('#attendButton').children()[0].id === 'attend') {
                 console.log('참석');
-                studyAttendService.attend({stdSn : stdSn, userId : userId}, function(result) {
-                    console.log("attend > result = " + result);
 
-                    if(result === "success") {
-                        alert("스터디에 참석했습니다.");
-                    }else if(result === "fail") {
-                        alert("스터디에 참석하지 못했습니다.");
+                // 설문 가져오는 ajax 호출
+                studySurveyService.getSurveyList(${study.sn}, function(result) {
+
+                    // 해당 스터디에 설문이 있으면
+                    if(result.length > 0) {
+                        for(let i = 0; i < result.length; i++) {
+
+                            // label에 해당 질문을 등록
+                            $('.questionLabel')[i].innerText = result[i].question;
+
+                            // 질문 form hidden처리 풀기
+                            $('.question')[i].hidden = false;
+                        }
+
+                        // 모달 띄우기
+                        $('#surveyModal').modal("show");
+                    }else {
+
+                        // 없으면 바로 참석 진행
+                        studyAttendService.attend({stdSn : stdSn, userId : userId}, function(result) {
+                            console.log("attend > result = " + result);
+
+                            if(result === "success") {
+                                alert("스터디에 참석했습니다.");
+                            }else if(result === "fail") {
+                                alert("스터디에 참석하지 못했습니다.");
+                            }
+
+                            // 참석버튼 reload
+                            getStudyAttend();
+                        })
                     }
 
-                    // 참석버튼 reload
-                    getStudyAttend();
                 })
 
-
+            // 탈퇴 버튼이 눌리면
             } else if($('#attendButton').children()[0].id === 'cancel') {
                 // cancel이면 탈퇴를 수행하는 ajax 호출
                 console.log('탈퇴');
-                studyAttendService.cancel({stdSn : stdSn, userId : userId}, function(result) {
-                    console.log("cancel > result = " + result);
+                if(confirm('해당 스터디를 탈퇴하시겠습니까?')) {
+                    studyAttendService.cancel({stdSn : stdSn, userId : userId}, function(result) {
+                        console.log("cancel > result = " + result);
 
-                    if(result === "success") {
-                        alert("스터디를 탈퇴했습니다.");
-                    }else if(result === "fail") {
-                        alert("스터디를 탈퇴하지 못했습니다.");
-                    }
+                        if(result === "success") {
+                            alert("스터디를 탈퇴했습니다.");
+                        }else if(result === "fail") {
+                            alert("스터디를 탈퇴하지 못했습니다.");
+                        }
 
-                    // 참석버튼 reload
-                    getStudyAttend();
-                })
+                        // 참석버튼 reload
+                        getStudyAttend();
+                    })
+                }
             }
 
         });

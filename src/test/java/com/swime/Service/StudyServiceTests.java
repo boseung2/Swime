@@ -257,6 +257,12 @@ public class StudyServiceTests {
     }
 
     @Test
+    public void testGetStudiesOfGroup() {
+        service.getStudiesOfGroup(720, "test1@naver.com").forEach(study -> log.info(study));
+
+    }
+
+    @Test
     public void testRegisterAttendant() {
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(561L);

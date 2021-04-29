@@ -4,11 +4,17 @@
 <%@include file="../includes/header.jsp" %>
 <c:set var="defaultImg" value="https://streamyard.com/resources/assets/images/docs/connect-a-facebook-group/connect-a-facebook-group.jpg"/>
 
+<!-- 상단 이미지 -->
+<div class="head-image">
+<div class="head-content">
+    <p>모임찾기</p>
+    원하는 조건에 맞춰 모임을 찾아보세요.
+</div>
+</div>
+<!-- 상단 이미지 -->
+
 <!-- Page Content -->
     <div class="container">
-        <h2>모임 찾기</h2>
-        <hr>
-
         <!-- 검색필터 -->
         <div class="filter">
             <h4 style="font-family: 'Roboto', sans-serif;">Filter</h4><br>
@@ -104,16 +110,11 @@
 
             <button type="submit" class="btn">검색&nbsp;&nbsp;&nbsp;<i class="fas fa-search"></i></button>
         </form>
-        </div>
-        <!-- /검색필터 -->
+    </div>
+    <!-- /검색필터 -->
 
-
-
-        <hr class="centerHr">
-
-
-    <!-- Content Row -->
-    <div>
+    <!-- 정렬 박스 -->
+    <div class="order-box">
         <h4>${pageMaker.total}개의 모임</h4>
         <select id="orderSelect">
             <option value="rating" <c:out value="${pageMaker.cri.order eq 'rating' ? 'selected' : ''}"/>>평점순</option>
@@ -121,31 +122,44 @@
             <option value="attend_count" <c:out value="${pageMaker.cri.order eq 'attend_count' ? 'selected' : ''}"/>>모임원순</option>
         </select>
     </div>
+    <!-- 정렬 박스 -->
+
+    <!-- Content Row -->
     <div class="row">
         <c:forEach items="${list}" var="group">
             <div class="col-md-4 mb-5">
                 <div class="card h-100">
-                    <div class="card-body">
-                        <div class="uploadResult">
-                            <img class="img-fluid rounded mb-4 mb-lg-0" src="${!empty group.picture ? '/display?fileName=' += group.picture : defaultImg}" alt="">
-                        </div>
-                        <div class="flex-container" style="display: flex;">
-                        <c:forEach items="${group.tags}" var="tag">
-                            <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
-                            <b><c:out value="${tag}"/></b>
-                            </div>
-                        </c:forEach>
-                        </div>
-                        <h2 class="card-title"><c:out value="${group.name}"/><span style="color:gray;font-size:20px;">[<c:out value="${group.category}"/>]</span></h2>
-                        <p class="card-text ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></p>
-                        <p class="card-text"><i class="fas fa-map-marker-alt"></i> <c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/></p>
-                        <p><i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
-                        <p class="card-text"><c:out value="${group.description}"/></p>
+                    <div class="card-body move" style=" cursor: pointer;" href="<c:out value="${group.sn}"/>">
+                        <h2 class="card-title"><span style="font-size:22px; font-weight:bold;"><c:out value="${group.category}"/></span></h2>
+                        <hr>
+                        <p class="card-text" id="card-text-sigungu"><c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/>
+                            &nbsp;|&nbsp;<i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
 
+                        <div class="card-title" id="card-title-name"><c:out value="${group.name}"/></div>
+
+                        <div class="card-text-rating">
+                        <div class="card-text ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></div>
+                        </div>
+
+                        <div class="uploadResult">
+                            <img class="img-fluid rounded mb-4 mb-lg-0" src="${!empty group.picture ? '/display?fileName=' += group.picture :'../resources/img/default_img.jpg'}" alt="">
+                        </div>
+
+                        <div class="caption">
+                        <p class="card-text" style="font-size : 25px"><c:out value="${group.name}"/></p>
+                        <p class="card-text" style="margin-top : 50px;"><c:out value="${group.description}"/></p>
+                        <div class="flex-container" style="display: flex;;">
+                            <c:forEach items="${group.tags}" var="tag">
+                                <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
+                                    <b><c:out value="${tag}"/></b>
+                                </div>
+                            </c:forEach>
+                        </div>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <a href="<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm move">More Info</a>
-                    </div>
+<%--                    <div class="card-footer">--%>
+<%--                        <a href="<c:out value="${group.sn}"/>" class="btn btn-primary btn-sm move">More Info</a>--%>
+<%--                    </div>--%>
                 </div>
             </div>
         </c:forEach>
@@ -207,7 +221,18 @@
         let groupName = '<c:out value="${pageMaker.cri.groupName}"/>';
 
         $('#groupName').val(groupName);
-        //$('#order > option').select(order);
+
+        $('#orderSelect').on("change", function(e) {
+            searchForm.find("input[name='pageNum']").val("1");
+            // 정렬기준 가져와서 order input 에 넣기
+            let orderValue = $('#orderSelect option:selected').val();
+            $('#order').prop("value", orderValue);
+
+            e.preventDefault();
+
+
+            searchForm.submit();
+        })
 
         function checkModal(result) {
 
