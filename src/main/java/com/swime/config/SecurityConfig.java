@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.sql.DataSource;
@@ -39,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
+
 
         http
             .authorizeRequests()
@@ -87,21 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        // 디테일서비스로 대신함
-//        String getUserQuery = "";
-//        String getUserDetailQuery = "";
-
-        auth
-                .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
-        // 디테일서비스로 대신함
-//            .jdbcAuthentication()
-//                .dataSource(dataSource)
-//                .passwordEncoder(passwordEncoder())
-//                .usersByUsernameQuery(getUserQuery)
-//                .authoritiesByUsernameQuery(getUserDetailQuery)
-//            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
-        ;
-
+        auth.userDetailsService(detailsService()).passwordEncoder(passwordEncoder());
     }
 
     @Bean
