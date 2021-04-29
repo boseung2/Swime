@@ -17,6 +17,10 @@
                 <input type="hidden" id="sn" name="sn" value="<c:out value="${group.sn}"/>">
                 <input type="hidden" id="pageNum" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
                 <input type="hidden" id="amount" name="amount" value="<c:out value="${cri.amount}"/>">
+                <input type="hidden" name="category" value="<c:out value="${cri.category}"/>">
+                <input type="hidden" name="sigungu" value="<c:out value="${cri.sigungu}"/>">
+                <input type="hidden" name="groupName" value="<c:out value="${cri.groupName}"/>">
+                <input type="hidden" name="order" value="<c:out value="${cri.order}"/>">
             </form>
             <h1 class="font-weight-light"><c:out value="${group.name}"/><span style="color:gray;font-size:20px;">[<c:out value="${group.category}"/>]</span></h1>
             <div class="ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></div>

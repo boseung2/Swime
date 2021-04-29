@@ -47,8 +47,8 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="description">한줄소개</label>
-            <textarea class="form-control" rows="1" id="description" name="description" required><c:out value="${group.description}"/></textarea>
+            <label for="description">간단소개</label>
+            <textarea class="form-control" rows="2" id="description" name="description" required><c:out value="${group.description}"/></textarea>
         </div>
         <div class="form-group">
             <label for="info">정보 (모임에 대해 자세히 적어주세요)</label>
@@ -359,7 +359,7 @@
             <button type="submit" class="btn btn-warning" data-oper="modify">수정</button>
             <button type="submit" class="btn btn-danger" data-oper="remove">삭제</button>
         </c:if>
-        <button type="submit" class="btn btn-secondary" data-oper="list">목록</button>
+        <button type="submit" class="btn btn-secondary" data-oper="list">취소</button>
     </form>
 </div>
 
@@ -383,13 +383,13 @@
 
             } else if (operation === 'list') {
 
-                formObj.attr("action", '/group/list').attr("method", "get");
-                let pageNumTag = $("input[name='pageNum']").clone();
-                let amountTag = $("input[name='amount']").clone();
+                formObj.attr("action", '/group/get?sn=' + "<c:out value="${group.sn}"/>").attr("method", "get");
+                //let pageNumTag = $("input[name='pageNum']").clone();
+                //let amountTag = $("input[name='amount']").clone();
 
-                formObj.empty();
-                formObj.append(pageNumTag);
-                formObj.append(amountTag);
+                //formObj.empty();
+                //formObj.append(pageNumTag);
+                //formObj.append(amountTag);
 
             }else if(operation === 'modify') {
 
@@ -614,10 +614,10 @@
         }
 
         if(getByte($('#description').val()) == "") {
-            alert("한줄소개를 입력해주세요");
+            alert("간단소개를 입력해주세요");
             return false;
-        } else if(getByte($('#description').val()) > 120) {
-            alert("한줄소개를 40자 이내로 작성해주세요")
+        } else if(getByte($('#description').val()) > 300) {
+            alert("간단소개를 90자 이내로 작성해주세요")
             return false;
         }
 
