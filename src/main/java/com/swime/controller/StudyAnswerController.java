@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +27,25 @@ import java.util.Map;
 public class StudyAnswerController {
 
     private StudyService answerService;
+
+    @GetMapping(value="/get/{userId}/{stdSn}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StudyAnswerVO>> get(@PathVariable("stdSn") long stdSn, @PathVariable("userId") String userId) {
+        log.info("===============================잘 왔니? stdSn = " + stdSn);
+        log.info("===============================잘 왔니? userId = " + userId);
+
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(stdSn);
+        param.setUserId(userId);
+
+        try {
+            List<StudyAnswerVO> answers = answerService.getAnswer(param);
+            return new ResponseEntity<>(answers, HttpStatus.OK);
+
+        }catch (Exception e) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 
     @PostMapping(value="/register")
     public ResponseEntity<String> register(@RequestBody String jsonString) {

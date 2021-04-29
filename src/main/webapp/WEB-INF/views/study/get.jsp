@@ -190,18 +190,18 @@
                 </div>
                 <div class="modal-body"><span style="color: gray; font-size: small">스터디 참석을 위한 정보를 입력해주세요.</span></div>
                     <div class="questionForm form-group" hidden="true">
-                        <label style="padding-left: 16px;">질문 1. </label>
-                        <label class="questionLabel"></label>
+                        <strong><label style="padding-left: 16px;">질문 1. </label></strong>
+                        <p class="questionLabel" style="padding-left: 16px;"></p>
                         <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
                     <div class="questionForm form-group" hidden="true">
-                        <label style="padding-left: 16px;">질문 2. </label>
-                        <label class="questionLabel"></label>
+                        <strong><label style="padding-left: 16px;">질문 2. </label></strong>
+                        <p class="questionLabel" style="padding-left: 16px;"></p>
                         <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
                     <div class="questionForm form-group" hidden="true">
-                        <label style="padding-left: 16px;">질문 3. </label>
-                        <label class="questionLabel"></label>
+                        <strong><label style="padding-left: 16px;">질문 3. </label></strong>
+                        <p class="questionLabel" style="padding-left: 16px;"></p>
                         <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
                 <div class = "modal-footer">

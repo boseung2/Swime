@@ -31,10 +31,43 @@
     </ul>
 </div>
 
+<!-- 답변 모달창 -->
+<div class="answerModal modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="answerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="answerModalLabel">스터디 설문 답변</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body"><span style="color: gray; font-size: small">회원의 참석을 승인하거나, 거절할 수 있습니다.</span></div>
+            <div class="questionForm form-group" hidden="true">
+                <strong><label style="padding-left: 16px;">질문 1. </label></strong>
+                <p class="questionLabel" style="padding-left: 16px;"></p>
+                <input style="width:465px;margin-left: 16px;" class="form-control answer" readonly>
+            </div>
+            <div class="questionForm form-group" hidden="true">
+                <strong><label style="padding-left: 16px;">질문 2. </label></strong>
+                <p class="questionLabel" style="padding-left: 16px;"></p>
+                <input style="width:465px;margin-left: 16px;" class="form-control answer" readonly>
+            </div>
+            <div class="questionForm form-group" hidden="true">
+                <strong><label style="padding-left: 16px;">질문 3. </label></strong>
+                <p class="questionLabel" style="padding-left: 16px;"></p>
+                <input style="width:465px;margin-left: 16px;" class="form-control answer" readonly>
+            </div>
+            <div class = "modal-footer">
+                <button id= "surveyRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">승인</button>
+                <button id= "surveyCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">거절</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%@include file="../includes/footer.jsp" %>
 
 <script type="text/javascript" src="/resources/js/studyMember.js"></script>
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
+<script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -132,9 +165,13 @@
 
                 str += '</div>';
 
-                str += '<div class="attendBtn">';
-                str += '<a id ="getAnswer" href="" style="color: blue;">답변보기</a>';
-                str += '</div>';
+                // 로그인한 사용자가 스터디장일때만 답변 보기 가능
+                if("${pinfo.username}" !== "" && "${representation}" === "${pinfo.username}" && "${representation}" !== result[i].userId) {
+                    str += '<div class="attendBtn">';
+                    str += '<a id ="getAnswer" class="' + result[i].userId + '" href="" style="color: blue;">답변보기</a>';
+                    str += '</div>';
+                }
+
                 str += '</li>';
             }
 
@@ -144,6 +181,7 @@
 </script>
 
 
+<!-- 참여멤버 처리 -->
 <script>
     $('#attendList').on("click", "li", function(e) {
         e.preventDefault();
@@ -183,5 +221,40 @@
         }
 
 
+    })
+</script>
+
+<!-- 대기멤버 처리 -->
+<script>
+    $('#waitingList').on("click", "li", function(e) {
+        e.preventDefault();
+
+        console.log("userId = " + e.target.className);
+        console.log("userId = " + e.target.id);
+
+        let userId = e.target.className;
+        let method = e.target.id;
+
+        if(method === 'getAnswer') {
+            // 답변 가져오기
+            studyAnswerService.get({userId : userId, stdSn : ${stdSn}}, function(result) {
+                for(let i = 0; i < result.length; i++) {
+                    console.log(result[i]);
+
+                    // 질문을 모달에 등록
+                    $('.questionLabel')[i].innerText = result[i].question;
+
+                    // 답변을 모달에 등록록
+                    $('.answer')[i].value = result[i].answer;
+
+                    // form의 hidden 처리를 풀어준다.
+                    $('.questionForm')[i].hidden = false;
+                }
+
+                // 모달을 띄운다.
+                $('#answerModal').modal("show");
+            })
+
+        }
     })
 </script>

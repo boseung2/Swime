@@ -2,6 +2,24 @@ console.log("studyAnswerService Module.....");
 
 let studyAnswerService = (function(){
 
+    function get(param, callback, error) {
+
+        console.log("get answers");
+        console.log("userId = " + param.userId);
+        console.log("stdSn = " + param.stdSn);
+
+        $.get("/study/answer/get/" + param.userId + "/" + param.stdSn , function (result) {
+            if (callback) {
+                callback(result);
+            }
+        }).fail(function (xhr, status, err) {
+            if (error) {
+                error();
+            }
+        })
+
+    }
+
     function register(answerList, callback, error) {
 
         console.log("register answer");
@@ -47,6 +65,7 @@ let studyAnswerService = (function(){
     }
 
     return {
+        get : get,
         register : register,
         remove : remove
     };
