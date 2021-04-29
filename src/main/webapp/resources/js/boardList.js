@@ -15,6 +15,8 @@ let boardListService = (function(){
             function(data){
                 if(callback) {
                     //boardCnt 변수명 이따가 확인하기
+                    console.log("js/boardCnt : "+data.boardCnt);
+                    console.log("js/boardList"+data.list);
                     callback(data.boardCnt, data.list);
                 }
             })
@@ -23,21 +25,7 @@ let boardListService = (function(){
                     error();
                 }
         });
-        // $.ajax({
-        //     type : 'GET',
-        //     url : '/board/list/' + grpSn + '/' + page + ".json",
-        //     contentType : "application/json; charset=utf-8",
-        //     success : function(result, status, xhr) {
-        //         if(callback) {
-        //             callback(result);
-        //         }
-        //     },
-        //     error : function(xhr, status, er) {
-        //         if(error) {
-        //             error(er);
-        //         }
-        //     }
-        // })
+
     };
 
 

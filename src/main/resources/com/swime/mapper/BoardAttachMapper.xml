@@ -6,9 +6,9 @@
 
     <insert id="insert">
         insert into tbrd_atch
-            (uuid, brd_sn, uploadPath, file_name, file_type, file_size)
+            (uuid, brd_sn, uploadPath, file_name, file_type)
         values
-            (#{uuid}, #{brdSn}, #{uploadPath}, #{fileName}, #{fileType}, #{fileSize})
+            (#{uuid}, #{brdSn}, #{uploadPath}, #{fileName}, #{fileType})
 
     </insert>
 

@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.ProfileMapper">
 
+<!-- 그룹 -->
     <select id="read" resultType="com.swime.domain.GroupVO">
         SELECT sn, category, name, user_id, picture, description, attend_count, rating, rating_count, sido, sigungu, status, reg_date, upd_date
         from tgrp
@@ -105,42 +106,120 @@
         where l.user_id = #{id}
     </select>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <select id="dsfsdffd" resultType="com.swime.domain.GroupVO">
+<!-- 스터디 -->
+    <select id="makeStudyList" resultType="com.swime.domain.StudyVO">
         <![CDATA[
-        select sn, category, name, user_id, user_name, picture, description, attend_count, rating,
-               rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
-        from(
-                select rownum rn, sn, category, name, user_id, user_name, picture, description, attend_count, rating,
-                       rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
-                from(
-                        select /*+INDEX_DESC(g tgrp_pk) */ g.sn, g.category, g.name, g.user_id, u.name user_name,
-                                                           g.picture, g.description, g.attend_count, g.rating, g.rating_count, g.sido, g.sigungu, g.status,
-                                                           g.reg_date, g.reg_user_id, g.upd_date, g.upd_user_id
-                        from tgrp g, tuser u
-                        where g.user_id = u.id
-                          and g.status != 'GRST03'
-                        order by g.sn desc
+        select *
+        from
+            (
+            select rownum rn, sn, grp_sn, representation, representation_name, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+            from
+                (
+                select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                from tstd s, tuser u
+                where s.representation = u.id and s.status in ('STST01', 'STST03') and u.id = #{id}
+                order by s.reg_date desc
+                )
+            where rownum <= #{cri.pageNum} * #{cri.amount}
+        )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <select id="makeStudyCount" resultType="int">
+        select count(*)
+        from tstd s, tuser u
+        where s.representation = u.id and s.status in ('STST01', 'STST03') and u.id = #{id}
+    </select>
+
+    <select id="beforeStudyList" resultType="com.swime.domain.StudyVO">
+        <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
+                        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) > 0
+                        order by s.start_date
                     )
                 where rownum <= #{cri.pageNum} * #{cri.amount}
             )
         where rn > (#{cri.pageNum} - 1) * #{cri.amount}
         ]]>
     </select>
+
+    <select id="beforeStudyCount" resultType="int">
+    <![CDATA[
+        select count(*)
+        from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
+        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) > 0
+    ]]>
+    </select>
+
+    <select id="afterStudyList" resultType="com.swime.domain.StudyVO">
+        <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
+                        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) < 0
+                        order by s.start_date
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <select id="afterStudyCount" resultType="int">
+    <![CDATA[
+        select count(*)
+        from tstd_list l LEFT OUTER JOIN tstd s on l.std_sn = s.sn
+        where l.user_id = #{id} and l.status ='STUS01' and (s.start_date - current_date) < 0
+    ]]>
+    </select>
+
+    <select id="wishStudyList" resultType="com.swime.domain.StudyVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from TSTD_WISH w LEFT OUTER JOIN tstd s on w.std_sn = s.sn
+                        where w.user_id = #{id} and s.status in ('STST01', 'STST03')
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+    ]]>
+
+    </select>
+
+    <select id="wishStudyCount" resultType="int">
+        select count(*)
+        from TSTD_WISH w LEFT OUTER JOIN tstd s on w.std_sn = s.sn
+        where w.user_id = 'tht1234551@gmail.com' and s.status in ('STST01', 'STST03')
+    </select>
+
+
+
+
+
+
+
+
+
+
 
 
 

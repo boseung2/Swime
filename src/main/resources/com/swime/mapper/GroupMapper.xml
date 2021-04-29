@@ -24,6 +24,24 @@
         and g.sn = #{sn}
     </select>
 
+    <sql id="criteria">
+        <trim prefix="AND">
+            <if test="category != null and category != ''.toString()">
+                    g.category = #{category}
+            </if>
+        </trim>
+        <trim prefix="AND">
+            <if test="sigungu != null and sigungu != ''.toString()">
+                    g.sigungu = #{sigungu}
+            </if>
+        </trim>
+        <trim prefix="AND">
+            <if test="groupName != null and groupName != ''.toString()">
+                    g.name like '%'||#{groupName}||'%'
+            </if>
+        </trim>
+    </sql>
+
     <select id="getListWithPaging" resultType="com.swime.domain.GroupVO">
         <![CDATA[
         select sn, category, name, user_id, user_name, picture, description, attend_count, rating,
@@ -37,9 +55,18 @@
                                                            g.reg_date, g.reg_user_id, g.upd_date, g.upd_user_id
                         from tgrp g, tuser u
                         where g.user_id = u.id
-                          and g.status != 'GRST03'
-                        order by g.sn desc
+                        and g.status = 'GRST01'
+        ]]>
+                       <include refid="criteria"></include>
+                        order by
+                        <trim suffix=",">
+                            <if test="order != null and order != ''.toString()">
+                                     g.${order} desc
+                            </if>
+                        </trim>
+                        g.sn desc
                     )
+        <![CDATA[
                 where rownum <= #{pageNum} * #{amount}
             )
         where rn > (#{pageNum} - 1) * #{amount}
@@ -83,7 +110,22 @@
         select count(*)
         from tgrp
         where sn > 0
-        and status != 'GRST03'
+        and status = 'GRST01'
+        <trim prefix="AND">
+            <if test="category != null and category != ''.toString()">
+                    category = #{category}
+            </if>
+        </trim>
+        <trim prefix="AND">
+            <if test="sigungu != null and sigungu != ''.toString()">
+                sigungu = #{sigungu}
+            </if>
+        </trim>
+        <trim prefix="AND">
+            <if test="groupName != null and groupName != ''.toString()">
+                name like '%'||#{groupName}||'%'
+            </if>
+        </trim>
     </select>
 
 </mapper>
