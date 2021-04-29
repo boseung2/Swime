@@ -8,7 +8,10 @@
 
 <sec:authorize access="isAuthenticated()">
     <c:set value="${principal.username}" var="userId"/>
+    <sec:authentication property="principal" var="pinfo"/>
+    <sec:authentication property="principal.memberVO" var="mv"/>
 </sec:authorize>
+
 <style>
     #topFix{
         width: 15px;
@@ -160,15 +163,25 @@
 <%--            <label for="topFix">게시물 상위고정</label>--%>
 <%--            <input type="checkbox" class="form-control" name="topFix" id="topFix">--%>
 <%--        </div>--%>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="BOFI02" id="topFix">
-                <label class="form-check-label" for="topFix">게시물 상위고정</label>
-        </div>
+        <!--게시글 상위고정은 모임장, 운영진만 가능하니까 일반회원은 안보이게한다.-->
+
+        <sec:authorize access="isAuthenticated()">
+            <c:choose>
+                <c:when test="${group.grpRole ne 'GRRO03'}">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="topFix_CKBox" name="topFix_CKBox">
+                        <label class="form-check-label" for="topFix_CKBox">게시물 상위고정</label>
+                        <input type="hidden" id="topFix" name="topFix" value="BOFI01">
+                    </div>
+                </c:when>
+            </c:choose>
+        </sec:authorize>
 
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <button id='registerBtn' type="submit" class="btn btn-primary">등록</button>
         <button id="back" type="reset" class="btn btn-dark">취소</button>
+
 
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
@@ -186,6 +199,29 @@
         let csrfHeaderName = "${_csrf.headerName}";
         let csrfTokenValue = "${_csrf.token}";
 
+        //체크박스를 클릭한다.
+        // function isChecked() {
+        console.log("ck box 11");
+        $('#topFix_CKBox').on("click", function () {
+            console.log("ck box");
+            let ischecked = $("input[type='checkbox']").is(":checked");
+            console.log(ischecked);//true/false
+            if (ischecked) {
+                console.log("if");
+                // $("input[name='topFix']").attr('value', 'BOFI02');
+                $("input[name='topFix']").val("BOFI02");
+            }else{
+                console.log("else");
+                // $("input[name='topFix']").attr('value', 'BOFI01');
+                $("input[name='topFix']").val("BOFI01");
+
+            }
+        });//end topFix
+
+
+
+       // }
+
         $("button[type='submit']").on("click", function(e) {
 
             e.preventDefault();
@@ -198,8 +234,13 @@
                 //alert("제목을 입력해주세요.");
                 // return;
             }
+            //체크박스 값 가져오기 위한 메서드
+            // isChecked();
 
-            console.log('hi');
+
+            console.log("final");
+            console.log($("input[name='topFix']").val());
+            //
             objForm.submit();
 
             let str = "";

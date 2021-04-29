@@ -9,19 +9,37 @@
          pageEncoding="UTF-8"%>
 
 <%@include file="../includes/tagLib.jsp" %>
+<style>
+    #boardNotice{
+        color: red;
+        margin-left: 20px;
+    }
+    .fa-heart{
+        font-size: 17px;
+
+        margin-left: 8px;
+    }
+</style>
 
 <!-- 게시판  -->
 <%--<hr class="centerHr" id="board">--%>
 <%--<div id="board">--%>
-
     <h4>게시판
+        <c:set var="done" value="false"/>
+        <!--글을 쓰려면 로그인 되어있고 모임에 가입해야-->
         <sec:authorize access="isAuthenticated()">
+
+            <c:if test="${not doen}">
             <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
                     style="float: right; margin-bottom: 5px">
                 글쓰기
             </button>
+                <c:set var="done" value="true"/>
+            </c:if>
+
         </sec:authorize>
     </h4><hr>
+
 
 
     <div class="boardHeader">
@@ -113,9 +131,14 @@
                         if(list[i].title.length >= 40 || list[i].content.length >=40){
                             dat = "...";
                         }
+                        let notice = "";
+                        if(list[i].topFix == "BOFI02"){
+                            notice = "[공지사항]";
+                        }
+
                         str += "<div class='boardHeader'>";
                         str += "<span>"+list[i].sn+"번"+"</span>";
-                        str += "<span id='boardNotice'>"+"[필독]"+"</span>";
+                        str += "<span id='boardNotice'>"+notice+"</span>";
                         str += "<br>";
                         str += "<div id='boardDivBox'>";
                         str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
@@ -127,8 +150,8 @@
                         str += "<a href='/board/get?sn="+list[i].sn+ "' class='boardMove'><span>"+list[i].title.substring(0,40)+dat+"</span></a>";
 
                         str += "<div id='boardContent'>"+list[i].content.substring(0,40)+dat+"</div>";
-                        str += "<i class='fas fa-comment'>"+list[i].replyCnt+"</i>";
-                        str += "<i class='fas fa-heart'>"+list[i].likeCnt+"</i>";
+                        str += "<i class='far fa-comment'>"+list[i].replyCnt+"</i>";
+                        str += "<i class='far fa-heart'>"+list[i].likeCnt+"</i>";
                         str += "</div><hr>";
                         console.log("boardList......."+list[i].content);
                     }
@@ -140,11 +163,9 @@
         }//end showList
 
         <!--게시글 페이지-->
-
-
         function showBoardPage(boardCnt) {
 
-            console.log('boardCnt'+boardCnt+"개");
+            console.log('boardCnt' + boardCnt + "개");
             let endNum = Math.ceil(boardPageNum / 10.0) * 10;
             let startNum = endNum - 9;
 
@@ -155,7 +176,7 @@
                 endNum = Math.ceil(boardCnt / 10.0);
             }
 
-            if(endNum * 10 < boardCnt) {
+            if (endNum * 10 < boardCnt) {
                 next = true;
             }
 
@@ -168,30 +189,30 @@
 
             let str = "<ul class ='pagination'>";
 
-            if(prev) {
+            if (prev) {
                 str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
             }
 
-            for(let i = startNum; i <= endNum; i++) {
+            for (let i = startNum; i <= endNum; i++) {
                 console.log("i=" + i);
                 let active = boardPageNum == i ? "active" : "";
 
-                str += "<li id='board-item' class = 'page-item " + active +" '><a id='board-link' class='page-link' href='" + i + "'>" + i + "</a></li>";
+                str += "<li id='board-item' class = 'page-item " + active + " '><a id='board-link' class='page-link' href='" + i + "'>" + i + "</a></li>";
             }
 
-            if(next) {
+            if (next) {
                 str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
             }
 
             str += "</ul></div>";
 
-            console.log("brdStr : "+str);
+            console.log("brdStr : " + str);
 
             boardPageFooter.html(str);
 
 
             //여기 좀 이상한 부분
-            boardPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function(e) {
+            boardPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function (e) {
 
                 e.preventDefault();
 
@@ -210,6 +231,7 @@
         }
 
 
+
     });//end ready
 
 
@@ -217,12 +239,16 @@
 
 <script>
     $(document).ready(function() {
+        let userId = '${pinfo.username}';
+        console.log("userId>>>>"+userId);
+
         $("#regBtn").on("click", function(){
 
-            self.location = "/board/register?grpSn=${group.sn}";
+            self.location = "/board/register?userId="+userId+"&grpSn=${group.sn}";
         });
 
         let boardResult = '<c:out value="${boardResult}"/>';
+
 
         console.log("boardRemoveResult" + boardResult);
 

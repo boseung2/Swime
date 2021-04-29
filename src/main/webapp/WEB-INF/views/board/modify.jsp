@@ -117,12 +117,12 @@
         </div>
 
 
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" ${board.topFix == 'BOFI01' ? 'checked' : ''} value="${board.topFix == null ? 'BOFI01' : board.topFix}" name="topFix" id="topFix">
-            <label class="form-check-label" for="topFix">
-                게시물 상위고정
-            </label>
-        </div>
+<%--        <div class="form-check">--%>
+<%--            <input class="form-check-input" type="checkbox" ${board.topFix == 'BOFI01' ? 'checked' : ''} value="${board.topFix == null ? 'BOFI01' : board.topFix}" name="topFix" id="topFix">--%>
+<%--            <label class="form-check-label" for="topFix">--%>
+<%--                게시물 상위고정--%>
+<%--            </label>--%>
+<%--        </div>--%>
 
         <input type="hidden" name="status" value="${board.status}">
 <%--        <input type="text" name="pageNum" value="${cri.pageNum}">--%>
@@ -186,8 +186,12 @@
             } else if(operation === 'modify'){
                 //e.preventDefault();
                 console.log("submit clicked.........");
-                formObj.attr("action", "/board/modify");
+                //formObj.attr("action", "/board/modify");
                 let str = "";
+
+                if(!validation()) {
+                    return;
+                }
 
                 $('ul.uploadResult li').each(function(i,obj){
 
@@ -199,12 +203,10 @@
                     str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
                     str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
                     str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+
                 });
                 formObj.append(str).submit();
 
-                if(!validation()) {
-                    return;
-                }
             }
             formObj.submit();
             // alert("asda");
