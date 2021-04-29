@@ -24,6 +24,9 @@ public interface StudyListMapper {
 
     // 수정 : 가입/탈퇴/영구강퇴
     public int update(StudyParamVO param);
+    
+    // 삭제 : 해당 사용자를 명단에서 삭제
+    public int delete(StudyParamVO param);
 
     // 스터디 참여인원 세기
     public int count(long stdSn);

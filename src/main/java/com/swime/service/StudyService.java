@@ -56,6 +56,9 @@ public interface StudyService {
 
     public int modifyAttendant(StudyParamVO param);
 
+    // 스터디 참여명단에서 삭제하고 해당 스터디에 해당 유저의 설문답변이 남아있으면 지운다.
+    public int removeAttendant(StudyParamVO param);
+
     public int countAttendants(long stdSn);
 
     // 등록을 위해 해당 스터디의 유저 가입상태를 확인해주는 함수

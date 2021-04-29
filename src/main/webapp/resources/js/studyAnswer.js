@@ -24,7 +24,30 @@ let studyAnswerService = (function(){
         })
     }
 
+    function remove(param, callback, error) {
+
+        console.log("remove answer");
+
+        $.ajax({
+            type:'post',
+            url : '/study/answer/remove',
+            data : JSON.stringify(param),
+            contentType : "application/json; charset = utf-8",
+            success : function(result, status, xhr) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error : function(xhr, status, er) {
+                if(error) {
+                    error(er);
+                }
+            }
+        })
+    }
+
     return {
-        register : register
+        register : register,
+        remove : remove
     };
 })();

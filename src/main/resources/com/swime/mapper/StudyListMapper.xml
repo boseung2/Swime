@@ -55,6 +55,11 @@
         where std_sn = #{stdSn} and user_id = #{userId}
     </update>
 
+    <update id="delete">
+        delete from tstd_list
+        where std_sn = #{stdSn} and user_id = #{userId}
+    </update>
+
     <select id="count" resultType="int">
         select count(*)
         from tstd_list

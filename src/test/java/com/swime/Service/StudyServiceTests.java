@@ -290,6 +290,27 @@ public class StudyServiceTests {
     }
 
     @Test
+    public void testModifyAttendant() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(561L);
+        param.setUserId("hong7073@service.com");
+        param.setStatus("STUS02");
+
+        service.modifyAttendant(param);
+
+        assert ("STUS02".equals(service.getAttendant(param).getStatus()));
+    }
+
+    @Test
+    public void testRemoveAttendant() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(561L);
+        param.setUserId("hong7073@service.com");
+
+        assert (service.removeAttendant(param) == 1);
+    }
+
+    @Test
     public void testGetAttendant() {
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(41L);

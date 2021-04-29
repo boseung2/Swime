@@ -181,6 +181,26 @@ public class StudyServiceImpl implements StudyService{
         return listMapper.update(param);
     }
 
+    // 스터디 참여명단에서 삭제하고 해당 스터디에 해당 유저의 설문답변이 남아있으면 지운다.
+    @Transactional
+    @Override
+    public int removeAttendant(StudyParamVO param) {
+
+        int cnt = 0;
+
+        // 해당 유저를 해당스터디 참여명단에서 삭제한다.
+        cnt += listMapper.delete(param);
+
+        // 해당 스터디에 해당 유저의 설문 답변이 있으면 삭제한다.
+        List<StudyAnswerVO> answers = answerMapper.get(param);
+
+        if (answers.size() > 0) {
+            answerMapper.delete(param);
+        }
+
+        return cnt;
+    }
+
     @Override
     public int countAttendants(long stdSn) {
         return listMapper.count(stdSn);

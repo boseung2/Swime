@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.swime.domain.StudyAnswerVO;
+import com.swime.domain.StudyParamVO;
 import com.swime.domain.StudySurveyVO;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
@@ -48,5 +49,20 @@ public class StudyAnswerController {
             return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @PostMapping(value="/remove")
+    public ResponseEntity<String> remove(@RequestBody StudyParamVO param) {
+        
+        // stdSn, userId 필요
+        log.info("study answer remove param = " + param);
+
+        try {
+            // 해당 스터디에 해당 유저의 답변을 모두 삭제
+            answerService.removeAnswer(param);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
