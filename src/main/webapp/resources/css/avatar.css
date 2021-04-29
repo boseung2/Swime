@@ -251,7 +251,7 @@ span.st_on {
 
 .boardHeader {
     height: 20%;
-    background-color: #efefef;
+    /*background-color: #efefef;*/
     border-radius: 2%;
     padding-left: 10px;
     padding-top: 10px;

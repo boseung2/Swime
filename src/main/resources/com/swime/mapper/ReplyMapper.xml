@@ -104,7 +104,11 @@
     </select>
 
     <select id="getCountByBrdSn" resultType="int">
-        select count(*) from trpl where brd_sn = #{brdSn}
+        select count(*) from trpl
+        where
+              status = 'RPST01'
+        and
+              brd_sn = #{brdSn}
     </select>
 
     <update id="updateReplyCnt">

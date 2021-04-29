@@ -47,8 +47,6 @@ let studyAttendService = (function(){
 
     function cancel(param, callback, error){
 
-        console.log('cancel 호출됨');
-
         console.log("cancel stdSn = " + param.stdSn);
         console.log("cancel userId = " + param.userId);
 
@@ -70,9 +68,33 @@ let studyAttendService = (function(){
         })
     }
 
+    function ban(param, callback, error){
+
+        console.log("ban stdSn = " + param.stdSn);
+        console.log("ban userId = " + param.userId);
+
+        $.ajax({
+            type:'post',
+            url : '/study/ban',
+            data : JSON.stringify(param),
+            contentType : "application/json; charset = utf-8",
+            success : function(result, status, xhr) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error : function(xhr, status, er) {
+                if(error) {
+                    error(er);
+                }
+            }
+        })
+    }
+
     return {
         get : get,
         attend : attend,
-        cancel : cancel
+        cancel : cancel,
+        ban : ban
     };
 })();

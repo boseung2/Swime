@@ -11,6 +11,113 @@
     <sec:authentication property="principal.memberVO" var="mv"/>
 </sec:authorize>
 <link rel="stylesheet" href="/resources/css/board-get.css">
+<style>
+
+    .uploadResult {
+        width: 150%;
+        background-color: white;
+        display:flex;
+        margin-bottom: 25px;
+    }
+
+    .uploadResult ul{
+        display:flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .uploadResult ul li {
+        list-style: none;
+        padding: 10px;
+        align-items: center;
+    }
+    /*one -> none으로바꿈*/
+    .uploadResult ul li {
+        list-style: none;
+        padding: 10px;
+        align-content: center;
+        text-align: center;
+    }
+
+    ul.uploadResult > li > img{
+        width: 100px;
+    }
+
+    ul.uploadResult > li > div> img{
+        width: 100px;
+        margin-right:1em;
+        height: 100px;
+    }
+
+    .uploadResult ul li span {
+        color: white;
+    }
+
+    .uploadResult2 {
+        width: 150%;
+        background-color: white;
+        display:flex;
+    }
+
+    .uploadResult2 ul{
+        display:flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .uploadResult2 ul li {
+        list-style: none;
+        padding: 10px;
+        align-items: center;
+    }
+    /*one -> none으로바꿈*/
+    .uploadResult2 ul li {
+        list-style: none;
+        padding: 10px;
+        align-content: center;
+        text-align: center;
+    }
+
+    ul.uploadResult2 > li > img{
+        width: 100px;
+    }
+
+    ul.uploadResult2 > li > div> img{
+        width: 100px;
+        margin-right:1em;
+        height: 100px;
+    }
+
+    .uploadResult2 ul li span {
+        color: white;
+    }
+
+    .bigPictureWrapper {
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        top: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: gray;
+        z-index: 100;
+        background:rgba(255,255,255,0.5);
+    }
+
+    .bigPicture {
+        position: relative;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bigPicture img {
+        width: 400px;
+    }
+</style>
 
 <div class="container">
     <div class="row">
@@ -21,15 +128,16 @@
             <div id="inline3">
                 <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>
                 <div class="inline" id="name"><c:out value="${board.name}" /></div>
-                <div class="inline" id="role">모임장</div>
+                <div class="inline" id="role"></div>
             </div>
 
 
             <div id="inline2">
-                <!--principal.MemberVo > mv.name 접근해서 이름 가져온다. 위에 참고-->
-                <c:if test="${mv.name eq board.name}">
+                <!--principal.MemberVo > mv.name board.name접근해서 이름 가져온다. 위에 참고-->
+                <c:if test="${mv.id eq board.userId}">
                     <button data-oper='modify' class="btn btn-primary">수정</button>
                 </c:if>
+
 
                 <button data-oper="list" class="btn btn-dark">취소</button>
 
@@ -71,25 +179,34 @@
 
             <div class="form-group">
                 <label for="content">내용</label>
-                <textarea class="form-control" rows="5"
-                          id="content" name="content" readonly="readonly"><c:out value="${board.content}"/></textarea>
+                <textarea class="form-control" rows="5" id="content" name="content" readonly="readonly"><c:out value="${board.content}"/></textarea>
             </div>
 
+<%--            <div class="form-group">--%>
+<%--                <label>사진</label>--%>
+<%--            </div>--%>
+            <!--class = form-group -> uploadResult -->
             <div class="form-group">
-                <label>사진</label>
-            </div>
+                <p>이미지</p>
 
-            <div class="form-group">
-                <label>첨부파일</label>
+                <ul class="uploadResult">
+
+                </ul>
+                <hr>
+                <p>첨부파일</p>
+                <ul class="uploadResult2">
+
+                </ul>
+
             </div>
 
             <div class="form-group" style="display: inline-block">
                 <label>댓글</label>
-                <label><c:out value="${board.replyCnt}"/> </label>
+                <label id="replyCnt"><c:out value="${board.replyCnt}"/> </label>
             </div>
 
             <div id="likeBundle" class="form-group" style="display: inline-block">
-                <i id="likeCnt1" class="far fa-heart" style='font-size:20px;color:red'></i>
+                <i id="likeCnt1" class="fa-heart" style='font-size:20px;color:red'></i>
             </div>
 
                 <label>좋아요</label>
@@ -100,6 +217,7 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
             <hr>
+
 
             <!--panel-->
 
@@ -117,15 +235,17 @@
                     <ul class="chat">
 
 
-                        <!-- 댓글 시작 -->
+                        <!-- 댓글 시작 .........................-->
                         <li class="left clearfix" data-sn="12">
                             <div>
                                 <div class="header2">
                                     <strong class="primary-font"></strong>
                                     <small class="pull-right text-muted"></small>
-                                    <!--내 글이면 수정 삭제 / 다른 사람 글이면 ...표시 -> 신고하기-->
+
                                     <button id='replyDeleteBtn' type="button" class="replyDelete"></button>
                                     <button id='replyModifyBtn'type="button" class="replyModify"></button>
+                                    <button id='boardUserRepot' type="button" class="boardUserRepot"></button>
+
                                 </div>
                                 <p></p>
                                 <button class="replySubmit" type="submit"></button>
@@ -137,19 +257,24 @@
 <%--            </div> <!--end reply box-->--%>
 
         <!--댓글 입력 창(로그인 안하면 댓글 창 안보이게 함.)-->
-        <c:if test="${mv.name eq board.name}">
             <div class="commentWriter">
                 <div class="comment_inbox">
-            <textarea id='replyComment' placeholder="댓글을 입력해주세요" rows="1"
-                      class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px"
-                      required></textarea>
-                </div>
+
+            <sec:authorize access="isAuthenticated()">
+            <textarea id='replyComment' placeholder="댓글을 입력해주세요" rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
                 <div class="register_box">
                     <button id='replyRegisterBtn' role="button" class="button btn_register is_active">등록</button>
                 </div>
-            </div>
+            </sec:authorize>
+            <sec:authorize access="isAnonymous()">
+            <textarea id='replyComment' placeholder="로그인 후 댓글을 입력할 수 있습니다." rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
+            </sec:authorize>
+                </div><!-- end comment_inbox-->
+
+            </div><!-- end commentWriter-->
             <!--end 댓글 입력 창-->
-        </c:if>
+
+
         </div> <!-- ./col-lg-12-->
 
     </div><!-- row -->
@@ -236,6 +361,7 @@
 
         // <!--유효성 검사-->
         $('button[id="replyRegisterBtn"]').on("click", function(e) {
+
             e.preventDefault();
 
             if(!validation()) {
@@ -246,8 +372,9 @@
 
 
         function validation(){
-
-            if(getByte($("textarea[id='replyComment']").val()) == "") {
+            //$("textarea[id='replyComment']").val().trim().length == 0
+            //getByte($("textarea[id='replyComment']").val()) == ""
+            if($("textarea[id='replyComment']").val().trim().length == 0) {
                 alert("댓글을 입력해주세요");
                 return false;
 
@@ -266,39 +393,7 @@
             return byte;
         }
 
-
-
-
     });
-
-
-
-    //*좋아요 기능 구현*
-    //아이디가 likeCnt인 하트를 가져온다.
-    <%--let likeBundle = document.getElementById("likeBundle")--%>
-    <%--let like1 = document.getElementById("likeCnt1");--%>
-    <%--let like2 = document.getElementById("likeCnt2");--%>
-    <%--//좋아요 클릭시 좋아요 함수 호출--%>
-    <%--likeBundle.onclick = function(){--%>
-    <%--    let sendData = {"userId" : "${board.userId}", "sn":"${board.sn}"};--%>
-    <%--    console.log(sendData);--%>
-    <%--    clickLike(sendData);--%>
-    <%--}--%>
-    <%--//기능 구현--%>
-    <%--function clickLike(sendData){--%>
-    <%--    $.ajax({--%>
-    <%--        type: "post",--%>
-    <%--        url: "/clickLike",--%>
-    <%--        data : sendData,--%>
-    <%--        success : function(data){--%>
-    <%--            if(data == 1){--%>
-
-    <%--            }else{--%>
-
-    <%--            }--%>
-    <%--        }--%>
-    <%--    })--%>
-    <%--}--%>
 
 </script>
 
@@ -309,14 +404,15 @@
         console.log(".......................")
         console.log("JS TEST")
 
+
+
         let snValue = '<c:out value="${board.sn}"/> ';
         let replyUL = $(".chat");
+
         //boseung@naver.com
         //let userId = 'qwer6786@naver.com'; //일단 이렇게 해야함..
         <%--let name = '<c:out value="${board.name}"/> ';--%>
         //let realname = '{mv.name}'
-
-
         // console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
 
         let replyComment = $('#replyComment'); //댓글 내용
@@ -331,8 +427,86 @@
         let modalModBtn = $('#modalModBtn');
         let modalCloseBtn = $('#modalCloseBtn');
 
+        //게시판 상세 조회 시 첨부파일
+        $.getJSON("/board/getAttachList", {brdSn : snValue}, function(arr){
+            console.log("게시판 brdSn" + snValue)
+            console.log(arr);
+
+            let str = "";
+            let str2 = "";
+            $(arr).each(function(i, attach) {
+
+            console.log(attach.fileType);
+
+            console.log(attach.uploadPath);
+            console.log(attach.uuid);
+            console.log(attach.fileName);
+
+            //https://dev-timero.tistory.com/96 참고 자료
+                //이미지면 true 첨부면 false이다. attach.filetype이 첨부면 false찍히는데
+                //if문에서는 true로 간다. 해결방법은 위에 참고 자료 봐가지고 해결.
+            let attachFileType = (attach.fileType === 'true');
+
+            if(attachFileType){
+                console.log("if");
+                let fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
+                str += "<li data-path='"+attach.uploadPath+"'";
+                str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
+                str += "><div>";
+                str += "<img src='/display?fileName="+fileCallPath+"'>";
+                str += "</div>";
+                str += "</li>";
+            } else {
+                //return;
+                console.log("else");
+                str2 += "<li data-path='"+attach.uploadPath+"'";
+                str2 += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
+                str2 += "><div>";
+                str2 += "<div> "+attach.fileName+"</div>";
+                str2 += "<img src='../../../resources/img/1.png'>";
+                str2 += "</div>";
+                str2 += "</li>";
+
+            }
+
+        })
+
+            $(".uploadResult").html(str);
+            $(".uploadResult2").html(str2);
+
+
+        }).fail(function() {
+            $(".uploadResult").html("<img src=/resources/img/group.jpg style='width:400px; height:200px;'>");
+        }); // end getJSON
+
+        //첨부파일 클릭 시 다운로드
+        $(".uploadResult2").on("click", "li", function(e) {
+            console.log("view image");
+
+            let liObj = $(this);
+
+            let path = encodeURIComponent(liObj.data("path")+ "/" + liObj.data("uuid") + "_" + liObj.data("filename"));
+
+            if(liObj.data("type")) {
+                showImage(path.replace(new RegExp(/\\/g),"/"));
+            } else {
+                self.location = "/download?fileName=" + path
+            }
+        });
+        //이미지 확대.
+        // function showImage(fileCallPath){
+        //     console.log(fileCallPath);
+        //     $('.bigPictureWrapper').css("display", "flex").show();
+        //
+        //     $('.bigPicture')
+        //     .html("<img src='/display?fileName="+fileCallPath+"'>")
+        //     .animate({width:'100%', height: '100%'},1000);
+        //
+        // }
+
+
         //userid = 이메일,  id = 이름
-        //댓글 등록할 때 insert는 userid로 get은 id로
+        //댓글 등록할 때 insert는 userid로 get은 id로 mv.id 이메일
         let userId = 'null';
         <sec:authorize access="isAuthenticated()">
                 userId = '${mv.id}';
@@ -343,6 +517,8 @@
         });
 
         //{brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
+
+
 
         //댓글 수정
         $(".chat").on("click", "button[id='replyModifyBtn']", function(e){
@@ -377,6 +553,7 @@
                     let modReply = {
                         sn : modal.data("sn"),
                         content : modalInputContent.val(),
+                        userId : userId,
                         status  : "RPST01"
                     }
                     replyService.update(modReply, function(result){
@@ -400,11 +577,14 @@
 
             let sn = $(this).data("sn")
             console.log("replySn : " + sn);
-
+            console.log("replyUserId : " + userId)
             if(confirm('댓글을 삭제하시겠습니까?')){
 
-                replyService.remove(sn, function(result){
+                replyService.remove(sn, snValue, userId, function(result){
                     console.log(result);
+
+                    console.log(result.getElementsByTagName("Integer"));
+                    document.getElementById("replyCnt").innerHTML = result.getElementsByTagName("Integer")[0].textContent;
                     showList(1);
                 });
             }
@@ -413,6 +593,7 @@
 
         //댓글 생성,    name : {mv.name}
         replyRegisterBtn.on("click", function(e){
+
             console.log("replyRegisterBtnClicked");
             let reply = {
                 brdSn : snValue,
@@ -423,7 +604,10 @@
 
             console.log("reply : " + JSON.stringify(reply));
 
-            replyService.add(reply, function(){
+            replyService.add(reply, function(result){
+                console.log(result.getElementsByTagName("Integer"));
+                document.getElementById("replyCnt").innerHTML = result.getElementsByTagName("Integer")[0].textContent;
+
                 alert('댓글이 달렸습니다.');
                 $("textarea[id='replyComment']").val('');
                 showList(1);
@@ -456,8 +640,25 @@
                     str += "<div><div class='header2'><strong id='userName' class='primary-" +
                         "font'>"+list[i].name+"</strong>";
                     str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
-                    str += "<button id='replyDeleteBtn' class='replyDelete' data-sn='"+list[i].sn+"'>삭제</button>";
-                    str += "<button id='replyModifyBtn' class='replyModify' data-sn='"+list[i].sn+"'>수정</button></div>";
+                    <sec:authorize access="isAuthenticated()">
+
+                        let p_username = "${pinfo.username}";
+                        // 내가 쓴 글이면 수정 삭제
+                        if(p_username == list[i].userId){
+                            console.log("equal");
+                            console.log("${pinfo.username}");
+                            console.log(list[i].userId);
+                            str += "<button id='replyDeleteBtn' class='replyDelete' data-sn='"+list[i].sn+"'>삭제</button>";
+                            str += "<button id='replyModifyBtn' class='replyModify' data-sn='"+list[i].sn+"'>수정</button></div>";
+                        // 내가 쓴 글이 아니면 신고 버튼
+                        }else{
+                            console.log("ne");
+                            console.log("${pinfo.username}");
+                            console.log(list[i].userId);
+                            str += "<button id='boardUserRepot' class='boardUserRepot' data-sn='"+list[i].sn+"'>신고</button>"
+                        }
+
+                    </sec:authorize>
                     str += "<p id='replyContent'>"+list[i].content+"</p>";
                     str += "<button class='replySubmit'>답글 쓰기</button></div></li><hr>"
 
@@ -466,20 +667,21 @@
             });
         } // end showlist
 
-        let like = ${board.likeCnt};
-        console.log("like : "+like);
+        // 하트 초기화
+        getBoardLike();
+
         function getBoardLike(){
             console.log("getBoardLike 호출..........")
             boardLikeService.getLike({brdSn : snValue, userId : userId},function(result){
 
-               let str = "";
 
                console.log("brdSn : " + snValue);
                console.log("userId : " + userId);
                console.log("likeResult : "+ result);
 
-               console.log(${board.likeCnt});
-               //$("#likeCnt").val(${board.likeCnt});
+
+
+               // $("#likeCnt").val();
                if(result === "notExist"){
                    //빈하트 r
                    console.log("empty heart");
@@ -495,28 +697,29 @@
                }
                //like.html(str);
 
-
             });
 
         }
 
-        <%--let test = '${isLike}';--%>
-        <%--// console.log(test === 'true');--%>
-        <%--// ajax로 사용자가 눌렀는지 확인한다--%>
-        <%--let check = test === 'false';//false;--%>
-        <%--// console.log()--%>
-        <%--// 그값으로 트루폴즈를 판단해서 하트를 세팅한다--%>
-        <%--if (check) {--%>
-        <%--    $("#likeCnt1").addClass('fas fa-heart'); // 채워진 하트--%>
-        <%--}else{--%>
-        <%--    $("#likeCnt1").addClass('far fa-heart'); // 빈 하트--%>
-        <%--}--%>
+        function updateLikeCnt(BoardLikeCnt){
+            console.log(BoardLikeCnt.getElementsByTagName("Integer")[0].textContent);
+            //좋아요 개수 동적으로 변경
+            document.getElementById("likeCnt").innerHTML = BoardLikeCnt.getElementsByTagName("Integer")[0].textContent;
+        }
 
 
         //좋아요 클릭 시
         $("#likeCnt1").on("click",function (e) {
             //e.preventDefault();
             //change(this);
+            let isLogin = "";
+            <sec:authorize access="isAuthenticated()">
+                isLogin = '<sec:authentication property="principal.username"/>'
+            </sec:authorize>
+            if(!isLogin){
+                alert("로그인 해주세요");
+                return;
+            }
 
             let boardLike = {
                 brdSn : snValue,
@@ -528,29 +731,23 @@
             boardLikeService.add(boardLike, function(result){
                console.log("result : " + result);
 
+               // 하트 채워짐 여부
                getBoardLike();
+               // 좋아요 갯수 보여주기
+               updateLikeCnt(result);
             });
 
-            // boardLikeService.remove(boardLike, function(){
-            //
-            // });
-
-            // function change(obj){
-            //     check = !check;
-            //     if (check) {
-            //         $(obj).removeClass('far fa-heart'); //빈 하트
-            //         $(obj).addClass('fas fa-heart');
-            //     }else{
-            //         $(obj).removeClass('fas fa-heart');
-            //         $(obj).addClass('far fa-heart');
-            //     }
-            // }
-
         });//end LikeCnt
+
+        $(".chat").on("click", "button[id='boardUserRepot']", function(e){
+            alert('구현 중 입니다 조금 많이 기다려주세요~♡')
+        });
 
 
 
     });// end ready
+
+
 
     // //댓글 생성
     // replyService.add(

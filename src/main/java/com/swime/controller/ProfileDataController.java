@@ -54,6 +54,16 @@ public class ProfileDataController {
         return new ResponseEntity<>(service.afterBoth(id, cri), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/wishStudy",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public ResponseEntity<GroupStudyListDTO> getWishStudyList(String id, ProfileCriteria cri){
+        return new ResponseEntity<>(service.wishBoth(id, cri), HttpStatus.OK);
+    }
+
 
 
 

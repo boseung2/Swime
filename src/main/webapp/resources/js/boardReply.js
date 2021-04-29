@@ -11,6 +11,7 @@ let replyService = (function() {
             data: JSON.stringify(reply),
             contentType: "application/json; charset=utf-8",
             success: function (result, status, xhr) {
+                console.log("boardReplyJs : "+ result);
                 if (callback) {
                     callback(result);
                 }
@@ -31,6 +32,8 @@ let replyService = (function() {
         $.getJSON("/replies/pages/" + brdSn + "/" + page + ".json",
             function(data){
             if(callback){
+                console.log("data");
+                console.log(data);
                 callback(data);
                 //test();
             }
@@ -41,10 +44,13 @@ let replyService = (function() {
         });
     }
     //댓글 삭제
-    function remove(sn, callback, error){
+    function remove(sn, brdSn, userId, callback, error){
+        console.log("js/userId : " + userId);
         $.ajax({
             type : 'delete',
-            url : '/replies/' +sn,
+            url : '/replies/' +sn +'/'+ brdSn,
+            data : JSON.stringify({sn:sn, brdSn:brdSn, userId:userId}),
+            contentType : "application/json; charset=utf-8",
             success : function(deleteResult, status, xhr){
                 if(callback){
                     callback(deleteResult);
