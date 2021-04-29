@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@include file="../../includes/tagLib.jsp" %>
+
+<link href="/resources/css/minicard.css" rel="stylesheet">
+
 <h1>글</h1>
 
 <div class="container">
@@ -13,12 +16,15 @@
     <input type="hidden" name="pageNum" id="pageNum1" value="1">
     <input type="hidden" name="amount" id="amount1" value="6">
 
-<%--    <h2>예정된 스터디</h2>--%>
-<%--    <div class="row" id="before"></div>--%>
-<%--    <div id="beforepagi"></div>--%>
+    <h2 hidden>좋아요를 누른글</h2>
 
-<%--    <input type="hidden" name="pageNum" id="pageNum2" value="1">--%>
-<%--    <input type="hidden" name="amount" id="amount2" value="6">--%>
+    <div class="row" id="wish"></div>
+    <div id="pagiwish"></div>
+
+    <input type="hidden" name="pageNum" id="pageNum2" value="1">
+    <input type="hidden" name="amount" id="amount2" value="6">
+
+
 </div>
 
 <script>
@@ -29,15 +35,17 @@
     });
     
     function write() {
+        // console.log("write 함수");
         let writePlace = $("#write");
         let pagiPlace = $("#pagiwrite");
         let pageNum1 = $("#pageNum1");
 
 
-        ajax("writeContents", $(pageNum1)[0].value, 6, writePlace, pagiPlace, pageNum1, "write");
+        useAjax("writeContents", $(pageNum1)[0].value, 6, writePlace, pagiPlace, pageNum1, "write");
     }
 
-    function ajax(url, pageNum, amount, place, pagiPlace, pageNumInput, kind) {
+    function useAjax(url, pageNum, amount, place, pagiPlace, pageNumInput, kind) {
+        // console.log("ajax");
         $.ajax({
             url: '/profile/' + url + ".json",
             type: 'GET',
@@ -59,7 +67,11 @@
     }
 
     function showHtmlByAjax(result, place, pagiPlace, pageNum, kind) {
-        console.log(result);
+        // console.log(result);
+        if(result.list.length === 0){
+            $(place).html("데이터가 없습니다");
+            return;
+        }
 
         let resultStr1 = "";
         let resultStr2 = "";
@@ -92,10 +104,10 @@
         let str = "" +
             "<div class='col-md-4 mb-5'>" +
             "    <div class='card h-100'>" +
-            "        <div class='card-body' data-sn='" + "null" + "'>" +
+            "        <div class='card-body' data-sn='" + sn + "'>" +
             "            <div class='card-body-top' style='display:flex;'>" +
             "                <div class='uploadResult'>" +
-            "                    <img class='img-fluid rounded mb-4 mb-lg-0' src='" + "null" +"' alt=''>" +
+            "                    <img class='img-fluid rounded mb-4 mb-lg-0' src='' alt=''>" +
             "                </div>" +
             "                <div>" +
             "                    <div>" +
@@ -114,14 +126,15 @@
             "    </div>" +
             "</div>"
         ;
+        // let str = "???";
 
         return str;
     }
 
     function makePagi(Cnt, pageNum, kind) {
-        console.log(Cnt);
-        console.log(pageNum);
-        console.log(kind);
+        // console.log(Cnt);
+        // console.log(pageNum);
+        // console.log(kind);
         let endNum = Math.ceil(pageNum / 5.0) * 5;
 
         let startNum = endNum - 4;
@@ -164,21 +177,24 @@
 
         return str;
     }
+
+    // board/get?sn=595
     function cardActive() {
         $(".card-body").on("click", function () {
-            console.log("click");
-            <%--$(location).attr('href', '/study/get?sn=' + this.dataset.sn + '&userId=' + '${MemberVo.id}');--%>
+            // console.log("click");
+            $(location).attr('href', '/board/get?sn=' + this.dataset.sn);
         });
     }
 
     function pagiActive(pageNumInput){
+        // console.log("pagi");
 
         $("#rating-item > #rating-link").unbind("click");
 
         $("#rating-item > #rating-link").on("click", function (e) {
-            console.log("click");
+            // console.log("click");
             // console.log(pageNumInput);
-            console.log(this.dataset.type);
+            // console.log(this.dataset.type);
 
             if(this.dataset.btn === 'prev'){
                 $(pageNumInput)[0].value = parseInt($(pageNumInput)[0].value) - 1;

@@ -97,7 +97,7 @@
         }
         else if(obj === 'wish'){
             // ajax 통신을 위한 변수
-            console.log("wish");
+            // console.log("wish");
             url = "wishStudy";
             pageNum = $("#pageNum4")[0].value;
             amount = $("#amount4")[0].value;
