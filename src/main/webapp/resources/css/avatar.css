@@ -259,30 +259,53 @@ span.st_on {
 .boardHeader {
     height: 20%;
     /*background-color: #efefef;*/
-    padding-left: 1rem;
+    padding: 1rem;
+    border : 1px solid rgba(0,0,0,.125);
+    cursor : pointer;
 }
 
 .board-body {
     background-color : white;
     border-radius: 0.3rem;
-    padding-top : 1rem;
+    border : 1px solid rgba(0,0,0,.125);
 
 }
 
+.board-body img {
+    width : 21px;
+    height : 21px;
+}
+
 #boardNotice{
-    margin-left: 38px;
+    color : red;
+    margin-bottom: 10px;
 }
 
 #boardName{
     margin-left: 10px;
 }
+
 #grpBrdRole{
     margin-left: 1px;
 }
+
 #boardRegDate{
     float: right;
-    margin-right: 100px;
-    margin-top: 13px;
+    margin-right : 50px;
+}
+
+#boardDivBox {
+    margin-bottom : 1rem;
+}
+
+#board-title {
+    font-weight : bold;
+    font-size : 1.3rem;
+    color : black;
+}
+
+.boardPageFooter .pagination {
+    margin-top : 1rem;
 }
 
 .card-body {
@@ -430,7 +453,6 @@ span.st_on {
 }
 
 .studyList .card-footer {
-    background-color: #007bff;
     background-color: rgba(0, 123, 255, 0.5);
 }
 

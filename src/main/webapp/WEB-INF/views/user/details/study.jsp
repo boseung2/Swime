@@ -14,37 +14,34 @@
 
 <div class="container">
     <!-- Content Row -->
-    <form id="paging" action="/user/details/groupWithPaging" method="get">
-        <h2>생성한 스터디</h2>
+    <h2>생성한 스터디</h2>
 
-        <div class="row" id="make"></div>
-        <div id="makepagi"></div>
+    <div class="row" id="make"></div>
+    <div id="makepagi"></div>
 
-        <input type="hidden" name="pageNum" id="pageNum1" value="1">
-        <input type="hidden" name="amount" id="amount1" value="6">
+    <input type="hidden" name="pageNum" id="pageNum1" value="1">
+    <input type="hidden" name="amount" id="amount1" value="6">
 
-        <h2>예정된 스터디</h2>
-        <div class="row" id="before"></div>
-        <div id="beforepagi"></div>
+    <h2>예정된 스터디</h2>
+    <div class="row" id="before"></div>
+    <div id="beforepagi"></div>
 
-        <input type="hidden" name="pageNum" id="pageNum2" value="1">
-        <input type="hidden" name="amount" id="amount2" value="6">
+    <input type="hidden" name="pageNum" id="pageNum2" value="1">
+    <input type="hidden" name="amount" id="amount2" value="6">
 
-        <h2>종료된 스터디</h2>
-        <div class="row" id="after"></div>
-        <div id="afterpagi"></div>
+    <h2>종료된 스터디</h2>
+    <div class="row" id="after"></div>
+    <div id="afterpagi"></div>
 
-        <input type="hidden" name="pageNum" id="pageNum3" value="1">
-        <input type="hidden" name="amount" id="amount3" value="6">
+    <input type="hidden" name="pageNum" id="pageNum3" value="1">
+    <input type="hidden" name="amount" id="amount3" value="6">
 
-        <h2>관심 스터디</h2>
-        <div class="row" id="wish"></div>
-        <div id="wishpagi"></div>
+    <h2>관심 스터디</h2>
+    <div class="row" id="wish"></div>
+    <div id="wishpagi"></div>
 
-        <input type="hidden" name="pageNum" id="pageNum4" value="1">
-        <input type="hidden" name="amount" id="amount4" value="6">
-    </form>
-
+    <input type="hidden" name="pageNum" id="pageNum4" value="1">
+    <input type="hidden" name="amount" id="amount4" value="6">
 </div>
 
 
@@ -100,7 +97,7 @@
         }
         else if(obj === 'wish'){
             // ajax 통신을 위한 변수
-            console.log("wish");
+            // console.log("wish");
             url = "wishStudy";
             pageNum = $("#pageNum4")[0].value;
             amount = $("#amount4")[0].value;
@@ -116,7 +113,7 @@
             url: '/profile/' + url + ".json",
             type: 'GET',
             data: {
-                id : '${MemberVo.id}',
+                id : '${id}',
                 pageNum : pageNum,
                 amount : amount
             },

@@ -1,9 +1,7 @@
 package com.swime.mapper;
 
 
-import com.swime.domain.GroupVO;
-import com.swime.domain.ProfileCriteria;
-import com.swime.domain.StudyVO;
+import com.swime.domain.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -45,5 +43,13 @@ public interface ProfileMapper {
     List<StudyVO> wishStudyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
 
     int wishStudyCount(String id);
+
+    List<BoardVO> writeContentsList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    int writeContentsCount(String id);
+
+    List<ReplyVO> writeReplyList(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    int writeReplyCount(String id);
 
 }

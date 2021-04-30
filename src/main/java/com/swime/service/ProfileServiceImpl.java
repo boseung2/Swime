@@ -142,5 +142,15 @@ public class ProfileServiceImpl implements ProfileService{
         dto.setList(list);
         return dto;
     }
+
+    @Override
+    public GroupBoardPageDTO ContentsBoth(String id, ProfileCriteria cri) {
+        return new GroupBoardPageDTO(mapper.writeContentsCount(id),mapper.writeContentsList(id, cri));
+    }
+
+    @Override
+    public ReplyPageDTO ReplyBoth(String id, ProfileCriteria cri) {
+        return new ReplyPageDTO(mapper.writeReplyCount(id),mapper.writeReplyList(id, cri));
+    }
 }
 
