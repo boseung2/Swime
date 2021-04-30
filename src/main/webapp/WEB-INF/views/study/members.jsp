@@ -25,7 +25,7 @@
 <div class="topnav tab" style="margin-bottom: 10px;">
     <a href="#member" class="tablinks active" onclick="openTab(event, 'member')">참여 멤버</a>
     <a href="#waitingMember" class="tablinks" onclick="openTab(event, 'waitingMember')">승인 대기 멤버</a>
-    <a href="#waitingMember" class="tablinks" onclick="openTab(event, 'banMember')">영구강퇴 멤버</a>
+    <a href="#waitingMember" class="tablinks" onclick="openTab(event, 'banMember')" id = "banMemberTab" hidden="true">영구강퇴 멤버</a>
 </div>
 <!-- /nav -->
 
@@ -144,6 +144,10 @@
 
         // 스터디장만 영구강퇴 멤버 볼 수 있음
         if("${pinfo.username}" !== "" && "${pinfo.username}" === "${representation}") {
+
+            //영구강퇴 탭 보여주기
+            $('#banMemberTab').removeAttr("hidden");
+
             // 영구강퇴 멤버 불러오기
             getBanList();
         }
