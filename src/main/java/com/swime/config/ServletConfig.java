@@ -13,6 +13,7 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages= {"com.swime.controller"})
 @EnableGlobalMethodSecurity(prePostEnabled = false, securedEnabled = false)
 public class ServletConfig implements WebMvcConfigurer {
+
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         InternalResourceViewResolver bean = new InternalResourceViewResolver();
@@ -27,21 +28,19 @@ public class ServletConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry
+//            .addMapping("/**")
+//            .allowedOrigins("*")
+//            .allowedMethods("*")
+//            .maxAge(3000)
+//        ;
+//    }
 
     @Bean
     public MultipartResolver multipartResolver() {
-
         StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
         return resolver;
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-//                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
     }
 }

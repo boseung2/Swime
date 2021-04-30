@@ -9,7 +9,7 @@
          pageEncoding="UTF-8"%>
 <%@include file="../../includes/header.jsp" %>
 
-github 데이터 확인용
+<button id="github">github</button>
 
 <script>
 
@@ -21,33 +21,48 @@ github 데이터 확인용
     let clientID = '190944c4173bf58cc6e5';
     let clientSecret = '6cef3b8bb7a83ca00207f602539850c53f549dff';
 
-
-    $.ajax({
-        crossOrigin : true,
-        url: 'https://github.com/login/oauth/access_token',
-        type: 'POST',
-        headers: {
-            accept: 'application/json',
-        },
-        xhrFields: {
-            withCredentials: false
-        },
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Accept", "application/json");
-        },
-        data: {
-            client_id : clientID,
-            client_secret : clientSecret,
-            code : code
-        },
-        success: function(result) {
-            console.log(result);
-
-        },
-        error : function (msg) {
-
-        }
+    $("#github").on("click",function () {
+        sendData();
     });
+
+    function sendData(){
+        // $.ajaxSetup({ dataType: "jsonp" });
+
+        try{
+            $.ajax({
+                // beforeSend: function(xhr) {
+                //     xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+                // },
+                crossOrigin : true,
+                url: 'https://github.com/login/oauth/access_token',
+                type: 'GET',
+                data: {
+                    client_id : clientID,
+                    client_secret : clientSecret,
+                    code : code
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function() {
+                    console.log();
+                    console.log("성공");
+
+                },
+                error : function (result) {
+                    console.log(result);
+                    console.log("에러");
+                }
+            });
+        }catch (e) {
+            console.log(e);
+        }
+
+    }
+
     <%--const app = express();--%>
 
     <%--app.get('/callback', (req, res) => {--%>
