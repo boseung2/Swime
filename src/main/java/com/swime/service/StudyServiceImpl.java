@@ -162,6 +162,14 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
+    public List<StudyListVO> getBanList(long stdSn) {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(stdSn);
+        param.setStatus("STUS04");
+        return listMapper.getList(param);
+    }
+
+    @Override
     public StudyListVO getAttendant(StudyParamVO param) {
         return listMapper.getAttendant(param);
     }

@@ -258,6 +258,16 @@ public class StudyServiceTests {
     }
 
     @Test
+    public void testGetBanList() {
+        List<StudyListVO> list = service.getBanList(1747L);
+        if (list.size() == 0) return;
+
+        for(StudyListVO li : list) {
+            assert (li.getStdSn() == 1747L);
+        }
+    }
+
+    @Test
     public void testGetStudiesOfGroup() {
         service.getStudiesOfGroup(720, "test1@naver.com").forEach(study -> log.info(study));
 

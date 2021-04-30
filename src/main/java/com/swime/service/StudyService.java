@@ -47,6 +47,8 @@ public interface StudyService {
 
     public List<StudyListVO> getWaitingList(StudyCriteria cri, long stdSn);
 
+    public List<StudyListVO> getBanList(long stdSn);
+
     public StudyListVO getAttendant(StudyParamVO param);
 
     // 해당 모임의 해당 유저가 참가한 스터디를 모두 가져온다.
