@@ -12,7 +12,9 @@
 </sec:authorize>
 <link rel="stylesheet" href="/resources/css/board-get.css">
 <style>
-
+    #notice{
+        color: red;
+    }
     .uploadResult {
         width: 150%;
         background-color: white;
@@ -124,6 +126,10 @@
         <div class="col-lg-12">
             <h1 class="page-header"> 게시판</h1>
             <hr/>
+
+            <c:if test="${board.topFix == 'BOFI02'}">
+                <div id="notice">[공지사항]</div>
+            </c:if>
 
             <div id="inline3">
                 <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>

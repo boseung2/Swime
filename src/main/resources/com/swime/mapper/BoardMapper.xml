@@ -90,7 +90,7 @@
                         tbrd_det d,
                         tgrp_list gl
                     where
-                        b.status != 'BOST02'
+                        b.status in ('BOST01','BOST03')
                     and
                     b.sn = d.brd_sn
                     and
@@ -211,7 +211,10 @@
         <![CDATA[
             select count(sn)
             from tbrd
-            where grp_sn = #{grpSn}
+            where
+                  grp_sn = #{grpSn}
+            and
+                  status in('BOST01','BOST03')
         ]]>
     </select>
 

@@ -69,6 +69,9 @@
     <a href="/group/register">모임만들기</a>
 
     <div class="header-right">
+        <sec:authorize access="isAuthenticated()">
+        <a href="/notice/list">고객센터</a>
+        </sec:authorize>
         <sec:authorize access="isAnonymous()">
             <a href="/user/register">회원가입</a>
             <a class="active" href="/user/login">로그인</a>

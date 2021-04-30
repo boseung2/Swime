@@ -125,11 +125,15 @@ public class BoardController {
         }
 
         log.info("register...." + board);
+        try{
+            service.register(board);
+            rttr.addFlashAttribute("boardResult", "registerSuccess");
+        }catch (Exception e){
+            rttr.addFlashAttribute("boardResult", "registerFail");
+            e.getMessage();
+        }
 
-        service.register(board);
 
-        //rttr.addFlashAttribute("result", board.getSn());
-        rttr.addFlashAttribute("boardResult", "registerSuccess");
 
 
        return "redirect:/group/get?sn="+grpSn;

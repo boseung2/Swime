@@ -174,6 +174,9 @@
                         <input type="hidden" id="topFix" name="topFix" value="BOFI01">
                     </div>
                 </c:when>
+                <c:otherwise>
+                    <input type="hidden" id="topFix2" name="topFix" value="BOFI01">
+                </c:otherwise>
             </c:choose>
         </sec:authorize>
 

@@ -10,15 +10,14 @@
 
 <%@include file="../includes/tagLib.jsp" %>
 <style>
+    .boardHeader{
+        padding-top: 1px;
+    }
     #boardNotice{
         color: red;
         margin-left: 20px;
     }
-    .fa-heart{
-        font-size: 17px;
 
-        margin-left: 8px;
-    }
 </style>
 
 <!-- 게시판  -->
@@ -123,17 +122,30 @@
                         //boardUL.html("");
                         return;
                     }
-                    //필독 (모임장)나중에 데이터 넣어야함.
+
+                    //게시판 리스트 뽑는 곳
                     for(let i = 0, len = list.length || 0; i < len; i++){
 
                         let dat = "";
+                        let notice = "";
+                        let role = "";
+
                         //제목 글자가40이상이면 ...찍는다. 글자가 너무 길면 칸을 초과함
                         if(list[i].title.length >= 40 || list[i].content.length >=40){
                             dat = "...";
                         }
-                        let notice = "";
+
+                        //공지사항이면 '공지사항' 찍히게
                         if(list[i].topFix == "BOFI02"){
                             notice = "[공지사항]";
+                        }
+                        //모임role
+                        if(list[i].grpRole == 'GRRO01'){
+                            role = "모임장";
+                        }else if(list[i].grpRole == 'GRRO02'){
+                            role = "운영진";
+                        }else{
+                            role = '회원'
                         }
 
                         str += "<div class='boardHeader'>";
@@ -143,17 +155,18 @@
                         str += "<div id='boardDivBox'>";
                         str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
                         str += "<span id='boardName'>"+list[i].name+"</span>";
-                        //str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
+                        str += "<span class='boardRole' style='color:gray'>"+role+"</span>";
                         str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";
                         str += "</div>";
 
                         str += "<a href='/board/get?sn="+list[i].sn+ "' class='boardMove'><span>"+list[i].title.substring(0,40)+dat+"</span></a>";
 
                         str += "<div id='boardContent'>"+list[i].content.substring(0,40)+dat+"</div>";
-                        str += "<i class='far fa-comment'>"+list[i].replyCnt+"</i>";
-                        str += "<i class='far fa-heart'>"+list[i].likeCnt+"</i>";
+                        str += "<i class='far fa-comment replyCnt'><small class='boardReplyCnt'>"+list[i].replyCnt+"</small></i>";
+                        str += "<i class='far fa-heart boardHeart'><small class='boardLikeCnt'>"+list[i].likeCnt+"</small></i>";
                         str += "</div><hr>";
                         console.log("boardList......."+list[i].content);
+
                     }
                     boardUL.html(str);
 
@@ -172,8 +185,8 @@
             let prev = startNum != 1;
             let next = false;
 
-            if (endNum * 10 >= boardCnt) {
-                endNum = Math.ceil(boardCnt / 10.0);
+            if (endNum * 4 >= boardCnt) {
+                endNum = Math.ceil(boardCnt / 4.0);
             }
 
             if (endNum * 10 < boardCnt) {
@@ -268,8 +281,12 @@
             }
 
             if("registerSuccess" === boardResult){
-                $(".boardModal").html("게시글이 정상적으로 등록되었습니다..");
+                $(".boardModal").html("게시글이 정상적으로 등록되었습니다.");
             }
+            if("registerFail" === boardResult){
+                $(".boardModal").html("게시글이 등록이 실패되었습니다.");
+            }
+
 
 
             $("#boardModal").modal("show");
