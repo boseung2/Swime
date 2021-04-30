@@ -50,7 +50,10 @@
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
             <p><i class="fas fa-user"></i> 스터디장 : ${study.representationName}</p>
-            <p><i class="fas fa-users"></i> 참여인원 : ${study.attendants} / ${study.capacity}</p>
+
+            <div id = "capacity">
+            </div>
+
             <c:if test="${study.onOff eq 'STOF01'}"><p><i class="fas fa-video"></i>온라인 스터디</p></c:if>
             <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디</p></c:if>
 
@@ -65,10 +68,6 @@
 
             <c:if test="${study.representation != pinfo.username}">
                 <div id="attendButton" style="width: max-content; height: max-content"></div>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${study.attendants >= study.capacity}"><span class="btn btn-primary">모집마감</span></c:when>--%>
-<%--                    <c:otherwise><div id="attendButton" style="width: max-content; height: max-content"></div></c:otherwise>--%>
-<%--                </c:choose>--%>
             </c:if>
 
             <br>
@@ -111,15 +110,15 @@
             })
         })
 
-        // window.onscroll = function() {myFunction()};
-        //
-        // function myFunction() {
-        //     if(window.pageYOffset >= sticky) {
-        //         topnav.classList.add("sticky");
-        //     } else {
-        //         topnav.classList.remove("sticky");
-        //     }
-        // }
+        window.onscroll = function() {myFunction()};
+
+        function myFunction() {
+            if(window.pageYOffset >= sticky) {
+                topnav.classList.add("sticky");
+            } else {
+                topnav.classList.remove("sticky");
+            }
+        }
     </script>
 
     <div class="main-contents">
@@ -130,21 +129,9 @@
     <br>
 
     <hr class="centerHr">
-    <div id="member">
-        <h4> 참여멤버</h4>
-
-        <c:forEach items="${members}" var="member">
-            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
-            <strong>${member.userName}</strong>
-            <c:if test="${member.userId eq study.representation}"><span>스터디장</span></c:if>
-            <c:choose>
-                <c:when test="${member.grpRole == 'GRRO01'}">모임장</c:when>
-                <c:when test="${member.grpRole == 'GRRO02'}">운영진</c:when>
-                <c:when test="${member.grpRole == 'GRRO03'}">일반회원</c:when>
-            </c:choose>
-            <br>
-        </c:forEach>
-    </div>
+    <div id = "attendants"></div>
+    <ul id="member">
+    </ul>
 
     <hr class="centerHr">
     <div id="onOff">
@@ -193,23 +180,23 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body"><span style="color: gray; font-size: small">스터디 참석을 위한 정보를 입력해주세요.</span></div>
-                    <div class="question form-group">
-                        <label style="padding-left: 16px;">질문 1. </label>
-                        <label class="questionLabel"></label>
-                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question1">
+                    <div class="questionForm form-group" hidden="true">
+                        <strong><label style="padding-left: 16px;">질문 1. </label></strong>
+                        <p class="questionLabel" style="padding-left: 16px;"></p>
+                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
-                    <div class="question form-group" hidden="true" >
-                        <label style="padding-left: 16px;">질문 2. </label>
-                        <label class="questionLabel"></label>
-                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question2">
+                    <div class="questionForm form-group" hidden="true">
+                        <strong><label style="padding-left: 16px;">질문 2. </label></strong>
+                        <p class="questionLabel" style="padding-left: 16px;"></p>
+                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
-                    <div class="question form-group" class="questionLabel" hidden="true">
-                        <label style="padding-left: 16px;">질문 3. </label>
-                        <label class="questionLabel"></label>
-                        <input style="width:465px;margin-left: 16px;" class="form-control" name="question3">
+                    <div class="questionForm form-group" hidden="true">
+                        <strong><label style="padding-left: 16px;">질문 3. </label></strong>
+                        <p class="questionLabel" style="padding-left: 16px;"></p>
+                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
                     </div>
                 <div class = "modal-footer">
-                    <button id= "surveyRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">승인</button>
+                    <button id= "surveyRegisterBtn" type="button" class="btn btn-primary">등록</button>
                     <button id= "surveyCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                 </div>
             </div>
@@ -222,16 +209,77 @@
 <script type="text/javascript" src="/resources/js/studyWish.js"></script>
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript" src="/resources/js/studySurvey.js"></script>
+<script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
+<script type="text/javascript" src="/resources/js/studyMember.js"></script>
+<script type="text/javascript" src="/resources/js/study.js"></script>
 
+<!-- 참여멤버 불러오기 -->
 <script>
     $(document).ready(function() {
-        let surveyModal = $('#surveyModal');
+
+        // 참여인원 / 모집인원 불러오기
+        getCapacity();
+
+        // 참여멤버 불러오기
+        getAttendList();
+
     })
+</script>
+
+<script>
+    // 참여멤버 불러오는 함수 (10명만 불러옴)
+    function getAttendList() {
+        studyMemberService.getAttendListWithPaging(${study.sn}, function(result){
+
+            if(result.length > 0) {
+
+                let str  = '';
+
+                for(let i = 0 ; i < result.length; i++) {
+
+                    str += '<li>';
+                    str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+                    str += '<strong> ' + result[i].userName + '</strong>';
+                    if ("${study.representation}" === result[i].userId) str += '<span> 스터디장</span>';
+                    if ("GRRO01" === result[i].grpRole) str += '<span> 모임장</span>';
+                    if ("GRRO02" === result[i].grpRole) str += '<span> 운영진</span>';
+                    if ("GRRO03" === result[i].grpRole) str += '<span> 일반회원</span>';
+                    str += '</li>';
+
+                }
+
+                $('#member').html(str);
+            }
+
+        })
+    }
+</script>
+
+<script>
+    // 참여인원 / 모집인원 불러오는 함수
+    function getCapacity() {
+        studyService.get(${study.sn}, function(result){
+
+            let str = '';
+
+            str += '<p><i class="fas fa-users"></i> 참여인원 : ' +  result.attendants  + ' / '  + result.capacity + '</p>';
+
+            $('#capacity').html(str);
+
+            // 참여멤버 제목 구성
+            let str2 = '<h4 style="display:inline;">참여멤버 (' + result.attendants + '명) </h4>';
+            str2 += '<a href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}"> 모두 보기</a>';
+
+            $('#attendants').html(str2)
+        })
+    }
 </script>
 
 <script type="text/javascript">
 
     $(document).ready(function(){
+
+        // post, ajax 시큐리티 적용
         let csrfHeaderName = "${_csrf.headerName}";
         let csrfTokenValue = "${_csrf.token}";
 
@@ -248,158 +296,14 @@
         console.log("userId = " + userId);
         console.log("stdSn = " + stdSn);
 
-        let wishUL = $('.wishButton');
-
         if(userId !== '') { // 로그인 되어있으면
 
             // 찜버튼 출력
             getStudyWish();
 
             // 참석버튼 출력
-            getStudyAttend();
+            getStudyAttendBtn();
         }
-
-        <!-- 참석버튼 출력 -->
-        function getStudyAttend() {
-            studyAttendService.get({grpSn : grpSn, stdSn : stdSn, userId : userId}, function(result) {
-                console.log("getStudyAttend > result = " + result);
-
-                let str = "";
-
-                if(result === "group not attend") {
-                    str += "";
-
-                } else if(result === "not attend"){
-                    if (parseInt("${study.attendants}") >= parseInt("${study.capacity}")) {
-
-                        str += "<a class='btn btn-dark'>모집마감</a>";
-                    }else {
-                        str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
-                    }
-
-                } else if(result === "attend"){
-                    str += "<a id='cancel' class='btn btn-danger' href=''>탈퇴하기</a>";
-
-                } else if(result === "waiting"){
-                    str += "<a class='btn btn-primary'>검토중</a>";
-
-                } else if(result === "kicked"){
-                    str += "<a class='btn btn-danger'>가입불가</a>";
-
-                } else if(result === "fail"){
-                    alert('가입상태를 불러오는데 실패하였습니다.');
-                }
-
-                $('#attendButton').html(str);
-            })
-        }
-
-
-        <!-- attend 버튼 눌렀을 때-->
-        $('#attendButton').on("click", function(e) {
-            e.preventDefault();
-
-            // 참석버튼이 눌리면
-            if($('#attendButton').children()[0].id === 'attend') {
-                console.log('참석');
-
-                // 설문 가져오는 ajax 호출
-                studySurveyService.getSurveyList(${study.sn}, function(result) {
-
-                    // 해당 스터디에 설문이 있으면
-                    if(result.length > 0) {
-                        for(let i = 0; i < result.length; i++) {
-
-                            // label에 해당 질문을 등록
-                            $('.questionLabel')[i].innerText = result[i].question;
-
-                            // 질문 form hidden처리 풀기
-                            $('.question')[i].hidden = false;
-                        }
-
-                        // 모달 띄우기
-                        $('#surveyModal').modal("show");
-                    }else {
-
-                        // 없으면 바로 참석 진행
-                        studyAttendService.attend({stdSn : stdSn, userId : userId}, function(result) {
-                            console.log("attend > result = " + result);
-
-                            if(result === "success") {
-                                alert("스터디에 참석했습니다.");
-                            }else if(result === "fail") {
-                                alert("스터디에 참석하지 못했습니다.");
-                            }
-
-                            // 참석버튼 reload
-                            getStudyAttend();
-                        })
-                    }
-
-                })
-
-            // 탈퇴 버튼이 눌리면
-            } else if($('#attendButton').children()[0].id === 'cancel') {
-                // cancel이면 탈퇴를 수행하는 ajax 호출
-                console.log('탈퇴');
-                if(confirm('해당 스터디를 탈퇴하시겠습니까?')) {
-                    studyAttendService.cancel({stdSn : stdSn, userId : userId}, function(result) {
-                        console.log("cancel > result = " + result);
-
-                        if(result === "success") {
-                            alert("스터디를 탈퇴했습니다.");
-                        }else if(result === "fail") {
-                            alert("스터디를 탈퇴하지 못했습니다.");
-                        }
-
-                        // 참석버튼 reload
-                        getStudyAttend();
-                    })
-                }
-            }
-
-        });
-
-        <!--찜 버튼 출력-->
-        function getStudyWish() {
-
-            studyWishService.getWish({stdSn : stdSn, userId : userId}, function(result) {
-                console.log("getWish > result = " + result);
-
-                let str = "";
-
-                if(result === "not exist") {
-                    str += "<a class='wish btn btn-outline-primary' href=''>♡</a>";
-                } else {
-                    str += "<a class='wish btn btn-outline-primary' href=''>❤</a>";
-                }
-
-                wishUL.html(str);
-            })
-        }
-
-        <!--찜 버튼 눌렀을 때-->
-        $(".wishButton").on("click", function(e) {
-            e.preventDefault();
-
-            studyWishService.wish({stdSn : stdSn, userId : userId}, function(result) {
-                console.log("찜버튼 눌린 result = " + result);
-
-                let str = "";
-
-                if(result === "wish") {
-                    alert("스터디를 찜했습니다.");
-                }else if(result === "cancelWish"){
-                    alert("스터디를 찜을 취소했습니다.");
-                }else if(result === "fail") {
-                    alert("찜 서비스가 실패했습니다.")
-                }
-
-                wishUL.html(str);
-
-                getStudyWish();
-            })
-        });
 
         <!-- 스터디 생성/수정/찜/찜 삭제 후 모달 창-->
         let result = '<c:out value="${result}"/>';
@@ -428,21 +332,6 @@
                 case "update error" :
                     $(".modal-body").html("스터디 수정을 실패하였습니다.");
                     break;
-                case "wish" :
-                    $(".modal-body").html("스터디를 찜했습니다.");
-                    break;
-                case "cancelWish" :
-                    $(".modal-body").html("스터디 찜이 취소되었습니다.");
-                    break;
-                case "attend" :
-                    $(".modal-body").html("참석 완료되었습니다.");
-                    //참석 버튼을 탈퇴버튼으로 바꾸기
-                    break;
-                case "failAttend" :
-                    $(".modal-body").html("참석 실패하였습니다.");
-                    break;
-                case "cancelAttend" :
-                    $(".modal-body").html("참석 취소되었습니다.");
             }
 
             $("#myModal").modal("show");
@@ -489,8 +378,255 @@
 
 </script>
 
-<!--구글 맵 -->
 
+<!-- 찜 버튼 처리-->
+<script>
+    // 찜버튼 출력 함수
+    function getStudyWish() {
+
+        studyWishService.getWish({stdSn : ${study.sn}, userId : "${pinfo.username}"}, function(result) {
+            console.log("getWish > result = " + result);
+
+            let str = "";
+
+            if(result === "not exist") {
+                str += "<a class='wish btn btn-outline-primary' href=''>♡</a>";
+            } else {
+                str += "<a class='wish btn btn-outline-primary' href=''>❤</a>";
+            }
+
+            $('.wishButton').html(str);
+        })
+    }
+
+    // 찜버튼 눌렀을 때
+    $(".wishButton").on("click", function(e) {
+        e.preventDefault();
+
+        studyWishService.wish({stdSn : ${study.sn}, userId : "${pinfo.username}"}, function(result) {
+            console.log("찜버튼 눌린 result = " + result);
+
+            if(result === "wish") {
+                alert("스터디를 찜했습니다.");
+            }else if(result === "cancelWish"){
+                alert("스터디를 찜을 취소했습니다.");
+            }else if(result === "fail") {
+                alert("찜 서비스가 실패했습니다.")
+            }
+
+            getStudyWish();
+        })
+    });
+</script>
+
+
+<!-- attend 버튼 처리-->
+<script>
+    // attend 버튼 출력
+    function getStudyAttendBtn() {
+        studyAttendService.get({grpSn : ${study.grpSn}, stdSn : ${study.sn}, userId : "${pinfo.username}"}, function(result) {
+            console.log("getStudyAttend > result = " + result);
+
+            let str = "";
+
+            if(result === "group not attend") {
+                // str += "";
+
+            } else if(result === "not attend"){
+                if (parseInt("${study.attendants}") >= parseInt("${study.capacity}")) {
+
+                    str += "<a class='btn btn-dark'>모집마감</a>";
+                }else {
+                    str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
+                }
+
+            } else if(result === "attend"){
+                str += "<a id='cancel' class='btn btn-danger' href=''>탈퇴하기</a>";
+
+            } else if(result === "waiting"){
+                str += "<a id ='waiting' class='btn btn-primary' href=''>검토중</a>";
+
+            } else if(result === "kicked"){
+                str += "<a class='btn btn-danger'>가입불가</a>";
+
+            } else if(result === "fail"){
+                alert('가입상태를 불러오는데 실패하였습니다.');
+            }
+
+            $('#attendButton').html(str);
+        })
+    }
+
+    // attend 버튼 눌렀을 때
+    $('#attendButton').on("click", function(e) {
+        e.preventDefault();
+
+        // 참석버튼이 눌리면
+        if($('#attendButton').children()[0].id === 'attend') {
+            console.log('참석');
+
+            // 설문 가져오는 ajax 호출
+            studySurveyService.getSurveyList(${study.sn}, function(result) {
+
+                // 해당 스터디에 설문이 있으면
+                if(result.length > 0) {
+                    for(let i = 0; i < result.length; i++) {
+
+                        // label에 해당 질문을 등록
+                        $('.questionLabel')[i].innerText = result[i].question;
+
+                        // 질문 form hidden처리 풀기
+                        $('.questionForm')[i].hidden = false;
+                    }
+
+                    // 모달 띄우기
+                    $('#surveyModal').modal("show");
+                }else {
+
+                    // 없으면 바로 참석 진행
+                    studyAttendService.attend({stdSn : ${study.sn}, userId : "${pinfo.username}"}, function(result) {
+                        console.log("attend > result = " + result);
+
+                        if(result === "success") {
+                            alert("스터디에 참석했습니다.");
+
+                            // 참여인원 / 모집인원 불러오기
+                            getCapacity();
+
+                            // 참석버튼 reload
+                            getStudyAttendBtn();
+
+                            // 참여멤버 불러오기
+                            getAttendList();
+
+                        }else if(result === "fail") {
+                            alert("스터디에 참석하지 못했습니다.");
+                        }
+                    })
+                }
+
+            })
+
+            // 탈퇴 버튼이 눌리면
+        } else if($('#attendButton').children()[0].id === 'cancel') {
+            // cancel이면 탈퇴를 수행하는 ajax 호출
+            console.log('탈퇴');
+            if(confirm('해당 스터디를 탈퇴하시겠습니까?')) {
+                studyAttendService.cancel({stdSn : ${study.sn}, userId : "${pinfo.username}"}, function(result) {
+                    console.log("cancel > result = " + result);
+
+                    if(result === "success") {
+                        alert("스터디를 탈퇴했습니다.");
+
+                        // 참여인원 / 모집인원 불러오기
+                        getCapacity();
+
+                        // 참석버튼 reload
+                        getStudyAttendBtn();
+
+                        // 참여멤버 불러오기
+                        getAttendList();
+
+                    }else if(result === "fail") {
+                        alert("스터디를 탈퇴하지 못했습니다.");
+                    }
+                })
+            }
+
+        // 검토중이 눌리면 명단에서 삭제하는 reject ajax 호출
+        } else if ($('#attendButton').children()[0].id === 'waiting') {
+
+            if(confirm('스터디장이 승인하면 스터디에 참석됩니다. 그래도 스터디 참석을 취소하겠습니까?')) {
+                studyAttendService.reject({stdSn : ${study.sn}, userId : "${pinfo.username}"}, function(result) {
+                    console.log("waiting > reject > result = " + result);
+
+                    if(result === "success") { // 검토중인 회원을 명단에서 삭제하고 해당 회원의 설문답변을 모두 삭제함
+                        alert("스터디 참석을 취소했습니다.");
+
+                        // 참석버튼 reload
+                        getStudyAttendBtn();
+
+                    }else if(result === "fail") {
+                        alert("스터디 참석을 취소하지 못했습니다.");
+                    }
+                })
+            }
+        }
+
+    });
+</script>
+
+
+<!-- 설문 등록 -->
+<script>
+    // 설문 등록 버튼 눌리면
+    $('#surveyRegisterBtn').on("click", function() {
+        console.log("등록 버튼 클릭");
+
+        // 유효성 검사
+        let qForms = $('.questionForm');
+
+        for(let i = 0; i < qForms.length; i++){
+            if(qForms[i].hidden == false){ // 질문이 존재하고
+
+                if($('.answer')[i].value === '') { // 답변이 없으면
+                    alert(i+1 + '번째 답변을 등록해주세요.');
+                    return;
+                }else if ($('.answer')[i].value.length > 100) {
+                    alert(i+1 + '번째 답변 정보가 너무 큽니다. 100자 이내로 작성해주세요.');
+                    return;
+                }
+            }
+        }
+
+        // 유효성 검사 통과하면 등록 버튼 눌리면 닫히게하기
+        $('#surveyRegisterBtn').attr("data-dismiss", "modal");
+
+        // 답변 배열
+        let answerList = [];
+
+        // 답변 input을 모두 돌면서 value가 ""이 아니면 answerList에 추가
+        for(let i = 0; i < $('.answer').length; i++) {
+            if($('.answer')[i].value === "") break;
+
+            let answer = {
+                stdSn : ${study.sn},
+                userId : "${pinfo.username}",
+                questionSn : i+1,
+                question : $('.questionLabel')[i].innerText,
+                answer : $('.answer')[i].value
+            };
+
+            answerList.push(answer);
+        }
+
+        // 콘솔에 답변 출력
+        console.log(answerList);
+
+        // ajax에 answerList 보내고 호출
+        studyAnswerService.register(answerList, function(result) {
+            console.log("result = " + result);
+
+            // 기존에 등록했던 답변을 모달에서 삭제
+            for(let i = 0; i < $('.answer').length; i++) {
+                $('.answer')[i].value = '';
+            }
+
+            if(result === 'success') {
+                alert('설문을 등록하였습니다. 스터디장이 승인하면 스터디에 참석됩니다.');
+
+                // attend 버튼 reload
+                getStudyAttendBtn();
+            }else {
+                alert('설문을 등록하는데 문제가 발생했습니다. 다시 시도해주세요.');
+            }
+        })
+
+    })
+</script>
+
+
+<!--구글 맵 -->
 <script>
     window.onload = function() {
         if("${study.placeId}" !== "") { // placeId가 null이 아니면 지도 출력

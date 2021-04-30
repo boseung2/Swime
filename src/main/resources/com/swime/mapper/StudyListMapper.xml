@@ -9,7 +9,7 @@
         from tstd_list sl, tuser u, tstd s, tgrp_list gl
         where sl.std_sn = #{stdSn} and sl.user_id = u.id and sl.std_sn = s.sn and s.grp_sn = gl.grp_sn and sl.user_id = gl.user_id
           and sl.status = #{status}
-        order by sn
+        order by sl.reg_date
     </select>
 
     <select id="getListWithPaging" resultType="com.swime.domain.StudyListVO">
@@ -52,6 +52,11 @@
     <update id="update">
         update tstd_list
         set status = #{status}
+        where std_sn = #{stdSn} and user_id = #{userId}
+    </update>
+
+    <update id="delete">
+        delete from tstd_list
         where std_sn = #{stdSn} and user_id = #{userId}
     </update>
 
