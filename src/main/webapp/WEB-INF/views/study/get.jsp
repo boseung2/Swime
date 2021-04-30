@@ -17,7 +17,7 @@
 
     <!-- Heading Row -->
     <div class="row align-items-center my-5" id="study-get-header">
-        <div class="col-lg-7">
+        <div class="col-lg-7" style="padding-left: 5rem;">
 
             <h1>${study.name}</h1><br>
 
@@ -36,7 +36,8 @@
             <c:if test="${study.repeatDay != null}"><span>${study.repeatDay}</span></c:if>
         </div>
         <!-- /.col-lg-8 -->
-        <div class="col-lg-5">
+        <div class="col-lg-5" style="padding-left: 5rem;
+">
             <p><i class="fas fa-user"></i> 스터디장 : ${study.representationName}</p>
 
             <div id = "capacity">
