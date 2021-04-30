@@ -540,6 +540,11 @@
         studyAnswerService.register(answerList, function(result) {
             console.log("result = " + result);
 
+            // 기존에 등록했던 답변을 모달에서 삭제
+            for(let i = 0; i < $('.answer').length; i++) {
+                $('.answer')[i].value = '';
+            }
+
             if(result === 'success') {
                 alert('설문을 등록하였습니다. 스터디장이 승인하면 스터디에 참석됩니다.');
 

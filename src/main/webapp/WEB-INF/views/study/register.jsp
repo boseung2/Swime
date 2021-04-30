@@ -322,8 +322,8 @@
         if($('#information').val() == "" || $('#information').val().replaceAll(" ", "").length == 0) {
             alert("상세정보를 입력해주세요");
             return false;
-        } else if($('#information').val().length > 400) {
-            alert("상세정보를 400자 이하로 작성해주세요");
+        } else if($('#information').val().length > 1000) {
+            alert("상세정보를 1000자 이하로 작성해주세요");
             return false;
         }else {
             let infoTemp = $('#information').val().trim().toString();
