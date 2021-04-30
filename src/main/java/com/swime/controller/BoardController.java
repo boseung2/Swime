@@ -3,6 +3,7 @@ package com.swime.controller;
 import com.swime.domain.*;
 import com.swime.service.BoardLikeService;
 import com.swime.service.BoardService;
+import com.swime.service.GroupAttendService;
 import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -34,6 +35,7 @@ public class BoardController {
     private BoardService service;
     private BoardLikeService boardLikeService;
     private ReplyService replyService;
+    private GroupAttendService groupAttendService;
 
 
 //    @GetMapping("/list")
@@ -77,8 +79,26 @@ public class BoardController {
     //게시판 생성 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
-    public void register(@RequestParam("grpSn") long grpSn, Model model){
+    public void register(@RequestParam("grpSn") long grpSn, String userId,Model model){
         model.addAttribute("grpSn", grpSn);
+        model.addAttribute("userId", userId);
+
+        //상위고정하기위해서 그룹참석자의 그룹역할을 가져온다.
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(grpSn);
+        groupAttend.setUserId(userId);
+
+        GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
+
+        log.info("groupAttend 가져왔나용?!!!!!!!!!"+groupAttendVO);
+
+        model.addAttribute("group", groupAttendVO);
+
+        //현재 모임의 참가명단에 접근해서 모임역할을 가져와야한다.
+        //-> readByGrpSnUserId() 접근하면 도미
+//        GroupAttendVO groupAttend = groupAttendService.get(grpSn);
+//        model.addAttribute("group", groupAttend);
+//        log.info("groupAttend>>>>>" + groupAttend);
     }
 
 
@@ -137,16 +157,20 @@ public class BoardController {
                          RedirectAttributes rttr) {
 
         //상위 고정도 나중에하기.
-        BoardVO boardVO = service.get(board.getSn());
-        if(board.getTopFix().equals("")) board.setTopFix("BOFI02");
+//        BoardVO boardVO = service.get(board.getSn());
+//        if(board.getTopFix().equals("")) board.setTopFix("BOFI02");
 
         log.info("modify: " + board);
-
-        if (service.modify(board)) {
-            rttr.addFlashAttribute("result", "success");
-        }else{
-            //fail처리
+        try{
+            if (service.modify(board)) {
+                rttr.addFlashAttribute("result", "success");
+            }else{
+                //fail처리
+            }
+        }catch (Exception e){
+            e.getMessage();
         }
+
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());

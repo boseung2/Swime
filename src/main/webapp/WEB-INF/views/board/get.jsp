@@ -218,7 +218,6 @@
 
             <hr>
 
-
             <!--panel-->
 
 <%--            <div class="panel panel-default">--%>
@@ -353,45 +352,15 @@
             $(location).attr('href', '/group/get?sn=' + '${board.grpSn}');
         });
 
-        // $("button[data-oper='list']").on("click",function(){
-        //     window.history.back();
-        //
-        // })
-
 
         // <!--유효성 검사-->
-        $('button[id="replyRegisterBtn"]').on("click", function(e) {
+        // $('button[id="replyRegisterBtn"]').on("click", function(e) {
+        //
+        //
+        //     }
 
-            e.preventDefault();
+        //})
 
-            if(!validation()) {
-                return;
-            }
-
-        })
-
-
-        function validation(){
-            //$("textarea[id='replyComment']").val().trim().length == 0
-            //getByte($("textarea[id='replyComment']").val()) == ""
-            if($("textarea[id='replyComment']").val().trim().length == 0) {
-                alert("댓글을 입력해주세요");
-                return false;
-
-            }else if(getByte($("textarea[id='replyComment']").val()) > 1000){
-                alert("댓글 내용이 너무 깁니다.");
-                return false;
-            }
-            return true;
-        }
-
-        function getByte(str){
-            let byte = 0;
-            for(let i = 0; i<str.length; ++i){
-                (str.charCodeAt(i) > 127) ? byte += 3 : byte++;
-            }
-            return byte;
-        }
 
     });
 
@@ -404,16 +373,8 @@
         console.log(".......................")
         console.log("JS TEST")
 
-
-
         let snValue = '<c:out value="${board.sn}"/> ';
         let replyUL = $(".chat");
-
-        //boseung@naver.com
-        //let userId = 'qwer6786@naver.com'; //일단 이렇게 해야함..
-        <%--let name = '<c:out value="${board.name}"/> ';--%>
-        //let realname = '{mv.name}'
-        // console.log("snValue : "+snValue+" userId : " + userId + " userName: " + name);
 
         let replyComment = $('#replyComment'); //댓글 내용
         let replyRegisterBtn = $('#replyRegisterBtn'); //댓글 버튼
@@ -479,7 +440,7 @@
             $(".uploadResult").html("<img src=/resources/img/group.jpg style='width:400px; height:200px;'>");
         }); // end getJSON
 
-        //첨부파일 클릭 시 다운로드
+        //첨부파일 클릭 시 다운로드 1
         $(".uploadResult2").on("click", "li", function(e) {
             console.log("view image");
 
@@ -591,9 +552,17 @@
         });
 
 
+
         //댓글 생성,    name : {mv.name}
         replyRegisterBtn.on("click", function(e){
 
+            e.preventDefault();
+
+            if(!validation()) {
+                return;
+            }
+
+            //e.preventDefault();
             console.log("replyRegisterBtnClicked");
             let reply = {
                 brdSn : snValue,
@@ -609,12 +578,33 @@
                 document.getElementById("replyCnt").innerHTML = result.getElementsByTagName("Integer")[0].textContent;
 
                 alert('댓글이 달렸습니다.');
-                $("textarea[id='replyComment']").val('');
+                $("textarea[id='replyComment']").val("");
                 showList(1);
             })
         });
+        //유효성검사-----------------------------------
+        function validation(){
+            //$("textarea[id='replyComment']").val().trim().length == 0
+            //getByte($("textarea[id='replyComment']").val()) == ""
+            if($("textarea[id='replyComment']").val().trim().length == 0) {
+                alert("댓글을 입력해주세요");
+                return false;
 
+            }else if(getByte($("textarea[id='replyComment']").val()) > 1000){
+                alert("댓글 내용이 너무 깁니다.");
+                return false;
+            }
+            return true;
+        }
 
+        function getByte(str){
+            let byte = 0;
+            for(let i = 0; i<str.length; ++i){
+                (str.charCodeAt(i) > 127) ? byte += 3 : byte++;
+            }
+            return byte;
+        }
+        //-------------------------------------------------
 
         showList(1);
         // test

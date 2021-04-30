@@ -65,21 +65,20 @@ public class BoardServiceImpl implements BoardService{
         boardAttachMapper.deleteAll(board.getSn());
 
         boolean modifyResult = mapper.update(board) == 1;
+
         log.info("modifyResult >>>>>>>>>> "+modifyResult);
         log.info(board.getAttachList());
         log.info(board.getAttachList().size());
+
         if(modifyResult && board.getAttachList() != null &&
         board.getAttachList().size() > 0){
-            log.info("modifyResult2 >>>>>>>>>> "+board.getAttachList().size());
+
             board.getAttachList().forEach(attach ->{
-                log.info("modifyResult3 >>>>>>>>>> "+attach);
-                log.info("modifyResult3 >>>>>>>>>> "+board.getSn());
+
                 attach.setBrdSn(board.getSn());
                 boardAttachMapper.insert(attach);
             });
         }
-
-
 
 //        mapper.update(board) == 1;
 

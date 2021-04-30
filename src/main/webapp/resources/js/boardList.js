@@ -19,8 +19,7 @@ let boardListService = (function(){
                     console.log("js/boardList"+data.list);
                     callback(data.boardCnt, data.list);
                 }
-            })
-            ,fail(function(xhr, status, err){
+            }).fail(function(xhr, status, err){
                 if(error){
                     error();
                 }
