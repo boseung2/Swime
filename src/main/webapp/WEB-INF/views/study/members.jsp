@@ -16,7 +16,7 @@
     }
 </style>
 
-<%--<a class="btn btn-primary" href="/study/get?pageNum=${cri.pageNum}&amount=${cri.amount}&sn=${stdSn}">스터디로 돌아가기</a>--%>
+<a class="btn btn-primary" href="/study/get?pageNum=${cri.pageNum}&amount=${cri.amount}&sn=${stdSn}">스터디로 돌아가기</a>
 <h2 style="display: inline">스터디 멤버</h2>
 <h2 style="display: inline" id = "capacity"></h2>
 
