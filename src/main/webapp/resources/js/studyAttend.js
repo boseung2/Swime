@@ -8,7 +8,7 @@ let studyAttendService = (function(){
         console.log("getAttend stdSn = " + param.stdSn);
         console.log("getAttend userId = " + param.userId);
 
-        $.get("/study/getAttend/" + param.grpSn + "/" + param.userId + "/" + param.stdSn, function (result) {
+        $.get("/study/attend/get/" + param.grpSn + "/" + param.userId + "/" + param.stdSn, function (result) {
             if (callback) {
                 console.log("getAttend result = " + result);
                 callback(result);
@@ -29,7 +29,7 @@ let studyAttendService = (function(){
 
         $.ajax({
             type:'post',
-            url : '/study/attend',
+            url : '/study/attend/register',
             data : JSON.stringify(param),
             contentType : "application/json; charset = utf-8",
             success : function(result, status, xhr) {
@@ -52,7 +52,7 @@ let studyAttendService = (function(){
 
         $.ajax({
             type:'post',
-            url : '/study/cancel',
+            url : '/study/attend/cancel',
             data : JSON.stringify(param),
             contentType : "application/json; charset = utf-8",
             success : function(result, status, xhr) {
@@ -75,7 +75,30 @@ let studyAttendService = (function(){
 
         $.ajax({
             type:'post',
-            url : '/study/ban',
+            url : '/study/attend/ban',
+            data : JSON.stringify(param),
+            contentType : "application/json; charset = utf-8",
+            success : function(result, status, xhr) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error : function(xhr, status, er) {
+                if(error) {
+                    error(er);
+                }
+            }
+        })
+    }
+
+    function reject(param, callback, error){
+
+        console.log("reject stdSn = " + param.stdSn);
+        console.log("reject userId = " + param.userId);
+
+        $.ajax({
+            type:'post',
+            url : '/study/attend/reject',
             data : JSON.stringify(param),
             contentType : "application/json; charset = utf-8",
             success : function(result, status, xhr) {
@@ -95,6 +118,7 @@ let studyAttendService = (function(){
         get : get,
         attend : attend,
         cancel : cancel,
-        ban : ban
+        ban : ban,
+        reject : reject
     };
 })();

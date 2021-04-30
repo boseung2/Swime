@@ -19,7 +19,8 @@ let boardListService = (function(){
                     console.log("js/boardList"+data.list);
                     callback(data.boardCnt, data.list);
                 }
-            }).fail(function(xhr, status, err){
+            })
+            .fail(function(xhr, status, err){
                 if(error){
                     error();
                 }
@@ -49,7 +50,7 @@ let boardListService = (function(){
             let mm = dateObj.getMonth() +1;
             let dd = dateObj.getDate();
 
-            return [yy, '-', (mm > 9 ? '':'0') + mm, '/', (dd > 9? '' : '0') +dd].join('');
+            return [yy, '-', (mm > 9 ? '':'0') + mm, '-', (dd > 9? '' : '0') +dd].join('');
         }
     };
 

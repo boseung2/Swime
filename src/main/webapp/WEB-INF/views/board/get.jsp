@@ -168,6 +168,7 @@
 <%--                <input type="hidden" id="pageNum" name="pageNum" value="${cri.pageNum}">--%>
 <%--                <input type="hidden" id="amount" name="amount" value="${cri.amount}">--%>
                 <input type="hidden" class="form-control" id="grpSn" name="grpSn" value="${board.grpSn}">
+                <input type="hidden" class="form-control" id="grpSn2" name="userId" value="${pinfo.username}">
             </form>
 
 

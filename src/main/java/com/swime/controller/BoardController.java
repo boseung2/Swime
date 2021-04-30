@@ -62,7 +62,7 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
         log.info(">>>>>>>>>>>>>  " + grpSn);
-        BoardCriteria cri = new BoardCriteria(page, 10);
+        BoardCriteria cri = new BoardCriteria(page, 3);
         log.info("cri>>>>>>>>>>"+cri);
 
         GroupBoardPageDTO list = service.getListWithPaging(cri, grpSn);
@@ -133,31 +133,48 @@ public class BoardController {
             e.getMessage();
         }
 
-
-
-
        return "redirect:/group/get?sn="+grpSn;
         //return "redirect:/board/get?sn="+board.getSn();
     }
 
-    @GetMapping({"/get","/modify"})
-    public void get(@RequestParam("sn") Long sn, Model model,
-                    @ModelAttribute("cri") BoardCriteria cri) {
+//
+    @GetMapping("/get")
+    public void get(@RequestParam("sn") Long sn,
+                    Model model, @ModelAttribute("cri") BoardCriteria cri) {
 
-        log.info("/get or modify");
+        log.info("/get");
         model.addAttribute("board", service.get(sn));
-
-
         model.addAttribute("reply", replyService.get(sn));
-
 
         log.info("replyServiceGet : "+replyService.get(sn));
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
-
     }
+    @GetMapping("/modify")
+    public void modify(@RequestParam("sn") Long sn, long grpSn, String userId,
+                    Model model, @ModelAttribute("cri") BoardCriteria cri,RedirectAttributes rttr) {
+
+        log.info("/modify");
+
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(grpSn);
+        groupAttend.setUserId(userId);
+
+        GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
+
+
+        model.addAttribute("board", service.get(sn));
+        model.addAttribute("reply", replyService.get(sn));
+        model.addAttribute("group", groupAttendVO);
+
+        log.info("groupAttend 가져왔나용?!!!!!!!!!"+groupAttendVO);
+        log.info("replyServiceGet : "+replyService.get(sn));
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
+    }
+
+
     @PreAuthorize("principal.username == #board.userId")
     @PostMapping("/modify")
-    public String modify(BoardVO board, @ModelAttribute("cri") BoardCriteria cri,
+    public String modify(BoardVO board, long grpSn, @ModelAttribute("cri") BoardCriteria cri,
                          RedirectAttributes rttr) {
 
         //상위 고정도 나중에하기.
@@ -170,6 +187,7 @@ public class BoardController {
                 rttr.addFlashAttribute("result", "success");
             }else{
                 //fail처리
+                //rttr.addFlashAttribute("result", "success");
             }
         }catch (Exception e){
             e.getMessage();
@@ -179,7 +197,8 @@ public class BoardController {
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 
-        return "redirect:/board/get?sn="+board.getSn();
+        return "redirect:/group/get?sn="+grpSn;
+        //return "redirect:/board/get?sn="+board.getSn();
     }
 
     @PreAuthorize("principal.username == #userId")

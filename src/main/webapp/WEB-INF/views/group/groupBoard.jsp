@@ -8,63 +8,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-<%@include file="../includes/tagLib.jsp" %>
-<style>
-    .boardHeader{
-        padding-top: 1px;
-    }
-    #boardNotice{
-        color: red;
-        margin-left: 20px;
-    }
+<h4>게시판
+    <c:set var="done" value="false"/>
+    <!--글을 쓰려면 로그인 되어있고 모임에 가입해야-->
+    <sec:authorize access="isAuthenticated()">
 
-</style>
+        <c:if test="${not done}">
+        <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
+                style="float: right; margin-bottom: 5px">
+            글쓰기
+        </button>
+            <c:set var="done" value="true"/>
+        </c:if>
 
-<!-- 게시판  -->
-<%--<hr class="centerHr" id="board">--%>
-<%--<div id="board">--%>
-    <h4>게시판
-        <c:set var="done" value="false"/>
-        <!--글을 쓰려면 로그인 되어있고 모임에 가입해야-->
-        <sec:authorize access="isAuthenticated()">
-
-            <c:if test="${not doen}">
-            <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
-                    style="float: right; margin-bottom: 5px">
-                글쓰기
-            </button>
-                <c:set var="done" value="true"/>
-            </c:if>
-
-        </sec:authorize>
-    </h4><hr>
+    </sec:authorize>
+</h4>
 
 
-
-    <div class="boardHeader">
-<%--        <span>1번</span>--%>
-<%--        <span id="boardNotice">[필독]</span>--%>
-<%--        <br>--%>
-
-<%--        <div id="boardDivBox">--%>
-<%--            <span><img class="avatar" src="../../../resources/img/img_avatar2.png" alt="error"></span>--%>
-<%--            <span id="boardName">이민재</span>--%>
-<%--            &lt;%&ndash;                <span id="grpBrdRole">(모임장)</span>&ndash;%&gt;--%>
-<%--            <span id="boardRegDate">2021-10-10</span>--%>
-<%--        </div>--%>
-
-<%--        <span>스프링</span>--%>
-
-<%--        <div id="boardContent">스프링 초고수만</div>--%>
-
-<%--        <i class='fas fa-comment'><strong>100</strong></i>--%>
-<%--        <i class='fas fa-heart'><strong>100</strong></i>--%>
-    </div><!--end board-->
+    <div class="board-body"></div>
+<!--end board-->
 
 <!--게시판 페이징 처리 -->
-<div class="boardPageFooter panel-footer">
-
-</div>
+<div class="boardPageFooter panel-footer"></div>
 
 <!-- 게시판Modal -->
 <div class="modal fade" id="boardModal" tabindex="-1" role="dialog"
@@ -93,7 +58,7 @@
     $(document).ready(function(){
 
         let grpSnValue = "${group.sn}";
-        let boardUL = $(".boardHeader");
+        let boardUL = $(".board-body");
 
         let boardPageNum = 1;
         let boardPageFooter = $('.boardPageFooter');
@@ -148,25 +113,25 @@
                             role = '회원'
                         }
 
-                        str += "<div class='boardHeader'>";
-                        str += "<span>"+list[i].sn+"번"+"</span>";
-                        str += "<span id='boardNotice'>"+notice+"</span>";
-                        str += "<br>";
+                        str += "<div class='boardHeader' onclick=location.href='/board/get?sn="+list[i].sn+ "';>";
+                        //str += "<span>"+list[i].sn+"번"+"</span>";
+                        str += "<div id='boardNotice'>"+notice+"</div>";
+                        //str += "<br>";
                         str += "<div id='boardDivBox'>";
                         str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
                         str += "<span id='boardName'>"+list[i].name+"</span>";
-                        str += "<span class='boardRole' style='color:gray'>"+role+"</span>";
+                        str += "<span style='color:gray'> "+role+"</span>";
                         str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";
                         str += "</div>";
 
-                        str += "<a href='/board/get?sn="+list[i].sn+ "' class='boardMove'><span>"+list[i].title.substring(0,40)+dat+"</span></a>";
 
-                        str += "<div id='boardContent'>"+list[i].content.substring(0,40)+dat+"</div>";
-                        str += "<i class='far fa-comment replyCnt'><small class='boardReplyCnt'>"+list[i].replyCnt+"</small></i>";
-                        str += "<i class='far fa-heart boardHeart'><small class='boardLikeCnt'>"+list[i].likeCnt+"</small></i>";
-                        str += "</div><hr>";
+                        str += "<div id='boardContent'>";
+                        str += "<a href='/board/get?sn="+list[i].sn+ "'<p id='board-title'>"+list[i].title.substring(0,40)+dat+"</p></a>";
+                        str += "<p style='color : gray;'>" + list[i].content.substring(0,40)+dat + "</p></div>";
+                        str += "<i class='fas fa-comments'></i> 댓글 " + list[i].replyCnt;
+                        str += " <i class='fas fa-heart'></i> 좋아요 " + list[i].likeCnt;
+                        str += "</div>";
                         console.log("boardList......."+list[i].content);
-
                     }
                     boardUL.html(str);
 
@@ -185,8 +150,8 @@
             let prev = startNum != 1;
             let next = false;
 
-            if (endNum * 4 >= boardCnt) {
-                endNum = Math.ceil(boardCnt / 4.0);
+            if (endNum * 3 >= boardCnt) {
+                endNum = Math.ceil(boardCnt / 3.0);
             }
 
             if (endNum * 10 < boardCnt) {

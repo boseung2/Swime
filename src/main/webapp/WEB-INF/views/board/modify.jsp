@@ -117,12 +117,19 @@
         </div>
 
 
-<%--        <div class="form-check">--%>
-<%--            <input class="form-check-input" type="checkbox" ${board.topFix == 'BOFI01' ? 'checked' : ''} value="${board.topFix == null ? 'BOFI01' : board.topFix}" name="topFix" id="topFix">--%>
-<%--            <label class="form-check-label" for="topFix">--%>
-<%--                게시물 상위고정--%>
-<%--            </label>--%>
-<%--        </div>--%>
+        <div class="form-check">
+            <c:choose>
+                <c:when test="${group.grpRole ne 'GRRO03'}">
+                    <input class="form-check-input" type="checkbox" id="topFix_CKBox" name="topFix_CKBox">
+                    <label class="form-check-label" for="topFix_CKBox">게시물 상위고정</label>
+                    <input type="hidden" id="topFix" name="topFix" value="BOFI01">
+                </c:when>
+                <c:otherwise>
+                    <input class="hiddenTop" type="hidden" id="topFix2" name="topFix" value="BOFI01">
+                </c:otherwise>
+            </c:choose>
+        </div>
+
 
         <input type="hidden" name="status" value="${board.status}">
 <%--        <input type="text" name="pageNum" value="${cri.pageNum}">--%>
@@ -147,6 +154,31 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
+        //게시물이 상위고정이면 checkbox에 체크상태가 되게 한다.
+        let isTopChecked = '<c:out value="${board.topFix}"/>';
+        console.log(isTopChecked);
+
+        if(isTopChecked === "BOFI02") {
+            $("input[type='checkbox']").prop("checked", true);
+            $("input[name='topFix']").val("BOFI02");
+        }
+
+        $('#topFix_CKBox').on("click", function () {
+            console.log("ck box");
+            let ischecked = $("input[type='checkbox']").is(":checked");
+            console.log(ischecked);//true/false
+
+            if (ischecked) {
+                console.log("if");
+                // $("input[name='topFix']").attr('value', 'BOFI02');
+                $("input[name='topFix']").val("BOFI02");
+            }else{
+                console.log("else");
+                // $("input[name='topFix']").attr('value', 'BOFI01');
+                $("input[name='topFix']").val("BOFI01");
+
+            }
+        });//end topFix
 
         // $("#back").on("click", function(){
         //     window.history.back();
@@ -192,6 +224,8 @@
                 if(!validation()) {
                     return;
                 }
+
+
 
                 $('ul.uploadResult li').each(function(i,obj){
 

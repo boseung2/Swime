@@ -252,15 +252,6 @@
     })
 </script>
 
-<script>
-    // 엔터키 submit 방지
-    document.addEventListener('keydown', function(event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-        }
-    }, true);
-</script>
-
 <!-- 지참금 보여주기 -->
 <script>
     $(document).ready(function() {
@@ -448,8 +439,8 @@
         if($('#information').val() == "") {
             alert("상세정보를 입력해주세요");
             return false;
-        } else if($('#information').val().length > 400) {
-            alert("상세정보를 400자 이하로 작성해주세요");
+        } else if($('#information').val().length > 1000) {
+            alert("상세정보를 1000자 이하로 작성해주세요");
             return false;
         }else {
             let infoTemp = $('#information').val().trim().toString();

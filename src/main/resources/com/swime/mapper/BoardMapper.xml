@@ -76,27 +76,29 @@
         select *
         from
             (
-            select rownum rn,sn,grp_sn,user_id,name,grp_role
+            select rownum rn,sn,grp_sn,user_id,name
+                 --,grp_role
                    ,picture,title,content,
                    like_cnt,reply_cnt, top_fix,status,reg_date,upd_date
                 from
                     (
-                    select b.sn,b.grp_sn,b.user_id,u.name,gl.grp_role
+                    select b.sn,b.grp_sn,b.user_id,u.name
+                         --,gl.grp_role
                            ,u.picture,b.title,d.content,
                            b.like_cnt,b.reply_cnt,b.status,b.reg_date,b.upd_date,b.top_fix
                     from
                         tuser u,
                         tbrd b,
-                        tbrd_det d,
-                        tgrp_list gl
+                        tbrd_det d
+                        --,tgrp_list gl
                     where
                         b.status in ('BOST01','BOST03')
                     and
                     b.sn = d.brd_sn
                     and
                     u.id = b.user_id
-                    and
-                    b.grp_sn = gl.grp_sn
+                    --and
+                    --b.grp_sn = gl.grp_sn
                     and
                     b.grp_sn = #{grpSn}
                     order by
@@ -190,7 +192,7 @@
             like_cnt = #{likeCnt},
             reply_cnt = #{replyCnt},
             status = #{status},
-
+            top_fix = #{topFix},
             upd_date = current_date
         where sn = #{sn}
     </update>
