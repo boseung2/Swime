@@ -46,6 +46,11 @@ public class UserController {
     public void login(){
     }
 
+    @CrossOrigin
+    @GetMapping("/login/github")
+    public void github(){
+    }
+
     @GetMapping("/register")
     public void register(){
     }
