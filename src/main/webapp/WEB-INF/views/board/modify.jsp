@@ -138,10 +138,16 @@
 
         <sec:authentication property="principal" var="pinfo"/>
         <sec:authorize access="isAuthenticated()">
-            <c:if test="${pinfo.username eq board.userId}">
-                <button id='modifyBtn' type="submit" data-oper="modify" class="btn btn-primary">수정</button>
-                <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
-            </c:if>
+            <c:choose>
+                <c:when test="${group.grpRole ne 'GRRO03'}">
+                    <button id='modifyBtn' type="submit" data-oper="modify" class="btn btn-primary">수정</button>
+                    <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
+                </c:when>
+                <c:when test="${pinfo.username eq board.userId}">
+                    <button id='modifyBtn' type="submit" data-oper="modify" class="btn btn-primary">수정</button>
+                    <button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
+                </c:when>
+            </c:choose>
         </sec:authorize>
                 <button type="submit" data-oper="list" class="btn btn-dark">목록</button>
 <%--        <a id="back" class="btn btn-dark">취소</a>--%>

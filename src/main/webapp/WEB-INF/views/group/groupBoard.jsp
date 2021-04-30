@@ -10,19 +10,22 @@
 
 <h4>게시판
     <c:set var="done" value="false"/>
-    <!--글을 쓰려면 로그인 되어있고 모임에 가입해야-->
+    <!--글을 쓰려면 로그인 되어있고모임에 가입해야-->
     <sec:authorize access="isAuthenticated()">
-
+    <c:forEach var = "attendant" items="${attendList}">
         <c:if test="${not done}">
-        <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
-                style="float: right; margin-bottom: 5px">
-            글쓰기
-        </button>
+            <c:if test="${attendant.userId == pinfo.username}">
+                <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
+                        style="float: right; margin-bottom: 5px">
+                    글쓰기
+                </button>
             <c:set var="done" value="true"/>
+            </c:if>
         </c:if>
-
+    </c:forEach>
     </sec:authorize>
 </h4>
+
 
 
     <div class="board-body"></div>
@@ -60,8 +63,7 @@
         let grpSnValue = "${group.sn}";
         let boardUL = $(".board-body");
 
-        let boardPageNum = 1;
-        let boardPageFooter = $('.boardPageFooter');
+
 
         showBoardList(1);
 
@@ -75,10 +77,10 @@
                     console.log(list);
 
                     if(page == -1){
-                        // boardPageNum = Math.ceil(boardCnt/10.0);
-                        // showBoardList(boardPageNum);
-                        boardPageNum = 1;
+                        boardPageNum = Math.ceil(boardCnt/10.0);
                         showBoardList(boardPageNum);
+                        // boardPageNum = 1;
+                        // showBoardList(boardPageNum);
                         return;
                     }
                     let str="";
@@ -110,10 +112,10 @@
                         }else if(list[i].grpRole == 'GRRO02'){
                             role = "운영진";
                         }else{
-                            role = '회원'
+                            role = '회원';
                         }
 
-                        str += "<div class='boardHeader' onclick=location.href='/board/get?sn="+list[i].sn+ "';>";
+                        str += "<div class='boardHeader' onclick=location.href='/board/get?sn="+list[i].sn+"&userId=${pinfo.username}&grpSn=${group.sn}';>";
                         //str += "<span>"+list[i].sn+"번"+"</span>";
                         str += "<div id='boardNotice'>"+notice+"</div>";
                         //str += "<br>";
@@ -126,7 +128,7 @@
 
 
                         str += "<div id='boardContent'>";
-                        str += "<a href='/board/get?sn="+list[i].sn+ "'<p id='board-title'>"+list[i].title.substring(0,40)+dat+"</p></a>";
+                        str += "<a href='/board/get?sn="+list[i].sn+"&userId=${pinfo.username}&grpSn=${group.sn}'<p id='board-title'>"+list[i].title.substring(0,40)+dat+"</p></a>";
                         str += "<p style='color : gray;'>" + list[i].content.substring(0,40)+dat + "</p></div>";
                         str += "<i class='fas fa-comments'></i> 댓글 " + list[i].replyCnt;
                         str += " <i class='fas fa-heart'></i> 좋아요 " + list[i].likeCnt;
@@ -139,7 +141,8 @@
                 });
 
         }//end showList
-
+        let boardPageNum = 1;
+        let boardPageFooter = $('.boardPageFooter');
         <!--게시글 페이지-->
         function showBoardPage(boardCnt) {
 
@@ -188,25 +191,23 @@
 
             boardPageFooter.html(str);
 
-
-            //여기 좀 이상한 부분
-            boardPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function (e) {
-
-                e.preventDefault();
-
-                console.log("board page click");
-
-                let targetPageNum = $(this).attr("href");
-
-                console.log("targetPageNum: " + targetPageNum);
-
-                boardPageNum = targetPageNum;
-
-                showBoardList(boardPageNum);
-
-            });
-
         }
+
+        boardPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function (e) {
+
+            e.preventDefault();
+
+            console.log("board page click");
+
+            let targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            boardPageNum = targetPageNum;
+
+            showBoardList(boardPageNum);
+
+        });
 
 
 

@@ -139,21 +139,9 @@ public class BoardController {
 
 //
     @GetMapping("/get")
-    public void get(@RequestParam("sn") Long sn,
+    public void get(@RequestParam("sn") Long sn, long grpSn, String userId,
                     Model model, @ModelAttribute("cri") BoardCriteria cri) {
 
-        log.info("/get");
-        model.addAttribute("board", service.get(sn));
-        model.addAttribute("reply", replyService.get(sn));
-
-        log.info("replyServiceGet : "+replyService.get(sn));
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
-    }
-    @GetMapping("/modify")
-    public void modify(@RequestParam("sn") Long sn, long grpSn, String userId,
-                    Model model, @ModelAttribute("cri") BoardCriteria cri,RedirectAttributes rttr) {
-
-        log.info("/modify");
 
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(grpSn);
@@ -161,6 +149,28 @@ public class BoardController {
 
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
 
+        model.addAttribute("group", groupAttendVO);
+        model.addAttribute("board", service.get(sn));
+        model.addAttribute("reply", replyService.get(sn));
+
+        log.info("groupAttendVO : " + groupAttendVO);
+        log.info("/get");
+        log.info("replyServiceGet : "+replyService.get(sn));
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
+
+    }
+    @GetMapping("/modify")
+    public void modify(@RequestParam("sn") Long sn, long grpSn, String userId,
+                    Model model, @ModelAttribute("cri") BoardCriteria cri,RedirectAttributes rttr) {
+
+        log.info("/modify");
+
+
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(grpSn);
+        groupAttend.setUserId(userId);
+
+        GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
 
         model.addAttribute("board", service.get(sn));
         model.addAttribute("reply", replyService.get(sn));

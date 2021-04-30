@@ -140,9 +140,20 @@
 
             <div id="inline2">
                 <!--principal.MemberVo > mv.name board.name접근해서 이름 가져온다. 위에 참고-->
-                <c:if test="${mv.id eq board.userId}">
-                    <button data-oper='modify' class="btn btn-primary">수정</button>
-                </c:if>
+                <!--모임장 운영자 그리고 자기자신은 게시글을 수정할 수 있다.-->
+                <sec:authorize access="isAuthenticated()">
+                <c:choose>
+                    <c:when test="${group.grpRole ne 'GRRO03'}">
+                        <button data-oper='modify' class="btn btn-primary">수정</button>
+                    </c:when>
+                    <c:when test="${mv.id eq board.userId}">
+                        <button data-oper='modify' class="btn btn-primary">수정</button>
+                    </c:when>
+
+                </c:choose>
+                </sec:authorize>
+
+
 
 
                 <button data-oper="list" class="btn btn-dark">취소</button>
