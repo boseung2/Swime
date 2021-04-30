@@ -21,7 +21,7 @@
                 글쓰기
             </button>
         </sec:authorize>
-    </h4><hr>
+    </h4>
 
 
     <div class="boardHeader">

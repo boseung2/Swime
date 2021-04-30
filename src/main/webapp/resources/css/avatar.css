@@ -5,7 +5,10 @@
     border-radius: 50%;
 }
 
-* {box-sizing: border-box;}
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif
+}
 
 body {
     margin: 0;
@@ -18,6 +21,8 @@ body {
     background-color: white;
     padding-bottom: 15px;
     padding-top: 15px;
+    padding-left : 15%;
+    padding-right : 15%;
 }
 
 .header a {
@@ -332,4 +337,102 @@ span.st_on {
 
 .gray-background {
     background-color: #f1f1f1;
+}
+
+
+.get-header .row {
+    margin : 20px;
+}
+
+.get-header .uploadResult {
+    width : 500px;
+    height : 350px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.7rem;
+
+}
+
+.get-header img {
+    width:100%;
+    height:100%;
+
+}
+
+.get-header p {
+    margin : 0px;
+}
+
+.get-header div {
+    margin : 5px 0px;
+}
+
+.get-header .info {
+    margin : 40px 0px;
+}
+
+.get-body #groupAttend .header{
+    background-color: #f1f1f1;
+    padding : 4px;
+}
+
+.get-body h4 {
+    margin-bottom : 30px;
+}
+
+.get-body #info pre{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-all
+
+}
+
+.get-body h4 .btn {
+    float : right;
+}
+
+.studyList .card{
+    cursor : pointer;
+    border-radius: 0.3rem;
+    margin-right : auto;
+}
+
+.studyList .card-body p{
+    text-align: left;
+    color : #808080;
+}
+
+.studyList .card-body h2{
+    text-align: left;
+    font-weight: bold;
+    font-size : 1.9em;
+}
+
+.studyList .blue-text {
+    color : white !important;
+    text-align: center;
+}
+
+.studyList .btn {
+    float : right;
+}
+
+.studyList .card-footer {
+    background-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.5);
+}
+
+.studyList .card:hover {
+    left:-1px;
+    top:-1px;
+    width:calc(100% - 1px);
+    height:calc(100% - 1px);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius:5px;
+
 }

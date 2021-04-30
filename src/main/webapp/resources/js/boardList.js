@@ -20,7 +20,7 @@ let boardListService = (function(){
                     callback(data.boardCnt, data.list);
                 }
             })
-            ,fail(function(xhr, status, err){
+            .fail(function(xhr, status, err){
                 if(error){
                     error();
                 }
