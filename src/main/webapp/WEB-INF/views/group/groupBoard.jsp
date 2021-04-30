@@ -1,18 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: toywa
-  Date: 2021-04-22
-  Time: 오전 12:49
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-
-<%@include file="../includes/tagLib.jsp" %>
-
-<!-- 게시판  -->
-<%--<hr class="centerHr" id="board">--%>
-<%--<div id="board">--%>
 
     <h4>게시판
         <sec:authorize access="isAuthenticated()">
@@ -24,7 +11,7 @@
     </h4>
 
 
-    <div class="boardHeader">
+    <div class="board-body">
 <%--        <span>1번</span>--%>
 <%--        <span id="boardNotice">[필독]</span>--%>
 <%--        <br>--%>
@@ -42,7 +29,8 @@
 
 <%--        <i class='fas fa-comment'><strong>100</strong></i>--%>
 <%--        <i class='fas fa-heart'><strong>100</strong></i>--%>
-    </div><!--end board-->
+    </div>
+<!--end board-->
 
 <!--게시판 페이징 처리 -->
 <div class="boardPageFooter panel-footer">
@@ -76,7 +64,7 @@
     $(document).ready(function(){
 
         let grpSnValue = "${group.sn}";
-        let boardUL = $(".boardHeader");
+        let boardUL = $(".board-body");
 
         let boardPageNum = 1;
         let boardPageFooter = $('.boardPageFooter');

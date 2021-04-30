@@ -319,8 +319,8 @@
                     str += "<div class='card-footer'>";
 
                     if(list[i].endDate != null) str += "<p class='card-text blue-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + "~" + list[i].endDate.substring(0,10) + "</p>";
-                    else str += "<p class='card-text blue-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10)
-                    str += " | " + list[i].startTime.substring(0,5) + "~" + list[i].endTime.substring(0,5) + "</p>";
+                    else str += "<p class='card-text blue-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + "</p>"
+                    str += "<p class='card-text blue-text'><i class='fas fa-clock'></i>&nbsp;" + list[i].startTime.substring(0,5) + "~" + list[i].endTime.substring(0,5) + "</p>";
 
                     str += "</div>";
                     str += "</div>";
