@@ -18,7 +18,7 @@ public class BoardVO {
     private int likeCnt;
     private String grpRole;//모임grp
     private int replyCnt;
-    private String topFix="";
+    private String topFix;
     private String status="";
     private Date regDate;
     private Date updDate;

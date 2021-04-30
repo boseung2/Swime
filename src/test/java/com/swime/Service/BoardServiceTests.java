@@ -36,13 +36,13 @@ public class BoardServiceTests {
         BoardVO board = new BoardVO();
 
         //board.setSn(142L);
-        board.setGrpSn(720L);
+        board.setGrpSn(1142L);
         board.setUserId("toywar94@gmail.com");
         //board.setUserName("새로운 name");
-        board.setTitle("자바 고수만 오세요333");
-        board.setContent("자바 고수만요~~");
+        board.setTitle("16");
+        board.setContent("16");
         //board.setLikeCnt(500);
-        board.setTopFix("BOFI01");
+        board.setTopFix("BOFI02");
         board.setStatus("BOST01");
         int result = service.register(board);
         log.info("result" + result);

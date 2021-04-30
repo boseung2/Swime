@@ -39,4 +39,10 @@ public interface ProfileService {
     GroupStudyListDTO afterBoth(@Param("id") String id, @Param("cri") ProfileCriteria cri);
 
     GroupStudyListDTO wishBoth(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    GroupBoardPageDTO ContentsBoth(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+    ReplyPageDTO ReplyBoth(@Param("id") String id, @Param("cri") ProfileCriteria cri);
+
+
 }

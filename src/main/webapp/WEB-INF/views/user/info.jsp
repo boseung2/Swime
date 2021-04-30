@@ -23,5 +23,14 @@
         사용자이름 : <sec:authentication property="principal.memberVO.name"/><br>
         사용자 권한 리스트 : <sec:authentication property="principal.memberVO.authList"/><br>
     </sec:authorize>
+
+<div style="border-style:solid;
+    border-top-width: thin;
+    border-bottom-width: thick;
+    border-left-width: 20px;
+    border-right-width: medium;
+    border-radius: 2px;">
+
+</div>
 </body>
 </html>

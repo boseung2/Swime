@@ -64,6 +64,25 @@ public class ProfileDataController {
         return new ResponseEntity<>(service.wishBoth(id, cri), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/writeContents",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public ResponseEntity<GroupBoardPageDTO> getWriteContentsList(String id, ProfileCriteria cri){
+        return new ResponseEntity<>(service.ContentsBoth(id, cri), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/writeReply",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    @ResponseBody
+    public ResponseEntity<ReplyPageDTO> getWriteReplyList(String id, ProfileCriteria cri){
+        return new ResponseEntity<>(service.ReplyBoth(id, cri), HttpStatus.OK);
+    }
 
 
 

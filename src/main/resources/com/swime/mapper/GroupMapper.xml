@@ -60,8 +60,13 @@
                        <include refid="criteria"></include>
                         order by
                         <trim suffix=",">
+                            <if test="order == null">
+                                g.rating desc
+                            </if>
+                        </trim>
+                        <trim suffix=",">
                             <if test="order != null and order != ''.toString()">
-                                     g.${order} desc
+                                g.${order} desc
                             </if>
                         </trim>
                         g.sn desc
