@@ -14,6 +14,7 @@
 
 <div class="container group-register">
     <form role="form" action="/group/register" method="post">
+        <h4 style="margin-top : 3rem; margin-bottom : 3rem;">모임정보입력</h4>
         <div class="form-group">
             <label for="userId" hidden>아이디</label>
             <input type="text" class="form-control" id="userId" name="userId" required
