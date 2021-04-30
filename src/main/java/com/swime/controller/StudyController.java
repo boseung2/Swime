@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +90,18 @@ public class StudyController {
         }
 
         return "study/get";
+    }
+
+    // ajax로 스터디정보 보내주기
+    @GetMapping(value = "/ajaxGet", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<StudyVO> ajaxGet(long stdSn) {
+
+        try {
+            return new ResponseEntity<>(service.get(stdSn), HttpStatus.OK);
+
+        }catch (Exception e) {
+            return new ResponseEntity<>(new StudyVO(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // 스터디 생성 페이지

@@ -50,7 +50,10 @@
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
             <p><i class="fas fa-user"></i> 스터디장 : ${study.representationName}</p>
-            <p><i class="fas fa-users"></i> 참여인원 : ${study.attendants} / ${study.capacity}</p>
+
+            <div id = "capacity">
+            </div>
+
             <c:if test="${study.onOff eq 'STOF01'}"><p><i class="fas fa-video"></i>온라인 스터디</p></c:if>
             <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디</p></c:if>
 
@@ -126,21 +129,9 @@
     <br>
 
     <hr class="centerHr">
-    <div id="member">
-        <h4> 참여멤버</h4>
-
-        <c:forEach items="${members}" var="member">
-            <img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">
-            <strong>${member.userName}</strong>
-            <c:if test="${member.userId eq study.representation}"><span>스터디장</span></c:if>
-            <c:choose>
-                <c:when test="${member.grpRole == 'GRRO01'}">모임장</c:when>
-                <c:when test="${member.grpRole == 'GRRO02'}">운영진</c:when>
-                <c:when test="${member.grpRole == 'GRRO03'}">일반회원</c:when>
-            </c:choose>
-            <br>
-        </c:forEach>
-    </div>
+    <h4> 참여멤버</h4>
+    <ul id="member">
+    </ul>
 
     <hr class="centerHr">
     <div id="onOff">
@@ -219,6 +210,64 @@
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript" src="/resources/js/studySurvey.js"></script>
 <script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
+<script type="text/javascript" src="/resources/js/studyMember.js"></script>
+<script type="text/javascript" src="/resources/js/study.js"></script>
+
+<!-- 참여멤버 불러오기 -->
+<script>
+    $(document).ready(function() {
+
+        // 참여멤버 불러오기
+        getAttendList();
+
+        // 참여인원 / 모집인원 불러오기
+        getCapacity();
+
+    })
+</script>
+
+<script>
+    // 참여멤버 불러오는 함수
+    function getAttendList() {
+        studyMemberService.getAttendList(${study.sn}, function(result){
+
+            if(result.length > 0) {
+
+                let str  = '';
+
+                for(let i = 0 ; i < result.length; i++) {
+
+                    str += '<li>';
+                    str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+                    str += '<strong> ' + result[i].userName + '</strong>';
+                    if ("${study.representation}" === result[i].userId) str += '<span> 스터디장</span>';
+                    if ("GRRO01" === result[i].grpRole) str += '<span> 모임장</span>';
+                    if ("GRRO02" === result[i].grpRole) str += '<span> 운영진</span>';
+                    if ("GRRO03" === result[i].grpRole) str += '<span> 일반회원</span>';
+                    str += '</li>';
+
+                }
+
+                $('#member').html(str);
+            }
+
+        })
+    }
+</script>
+
+<script>
+    // 참여인원 / 모집인원 불러오는 함수
+    function getCapacity() {
+        studyService.get(${study.sn}, function(result){
+
+            let str = '';
+
+            str += '<p><i class="fas fa-users"></i> 참여인원 : ' +  result.attendants  + ' / '  + result.capacity + '</p>';
+
+            $('#capacity').html(str);
+        })
+    }
+</script>
 
 <script type="text/javascript">
 
@@ -326,7 +375,7 @@
 
 <!-- 찜 버튼 처리-->
 <script>
-    <!--찜 버튼 출력-->
+    // 찜버튼 출력 함수
     function getStudyWish() {
 
         studyWishService.getWish({stdSn : ${study.sn}, userId : "${pinfo.username}"}, function(result) {
@@ -344,7 +393,7 @@
         })
     }
 
-    <!--찜 버튼 눌렀을 때-->
+    // 찜버튼 눌렀을 때
     $(".wishButton").on("click", function(e) {
         e.preventDefault();
 
@@ -367,7 +416,7 @@
 
 <!-- attend 버튼 처리-->
 <script>
-    <!-- attend 버튼 출력 -->
+    // attend 버튼 출력
     function getStudyAttendBtn() {
         studyAttendService.get({grpSn : ${study.grpSn}, stdSn : ${study.sn}, userId : "${pinfo.username}"}, function(result) {
             console.log("getStudyAttend > result = " + result);
@@ -402,7 +451,7 @@
         })
     }
 
-    <!-- attend 버튼 눌렀을 때-->
+    // attend 버튼 눌렀을 때
     $('#attendButton').on("click", function(e) {
         e.preventDefault();
 
@@ -435,8 +484,14 @@
                         if(result === "success") {
                             alert("스터디에 참석했습니다.");
 
+                            // 참여인원 / 모집인원 불러오기
+                            getCapacity();
+
                             // 참석버튼 reload
                             getStudyAttendBtn();
+
+                            // 참여멤버 불러오기
+                            getAttendList();
 
                         }else if(result === "fail") {
                             alert("스터디에 참석하지 못했습니다.");
@@ -457,8 +512,14 @@
                     if(result === "success") {
                         alert("스터디를 탈퇴했습니다.");
 
+                        // 참여인원 / 모집인원 불러오기
+                        getCapacity();
+
                         // 참석버튼 reload
                         getStudyAttendBtn();
+
+                        // 참여멤버 불러오기
+                        getAttendList();
 
                     }else if(result === "fail") {
                         alert("스터디를 탈퇴하지 못했습니다.");
@@ -558,8 +619,8 @@
     })
 </script>
 
-<!--구글 맵 -->
 
+<!--구글 맵 -->
 <script>
     window.onload = function() {
         if("${study.placeId}" !== "") { // placeId가 null이 아니면 지도 출력
