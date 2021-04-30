@@ -262,19 +262,34 @@ span.st_on {
     padding: 1rem;
     border : 1px solid rgba(0,0,0,.125);
     cursor : pointer;
+    border-radius: 0.5rem;
+    background-color : white;
+    margin-bottom : 2px;
+}
+
+.boardHeader:hover {
+    left:-1px;
+    top:-1px;
+    width:calc(100% - 1px);
+    height:calc(100% - 1px);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius:5px;
+
 }
 
 .board-body {
-    background-color : white;
-    border-radius: 0.3rem;
-    border : 1px solid rgba(0,0,0,.125);
+    border-radius: 0.5rem;
+    border : 1px solid #f1f1f1;
 
 }
 
 .board-body img {
     width : 21px;
     height : 21px;
+
 }
+
+
 
 #boardNotice{
     color : red;
