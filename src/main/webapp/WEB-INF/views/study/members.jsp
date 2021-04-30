@@ -8,28 +8,66 @@
 
 <%@include file="../includes/header.jsp" %>
 
-<h2>멤버 관리</h2>
-<a class="btn btn-primary" href="/study/get?pageNum=${cri.pageNum}&amount=${cri.amount}&sn=${stdSn}">스터디로 돌아가기</a>
+<style>
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+    }
+</style>
+
+<%--<a class="btn btn-primary" href="/study/get?pageNum=${cri.pageNum}&amount=${cri.amount}&sn=${stdSn}">스터디로 돌아가기</a>--%>
+<h2 style="display: inline">스터디 멤버</h2>
+<h2 style="display: inline" id = "capacity"></h2>
 
 
 <!-- nav -->
-<div class="topnav" style="margin-bottom: 10px;">
-    <a href="#member" class="active">참여 멤버</a>
-    <a href="#waitingMember">승인 대기 멤버</a>
+<div class="topnav tab" style="margin-bottom: 10px;">
+    <a href="#member" class="tablinks active" onclick="openTab(event, 'member')">참여 멤버</a>
+    <a href="#waitingMember" class="tablinks" onclick="openTab(event, 'waitingMember')">승인 대기 멤버</a>
 </div>
 <!-- /nav -->
 
-<div id="member">
+<div id="member" class="tabcontent">
     <ul id="attendList">
 
     </ul>
 </div>
 
-<div id="waitingMember">
+<div id="waitingMember" class="tabcontent">
     <ul id="waitingList">
 
     </ul>
 </div>
+
+<script>
+
+    $(document).ready(function() {
+        // 처음에 참여멤버를 띄운다.
+        $("#member")[0].style.display = "block";
+    })
+
+    // tab 클릭될 때
+    function openTab(evt, tabName) {
+        let tabcontent, tablinks;
+
+        // tab content를 모두 안보이게
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (let i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // tab link의 active를 지운다.
+        tablinks = document.getElementsByClassName("tablinks");
+        for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // 클릭된 tab을 보여준다.
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
 
 <!-- 답변 모달창 -->
 <div class="answerModal modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="answerModalLabel" aria-hidden="true">
@@ -68,6 +106,7 @@
 <script type="text/javascript" src="/resources/js/studyMember.js"></script>
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
+<script type="text/javascript" src="/resources/js/study.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -86,15 +125,35 @@
 <script>
     $(document).ready(function() {
 
+        // 스터디 참여인원과 모집인원 불러오기
+        getCapacity();
+
+        // 참여멤버 불러오기
         getAttendList();
+
+        // 대기 멤버 불러오기
         getWaitingList();
 
     })
 </script>
 
 <script>
+    // 스터디 참여인원과 모집인원 불러오는 함수
+    function getCapacity() {
+        studyService.get(${stdSn}, function(result){
+            console.log(result.attendants + ' / ' + result.capacity);
 
-    // 참여멤버 가져오기
+            let str = '(' + result.attendants + ' / ' + result.capacity + '명)';
+
+            $('#capacity').html(str);
+        })
+    }
+
+</script>
+
+<script>
+
+    // 참여멤버 가져오는 함수
     function getAttendList() {
         studyMemberService.getAttendList("${stdSn}", function(result) {
 
@@ -139,7 +198,7 @@
     }
 
 
-    // 대기멤버 가져오기
+    // 대기멤버 가져오는 함수
     function getWaitingList() {
         studyMemberService.getWaitingList("${stdSn}", function (result) {
             for(let i = 0; i < result.length; i++) {
@@ -198,6 +257,11 @@
 
                     if(result === 'success') {
                         alert('해당 회원을 성공적으로 강퇴시켰습니다.');
+
+                        // 스터디 참여인원과 모집인원 불러오기
+                        getCapacity();
+
+                        // 참여 멤버 reload
                         getAttendList();
 
                     }else if (result === 'fail') {
@@ -211,6 +275,11 @@
 
                     if(result === 'success') {
                         alert('해당 회원을 성공적으로 강퇴시켰습니다.');
+
+                        // 스터디 참여인원과 모집인원 불러오기
+                        getCapacity();
+
+                        // 참여 멤버 reload
                         getAttendList();
 
                     }else if (result === 'fail') {
@@ -226,6 +295,7 @@
 
 <!-- 대기멤버 처리 -->
 <script>
+    // 답변보기 눌렀을 때
     $('#waitingList').on("click", "li", function(e) {
         e.preventDefault();
 
@@ -253,6 +323,17 @@
 
                     // form의 hidden 처리를 풀어준다.
                     $('.questionForm')[i].hidden = false;
+
+                    // 참여인원과 모집인원을 불러와서 모집인원이 꽉찼으면 승인 버튼을 hidden 처리한다.
+                    studyService.get(${stdSn}, function(result){
+
+                        if(result.attendants >= result.capacity) {
+                            $('#permitBtn').attr("hidden", true);
+                        }else {
+                            $('#permitBtn').removeAttr("hidden");
+                        }
+                    })
+
                 }
 
                 // 모달을 띄운다.
@@ -281,6 +362,9 @@
                     studyAttendService.attend({stdSn : ${stdSn}, userId : userId}, function(result) {
                         if(result === 'success') {
                             alert('참석 승인 처리가 완료되었습니다.');
+
+                            // 스터디 참여인원과 모집인원 불러오기
+                            getCapacity();
 
                             // 참여 멤버 reload
                             getAttendList();
@@ -315,6 +399,9 @@
 
                 if(result === "success") {
                     alert('참석 거절 처리가 완료되었습니다.');
+
+                    // 스터디 참여인원과 모집인원 불러오기
+                    getCapacity();
 
                     // 대기 멤버 reload
                     getWaitingList();

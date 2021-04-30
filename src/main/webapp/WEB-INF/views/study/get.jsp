@@ -110,15 +110,15 @@
             })
         })
 
-        // window.onscroll = function() {myFunction()};
-        //
-        // function myFunction() {
-        //     if(window.pageYOffset >= sticky) {
-        //         topnav.classList.add("sticky");
-        //     } else {
-        //         topnav.classList.remove("sticky");
-        //     }
-        // }
+        window.onscroll = function() {myFunction()};
+
+        function myFunction() {
+            if(window.pageYOffset >= sticky) {
+                topnav.classList.add("sticky");
+            } else {
+                topnav.classList.remove("sticky");
+            }
+        }
     </script>
 
     <div class="main-contents">
@@ -129,7 +129,7 @@
     <br>
 
     <hr class="centerHr">
-    <h4> 참여멤버</h4>
+    <div id = "attendants"></div>
     <ul id="member">
     </ul>
 
@@ -217,19 +217,19 @@
 <script>
     $(document).ready(function() {
 
-        // 참여멤버 불러오기
-        getAttendList();
-
         // 참여인원 / 모집인원 불러오기
         getCapacity();
+
+        // 참여멤버 불러오기
+        getAttendList();
 
     })
 </script>
 
 <script>
-    // 참여멤버 불러오는 함수
+    // 참여멤버 불러오는 함수 (10명만 불러옴)
     function getAttendList() {
-        studyMemberService.getAttendList(${study.sn}, function(result){
+        studyMemberService.getAttendListWithPaging(${study.sn}, function(result){
 
             if(result.length > 0) {
 
@@ -265,6 +265,12 @@
             str += '<p><i class="fas fa-users"></i> 참여인원 : ' +  result.attendants  + ' / '  + result.capacity + '</p>';
 
             $('#capacity').html(str);
+
+            // 참여멤버 제목 구성
+            let str2 = '<h4 style="display:inline;">참여멤버 (' + result.attendants + '명) </h4>';
+            str2 += '<a href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}"> 모두 보기</a>';
+
+            $('#attendants').html(str2)
         })
     }
 </script>
