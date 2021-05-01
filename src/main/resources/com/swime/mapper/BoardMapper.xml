@@ -76,8 +76,7 @@
         select *
         from
             (
-            select rownum rn,sn,grp_sn,user_id,name,grp_role
-                   ,picture,title,content,
+            select rownum rn,sn,grp_sn,user_id,name,grp_role,picture,title,content,
                    like_cnt,reply_cnt, top_fix,status,reg_date,upd_date
                 from
                     (
@@ -88,17 +87,19 @@
                         tuser u,
                         tbrd b,
                         tbrd_det d,
-                        tgrp_list gl
+                         tgrp_list gl
                     where
-                        b.status != 'BOST02'
+                        b.status in ('BOST01','BOST03')
                     and
-                    b.sn = d.brd_sn
+                        b.sn = d.brd_sn
                     and
-                    u.id = b.user_id
+                        u.id = b.user_id
                     and
-                    b.grp_sn = gl.grp_sn
+                        b.grp_sn = gl.grp_sn
                     and
-                    b.grp_sn = #{grpSn}
+                        b.user_id = gl.user_id
+                    and
+                        b.grp_sn = #{grpSn}
                     order by
                         top_fix desc,
                         reg_date desc
@@ -160,6 +161,7 @@
                b.grp_sn,
                b.user_id,
                u.name,
+               gl.grp_role,
                b.title,
                d.content,
                b.like_cnt,
@@ -169,11 +171,15 @@
                b.reg_date,
                b.upd_date
         from
-            tuser u, tbrd b, tbrd_det d
+            tuser u, tbrd b, tbrd_det d, tgrp_list gl
         where
             b.sn = d.brd_sn
         and
             u.id = b.user_id
+        and
+            b.grp_sn = gl.grp_sn
+        and
+            b.user_id = gl.user_id
         and
             b.sn = #{sn}
         ]]>
@@ -190,7 +196,7 @@
             like_cnt = #{likeCnt},
             reply_cnt = #{replyCnt},
             status = #{status},
-
+            top_fix = #{topFix},
             upd_date = current_date
         where sn = #{sn}
     </update>
@@ -211,7 +217,10 @@
         <![CDATA[
             select count(sn)
             from tbrd
-            where grp_sn = #{grpSn}
+            where
+                  grp_sn = #{grpSn}
+            and
+                  status in('BOST01','BOST03')
         ]]>
     </select>
 

@@ -6,24 +6,34 @@ import com.swime.service.AuthService;
 import com.swime.service.MemberService;
 import com.swime.service.ProfileService;
 import com.swime.util.GmailSend;
+import com.swime.util.HttpRequest;
 import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.kohsuke.github.GHPerson;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 @Controller
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
+@CrossOrigin("*")
 public class UserController {
 
     MemberService service;
@@ -44,6 +54,17 @@ public class UserController {
 
     @GetMapping("/login")
     public void login(){
+    }
+
+    @GetMapping("/login/github")
+    public void github(String code, Model model) throws Exception{
+        log.info("code = " + code);
+        HttpRequest httpRequest = new HttpRequest();
+        String ac = httpRequest.getGithubAccessCode(code);
+        log.info(ac);
+        GHPerson ghPerson = httpRequest.connectGithub(ac);
+        log.info(ghPerson);
+        model.addAttribute("ghPerson", ghPerson);
     }
 
     @GetMapping("/register")
