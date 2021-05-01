@@ -154,10 +154,10 @@
         <div class="form-group">
             <label for="expense">지참금</label>
             <select class="form-control" id="expenseSelect" name="expenseSelect">
-                <option>(선택)</option>
+                <option value="(선택)">(선택)</option>
                 <option class="expense" value="없음">없음</option>
                 <option class="expense" value="추후공지">추후공지</option>
-                <option class="expense" value="직접입력">직접입력</option>
+                <option value="직접입력">직접입력</option>
             </select>
             <input type="text" class="form-control" id="expense" name="expense" placeholder="원 단위로 숫자만 입력해주세요." hidden="true" value="${study.expense}">
         </div>
@@ -255,20 +255,28 @@
 <!-- 지참금 보여주기 -->
 <script>
     $(document).ready(function() {
+
+        // null인경우 (선택) 출력
+        if("" === "${study.expense}") {
+            $('option[value="(선택)"]').prop("selected", true);
+
+        }
         // 직접 입력인 경우 금액입력창 보여주기
-        if("(선택)" !== "${study.expense}" && "없음" !== "${study.expense}" && "추후공지" !== "${study.expense}") {
+        else if("없음" !== "${study.expense}" && "추후공지" !== "${study.expense}") {
             $('option[value="직접입력"]').prop("selected", true);
             $('#expense').removeAttr("hidden");
         }
+        else {
+            let selectList = $('option[class="expense"]');
 
-        let selectList = $('option[class="expense"]');
-
-        // 그 외의 경우 옵션 선택
-        for(let i = 0; i < selectList.length; i++) {
-            if(selectList[i].value === "${study.expense}") {
-                selectList[i].selected = true;
+            // 그 외의 경우 옵션 선택
+            for(let i = 0; i < selectList.length; i++) {
+                if(selectList[i].value === "${study.expense}") {
+                    selectList[i].selected = true;
+                }
             }
         }
+
     })
 </script>
 
@@ -527,7 +535,10 @@
         }
         if(repeatCheck == false) {
             // 정기스터디 취소시 데이터도 모두 지우기
-            endDate.val('');
+
+            // endDate는 startDate와 같게한다.
+            endDate.val($('#startDate').val());
+
             repeatCycle.val('(선택)');
 
             // 반복주기 select도 모두 hidden 처리

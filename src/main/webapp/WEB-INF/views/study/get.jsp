@@ -44,8 +44,8 @@
             <br>
             <span><i class="fas fa-clock"></i> 시간 : ${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
             <br>
-            <c:if test="${endDate != null}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
-            <c:if test="${endDate == null}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)}</span></c:if>
+            <c:if test="${endDate != startDate}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
+            <c:if test="${endDate == startDate}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)}</span></c:if>
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-5">
@@ -58,9 +58,8 @@
             <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디</p></c:if>
 
             <c:choose>
-                <c:when test="${study.expense == '(선택)'}"></c:when>
                 <c:when test="${study.expense == '없음' || study.expense =='추후공지'}"><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}</p></c:when>
-                <c:otherwise><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}원</p></c:otherwise>
+                <c:when test="${study.expense != null}"><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}원</p></c:when>
             </c:choose>
 
 

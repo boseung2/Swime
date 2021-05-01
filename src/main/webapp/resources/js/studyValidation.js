@@ -52,6 +52,11 @@ function validation() {
         }
     }
 
+    // 정기스터디 선택일때 빈문자열로 초기화
+    if ($('#repeatCycle').val() === '(선택)') {
+        $('#repeatCycle').val("");
+    }
+
     // 정기스터디이면
     if($('#repeat').is(":checked")) {
         // 종료일자가 시작일자보다 커야함
@@ -123,11 +128,23 @@ function validation() {
         }
     }
 
+    // 지참금 선택일때 빈문자열로 초기화
+    if ($('#expenseSelect').val() === '(선택)') {
+        $('#expenseSelect').val("");
+    }
+
     if($('#expense').val().length > 10) {
         alert("지참금 정보는 10자 이내여야합니다.");
         return false;
+
     }else if($('#expenseSelect').val() === '직접입력') {
         let str = $('#expense').val();
+
+        if(str.length <= 0) {
+            alert('금액을 입력해주세요');
+            return false;
+        }
+        
         let flag = true;
 
         for(let i = 0; i < str.length; i ++) {

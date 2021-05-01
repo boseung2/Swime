@@ -451,7 +451,10 @@
         }
         if(repeatCheck == false) {
             // 정기스터디 취소시 데이터도 모두 지우기
-            endDate.val('');
+
+            // endDate는 startDate와 같게한다.
+            endDate.val($('#startDate').val());
+
             repeatCycle.val('(선택)');
 
             // select도 모두 hidden 처리

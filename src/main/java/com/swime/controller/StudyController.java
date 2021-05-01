@@ -125,12 +125,17 @@ public class StudyController {
         log.info("그룳 페이징 = " + cri);
         log.info("study onOff = " + study.getOnOff());
 
-        // 반복 주기 설정
-        if("(선택)".equals(study.getRepeatCycle())) {
-            study.setRepeatCycle("");
-        }else {
-            study.setRepeatCycle(study.getRepeatCycle());
-        }
+        log.info("register/ study startDate = " + study.getStartDate());
+        log.info("register/ study starTime = " + study.getStartTime());
+        log.info("register/ study endDate = " + study.getEndDate());
+        log.info("register/ study endTime = " + study.getEndTime());
+
+        log.info("register/ study repeatCycle = " + study.getRepeatCycle());
+        log.info("register/ study expense = " + study.getExpense());
+
+        // startDate, endDate 시간 더해주기
+        study.setStartDate(study.getStartDate() + ' ' + study.getStartTime());
+        study.setEndDate(study.getEndDate() + ' ' + study.getEndTime());
 
         try {
             // 스터디 등록
@@ -201,16 +206,18 @@ public class StudyController {
     @PreAuthorize("principal.username == #study.representation")
     public String modify(StudyVO study, StudyCriteria cri, StudyQuestionVO questions, RedirectAttributes rttr) {
 
-        log.info("modify representation " + study.getRepresentation());
-        log.info("modify study onOff = " + study.getOnOff());
+        log.info("modify/ study startDate = " + study.getStartDate());
+        log.info("modify/ study starTime = " + study.getStartTime());
+        log.info("modify/ study endDate = " + study.getEndDate());
+        log.info("modify/ study endTime = " + study.getEndTime());
 
-        // 반복 주기 설정
-        log.info("====================================repeatCycle" + study.getRepeatCycle()); //STCY01
-        if("(선택)".equals(study.getRepeatCycle())) {
-            study.setRepeatCycle("");
-        }else {
-            study.setRepeatCycle(study.getRepeatCycle());
-        }
+        log.info("modify/ study repeatCycle = " + study.getRepeatCycle());
+        log.info("modify/ study expense = " + study.getExpense());
+
+        // startDate, endDate 시간 더해주기
+        study.setStartDate(study.getStartDate() + ' ' + study.getStartTime());
+        study.setEndDate(study.getEndDate() + ' ' + study.getEndTime());
+
 
         if(service.modify(study) == 1) {
             rttr.addFlashAttribute("result", "update");
