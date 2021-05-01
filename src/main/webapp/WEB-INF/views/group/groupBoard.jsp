@@ -1,21 +1,31 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: toywa
+  Date: 2021-04-22
+  Time: 오전 12:49
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
 <h4>게시판
     <c:set var="done" value="false"/>
-    <!--글을 쓰려면 로그인 되어있고 모임에 가입해야-->
+    <!--글을 쓰려면 로그인 되어있고모임에 가입해야-->
     <sec:authorize access="isAuthenticated()">
-
+    <c:forEach var = "attendant" items="${attendList}">
         <c:if test="${not done}">
-        <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
-                style="float: right; margin-bottom: 5px">
-            글쓰기
-        </button>
+            <c:if test="${attendant.userId == pinfo.username}">
+                <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
+                        style="float: right; margin-bottom: 5px">
+                    글쓰기
+                </button>
             <c:set var="done" value="true"/>
+            </c:if>
         </c:if>
-
+    </c:forEach>
     </sec:authorize>
 </h4>
+
 
 
     <div class="board-body"></div>
@@ -53,8 +63,7 @@
         let grpSnValue = "${group.sn}";
         let boardUL = $(".board-body");
 
-        let boardPageNum = 1;
-        let boardPageFooter = $('.boardPageFooter');
+
 
         showBoardList(1);
 
@@ -68,10 +77,10 @@
                     console.log(list);
 
                     if(page == -1){
-                        // boardPageNum = Math.ceil(boardCnt/10.0);
-                        // showBoardList(boardPageNum);
-                        boardPageNum = 1;
+                        boardPageNum = Math.ceil(boardCnt/10.0);
                         showBoardList(boardPageNum);
+                        // boardPageNum = 1;
+                        // showBoardList(boardPageNum);
                         return;
                     }
                     let str="";
@@ -80,34 +89,46 @@
                         //boardUL.html("");
                         return;
                     }
-                    //필독 (모임장)나중에 데이터 넣어야함.
+
+                    //게시판 리스트 뽑는 곳
                     for(let i = 0, len = list.length || 0; i < len; i++){
 
                         let dat = "";
+                        let notice = "";
+                        let role = "";
+
                         //제목 글자가40이상이면 ...찍는다. 글자가 너무 길면 칸을 초과함
                         if(list[i].title.length >= 40 || list[i].content.length >=40){
                             dat = "...";
                         }
-                        let notice = "";
+
+                        //공지사항이면 '공지사항' 찍히게
                         if(list[i].topFix == "BOFI02"){
                             notice = "[공지사항]";
                         }
+                        //모임role
+                        if(list[i].grpRole == 'GRRO01'){
+                            role = "모임장";
+                        }else if(list[i].grpRole == 'GRRO02'){
+                            role = "운영진";
+                        }else{
+                            role = '회원';
+                        }
 
-                        str += "<div class='boardHeader' onclick=location.href='/board/get?sn="+list[i].sn+ "';>";
+                        str += "<div class='boardHeader' onclick=location.href='/board/get?sn="+list[i].sn+"&userId=${pinfo.username}&grpSn=${group.sn}';>";
                         //str += "<span>"+list[i].sn+"번"+"</span>";
                         str += "<div id='boardNotice'>"+notice+"</div>";
                         //str += "<br>";
                         str += "<div id='boardDivBox'>";
                         str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
                         str += "<span id='boardName'>"+list[i].name+"</span>";
-                        str += "<span style='color:gray'> "+list[i].grpRole+"</span>";
+                        str += "<span style='color:gray'> "+role+"</span>";
                         str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";
                         str += "</div>";
 
 
-
                         str += "<div id='boardContent'>";
-                        str += "<a href='/board/get?sn="+list[i].sn+ "'<p id='board-title'>"+list[i].title.substring(0,40)+dat+"</p></a>";
+                        str += "<a href='/board/get?sn="+list[i].sn+"&userId=${pinfo.username}&grpSn=${group.sn}'<p id='board-title'>"+list[i].title.substring(0,40)+dat+"</p></a>";
                         str += "<p style='color : gray;'>" + list[i].content.substring(0,40)+dat + "</p></div>";
                         str += "<i class='fas fa-comments'></i> 댓글 " + list[i].replyCnt;
                         str += " <i class='fas fa-heart'></i> 좋아요 " + list[i].likeCnt;
@@ -120,7 +141,8 @@
                 });
 
         }//end showList
-
+        let boardPageNum = 1;
+        let boardPageFooter = $('.boardPageFooter');
         <!--게시글 페이지-->
         function showBoardPage(boardCnt) {
 
@@ -131,8 +153,8 @@
             let prev = startNum != 1;
             let next = false;
 
-            if (endNum * 10 >= boardCnt) {
-                endNum = Math.ceil(boardCnt / 10.0);
+            if (endNum * 3 >= boardCnt) {
+                endNum = Math.ceil(boardCnt / 3.0);
             }
 
             if (endNum * 10 < boardCnt) {
@@ -169,25 +191,23 @@
 
             boardPageFooter.html(str);
 
-
-            //여기 좀 이상한 부분
-            boardPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function (e) {
-
-                e.preventDefault();
-
-                console.log("board page click");
-
-                let targetPageNum = $(this).attr("href");
-
-                console.log("targetPageNum: " + targetPageNum);
-
-                boardPageNum = targetPageNum;
-
-                showBoardList(boardPageNum);
-
-            });
-
         }
+
+        boardPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function (e) {
+
+            e.preventDefault();
+
+            console.log("board page click");
+
+            let targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            boardPageNum = targetPageNum;
+
+            showBoardList(boardPageNum);
+
+        });
 
 
 
@@ -227,8 +247,12 @@
             }
 
             if("registerSuccess" === boardResult){
-                $(".boardModal").html("게시글이 정상적으로 등록되었습니다..");
+                $(".boardModal").html("게시글이 정상적으로 등록되었습니다.");
             }
+            if("registerFail" === boardResult){
+                $(".boardModal").html("게시글이 등록이 실패되었습니다.");
+            }
+
 
 
             $("#boardModal").modal("show");
