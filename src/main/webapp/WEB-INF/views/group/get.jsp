@@ -112,7 +112,6 @@
                 <c:if test="${not done}">
                     <c:if test="${attendant.userId == pinfo.username}">
                         <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a>
-                        git
                     </c:if>
                 </c:if>
             </c:forEach>
