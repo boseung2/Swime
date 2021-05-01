@@ -241,7 +241,9 @@
     })
 </script>
 
+
 <!-- 유효성검사 -->
+<script type="text/javascript" src="/resources/js/studyValidation.js"></script>
 <script>
     $(document).ready(function() {
         let formObj = $('#registerForm');
@@ -256,211 +258,45 @@
             formObj.submit();
         })
     })
-
-    function validation() {
-
-        if($('#name').val() == "" || $('#name').val().replaceAll(" ", "").length == 0) {
-            alert("스터디명을 입력해주세요");
-            return false;
-        } else if($('#name').val().length > 30) {
-            alert("스터디명을 30자 이하로 작성해주세요");
-            return false;
-        }else {
-            let nameTemp = $('#name').val().trim();
-            $('#name').val(nameTemp);
-        }
-
-        if($('#startDate').val() == "") {
-            alert("시작일자를 입력해주세요");
-            return false;
-        }
-        if($('#startTime').val() == "") {
-            alert("시작시간을 입력해주세요");
-            return false;
-        }
-
-        // 정기스터디이면
-        if($('#repeat').is(":checked")) {
-            // 종료일자 필수
-            if($('#endDate').val() == "") {
-                alert("종료 일자를 선택해주세요.")
-                return false;
-            }else {
-                let date1 = new Date($('#startDate').val());
-                let date2 = new Date($('#endDate').val());
-
-                if(date1 > date2) {
-                    alert('시작 일자가 종료 일자보다 빠를 수 없습니다.');
-                    return false;
-                }
-            }
-
-            // 매주/격주일때 반복요일 하나는 필수
-            if($('#repeatCycle').val() =='STCY01' || $('#repeatCycle').val() =='STCY02') {
-                if($('#repeatDay').val().length < 1) {
-                    alert('반복요일을 선택해주세요.');
-                    return false;
-                }
-            }
-
-        }
-
-        if($('#endTime').val() == "") {
-            alert("종료시간을 입력해주세요");
-            return false;
-        }else {
-            let date1 = new Date($('#startDate').val() + ' ' + $('#startTime').val());
-            let date2 = new Date($('#startDate').val() + ' ' + $('#endTime').val());
-
-            if(date1 > date2) {
-                alert("종료시간이 시작시간보다 빠를 수 없습니다.");
-                return false;
-            }
-        }
-
-
-        if($('#information').val() == "" || $('#information').val().replaceAll(" ", "").length == 0) {
-            alert("상세정보를 입력해주세요");
-            return false;
-        } else if($('#information').val().length > 1000) {
-            alert("상세정보를 1000자 이하로 작성해주세요");
-            return false;
-        }else {
-            let infoTemp = $('#information').val().trim().toString();
-            infoTemp = removeTag(infoTemp);
-            $('#information').val(infoTemp);
-        }
-
-        if($('#onOff').val() === 'STOF01') { // 온라인일 경우
-            if ($('#onUrl').val() == '') {
-                alert("온라인 링크를 입력해주세요.");
-                return false;
-            } else if(!checkUrl($('#onUrl').val())) {
-                alert("url 형식이 맞지 않습니다.");
-                return false;
-            } else if (getByte($('#onUrl').val()) > 300) {
-                alert("온라인 링크 정보가 너무 큽니다.");
-                return false;
-            }
-        } else if ($('#onOff').val() === 'STOF02'){// 오프라인일 경우
-            if ($('#placeId').val() == '') {
-                alert("장소 정보를 입력해주세요.");
-                return false;
-            } else if (getByte($('#placeId').val()) > 300) {
-                alert("장소 정보가 너무 큽니다.");
-                return false;
-            }
-        }
-
-        if($('#expense').val().length > 10) {
-            alert("지참금 정보는 10자 이내여야합니다.");
-            return false;
-        }else if($('#expenseSelect').val() === '직접입력') {
-            let str = $('#expense').val();
-            let flag = true;
-
-            for(let i = 0; i < str.length; i ++) {
-                if(isNaN(parseInt(str[i]))) {
-                    flag = false;
-                    break;
-                }
-            }
-
-            if(flag == false) {
-                alert("지참금에 숫자만 입력해주세요.");
-                return false;
-            }
-        }
-
-        if($('#capacity').val() == '') {
-            alert("모집인원을 설정해주세요.");
-            return false;
-        }else {
-            let str = $('#capacity').val();
-            let flag = true;
-
-            for(let i = 0; i < str.length; i ++) {
-                if(isNaN(parseInt(str[i]))) {
-                    flag = false;
-                    break;
-                }
-            }
-
-            if(flag == false) {
-                alert("숫자만 입력해주세요.");
-                return false;
-            }else {
-                if(parseInt(str) < 2) {
-                    alert("모집인원은 2명 이상이어야합니다.");
-                    return false;
-                }else if (parseInt(str) > 99) {
-                    alert("모집인원은 99명 이하이어야합니다.");
-                    return false;
-                }
-            }
-        }
-
-        // 가입질문 사용하는 경우
-        if($('#surveyCheck')[0].checked) {
-
-            if($('#question1').val() === '' && $('#question2').val() === '' && $('#question3').val() === '') {
-                alert('가입 질문은 최소 한개 이상 입력되어야합니다.');
-                return false;
-            }else if($('#question1').val().length > 50 || $('#question2').val().length > 50 || $('#question3').val().length > 50) {
-                alert('가입 질문은 50자 이내여야합니다.');
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    function getByte(str) {
-        let byte = 0;
-        for (let i=0; i<str.length; ++i) {
-            (str.charCodeAt(i) > 127) ? byte += 3 : byte++ ;
-        }
-        return byte;
-    }
-
-    // url 형식인지 체크( http, https 를 포함하는 형식 )
-    function checkUrl(url) {
-        let expUrl = /^http[s]?\:\/\/./i;
-        return expUrl.test(url);
-    }
-
-    // 태그 제거
-    function removeTag(str) {
-        return str.replace(/(<([^>]+)>)/ig,"");
-    }
 </script>
 
+<!-- 날짜 -->
 <script type="text/javascript">
 
-    <!-- 날짜 -->
+    // 오늘 날짜와 시간
     let today = new Date();
 
+    // 오늘 년도
     let year = today.getFullYear();
+
+    // 오늘 월
     let month = today.getMonth();
     if(month < 10) month = "0" + (month+1);
+
+    // 오늘 날짜
     let date = today.getDate();
     if(date < 10) date = "0" + date;
-    let hours = today.getHours();
-    if(hours < 10) hours = "0" + hours;
-    let minutes = today.getMinutes();
-    if(minutes < 10) minutes = "0" + minutes;
 
+    // 오늘 시간
+    let hours = today.getHours();
+
+    // 시작일자 초기화
     $('#startDate').val(year + "-" + month + "-" + date);
     $('#startDate').attr("min", year + "-" + month + "-" + date);
 
-    // $('#endDate').val(year + "-" + month + "-" + date);
-    // $('#endDate').attr("min", year + "-" + month + "-" + date);
+    // 종료일자 초기화
+    $('#endDate').val(year + "-" + month + "-" + date);
+    $('#endDate').attr("min", year + "-" + month + "-" + date);
 
-    $('#startTime').val(hours + ":" + minutes);
-    $('#startTime').attr("min", hours + ":" + minutes);
+    // 시작시간 초기화
+    hours += 1;
+    hours = hours == 24 ? "00" : hours;
+    hours = hours < 10 ? "0" + hours : hours;
 
-    $('#endTime').val(hours + ":" + minutes);
-    $('#endTime').attr("min", hours + ":" + minutes);
+    $('#startTime').val(hours + ":00");
+
+    // 종료시간 초기화
+    $('#endTime').val(hours + ":00");
 
 
     <!-- 반복주기/요일 -->
@@ -475,52 +311,56 @@
     let repeatDay = $('#repeatDay');
 
 
-    // 종료일자 선택될때마다 반복주기 다르게 보여주기
-    $('#endDate').on('change', function(){
-        let start = new Date($('#startDate').val());
-        let end = new Date($('#endDate').val());
+    // 시작일자, 종료일자 선택될때마다 반복주기 새로 넣고, 반복주기 option 없애주고, 체크박스 없애주기
+    $('#startDate, #endDate').on('change', function(){
 
-        // 매주
-        if((end-start) / (1000 * 24 * 60 * 60) > 7) {
-            $('option[value="STCY01"]').removeAttr("hidden");
-        }else {
-            $('option[value="STCY01"]').attr("hidden", "true");
-        }
-        // 격주
-        if((end-start) / (1000 * 24 * 60 * 60) > 15) {
-            $('option[value="STCY02"]').removeAttr("hidden");
-        }else {
-            $('option[value="STCY02"]').attr("hidden", "true");
-        }
-        // 매달
-        let flag = false;
-        for(let i = start.getMonth()+2; i < end.getMonth()+1; i++) {
-            console.log("start = " + start.getMonth()+2);
-            console.log("i = " + i);
-            console.log("end = " + end.getMonth()+1);
+        // 시작일자와 종료일자가 같지않으면 정기스터디이므로 시작일자가 종료일자보다 크면 alert
+        if($('#startDate').val() !== $('#endDate').val()) {
+            let start = new Date($('#startDate').val());
+            let end = new Date($('#endDate').val());
 
-            if(start.getDate() <= new Date(end.getFullYear(), i, 0)) { // 해당 월의 말일
-                flag = true;
-                break;
+            if(end < start) {
+                alert('시작일자는 종료일자보다 클 수 없습니다.');
+
+                //종료일자를 시작일자+1로 초기화
+                let temp = new Date($('#startDate').val());
+                temp.setDate(temp.getDate() + 1);
+
+                let year = temp.getFullYear();
+                let month = (temp.getMonth()+1 < 10 ? "0" : "") + (temp.getMonth()+1);
+                let date = (temp.getDate() < 10 ? "0" : "") + temp.getDate();
+
+                $('#endDate').val(year + "-" + month + "-" + date);
             }
         }
-        if(!flag && start.getMonth() < end.getMonth()  && start.getDate() <= end.getDate()){
-            flag = true;
+
+        // 빈복주기 옵션 추가
+        setRepeatCycle();
+
+        // 반복주기 옵션 초기화
+        $('#repeatCycle').val("(선택)");
+
+        // 반복요일값 초기화
+        $('#repeatDay').val("");
+
+        // 체크박스 체크 해제
+        let days= $('input[class="day"]');
+        for (let i = 0;  i < days.length; i ++) {
+            days[i].checked = false;
         }
 
-        if(flag) {
-            $('option[value="STCY03"]').removeAttr("hidden");
-        }else {
-            $('option[value="STCY03"]').attr("hidden", "true");
-        }
+        // 반복요일 form 숨기기
+        $('#formRepeatDay').attr("hidden", true);
     })
 
-    // 반복주기가 매주/격주일때 반복요일 출력
+
+    // 반복주기가 바뀌고, 매주/격주일때 반복요일 출력
     $('#repeatCycle').on('change', function(){
-        // alert('반복주기 선택됨');
+
         console.log("this.val = " + $(this).val());
 
         let cycle = $(this).val();
+
         if(cycle === 'STCY01' || cycle === 'STCY02') {
             $('#formRepeatDay').removeAttr("hidden");
         }else {
@@ -537,7 +377,34 @@
         }
     })
 
+    // 반복주기 옵션 추가 함수
+    function setRepeatCycle() {
+        let start = new Date($('#startDate').val());
+        let end = new Date($('#endDate').val());
 
+        // 매주
+        if((end-start) / (1000 * 24 * 60 * 60) >= 7) {
+            $('option[value="STCY01"]').removeAttr("hidden");
+        }else {
+            $('option[value="STCY01"]').attr("hidden", "true");
+        }
+        // 격주
+        if((end-start) / (1000 * 24 * 60 * 60) >= 14) {
+            $('option[value="STCY02"]').removeAttr("hidden");
+        }else {
+            $('option[value="STCY02"]').attr("hidden", "true");
+        }
+
+        // 매월
+        // 시작일자보다 종료일자가 최소 28일이 커야하고, 달이 달라야 매월 select 생김
+        if((end-start) / (1000 * 24 * 60 * 60) >= 28 && start.getMonth() !== end.getMonth()) {
+            $('option[value="STCY03"]').removeAttr("hidden");
+        }else {
+            $('option[value="STCY03"]').attr("hidden", "true");
+        }
+    }
+
+    // 정기스터디 버튼 클릭 처리함수
     function repeatFunction() {
         let repeatCheck = repeat[0].checked;
 
@@ -548,7 +415,6 @@
         // 체크 false -> 종료일자/반복주기/반복요일 숨기기 (hidden = true)
         formEndDate[0].hidden = !repeatCheck;
         formRepeatCycle[0].hidden = !repeatCheck;
-        // formRepeatDay[0].hidden = !repeatCheck;
 
         // 정기스터디이면 true
         if(repeatCheck == true) {
@@ -558,12 +424,13 @@
 
             console.log("end = " + end);
 
+            // 최소 날짜 설정 (시작날짜 + 1일)
             let endMonth = end.getMonth()+1;
             if(endMonth < 10) endMonth = "0" + endMonth;
             let endDt = end.getDate();
             if(endDt < 10) endDt = "0" + endDt;
 
-
+            // 최대 날짜 설정 (6개월)
             let maxEnd = new Date($('#startDate').val());
             maxEnd.setMonth(maxEnd.getMonth() + 6);
             console.log("maxEnd = " + maxEnd);
