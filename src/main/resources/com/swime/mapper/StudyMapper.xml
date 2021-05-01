@@ -5,11 +5,13 @@
 <mapper namespace="com.swime.mapper.StudyMapper">
 
     <select id="getList" resultType="com.swime.domain.StudyVO">
-        select
-            s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+        <![CDATA[
+        select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
         from tstd s, tuser u
-        where s.representation = u.id and s.status in ('STST01', 'STST03') and grp_sn = #{grpSn}
-        order by reg_date desc
+        where s.grp_sn = #{grpSn} and s.status in ('STST01', 'STST03') and s.representation = u.id and
+                (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) < 0
+        order by start_date
+        ]]>
     </select>
 
     <select id="getListWithPaging" resultType="com.swime.domain.StudyVO">
@@ -22,8 +24,9 @@
                 (
                 select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
                 from tstd s, tuser u
-                where s.representation = u.id and s.status in ('STST01', 'STST03') and grp_sn = #{grpSn}
-                order by s.reg_date desc
+                where s.grp_sn = #{grpSn} and s.status in ('STST01', 'STST03') and s.representation = u.id and
+                        (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) < 0
+                order by start_date
                 )
             where rownum <= #{cri.pageNum} * #{cri.amount}
             )
@@ -32,9 +35,12 @@
     </select>
 
     <select id="countStudy" resultType="int">
+    <![CDATA[
         select count(*)
-        from tstd
-        where grp_sn = #{grpSn} and status in ('STST01', 'STST03')
+        from tstd s
+        where grp_sn = #{grpSn} and status in ('STST01', 'STST03') and
+        (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) < 0
+    ]]>
     </select>
 
     <insert id="insert">

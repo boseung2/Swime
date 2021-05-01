@@ -280,7 +280,11 @@
         let grpSnValue = '<c:out value="${group.sn}"/>';
         let studyUL = $('.studyList');
 
+        // 예정스터디 리스트 띄우기
         showStudyList(1);
+
+        // 지난스터디 리스트 띄우기
+        showPastStudyList(1);
 
         function showStudyList(page) {
             studyListService.getList({grpSn:grpSnValue, page: page || 1}, function(count, list) {
@@ -318,7 +322,7 @@
                     str += "</div>";
                     str += "<div class='card-footer'>";
 
-                    if(list[i].endDate != null) str += "<p class='card-text blue-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + "~" + list[i].endDate.substring(0,10) + "</p>";
+                    if(list[i].endDate.substring(0, 10) !== list[i].startDate.substring(0, 10)) str += "<p class='card-text blue-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + "~" + list[i].endDate.substring(0,10) + "</p>";
                     else str += "<p class='card-text blue-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + "</p>"
                     str += "<p class='card-text blue-text'><i class='fas fa-clock'></i>&nbsp;" + list[i].startTime.substring(0,5) + "~" + list[i].endTime.substring(0,5) + "</p>";
 
@@ -332,6 +336,8 @@
                 showStudyPage(count);
             })
         }
+
+        function showPastStudyList() {}
 
         <!-- 스터디 페이징 처리 -->
         let studyPageNum = 1;
