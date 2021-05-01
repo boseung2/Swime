@@ -161,6 +161,7 @@
                b.grp_sn,
                b.user_id,
                u.name,
+               gl.grp_role,
                b.title,
                d.content,
                b.like_cnt,
@@ -170,11 +171,15 @@
                b.reg_date,
                b.upd_date
         from
-            tuser u, tbrd b, tbrd_det d
+            tuser u, tbrd b, tbrd_det d, tgrp_list gl
         where
             b.sn = d.brd_sn
         and
             u.id = b.user_id
+        and
+            b.grp_sn = gl.grp_sn
+        and
+            b.user_id = gl.user_id
         and
             b.sn = #{sn}
         ]]>

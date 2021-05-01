@@ -130,7 +130,6 @@
             <c:if test="${board.topFix == 'BOFI02'}">
                 <div id="notice">[공지사항]</div>
             </c:if>
-
             <div id="inline3">
                 <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>
                 <div class="inline" id="name"><c:out value="${board.name}" /></div>
@@ -139,19 +138,36 @@
 
 
             <div id="inline2">
-                <!--principal.MemberVo > mv.name board.name접근해서 이름 가져온다. 위에 참고-->
-                <!--모임장 운영자 그리고 자기자신은 게시글을 수정할 수 있다.-->
-                <sec:authorize access="isAuthenticated()">
-                <c:choose>
-                    <c:when test="${group.grpRole ne 'GRRO03'}">
-                        <button data-oper='modify' class="btn btn-primary">수정</button>
-                    </c:when>
-                    <c:when test="${mv.id eq board.userId}">
-                        <button data-oper='modify' class="btn btn-primary">수정</button>
-                    </c:when>
+                <!--모임참석 x -> 수정버튼 x
+                    모임참석 o
+                    모임장,운영진 -> 자기자신 포함, 일반회원 수정가능,  하지만 운영진은 모임장 수정 x
+                    일반회원 -> 자기자신만 수정가능
+                    참석자 리스트 가져와서 권한확인
+                -->
 
-                </c:choose>
+                <c:set var="done" value="false"/>
+                <sec:authorize access="isAuthenticated()">
+                    <c:forEach var = "attendant" items="${groupAttendList}">
+                        <c:if test="${not done}">
+                            <c:choose>
+                                <c:when test="${group.grpRole eq 'GRRO01'}"> <!--모임장이면 다 수정 -->
+                                    <button data-oper='modify' class="btn btn-primary">수정</button>
+                                </c:when>
+
+                                <c:when test="${group.grpRole eq 'GRRO02' and board.grpRole ne 'GRRO01'}">
+
+                                    <button data-oper='modify' class="btn btn-primary">수정</button>
+                                </c:when>
+
+                                <c:when test="${mv.id eq board.userId}">
+                                    <button data-oper='modify' class="btn btn-primary">수정</button>
+                                </c:when>
+                            </c:choose>
+                <c:set var="done" value="true"/>
+                        </c:if>
+                    </c:forEach>
                 </sec:authorize>
+
 
 
 
@@ -273,19 +289,52 @@
                 </div> <!--end panel-body-->
 <%--            </div> <!--end reply box-->--%>
 
-        <!--댓글 입력 창(로그인 안하면 댓글 창 안보이게 함.)-->
+        <!--비로그인 : 댓글 입력 x
+            로그인 O 모입가입 x : 댓글 입력 x
+            로그인 O 모입가입 O : 댓글 입력 O
+
+            로그인 안한 사람 -> "로그인한 후 입력해주세요!"
+            [1] 변수 match ->0 /1
+            로그인한 계정 : toywar / 참석자 계정 : toywar -> "댓글입력해주세요" (match =1 )
+            로그인한 계정 : toywar / 참석자리스트에 없을 경우 -> "모임 가입 후 댓글입력해주세요"
+
+            [2] display : match == 1
+            pinfo.username forloop match! -> 댓글입력
+
+
+
+        -->
+
             <div class="commentWriter">
                 <div class="comment_inbox">
+                    <c:set var="done" value="false"/>
+                    <sec:authorize access="isAuthenticated()">
 
-            <sec:authorize access="isAuthenticated()">
-            <textarea id='replyComment' placeholder="댓글을 입력해주세요" rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
-                <div class="register_box">
-                    <button id='replyRegisterBtn' role="button" class="button btn_register is_active">등록</button>
-                </div>
-            </sec:authorize>
-            <sec:authorize access="isAnonymous()">
-            <textarea id='replyComment' placeholder="로그인 후 댓글을 입력할 수 있습니다." rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
-            </sec:authorize>
+                        <c:forEach var = "attendant" items="${groupAttendList}">
+
+                            <c:if test="${attendant.userId eq pinfo.username}">
+
+                                <c:set var="exist" value="true"/>
+                            </c:if>
+
+                        </c:forEach>
+                            <c:if test="${exist}">
+                                <textarea id='replyComment' placeholder="댓글을 입력해주세요" rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
+                                <div class="register_box">
+                                    <button id='replyRegisterBtn' role="button" class="button btn_register is_active">등록</button>
+                                </div>
+                            </c:if>
+                            <c:if test="${not exist}">
+                                <textarea id='replyComment' placeholder="모임가입 후 댓글을 입력하실 수 있습니다." rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
+                            </c:if>
+
+                    </sec:authorize>
+
+
+
+                    <sec:authorize access="isAnonymous()">
+                        <textarea id='replyComment' placeholder="로그인 후 댓글을 입력할 수 있습니다." rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
+                    </sec:authorize>
                 </div><!-- end comment_inbox-->
 
             </div><!-- end commentWriter-->
@@ -405,6 +454,8 @@
 
         let modalModBtn = $('#modalModBtn');
         let modalCloseBtn = $('#modalCloseBtn');
+
+
 
         //게시판 상세 조회 시 첨부파일
         $.getJSON("/board/getAttachList", {brdSn : snValue}, function(arr){
@@ -650,9 +701,9 @@
                     str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
                     <sec:authorize access="isAuthenticated()">
 
-                        let p_username = "${pinfo.username}";
+                        let pUsername = "${pinfo.username}";
                         // 내가 쓴 글이면 수정 삭제
-                        if(p_username == list[i].userId){
+                        if(pUsername == list[i].userId){
                             console.log("equal");
                             console.log("${pinfo.username}");
                             console.log(list[i].userId);
@@ -724,6 +775,7 @@
             <sec:authorize access="isAuthenticated()">
                 isLogin = '<sec:authentication property="principal.username"/>'
             </sec:authorize>
+
             if(!isLogin){
                 alert("로그인 해주세요");
                 return;

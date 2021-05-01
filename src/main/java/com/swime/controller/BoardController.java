@@ -83,7 +83,7 @@ public class BoardController {
         model.addAttribute("grpSn", grpSn);
         model.addAttribute("userId", userId);
 
-        //상위고정하기위해서 그룹참석자의 그룹역할을 가져온다.
+        //상위고정하기위해서 그룹참석자의 가져온다.
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(grpSn);
         groupAttend.setUserId(userId);
@@ -143,16 +143,23 @@ public class BoardController {
                     Model model, @ModelAttribute("cri") BoardCriteria cri) {
 
 
+
+        //그룹 참석자 가져온다
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(grpSn);
         groupAttend.setUserId(userId);
 
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
 
+        //그룹을 가입한 리스트 출력
+        List<GroupAttendVO> groupList = groupAttendService.getList(grpSn);
+
+        model.addAttribute("groupAttendList", groupList);
         model.addAttribute("group", groupAttendVO);
         model.addAttribute("board", service.get(sn));
         model.addAttribute("reply", replyService.get(sn));
 
+        log.info("groupList>>>>>>>"+groupList);
         log.info("groupAttendVO : " + groupAttendVO);
         log.info("/get");
         log.info("replyServiceGet : "+replyService.get(sn));
