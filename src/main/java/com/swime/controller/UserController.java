@@ -6,9 +6,11 @@ import com.swime.service.AuthService;
 import com.swime.service.MemberService;
 import com.swime.service.ProfileService;
 import com.swime.util.GmailSend;
+import com.swime.util.HttpRequest;
 import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.kohsuke.github.GHPerson;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 @Controller
@@ -50,27 +57,14 @@ public class UserController {
     }
 
     @GetMapping("/login/github")
-    public void github(String code){
-        log.info(code);
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", "190944c4173bf58cc6e5");
-        params.add("client_secret", "6cef3b8bb7a83ca00207f602539850c53f549dff");
-        params.add("code", code);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("","");
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
-
-        RestTemplate rt = new RestTemplate();
-
-        ResponseEntity<String> response = rt.exchange(
-                "https://github.com/login/oauth/access_token", //{요청할 서버 주소}
-                HttpMethod.POST, //{요청할 방식}
-                entity, // {요청할 때 보낼 데이터}
-                String.class // {요청시 반환되는 데이터 타입}
-        );
-
-        log.info(response);
+    public void github(String code, Model model) throws Exception{
+        log.info("code = " + code);
+        HttpRequest httpRequest = new HttpRequest();
+        String ac = httpRequest.getGithubAccessCode(code);
+        log.info(ac);
+        GHPerson ghPerson = httpRequest.connectGithub(ac);
+        log.info(ghPerson);
+        model.addAttribute("ghPerson", ghPerson);
     }
 
     @GetMapping("/register")

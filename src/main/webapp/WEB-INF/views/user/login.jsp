@@ -66,7 +66,7 @@
         </form>
         <%--        <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login"></button>--%>
         <a class="w-100 btn btn-lg btn-primary" style="margin-top: 30px;"
-           href="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://localhost/user/login/github"
+           href="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://localhost/user/login/github&scope=repo,user"
         >GitHub 아이디로 로그인</a>
     </div>
 </div>
