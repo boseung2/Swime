@@ -331,7 +331,6 @@
                     </sec:authorize>
 
 
-
                     <sec:authorize access="isAnonymous()">
                         <textarea id='replyComment' placeholder="로그인 후 댓글을 입력할 수 있습니다." rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
                     </sec:authorize>
