@@ -6,7 +6,7 @@
 
 <!-- 상단 이미지 -->
 <div class="head-image">
-<div class="head-content">
+<div class="head-content" onclick="location.href='/group/list'">
     <p>모임찾기</p>
     원하는 조건에 맞춰 모임을 찾아보세요.
 </div>
@@ -146,8 +146,6 @@
                         </div>
 
                         <div class="caption">
-                            <p class="card-text" style="font-size : 25px"><c:out value="${group.name}"/></p>
-                            <p class="card-text" style="margin-top : 50px;"><c:out value="${group.description}"/></p>
                             <div class="flex-container" style="display: flex;;">
                                 <c:forEach items="${group.tags}" var="tag">
                                     <div style="background-color: #f1f1f1;margin: 2px;padding: 2px;font-size: 15px;border-radius: 0.5rem;width: 80px;height: 25px; text-align:center;">
@@ -155,6 +153,8 @@
                                     </div>
                                 </c:forEach>
                             </div>
+                            <p class="card-text" style="font-size : 25px"><c:out value="${group.name}"/></p>
+                            <p class="card-text" style="margin-top : 50px;"><c:out value="${group.description}"/></p>
                         </div>
                     </div>
 <%--                    <div class="card-footer">--%>

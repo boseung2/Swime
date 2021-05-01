@@ -140,13 +140,14 @@
                 <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
             </sec:authorize></h4>
 
-
-            <ul class="rating">
-                <li data-sn="12">
-                    <div>
-                    </div>
-                </li>
-            </ul>
+            <div class="group-rating">
+                <ul class="rating">
+                    <li data-sn="12">
+                        <div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <!-- 후기 페이징 -->
@@ -157,6 +158,7 @@
 
 
         <!-- Call to Action Well -->
+        <!--
         <div class="card text-white bg-secondary my-5 py-4 text-center">
             <div class="card-body">
                 <p class="text-white m-0">This call to action card is a great place to showcase some important information or display a clever tagline!</p>
@@ -164,6 +166,7 @@
         </div>
 
         </div>
+        -->
         <!-- main-contents -->
     </div>
     <!-- container -->
@@ -476,11 +479,11 @@
                 }
                 for(let i=0, len=list.length || 0; i<len; i++) {
                     str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><strong>"+list[i].userName+"</strong>";
+                    str += "<div class='group-rating-content'><div class='header'><strong>"+list[i].userName+"</strong>";
                     str += "<small> "+list[i].regDate+"</small></div>";
                     str += "<p class='ratingPlace2' id='stars"+list[i].sn+"' data-rating='"+list[i].rating+"'></p>";
                     console.log(list[i]);
-                    str += "<p>내용 : "+list[i].review+"</p></div></li>";
+                    str += "<p>" + list[i].review + "</p></div></li>";
                 }
 
                 ratingUL.html(str);
