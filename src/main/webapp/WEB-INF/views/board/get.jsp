@@ -330,7 +330,6 @@
 
                     </sec:authorize>
 
-
                     <sec:authorize access="isAnonymous()">
                         <textarea id='replyComment' placeholder="로그인 후 댓글을 입력할 수 있습니다." rows="1" class="comment_inbox_text" style="overflow: hidden; overflow-wrap: break-word; height: 18px" required></textarea>
                     </sec:authorize>
@@ -339,11 +338,9 @@
             </div><!-- end commentWriter-->
             <!--end 댓글 입력 창-->
 
-
         </div> <!-- ./col-lg-12-->
 
     </div><!-- row -->
-
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" aria-hidden="true">
