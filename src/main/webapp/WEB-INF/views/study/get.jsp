@@ -428,7 +428,19 @@
 
             let str = "";
 
-            if(result === "group not attend") {
+            // 현재날짜
+            let currDate = new Date();
+
+            //시작일자
+            let startDate = new Date("${study.startDate}" + " " + "${study.startTime}");
+
+            console.log("현재날짜 = " + currDate);
+            console.log("시작날짜 = " + startDate);
+            console.log("예정스터디 = " + currDate <= startDate);
+            console.log("지난스터디 = " + currDate > startDate);
+
+            // 그룹에 속해있지 않거나 시작일자가 현재날짜보다 이전일때
+            if(result === "group not attend" || currDate > startDate) {
                 // str += "";
 
             } else if(result === "not attend"){
