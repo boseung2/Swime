@@ -101,6 +101,17 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
+    public GroupStudyListDTO getPastList(StudyCriteria cri, long grpSn) {
+        GroupStudyListDTO groupStudyList = new GroupStudyListDTO();
+        groupStudyList.setList(mapper.getPastListWithPaging(cri, grpSn));
+        groupStudyList.setCount(mapper.countPastStudy(grpSn));
+
+        groupStudyList.getList().forEach(study -> study.setAttendants(listMapper.count(study.getSn())));
+
+        return groupStudyList;
+    }
+
+    @Override
     public int countStudy(long grpSn) {
         return mapper.countStudy(grpSn);
     }

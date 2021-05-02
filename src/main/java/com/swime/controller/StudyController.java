@@ -46,6 +46,17 @@ public class StudyController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    // 지난 스터디 리스트 페이징처리
+    @GetMapping(value = "/pastList/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<GroupStudyListDTO> getPastList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
+
+        StudyCriteria cri = new StudyCriteria(page, 3);
+        GroupStudyListDTO list = service.getPastList(cri, grpSn);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     // 에러페이지
     @GetMapping("/error")
     public void error() {

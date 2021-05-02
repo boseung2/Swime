@@ -116,6 +116,24 @@ public class StudyServiceTests {
     }
 
     @Test
+    public void testGetPastListWithPaging() {
+        StudyCriteria cri = new StudyCriteria();
+        cri.setPageNum(1);
+        cri.setAmount(3);
+
+        GroupStudyListDTO groupStudyListDTO = service.getPastList(cri, 1040);
+
+        List<StudyVO> list = groupStudyListDTO.getList();
+        list.forEach(study -> log.info(study));
+        log.info(groupStudyListDTO.getCount());
+
+        for (StudyVO li : list) {
+            assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
+        }
+        assert (0 <= list.size() && list.size() <= 3);
+    }
+
+    @Test
     public void testCountStudy() {
         assert (service.countStudy(222) == 2);
     }

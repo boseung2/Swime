@@ -105,7 +105,7 @@
         <!-- 스터디 만들기 버튼-->
         <hr class="centerHr" id="study">
         <div>
-            <h4>스터디
+            <h4>
             <c:set var="done" value="false"/>
 
             <c:forEach var = "attendant" items="${attendList}">
@@ -120,12 +120,22 @@
         </div>
 
 
-        <!-- 스터디 리스트 -->
+        <!-- 예정된 스터디 리스트 -->
+        <h4>예정된 스터디</h4>
         <div class="studyList row">
         </div>
 
-        <!-- 스터디 페이징 처리 -->
+        <!-- 예정된 스터디 페이징 처리 -->
         <div class="studyPageFooter panel-footer">
+        </div>
+
+        <!-- 지난 스터디 리스트 -->
+        <h4>지난 스터디</h4>
+        <div class="pastStudyList row">
+        </div>
+
+        <!-- 지난 스터디 페이징 처리 -->
+        <div class="pastStudyPageFooter panel-footer">
         </div>
 
         <!-- 게시판 -->
@@ -278,7 +288,6 @@
 <script>
     $(document).ready(function() {
         let grpSnValue = '<c:out value="${group.sn}"/>';
-        let studyUL = $('.studyList');
 
         // 예정스터디 리스트 띄우기
         showStudyList(1);
@@ -286,18 +295,15 @@
         // 지난스터디 리스트 띄우기
         showPastStudyList(1);
 
-        function showStudyList(page) {
-            studyListService.getList({grpSn:grpSnValue, page: page || 1}, function(count, list) {
+        function showPastStudyList(page) {
+            studyListService.getPastList({grpSn:grpSnValue, page: page || 1}, function(count, list) {
 
-                console.log("study count : " + count);
-                for(let i = 0, len = list.length; i < len; i++) {
-                    console.log(list[i]);
-                }
+                console.log("past study count : " + count);
 
                 let str = "";
 
                 if(list == null || list.length == 0) {
-                    studyUL.html("");
+                    $('.pastStudyList').html("");
                     return;
                 }
 
@@ -331,19 +337,66 @@
                     str += "</div>";
                 }
 
-                studyUL.html(str);
+                $('.pastStudyList').html(str);
 
-                showStudyPage(count);
+                showStudyPage(count, $('.pastStudyPageFooter'));
             })
         }
 
-        function showPastStudyList() {}
+
+        function showStudyList(page) {
+            studyListService.getList({grpSn:grpSnValue, page: page || 1}, function(count, list) {
+
+                console.log("study count : " + count);
+
+                let str = "";
+
+                if(list == null || list.length == 0) {
+                    $('.studyList').html("");
+                    return;
+                }
+
+                for(let i = 0, len = list.length || 0; i < len; i++) {
+
+                    str += "<div class='col-md-4 mb-5'>";
+                    str += "<div class='card h-100' onclick=location.href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "';>";
+                    str += "<div class='card-body'>";
+
+                    str += "<h2 class='card-title'>" + list[i].name + "</h2>";
+
+
+                    if(list[i].onOff === 'STOF01') str += "<p class='card-text'><i class='fas fa-video'></i> 온라인 스터디</p>";
+                    if(list[i].onOff === 'STOF02') str += "<p class='card-text'><i class='fas fa-map-marker-alt'></i> 오프라인 스터디</p>";
+
+                    <c:if test="list[i].expense == null">str += "<p class='card-text'></p>"; </c:if>
+                    <c:if test="list[i].expense != null">str += "<p class='card-text'><i class='fas fa-won-sign'></i> " + list[i].expense + "</p>"; </c:if>
+
+                    if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
+                    else str += "<p class='card-text'><i class='fas fa-users'></i> 참석인원 " + list[i].attendants + "명 / 모집인원 " +  list[i].capacity + "명</p>";
+                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    str += "</div>";
+                    str += "<div class='card-footer'>";
+
+                    if(list[i].endDate.substring(0, 10) !== list[i].startDate.substring(0, 10)) str += "<p class='card-text blue-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + "~" + list[i].endDate.substring(0,10) + "</p>";
+                    else str += "<p class='card-text blue-text'><i class='fas fa-calendar-alt'></i> " + list[i].startDate.substring(0,10) + "</p>"
+                    str += "<p class='card-text blue-text'><i class='fas fa-clock'></i>&nbsp;" + list[i].startTime.substring(0,5) + "~" + list[i].endTime.substring(0,5) + "</p>";
+
+                    str += "</div>";
+                    str += "</div>";
+                    str += "</div>";
+                }
+
+                $('.studyList').html(str);
+
+                showStudyPage(count, $('.studyPageFooter'));
+            })
+        }
 
         <!-- 스터디 페이징 처리 -->
         let studyPageNum = 1;
-        let studyPageFooter = $('.studyPageFooter');
+        // let studyPageFooter = $('.studyPageFooter');
 
-        function showStudyPage(studyCount) {
+        function showStudyPage(studyCount, pageFooter) {
 
             let endNum = Math.ceil(studyPageNum / 10.0) * 10;
             let startNum = endNum - 9;
@@ -386,10 +439,10 @@
 
             console.log(str);
 
-            studyPageFooter.html(str);
+            pageFooter.html(str);
         }
 
-        studyPageFooter.on("click", "li[id='study-item'] a[id='study-link']", function(e) {
+        $('.studyPageFooter').on("click", "li[id='study-item'] a[id='study-link']", function(e) {
             e.preventDefault();
 
             console.log("study page click");
@@ -401,6 +454,22 @@
             studyPageNum = targetPageNum;
 
             showStudyList(studyPageNum);
+
+        })
+
+        $('.pastStudyPageFooter').on("click", "li[id='study-item'] a[id='study-link']", function(e) {
+            e.preventDefault();
+
+            console.log("study page click");
+
+            let targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            studyPageNum = targetPageNum;
+
+            showPastStudyList(studyPageNum);
+
         })
 
         // studyPageFooter.on("click", "li a", function(e) {

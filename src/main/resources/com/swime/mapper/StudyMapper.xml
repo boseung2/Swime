@@ -25,8 +25,8 @@
                 select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
                 from tstd s, tuser u
                 where s.grp_sn = #{grpSn} and s.status in ('STST01', 'STST03') and s.representation = u.id and
-                        (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) < 0
-                order by start_date
+                        (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) <= 0
+                order by start_date, sn asc
                 )
             where rownum <= #{cri.pageNum} * #{cri.amount}
             )
@@ -34,13 +34,42 @@
     ]]>
     </select>
 
+    <select id="getPastListWithPaging" resultType="com.swime.domain.StudyVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, representation, representation_name, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from tstd s, tuser u
+                        where s.grp_sn = #{grpSn} and s.status in ('STST01', 'STST03') and s.representation = u.id and
+                                (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) > 0
+                        order by start_date desc, sn asc
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
     <select id="countStudy" resultType="int">
     <![CDATA[
         select count(*)
         from tstd s
         where grp_sn = #{grpSn} and status in ('STST01', 'STST03') and
-        (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) < 0
+        (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) <= 0
     ]]>
+    </select>
+
+    <select id="countPastStudy" resultType="int">
+    <![CDATA[
+        select count(*)
+        from tstd s
+        where grp_sn = #{grpSn} and status in ('STST01', 'STST03') and
+                (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) > 0
+        ]]>
     </select>
 
     <insert id="insert">

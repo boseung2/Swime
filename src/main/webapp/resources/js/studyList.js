@@ -4,7 +4,7 @@ let studyListService = (function(){
 
     function getList(param, callback, error) {
 
-        console.log("param=" + param);
+        console.log("getList param=" + param);
 
         let grpSn = param.grpSn;
         let page = param.page || 1;
@@ -24,7 +24,30 @@ let studyListService = (function(){
             }
         })
     }
+
+    function getPastList(param, callback, error) {
+
+        console.log("getPastList param=" + param);
+
+        let grpSn = param.grpSn;
+        let page = param.page || 1;
+
+        console.log("grpSn = " + grpSn);
+        console.log("page = " + page);
+
+        $.getJSON("/study/pastList/" + grpSn + "/" + page + ".json",
+            function(data) {
+                if(callback) {
+                    callback(data.count, data.list);
+                }
+            }).fail(function(xhr, status, err) {
+            if(error) {
+                error();
+            }
+        })
+    }
     return {
-        getList : getList
+        getList : getList,
+        getPastList : getPastList
     };
 })();
