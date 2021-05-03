@@ -3,18 +3,31 @@
 
 <%@include file="../includes/header.jsp" %>
 
-<div class="container">
-    <h2>모임 정보 수정</h2>
-    <hr/>
+<!-- 상단 이미지 -->
+<div class="head-image">
+    <div class="head-content" onclick="location.href='/group/register'">
+        <p>모임만들기</p>
+        회원들과 함께 모임을 이끌어 보세요.
+    </div>
+</div>
+<!-- 상단 이미지 -->
+
+<div class="container group-register">
     <form role="form" action="/group/modify" method="post">
         <div class="form-group">
-            <label for="sn">모임번호</label>
-            <input type="text" class="form-control" id="sn" name="sn" value="<c:out value="${group.sn}"/>" readonly="readonly">
+            <label for="sn" hidden>모임번호</label>
+            <input type="text" class="form-control" id="sn" name="sn" value="<c:out value="${group.sn}"/>" readonly="readonly" hidden>
         </div>
         <div class="form-group">
-            <label for="userId">아이디</label>
-            <input type="text" class="form-control" id="userId" name="userId" value="<c:out value="${group.userId}"/>" readonly="readonly">
+            <label for="userId" hidden>아이디</label>
+            <input type="text" class="form-control" id="userId" name="userId" value="<c:out value="${group.userId}"/>" readonly="readonly" hidden>
         </div>
+
+        <div class="form-group">
+            <label for="name">모임명</label>
+            <input type="text" class="form-control" name="name" id="name" value="<c:out value="${group.name}"/>" required>
+        </div>
+
         <div class="form-group">
             <label for="category">카테고리</label>
             <select class="form-control" id="category" name="category" required>
@@ -34,34 +47,24 @@
         </div>
 
         <div class="form-group">
-            <label for="name">모임이름</label>
-            <input type="text" class="form-control" name="name" id="name" value="<c:out value="${group.name}"/>" required>
-        </div>
-        <div class="form-group uploadDiv">
-            <label for="uploadFile">대표사진</label>
-            <input type="file" class="form-control" id="uploadFile" name="uploadFile" accept="image/*">
-            <div class="uploadResult">
-                <ul>
-
-                </ul>
-            </div>
-        </div>
-        <div class="form-group">
             <label for="description">간단소개</label>
             <textarea class="form-control" rows="2" id="description" name="description" required><c:out value="${group.description}"/></textarea>
         </div>
+
         <div class="form-group">
-            <label for="info">정보 (모임에 대해 자세히 적어주세요)</label>
-            <textarea class="form-control" rows="5" id="info" name="info" required><c:out value="${group.info}"/></textarea>
+            <label for="info">모임정보 - 모임에 대해 자세히 적어주세요(운영계획, 공부할 책제목 등)</label>
+            <textarea class="form-control" rows="20" id="info" name="info" required><c:out value="${group.info}"/></textarea>
         </div>
+
+        <div class="form-group">
         <div class="form-row">
             <div class="col">
-            <label for="sido">시/도</label>
-            <select class="form-control" id="sido" name="sido">
-                <option value="select">-------------</option>
-                <option value="LODO01">서울특별시</option>
-                <option value="LODO02">경기도</option>
-            </select>
+                <label for="sido">시/도</label>
+                <select class="form-control" id="sido" name="sido">
+                    <option value="select">-------------</option>
+                    <option value="LODO01">서울특별시</option>
+                    <option value="LODO02">경기도</option>
+                </select>
             </div>
             <div class="col">
                 <label for="sigungu">시/군/구</label>
@@ -129,44 +132,26 @@
                 </select>
             </div>
         </div>
-        <script>
-            $(document).ready(function() {
-                let seoul = $('#sido').children()[0];
-                let gyunggido = $('#sido').children()[1];
+        </div>
 
-                $('#sido').on("click", function(e) {
-                    $('#sido').children()
-                })
-            })
-        </script>
-        <!-- 시/군/구를 시/도에 맞게 변경-->
-        <script>
-            $(document).ready(function() {
-                $('#sido').on("change", function() {
-                    let options = $('#sigungu option');
 
-                    for(let i=1; i<options.length; i++) {
-                        options[i].setAttribute("hidden", "hidden");
-                    }
+        <p>대표사진</p>
+        <div class="form-group">
+            <div class="uploadDiv">
+                <div class="custom-file">
+                    <label for="uploadFile" class="custom-file-label">없음</label>
+                    <input type="file" class="form-control custom-file-input" id="uploadFile" name="uploadFile" accept="image/*">
+                    <div class="uploadResult">
+                        <ul>
 
-                    if($('#sido option:selected').val() == "LODO01") {
-                        // 서울특별시일때
-                        for(let i=0; i<options.length; i++) {
-                            if(options[i].value.substr(0,4) == "LOGU") {
-                                options[i].removeAttribute("hidden");
-                            }
-                        }
-                    }else if($('#sido option:selected').val() == "LODO02") {
-                        // 경기도일때
-                        for(let i=0; i<options.length; i++) {
-                            if(options[i].value.substr(0,4) == "LOSI") {
-                                options[i].removeAttribute("hidden");
-                            }
-                        }
-                    }
-                })
-            })
-        </script>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="form-group">
             <label for="tags">태그</label>
             <select class="form-control" id="tags" name="tags" >
@@ -212,11 +197,6 @@
                 <option value="GRTG39">Eclipse</option>
                 <option value="GRTG40">Excel</option>
             </select>
-        </div>
-
-        <div class="bigPictureWrapper">
-            <div class="bigPicture">
-            </div>
         </div>
 
         <div class="form-group">
@@ -446,21 +426,25 @@
                         str += "<li data-path='"+attach.uploadPath+"'";
                         str += "data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"'data-type='"+attach.fileType+"'";
                         str += "><div>";
-                        str += "<span> "+attach.fileName+"</span>";
-                        str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
+                        //str += "<span> "+obj.fileName+"</span>";
                         str += "<img src='/display?fileName="+fileCallPath+"'>";
+                        str += "<button type='button' class='btn btn-dark btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button>";
                         str += "</div>";
                         str += "</li>";
+
+                        $('.custom-file-label').html(attach.fileName);
                     } else {
                         let fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
                         str += "<li";
                         str += "data-path='" + attach.uploadPath + "' data-uuid='"+attach.uuid+"'data-filename='" + attach.fileName + "'data-type='" + attach.fileType+"'><div>";
-                        str += "<span> " + attach.fileName+"</span>";
-                        str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='file'>X</button><br>";
+                        //str += "<span> " + attach.fileName+"</span>";
+                        //str += "<span> "+obj.fileName+"</span>";
                         str += "<img src='/resources/img/attach.png'></a>";
+                        str += "<button type='button' class='btn btn-dark btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button>";
                         str += "</div>";
                         str += "</li>";
                     }
+
                 })
 
                 $(".uploadResult ul").html(str);
@@ -470,6 +454,8 @@
         $(".uploadResult").on("click", "button", function(e) {
 
             console.log("delete file");
+
+            $('.custom-file-label').html("없음");
 
             if(confirm("Remove this file? ")) {
 
@@ -553,9 +539,9 @@
                     str += "<li data-path='"+obj.uploadPath+"'";
                     str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'";
                     str += "><div>";
-                    str += "<span> "+obj.fileName+"</span>";
-                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
+                    //str += "<span> "+obj.fileName+"</span>";
                     str += "<img src='/display?fileName="+fileCallPath+"'>";
+                    str += "<button type='button' class='btn btn-dark btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button>";
                     str += "</div>";
                     str += "</li>";
                 } else {
@@ -655,8 +641,42 @@
         return byte;
     }
 </script>
+<script>
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
 
+<!-- 시/군/구를 시/도에 맞게 변경-->
+<script>
+    $(document).ready(function() {
+        $('#sido').on("change", function() {
+            let options = $('#sigungu option');
 
+            for(let i=1; i<options.length; i++) {
+                options[i].setAttribute("hidden", "hidden");
+            }
+
+            if($('#sido option:selected').val() == "LODO01") {
+                // 서울특별시일때
+                for(let i=0; i<options.length; i++) {
+                    if(options[i].value.substr(0,4) == "LOGU") {
+                        options[i].removeAttribute("hidden");
+                    }
+                }
+            }else if($('#sido option:selected').val() == "LODO02") {
+                // 경기도일때
+                for(let i=0; i<options.length; i++) {
+                    if(options[i].value.substr(0,4) == "LOSI") {
+                        options[i].removeAttribute("hidden");
+                    }
+                }
+            }
+        })
+    })
+</script>
 
 
 

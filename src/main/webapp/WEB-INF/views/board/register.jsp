@@ -49,6 +49,7 @@
     .uploadResult ul li span {
         color: black;
     }
+
     /*.uploadResult2 {*/
     /*    width: 100%;*/
     /*    background-color: white;*/
@@ -165,17 +166,19 @@
 <%--        </div>--%>
         <!--게시글 상위고정은 모임장, 운영진만 가능하니까 일반회원은 안보이게한다.-->
 
-        <sec:authorize access="isAuthenticated()">
+        <div class="form-check">
             <c:choose>
                 <c:when test="${group.grpRole ne 'GRRO03'}">
-                    <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="topFix_CKBox" name="topFix_CKBox">
                         <label class="form-check-label" for="topFix_CKBox">게시물 상위고정</label>
                         <input type="hidden" id="topFix" name="topFix" value="BOFI01">
-                    </div>
                 </c:when>
+                <c:otherwise>
+                    <input class="hiddenTop" type="hidden" id="topFix2" name="topFix" value="BOFI01">
+                </c:otherwise>
             </c:choose>
-        </sec:authorize>
+        </div>
+
 
         <sec:csrfInput/>
 <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>

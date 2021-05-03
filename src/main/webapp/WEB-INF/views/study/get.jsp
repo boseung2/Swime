@@ -8,47 +8,36 @@
 
 <%@include file="../includes/header.jsp" %>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<style type="text/css">
-    #map {
-        width : 100%;
-        height: 400px;
-    }
-
-    html,
-    body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-</style>
-
-<!-- Page Content -->
+<!-- container -->
 <div class="container">
-
     <c:set var="startDate" value="${study.startDate}"/>
     <c:set var="endDate" value="${study.endDate}"/>
     <c:set var="startTime" value="${study.startTime}"/>
     <c:set var="endTime" value="${study.endTime}"/>
 
     <!-- Heading Row -->
-    <div class="row align-items-center my-5">
-        <div class="col-lg-7">
+    <div class="row align-items-center my-5" id="study-get-header">
+        <div class="col-lg-7" style="padding-left: 5rem;">
 
             <h1>${study.name}</h1><br>
+
+            <c:if test="${endDate != startDate}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
+            <c:if test="${endDate == startDate}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)}</span></c:if>
+            <br>
+
+            <span><i class="fas fa-clock"></i> 시간 : ${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
+
+
+            <br>
             <c:if test="${study.repeatCycle eq 'STCY01'}"><span>매주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY02'}"><span>격주</span></c:if>
             <c:if test="${study.repeatCycle eq 'STCY03'}"><span>매월</span></c:if>
 
             <c:if test="${study.repeatDay != null}"><span>${study.repeatDay}</span></c:if>
-            <br>
-            <span><i class="fas fa-clock"></i> 시간 : ${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
-            <br>
-            <c:if test="${endDate != startDate}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
-            <c:if test="${endDate == startDate}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)}</span></c:if>
         </div>
         <!-- /.col-lg-8 -->
-        <div class="col-lg-5">
+        <div class="col-lg-5" style="padding-left: 5rem;
+">
             <p><i class="fas fa-user"></i> 스터디장 : ${study.representationName}</p>
 
             <div id = "capacity">
@@ -62,148 +51,138 @@
                 <c:when test="${study.expense != null}"><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}원</p></c:when>
             </c:choose>
 
-
-            <div class="wishButton" style="width: max-content; height: max-content"></div>
-
-            <c:if test="${study.representation != pinfo.username}">
-                <div id="attendButton" style="width: max-content; height: max-content"></div>
-            </c:if>
-
-            <br>
-            <c:if test="${study.representation eq pinfo.username}">
-                <a class="modify btn btn-primary" href="">스터디 수정</a>
-                <a class="remove btn btn-primary" href="">스터디 삭제</a>
-                <a class="btn btn-primary" href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}">멤버 관리</a>
-                <br><br>
-<%--            <a class="btn btn-primary" href="#">참가 신청 마감</a>--%>
-<%--            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>--%>
-<%--            <br><br>--%>
-            </c:if>
-
-            <a class="list btn btn-primary" href="">그룹으로 돌아가기</a>
-            <br>
         </div>
         <!-- /.col-md-4 -->
     </div>
     <!-- /.row -->
+</div>
+<!-- /container -->
+
+<!-- 버튼들 -->
+<div class="container study-buttons">
+    <div class="wishButton" style="display: inline"></div>
+
+    <c:if test="${study.representation != pinfo.username}">
+        <div id="attendButton" style="width: max-content; height: max-content"></div>
+    </c:if>
+
+    <c:if test="${study.representation eq pinfo.username}">
+        <a class="modify btn btn-secondary" href="">스터디 수정</a>
+        <a class="remove btn btn-danger" href="">스터디 삭제</a>
+        <a class="btn btn-primary" href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}">멤버 관리</a>
+        <%--            <a class="btn btn-primary" href="#">참가 신청 마감</a>--%>
+        <%--            <a class="btn btn-primary" href="#">참여멤버와 채팅</a>--%>
+        <%--            <br><br>--%>
+    </c:if>
+
+    <a class="list btn btn-primary" href="">그룹으로 돌아가기</a>
+</div>
+
+<!-- Page Content -->
+<div class="gray-background">
+<div class="container">
 
     <!-- nav -->
     <div class="topnav">
-        <a href="#info" class="active">정보</a>
-        <a href="#member">참여멤버</a>
+        <a href="#info" class="active">스터디 정보</a>
         <c:if test="${study.onOff eq 'STOF01'}"><a href="#onOff">온라인 링크</a></c:if>
         <c:if test="${study.onOff eq 'STOF02'}"><a href="#onOff">장소</a></c:if>
     </div>
     <!-- /nav -->
 
-    <!-- topnav javascript -->
-    <script>
-        let topnav = document.getElementsByClassName("topnav")[0];
-        let sticky = topnav.offsetTop;
+    <div class="main-contents get-body">
 
-        $(document).ready(function() {
-            $('.topnav').on("click", "a", function(e) {
-                $(".topnav > a").removeClass('active');
-                console.dir(e.target);
-                $(this).attr("class", "active");
-            })
-        })
+        <div id="groupAttend">
+            <div id = "attendants">
+            </div>
+            <ul id="member">
+            </ul>
+        </div>
 
-        window.onscroll = function() {myFunction()};
+        <hr class="centerHr">
 
-        function myFunction() {
-            if(window.pageYOffset >= sticky) {
-                topnav.classList.add("sticky");
-            } else {
-                topnav.classList.remove("sticky");
-            }
-        }
-    </script>
+        <div id="info">
+            <h4> 스터디 정보</h4>
+            <pre>${study.information}</pre>
+        </div>
 
-    <div class="main-contents">
-    <div id="info">
-        <h4> 정보</h4>
-        <pre>${study.information}</pre>
-    </div>
-    <br>
+        <hr class="centerHr">
+        <div id="study-place">
+            <div id="onOff">
+                <c:if test="${study.onOff eq 'STOF01'}">
+                    <h4>온라인 스터디 링크</h4>
+                    <p><a href="${study.onUrl}">바로가기</a></p>
+                </c:if>
 
-    <hr class="centerHr">
-    <div id = "attendants"></div>
-    <ul id="member">
-    </ul>
-
-    <hr class="centerHr">
-    <div id="onOff">
-        <c:if test="${study.onOff eq 'STOF01'}">
-            <h4>온라인 스터디 링크</h4>
-            <p><a href="${study.onUrl}">바로가기</a></p>
-        </c:if>
-
-        <c:if test="${study.onOff eq 'STOF02'}">
-            <h4>장소</h4>
-            <div id="map"></div>
-        </c:if>
-    </div>
-
-
-    <!-- 스터디 생성/수정 확인 모달 -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">정상적으로 처리되었습니다.</div>
-                <div class = "modal-footer">
-<%--                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>--%>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
-                </div>
+                <c:if test="${study.onOff eq 'STOF02'}">
+                    <h4>장소</h4>
+                    <div id="map"></div>
+                </c:if>
             </div>
         </div>
     </div>
-
-    <form id="actionForm" action="" method="get">
-        <input type="hidden" name="pageNum" value="${cri.pageNum}">
-        <input type="hidden" name="amount" value="${cri.amount}">
-        <input type="hidden" name="grpSn" value="${study.grpSn}">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-    </form>
-
-    <!-- 설문 등록 모달창 -->
-    <div class="surveyModal modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="surveyModalLabel">스터디 설문 등록</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body"><span style="color: gray; font-size: small">스터디 참석을 위한 정보를 입력해주세요.</span></div>
-                    <div class="questionForm form-group" hidden="true">
-                        <strong><label style="padding-left: 16px;">질문 1. </label></strong>
-                        <p class="questionLabel" style="padding-left: 16px;"></p>
-                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
-                    </div>
-                    <div class="questionForm form-group" hidden="true">
-                        <strong><label style="padding-left: 16px;">질문 2. </label></strong>
-                        <p class="questionLabel" style="padding-left: 16px;"></p>
-                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
-                    </div>
-                    <div class="questionForm form-group" hidden="true">
-                        <strong><label style="padding-left: 16px;">질문 3. </label></strong>
-                        <p class="questionLabel" style="padding-left: 16px;"></p>
-                        <input style="width:465px;margin-left: 16px;" class="form-control answer">
-                    </div>
-                <div class = "modal-footer">
-                    <button id= "surveyRegisterBtn" type="button" class="btn btn-primary">등록</button>
-                    <button id= "surveyCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <hr style="margin: 2rem; border-top: 1px solid #f1f1f1;">
 </div>
+
+
+
+
+<!-- 스터디 생성/수정 확인 모달 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">정상적으로 처리되었습니다.</div>
+            <div class = "modal-footer">
+<%--                    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>--%>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="actionForm" action="" method="get">
+    <input type="hidden" name="pageNum" value="${cri.pageNum}">
+    <input type="hidden" name="amount" value="${cri.amount}">
+    <input type="hidden" name="grpSn" value="${study.grpSn}">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+</form>
+
+<!-- 설문 등록 모달창 -->
+<div class="surveyModal modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="surveyModalLabel">스터디 설문 등록</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body"><span style="color: gray; font-size: small">스터디 참석을 위한 정보를 입력해주세요.</span></div>
+                <div class="questionForm form-group" hidden="true">
+                    <strong><label style="padding-left: 16px;">질문 1. </label></strong>
+                    <p class="questionLabel" style="padding-left: 16px;"></p>
+                    <input style="width:465px;margin-left: 16px;" class="form-control answer">
+                </div>
+                <div class="questionForm form-group" hidden="true">
+                    <strong><label style="padding-left: 16px;">질문 2. </label></strong>
+                    <p class="questionLabel" style="padding-left: 16px;"></p>
+                    <input style="width:465px;margin-left: 16px;" class="form-control answer">
+                </div>
+                <div class="questionForm form-group" hidden="true">
+                    <strong><label style="padding-left: 16px;">질문 3. </label></strong>
+                    <p class="questionLabel" style="padding-left: 16px;"></p>
+                    <input style="width:465px;margin-left: 16px;" class="form-control answer">
+                </div>
+            <div class = "modal-footer">
+                <button id= "surveyRegisterBtn" type="button" class="btn btn-primary">등록</button>
+                <button id= "surveyCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript" src="/resources/js/studyWish.js"></script>
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
@@ -266,8 +245,8 @@
             $('#capacity').html(str);
 
             // 참여멤버 제목 구성
-            let str2 = '<h4 style="display:inline;">참여멤버 (' + result.attendants + '명) </h4>';
-            str2 += '<a href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}"> 모두 보기</a>';
+            let str2 = '<h4>참여멤버 (' + result.attendants + '명)';
+            str2 += '<a href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}"> 모두 보기</a></h4>';
 
             $('#attendants').html(str2)
         })
@@ -391,7 +370,7 @@
             if(result === "not exist") {
                 str += "<a class='wish btn btn-outline-primary' href=''>♡</a>";
             } else {
-                str += "<a class='wish btn btn-outline-primary' href=''>❤</a>";
+                str += "<a class='wish btn btn-primary' href=''>♡</a>";
             }
 
             $('.wishButton').html(str);
@@ -696,5 +675,31 @@
     src="https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&v=weekly"
     async
 ></script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+<!-- topnav javascript -->
+<script>
+    let topnav = document.getElementsByClassName("topnav")[0];
+    let sticky = topnav.offsetTop;
+
+    $(document).ready(function() {
+        $('.topnav').on("click", "a", function(e) {
+            $(".topnav > a").removeClass('active');
+            console.dir(e.target);
+            $(this).attr("class", "active");
+        })
+    })
+
+    window.onscroll = function() {myFunction()};
+
+    function myFunction() {
+        if(window.pageYOffset >= sticky) {
+            topnav.classList.add("sticky");
+        } else {
+            topnav.classList.remove("sticky");
+        }
+    }
+</script>
 
 <%@include file="../includes/footer.jsp" %>
