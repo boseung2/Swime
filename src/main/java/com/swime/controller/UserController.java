@@ -58,6 +58,8 @@ public class UserController {
 
     @GetMapping("/login/github")
     public void github(String code, Model model) throws Exception{
+        if(code == null) return;
+
         log.info("code = " + code);
         HttpRequest httpRequest = new HttpRequest();
         String ac = httpRequest.getGithubAccessCode(code);
@@ -69,6 +71,25 @@ public class UserController {
 
     @GetMapping("/register")
     public void register(){
+    }
+
+    @Transactional
+    @PostMapping("/registerSocial")
+    public ResponseEntity<String> registerSocial(MemberVO vo, RedirectAttributes rttr){
+        log.info(vo);
+        boolean result = false;
+        boolean result1 = false;
+        boolean result3 = false;
+        vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+        result = service.registerHistory(vo);
+        result1 = service.register(vo);
+        result3 = authService.register(vo.getId(),"MEMBER");
+        rttr.addFlashAttribute("vo", vo);
+//        return "redirect:/user/registerSuccess";
+        boolean all = result && result1 && result3;
+        return all ?
+                new ResponseEntity<>("Register Success", HttpStatus.OK) :
+                new ResponseEntity<>("Register Fail", HttpStatus.BAD_REQUEST);
     }
 
     @Transactional

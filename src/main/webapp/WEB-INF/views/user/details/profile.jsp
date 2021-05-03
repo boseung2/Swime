@@ -19,7 +19,7 @@
             <input type="text" class="form-control" id="userId" name="id" value="${MemberVo.id}" readonly>
         </div>
 
-        <c:if test="${userId == MemberVo.id}">
+        <c:if test="${userId == MemberVo.id && MemberVo.regPath == 'REPA01'}">
             <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input type="password" class="form-control" name="password" id="password" readonly>
