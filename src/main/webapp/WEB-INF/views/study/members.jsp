@@ -25,6 +25,7 @@
 <div class="topnav tab" style="margin-bottom: 10px;">
     <a href="#member" class="tablinks active" onclick="openTab(event, 'member')">참여 멤버</a>
     <a href="#waitingMember" class="tablinks" onclick="openTab(event, 'waitingMember')">승인 대기 멤버</a>
+    <a href="#waitingMember" class="tablinks" onclick="openTab(event, 'banMember')" id = "banMemberTab" hidden="true">영구강퇴 멤버</a>
 </div>
 <!-- /nav -->
 
@@ -40,34 +41,11 @@
     </ul>
 </div>
 
-<script>
+<div id="banMember" class="tabcontent">
+    <ul id="banList">
 
-    $(document).ready(function() {
-        // 처음에 참여멤버를 띄운다.
-        $("#member")[0].style.display = "block";
-    })
-
-    // tab 클릭될 때
-    function openTab(evt, tabName) {
-        let tabcontent, tablinks;
-
-        // tab content를 모두 안보이게
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (let i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        // tab link의 active를 지운다.
-        tablinks = document.getElementsByClassName("tablinks");
-        for (let i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-
-        // 클릭된 tab을 보여준다.
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-</script>
+    </ul>
+</div>
 
 <!-- 답변 모달창 -->
 <div class="answerModal modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="answerModalLabel" aria-hidden="true">
@@ -108,6 +86,36 @@
 <script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
 <script type="text/javascript" src="/resources/js/study.js"></script>
 
+<!-- tab 처리 -->
+<script>
+
+    $(document).ready(function() {
+        // 처음에 참여멤버를 띄운다.
+        $("#member")[0].style.display = "block";
+    })
+
+    // tab 클릭될 때
+    function openTab(evt, tabName) {
+        let tabcontent, tablinks;
+
+        // tab content를 모두 안보이게
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (let i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // tab link의 active를 지운다.
+        tablinks = document.getElementsByClassName("tablinks");
+        for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // 클릭된 tab을 보여준다.
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
 <script>
     $(document).ready(function() {
 
@@ -134,6 +142,16 @@
         // 대기 멤버 불러오기
         getWaitingList();
 
+        // 스터디장만 영구강퇴 멤버 볼 수 있음
+        if("${pinfo.username}" !== "" && "${pinfo.username}" === "${representation}") {
+
+            //영구강퇴 탭 보여주기
+            $('#banMemberTab').removeAttr("hidden");
+
+            // 영구강퇴 멤버 불러오기
+            getBanList();
+        }
+
     })
 </script>
 
@@ -156,10 +174,6 @@
     // 참여멤버 가져오는 함수
     function getAttendList() {
         studyMemberService.getAttendList("${stdSn}", function(result) {
-
-            for(let i = 0; i < result.length; i++) {
-                console.log(result[i]);
-            }
 
             if(result == null || result.length == 0) {
                 $('#attendList').html("");
@@ -201,9 +215,6 @@
     // 대기멤버 가져오는 함수
     function getWaitingList() {
         studyMemberService.getWaitingList("${stdSn}", function (result) {
-            for(let i = 0; i < result.length; i++) {
-                console.log(result[i]);
-            }
 
             if(result == null || result.length == 0) {
                 $('#waitingList').html("");
@@ -235,6 +246,45 @@
             }
 
             $('#waitingList').html(str);
+        })
+    }
+
+    // 영구강퇴 멤버 가져오는 함수
+    function getBanList() {
+        studyMemberService.getBanList(${stdSn}, function(result){
+
+            if(result == null || result.length == 0) {
+                $('#banList').html("");
+                return;
+            }
+
+            let str = "";
+
+            for(let i = 0; i < result.length; i++) {
+                str += '<li>';
+                str += '<div class="attendCard">';
+                str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+                str += '<strong> ' + result[i].userName + '</strong>';
+
+                if("${representation}" === result[i].userId) str += '<span style="color:gray;"> 스터디장</span>';
+
+                if(result[i].grpRole === 'GRRO01') str += '<span style="color:gray;"> 모임장</span>';
+                if(result[i].grpRole === 'GRRO02') str += '<span style="color:gray;"> 운영진</span>';
+                if(result[i].grpRole === 'GRRO03') str += '<span style="color:gray;"> 일반회원</span>';
+
+                str += '</div>';
+
+                // 로그인한 사용자가 스터디장이고, 본인이 아닌 사람들만 강퇴 가능
+                if("${pinfo.username}" !== "" && "${representation}" === "${pinfo.username}" && "${representation}" !== result[i].userId) {
+                    str += '<div class="attendBtn">';
+                    str += '<a id = "cancelBan" class="' + result[i].userId + '" href="">영구강퇴 해제</a>'
+                    str += '</div>';
+                }
+
+                str += '</li>';
+            }
+
+            $('#banList').html(str);
         })
     }
 </script>
@@ -282,13 +332,15 @@
                         // 참여 멤버 reload
                         getAttendList();
 
+                        // 영구강퇴 멤버 reload
+                        getBanList();
+
                     }else if (result === 'fail') {
                         alert('해당 회원을 강퇴시키지 못했습니다.');
                     }
                 })
             }
         }
-
 
     })
 </script>
@@ -409,6 +461,36 @@
                     alert('참석 거절 처리를 실패했습니다.');
                 }
             })
+        }
+    })
+</script>
+
+<!-- 영구강퇴 멤버 처리-->
+<script>
+    $('#banList').on("click", "li", function(e) {
+        e.preventDefault();
+
+        console.log("userId = " + e.target.className);
+        console.log("userId = " + e.target.id);
+
+        let userId = e.target.className;
+        let method = e.target.id;
+
+        if(method === 'cancelBan') {
+            if (confirm("해당 회원의 영구강퇴를 취소하겠습니까?")) {
+                studyAttendService.cancelBan({stdSn : ${stdSn}, userId : userId}, function(result) {
+
+                    if(result === 'success') {
+                        alert('해당 회원의 영구강퇴를 취소했습니다.');
+
+                        // 영구강퇴 멤버 reload
+                        getBanList();
+
+                    }else if (result === 'fail') {
+                        alert('해당 회원의 영구강퇴를 취소하지 못했습니다.');
+                    }
+                })
+            }
         }
     })
 </script>

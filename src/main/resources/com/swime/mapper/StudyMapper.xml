@@ -5,11 +5,13 @@
 <mapper namespace="com.swime.mapper.StudyMapper">
 
     <select id="getList" resultType="com.swime.domain.StudyVO">
-        select
-            s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+        <![CDATA[
+        select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
         from tstd s, tuser u
-        where s.representation = u.id and s.status in ('STST01', 'STST03') and grp_sn = #{grpSn}
-        order by reg_date desc
+        where s.grp_sn = #{grpSn} and s.status in ('STST01', 'STST03') and s.representation = u.id and
+                (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) < 0
+        order by start_date
+        ]]>
     </select>
 
     <select id="getListWithPaging" resultType="com.swime.domain.StudyVO">
@@ -22,8 +24,9 @@
                 (
                 select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
                 from tstd s, tuser u
-                where s.representation = u.id and s.status in ('STST01', 'STST03') and grp_sn = #{grpSn}
-                order by s.reg_date desc
+                where s.grp_sn = #{grpSn} and s.status in ('STST01', 'STST03') and s.representation = u.id and
+                        (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) <= 0
+                order by start_date, sn asc
                 )
             where rownum <= #{cri.pageNum} * #{cri.amount}
             )
@@ -31,15 +34,47 @@
     ]]>
     </select>
 
+    <select id="getPastListWithPaging" resultType="com.swime.domain.StudyVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, representation, representation_name, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from tstd s, tuser u
+                        where s.grp_sn = #{grpSn} and s.status in ('STST01', 'STST03') and s.representation = u.id and
+                                (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) > 0
+                        order by start_date desc, sn asc
+                    )
+                where rownum <= #{cri.pageNum} * #{cri.amount}
+            )
+        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        ]]>
+    </select>
+
     <select id="countStudy" resultType="int">
+    <![CDATA[
         select count(*)
-        from tstd
-        where grp_sn = #{grpSn} and status in ('STST01', 'STST03')
+        from tstd s
+        where grp_sn = #{grpSn} and status in ('STST01', 'STST03') and
+        (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) <= 0
+    ]]>
+    </select>
+
+    <select id="countPastStudy" resultType="int">
+    <![CDATA[
+        select count(*)
+        from tstd s
+        where grp_sn = #{grpSn} and status in ('STST01', 'STST03') and
+                (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) > 0
+        ]]>
     </select>
 
     <insert id="insert">
         insert into tstd (sn, grp_sn, representation, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date)
-        values(seq_std.nextval, #{grpSn}, #{representation}, #{name}, to_date(#{startDate}, 'YYYY-MM-DD'), to_date(#{endDate}, 'YYYY-MM-DD'), to_char(to_date(#{startTime} , 'HH24:MI:SS'), 'HH24:MI:SS'), to_char(to_date(#{endTime} , 'HH24:MI:SS'), 'HH24:MI:SS'), #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, 'STST01', current_date, current_date)
+        values(seq_std.nextval, #{grpSn}, #{representation}, #{name}, to_date(#{startDate}, 'YYYY-MM-DD HH24:MI:SS'), to_date(#{endDate}, 'YYYY-MM-DD HH24:MI:SS'), to_char(to_date(#{startTime} , 'HH24:MI:SS'), 'HH24:MI:SS'), to_char(to_date(#{endTime} , 'HH24:MI:SS'), 'HH24:MI:SS'), #{repeatCycle}, #{repeatDay}, #{information}, #{onOff}, #{onUrl}, #{placeId}, #{expense}, #{capacity}, 'STST01', current_date, current_date)
     </insert>
 
     <insert id="insertSelectKey">
@@ -48,7 +83,7 @@
         </selectKey>
 
         insert into tstd (sn, grp_sn, representation, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date)
-        values(#{sn}, #{grpSn}, #{representation}, #{name}, to_date(#{startDate}, 'YYYY-MM-DD'), to_date(#{endDate}, 'YYYY-MM-DD'), to_char(to_date(#{startTime} , 'HH24:MI:SS'), 'HH24:MI:SS'), to_char(to_date(#{endTime} , 'HH24:MI:SS'), 'HH24:MI:SS'), #{repeatCycle, jdbcType=VARCHAR}, #{repeatDay, jdbcType=VARCHAR}, #{information}, #{onOff}, #{onUrl, jdbcType=VARCHAR}, #{placeId, jdbcType=VARCHAR}, #{expense, jdbcType=VARCHAR}, #{capacity}, 'STST01', current_date, current_date)
+        values(#{sn}, #{grpSn}, #{representation}, #{name}, to_date(#{startDate}, 'YYYY-MM-DD HH24:MI:SS'), to_date(#{endDate}, 'YYYY-MM-DD HH24:MI:SS'), to_char(to_date(#{startTime} , 'HH24:MI:SS'), 'HH24:MI:SS'), to_char(to_date(#{endTime} , 'HH24:MI:SS'), 'HH24:MI:SS'), #{repeatCycle, jdbcType=VARCHAR}, #{repeatDay, jdbcType=VARCHAR}, #{information}, #{onOff}, #{onUrl, jdbcType=VARCHAR}, #{placeId, jdbcType=VARCHAR}, #{expense, jdbcType=VARCHAR}, #{capacity}, 'STST01', current_date, current_date)
         </insert>
 
     <select id="get" resultType="com.swime.domain.StudyVO">
@@ -60,8 +95,8 @@
     <update id="update">
         update tstd
         set name = #{name},
-        start_date = to_date(#{startDate}, 'YYYY-MM-DD'),
-        end_date = to_date(#{endDate}, 'YYYY-MM-DD'),
+        start_date = to_date(#{startDate}, 'YYYY-MM-DD HH24:MI:SS'),
+        end_date = to_date(#{endDate}, 'YYYY-MM-DD HH24:MI:SS'),
         repeat_cycle = #{repeatCycle, jdbcType=VARCHAR},
         repeat_day = #{repeatDay, jdbcType=VARCHAR},
         start_time = to_char(to_date(#{startTime} , 'HH24:MI:SS'), 'HH24:MI:SS'),

@@ -91,6 +91,29 @@ let studyAttendService = (function(){
         })
     }
 
+    function cancelBan(param, callback, error){
+
+        console.log("cancelBan stdSn = " + param.stdSn);
+        console.log("cancelBan userId = " + param.userId);
+
+        $.ajax({
+            type:'post',
+            url : '/study/attend/cancelBan',
+            data : JSON.stringify(param),
+            contentType : "application/json; charset = utf-8",
+            success : function(result, status, xhr) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error : function(xhr, status, er) {
+                if(error) {
+                    error(er);
+                }
+            }
+        })
+    }
+
     function reject(param, callback, error){
 
         console.log("reject stdSn = " + param.stdSn);
@@ -119,6 +142,7 @@ let studyAttendService = (function(){
         attend : attend,
         cancel : cancel,
         ban : ban,
+        cancelBan : cancelBan,
         reject : reject
     };
 })();
