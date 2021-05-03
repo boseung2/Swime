@@ -52,4 +52,12 @@ public class StudyMemberController {
 
         return new ResponseEntity<>(waitingList, HttpStatus.OK);
     }
+
+    @GetMapping(value="/banList/{stdSn}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<StudyListVO>> banList(@PathVariable("stdSn") long stdSn) {
+        // 1. stdSn만 필요
+        List<StudyListVO> waitingList = service.getBanList(stdSn);
+
+        return new ResponseEntity<>(waitingList, HttpStatus.OK);
+    }
 }

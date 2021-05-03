@@ -27,6 +27,8 @@ public interface StudyService {
     // 그룹별 스터디 리스트
     public GroupStudyListDTO getList(StudyCriteria cri, long grpSn);
 
+    public GroupStudyListDTO getPastList(StudyCriteria cri, long grpSn);
+
     public int countStudy(long grpSn);
 
     // WishStudy
@@ -46,6 +48,8 @@ public interface StudyService {
     public List<StudyListVO> getWaitingList(long stdSn);
 
     public List<StudyListVO> getWaitingList(StudyCriteria cri, long stdSn);
+
+    public List<StudyListVO> getBanList(long stdSn);
 
     public StudyListVO getAttendant(StudyParamVO param);
 

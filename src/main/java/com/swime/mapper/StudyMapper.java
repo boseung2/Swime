@@ -12,6 +12,8 @@ public interface StudyMapper {
 
     public List<StudyVO> getListWithPaging(@Param("cri") StudyCriteria cri, @Param("grpSn") long grpSn);
 
+    public List<StudyVO> getPastListWithPaging(@Param("cri") StudyCriteria cri, @Param("grpSn") long grpSn);
+
     public int insert(StudyVO study);
 
     public int insertSelectKey(StudyVO study);
@@ -25,5 +27,7 @@ public interface StudyMapper {
     public int updateStatus(StudyParamVO param);
 
     public int countStudy(long grpSn);
+
+    public int countPastStudy(long grpSn);
 
 }
