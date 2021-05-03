@@ -93,7 +93,7 @@ public class StudyController {
                 // 해당스터디가 존재하지 않으면 에러페이지로 이동
                 return "redirect:/study/error";
             }
-            model.addAttribute("members", service.getAttendantList(sn));
+//            model.addAttribute("members", service.getAttendantList(sn));
 
         }catch (Exception e) {
             // 스터디 정보를 가져오는데 실패하면 에러페이지로 이동
