@@ -181,21 +181,9 @@ public class StudyController {
     @PreAuthorize("principal.username == #study.representation")
     public String modify(StudyVO study, StudyCriteria cri, StudyQuestionVO questions, RedirectAttributes rttr) {
 
-        log.info("modify/ study startDate = " + study.getStartDate());
-        log.info("modify/ study starTime = " + study.getStartTime());
-        log.info("modify/ study endDate = " + study.getEndDate());
-        log.info("modify/ study endTime = " + study.getEndTime());
-
-        log.info("modify/ study repeatCycle = " + study.getRepeatCycle());
-        log.info("modify/ study expense = " + study.getExpense());
-
         // startDate, endDate 시간 더해주기
         study.setStartDate(study.getStartDate() + ' ' + study.getStartTime());
         study.setEndDate(study.getEndDate() + ' ' + study.getEndTime());
-
-        log.info("첫번째 질문 = " + questions.getQuestion1());
-        log.info("두번째 질문 = " + questions.getQuestion2());
-        log.info("세번째 질문 = " + questions.getQuestion3());
 
         // 설문 새로 등록
         List<String> qList = new ArrayList<>();
@@ -227,11 +215,8 @@ public class StudyController {
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(sn);
 
-        if(service.remove(param) == 1) {
-            rttr.addFlashAttribute("result", "success");
-        }else {
-            rttr.addFlashAttribute("result", "error");
-        }
+        service.remove(param);
+        rttr.addFlashAttribute("result", "success");
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());

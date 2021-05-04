@@ -301,14 +301,8 @@
                 case "register" :
                     $(".modal-body").html("스터디가 정상적으로 등록되었습니다.");
                     break;
-                case "register error" :
-                    $(".modal-body").html("스터디가 등록을 실패하였습니다.");
-                    break;
                 case "update" :
                     $(".modal-body").html("스터디가 정상적으로 수정되었습니다.");
-                    break;
-                case "update error" :
-                    $(".modal-body").html("스터디 수정을 실패하였습니다.");
                     break;
             }
 
