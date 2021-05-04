@@ -52,7 +52,7 @@ function validation() {
         }
     }
 
-    // 정기스터디 선택일때 빈문자열로 초기화
+    // 반복주기가 선택일때 빈문자열로 초기화
     if ($('#repeatCycle').val() === '(선택)') {
         $('#repeatCycle').val("");
     }
@@ -78,7 +78,9 @@ function validation() {
                 return false;
             }
         }
-
+    }else {
+        // 정기스터디 아니면 시작일자와 종료일자를 동일하게
+        $('#endDate').val($('#startDate').val());
     }
 
     if($('#endTime').val() == "") {

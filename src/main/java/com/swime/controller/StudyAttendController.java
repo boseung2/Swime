@@ -6,6 +6,7 @@ import com.swime.domain.StudyListVO;
 import com.swime.domain.StudyParamVO;
 import com.swime.domain.WishStudyVO;
 import com.swime.service.GroupAttendService;
+import com.swime.service.StudyListService;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class StudyAttendController {
 
-    private StudyService service;
+    private StudyListService service;
     private GroupAttendService groupAttendService;
 
     // 스터디 명단에 해당 id가 있는지 확인

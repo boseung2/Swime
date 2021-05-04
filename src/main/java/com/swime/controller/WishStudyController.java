@@ -4,6 +4,7 @@ package com.swime.controller;
 import com.swime.domain.StudyParamVO;
 import com.swime.domain.WishStudyVO;
 import com.swime.service.StudyService;
+import com.swime.service.WishStudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class WishStudyController {
 
-    private StudyService service;
+    private WishStudyService service;
 
     // 스터디 찜 여부 반환
     @GetMapping(value = "/wish/{userId}/{stdSn}")

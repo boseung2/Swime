@@ -48,7 +48,9 @@ public class StudyServiceTests {
         study.setExpense("5000원");
         study.setCapacity(20);
 
-        assert (service.register(study) == 2);
+        service.register(study, new ArrayList<>());
+
+        assert(service.get(study.getSn()) != null);
     }
 
     @Test
@@ -83,7 +85,8 @@ public class StudyServiceTests {
             study.setExpense("5000원");
             study.setCapacity(20);
 
-            assert (service.register(study) == 2);
+            service.register(study, new ArrayList<>());
+            assert(service.get(study.getSn()) != null);
         }
 
     }
@@ -153,7 +156,7 @@ public class StudyServiceTests {
 
         study.setName("제목 수정수정합니다.");
 
-        assert (service.modify(study) == 1);
+        service.modify(study, new ArrayList<>());
         assert ("제목 수정수정합니다.".equals(service.get(366L).getName()));
     }
 
@@ -173,280 +176,5 @@ public class StudyServiceTests {
 
         assert (service.remove(param) == 1);
         assert (service.get(307L) == null);
-    }
-
-
-    // WishStudy
-    @Test
-    public void testGetWishList() {
-        StudyCriteria cri = new StudyCriteria(1, 3);
-
-        List<StudyVO> list = service.getWishList(cri, "asdf@naver.com");
-
-        assert (0 <= list.size() && list.size() <= 3);
-    }
-
-    @Test
-    public void testGetWish() {
-
-        WishStudyVO wishParam = new WishStudyVO();
-        wishParam.setStdSn(82L);
-        wishParam.setUserId("aaa@naver.com");
-
-        WishStudyVO wish = service.getWish(wishParam);
-
-        assert (wish != null && wish.getStdSn() == 82L && "aaa@naver.com".equals(wish.getUserId()));
-    }
-
-    @Test
-    public void testRegisterWish() {
-        WishStudyVO wish = new WishStudyVO();
-        wish.setStdSn(82L);
-        wish.setUserId("aaa@naver.com");
-
-        if(service.getWish(wish) != null) return;
-
-        assert (service.registerWish(wish) == 1);
-        assert (service.getWish(wish) != null);
-    }
-
-    @Test
-    public void testRemoveWish() {
-        WishStudyVO wish = new WishStudyVO();
-        wish.setStdSn(368L);
-        wish.setUserId("jiho@naver.com");
-        service.registerWish(wish);
-
-        WishStudyVO wishParam = new WishStudyVO();
-        wishParam.setStdSn(368L);
-        wishParam.setUserId("jiho@naver.com");
-
-        assert (service.removeWish(wishParam) == 1);
-        assert (service.getWish(wishParam) == null);
-    }
-
-    //StudyList
-    @Test
-    public void testGetAttendList() {
-        List<StudyListVO> list = service.getAttendantList(307L);
-        if (list.size() == 0) return;
-
-        for(StudyListVO li : list) {
-            assert (li.getStdSn() == 307L);
-        }
-    }
-
-    @Test
-    public void testGetAttendListWithPaging() {
-        StudyCriteria cri = new StudyCriteria(1, 3);
-
-        List<StudyListVO> list = service.getAttendantList(cri, 307L);
-        if (list.size() == 0) return;
-
-        for(StudyListVO li : list) {
-            assert (li.getStdSn() == 307L);
-        }
-        assert (0 <= list.size() && list.size() <= 3);
-    }
-
-    @Test
-    public void testGetWaitingList() {
-        List<StudyListVO> list = service.getWaitingList(308L);
-        if (list.size() == 0) return;
-
-        for(StudyListVO li : list) {
-            assert (li.getStdSn() == 308L);
-        }
-    }
-
-    @Test
-    public void testGetWaitingListWithPaging() {
-        StudyCriteria cri = new StudyCriteria(1, 3);
-
-        List<StudyListVO> list = service.getWaitingList(cri, 308L);
-        if (list.size() == 0) return;
-
-        for(StudyListVO li : list) {
-            assert (li.getStdSn() == 308L);
-        }
-        assert (0 <= list.size() && list.size() <= 3);
-    }
-
-    @Test
-    public void testGetBanList() {
-        List<StudyListVO> list = service.getBanList(1747L);
-        if (list.size() == 0) return;
-
-        for(StudyListVO li : list) {
-            assert (li.getStdSn() == 1747L);
-        }
-    }
-
-    @Test
-    public void testGetStudiesOfGroup() {
-        service.getStudiesOfGroup(720, "test1@naver.com").forEach(study -> log.info(study));
-
-    }
-
-    @Test
-    public void testRegisterAttendant() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(561L);
-        param.setUserId("hong7073@service.com");
-        param.setStatus("STUS01");
-
-        if(service.getAttendant(param) != null) return;
-
-        assert (service.registerAttendant(param) == 1);
-        assert (service.getAttendant(param) != null);
-    }
-
-    @Test
-    public void testRegisterAttendant2() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(561L);
-        param.setUserId("qwer5935@naver.com");
-        param.setStatus("STUS01");
-
-        if(service.getAttendant(param) != null) return;
-
-        assert (service.registerAttendant(param) == 1);
-        assert (service.getAttendant(param) != null);
-    }
-
-    @Test
-    public void testModifyAttendant() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(561L);
-        param.setUserId("hong7073@service.com");
-        param.setStatus("STUS02");
-
-        service.modifyAttendant(param);
-
-        assert ("STUS02".equals(service.getAttendant(param).getStatus()));
-    }
-
-    @Test
-    public void testRemoveAttendant() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(561L);
-        param.setUserId("hong7073@service.com");
-
-        assert (service.removeAttendant(param) == 1);
-    }
-
-    @Test
-    public void testGetAttendant() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(41L);
-        param.setUserId("hong2841@service.com");
-
-        StudyListVO list = service.getAttendant(param);
-        assert (list != null && list.getStdSn() == 41L && "hong2841@service.com".equals(list.getUserId()));
-
-    }
-
-    @Test
-    public void testCountAttendants() {
-        assert (service.countAttendants(82L) >= 0);
-    }
-
-    //StudySurvey
-    @Test
-    public void testGetSurveyList() {
-        List<StudySurveyVO> list = service.getSurveyList(82L);
-
-        for(StudySurveyVO li : list) {
-            assert(li.getStdSn() == 82L);
-        }
-    }
-
-    @Test
-    public void testRegisterSurvey() {
-        StudySurveyVO survey = new StudySurveyVO();
-        survey.setStdSn(84L);
-        survey.setQuestionSn(1);
-        survey.setQuestion("각오한마디 부탁드립니다.");
-
-        assert (service.registerSurvey(survey) == 1);
-        assert (service.getSurveyList(84L).size() > 0);
-    }
-
-    @Test
-    public void testRemoveSurvey() {
-        assert (service.removeSurvey(84L) == 1);
-        assert (service.getSurveyList(84L).size() == 0);
-    }
-
-    //StudyAnswer
-    @Test
-    public void testGetAnswer() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(82L);
-        param.setUserId("aaa@naver.com");
-
-        List<StudyAnswerVO> list = service.getAnswer(param);
-
-        for(StudyAnswerVO li : list) {
-            assert (li.getStdSn() == 82L);
-            assert ("aaa@naver.com".equals(li.getUserId()));
-        }
-
-        assert (list.get(list.size()-1).getQuestionSn() == list.size());
-    }
-
-    @Test
-    public void testRegisterAnswer() {
-        StudyAnswerVO answer = new StudyAnswerVO();
-        answer.setStdSn(223L);
-        answer.setUserId("aaa@naver.com");
-        answer.setQuestionSn(1);
-        answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
-        answer.setAnswer("네. 괜찮습니다.");
-
-        List<StudyAnswerVO> answers = new ArrayList<>();
-        answers.add(answer);
-
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(223L);
-        param.setUserId("aaa@naver.com");
-
-        int before=  service.getAnswer(param).size();
-
-        String result = "";
-
-        try {
-            service.registerAnswers(answers);
-            result =  "success";
-        }catch (Exception e) {
-            result =  "fail";
-        }
-
-        assert("success".equals(result));
-
-        if("success".equals(result)) assert(service.getAnswer(param).size() > before);
-        if("fail".equals(result)) assert (service.getAnswer(param).size() == before);
-    }
-
-    @Test
-    public void testRemoveAnswer() {
-        StudyAnswerVO answer = new StudyAnswerVO();
-        answer.setStdSn(84L);
-        answer.setUserId("ffff@naver.com");
-        answer.setQuestionSn(1);
-        answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
-        answer.setAnswer("네. 괜찮습니다.");
-
-        List<StudyAnswerVO> answers = new ArrayList<>();
-        answers.add(answer);
-
-        service.registerAnswers(answers);
-
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(84L);
-        param.setUserId("ffff@naver.com");
-
-        assert (service.removeAnswer(param) == 1);
-        assert(service.getAnswer(param).size() == 0);
     }
 }

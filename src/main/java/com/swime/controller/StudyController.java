@@ -3,6 +3,7 @@ package com.swime.controller;
 
 import com.swime.domain.*;
 import com.swime.service.StudyService;
+import com.swime.service.StudySurveyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class StudyController {
     ApplicationContext context;
 
     private StudyService service;
+    private StudySurveyService surveyService;
 
     // 스터디 리스트 페이징처리
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -83,20 +85,11 @@ public class StudyController {
         StudyCriteria sendCri = new StudyCriteria(cri.getPageNum(), cri.getAmount());
         model.addAttribute("cri", sendCri);
 
-        log.info("그룹 페이징 = " + sendCri);
+        StudyVO study = service.get(sn);
+        model.addAttribute("study", study);
 
-        try {
-            StudyVO study = service.get(sn);
-            model.addAttribute("study", study);
-
-            if(study == null) {
-                // 해당스터디가 존재하지 않으면 에러페이지로 이동
-                return "redirect:/study/error";
-            }
-//            model.addAttribute("members", service.getAttendantList(sn));
-
-        }catch (Exception e) {
-            // 스터디 정보를 가져오는데 실패하면 에러페이지로 이동
+        if(study == null) {
+            // 해당스터디가 존재하지 않으면 에러페이지로 이동
             return "redirect:/study/error";
         }
 
@@ -134,45 +127,28 @@ public class StudyController {
     @PreAuthorize("isAuthenticated()")
     public String register(StudyVO study, StudyCriteria cri, StudyQuestionVO questions, RedirectAttributes rttr) {
 
-        // 질문이 하나라도 있으면 설문 등록
-        if(!"".equals(questions.getQuestion1()) || !"".equals(questions.getQuestion2()) || !"".equals(questions.getQuestion3())) {
-
-            List<String> qList = new ArrayList<>();
-            qList.add(questions.getQuestion1());
-            qList.add(questions.getQuestion2());
-            qList.add(questions.getQuestion3());
-
-            int order = 1;
-            long stdSn = study.getSn();
-
-            // 질문이 있으면 surveyVO 객체만들어서 등록해주기
-            for(int i = 0; i < qList.size(); i++) {
-
-                if(!"".equals(qList.get(i))) {
-                    StudySurveyVO survey= new StudySurveyVO();
-                    survey.setStdSn(stdSn);
-                    survey.setQuestionSn(order++);
-                    survey.setQuestion(qList.get(i));
-
-                    service.registerSurvey(survey);
-
-                }
-            }
-        }
-
         // startDate, endDate 시간 더해주기
         study.setStartDate(study.getStartDate() + ' ' + study.getStartTime());
         study.setEndDate(study.getEndDate() + ' ' + study.getEndTime());
 
-        try {
-            // 스터디 등록
-            service.register(study);
+        // 질문이 하나라도 있으면 설문 등록
+        List<String> qList = new ArrayList<>();
 
-            // 결과 모달에 띄워주기 위한 result 전달
-            rttr.addFlashAttribute("result", "register");
-        }catch (Exception e) {
-            rttr.addFlashAttribute("result", "register error");
+        if(!"".equals(questions.getQuestion1()) || !"".equals(questions.getQuestion2()) || !"".equals(questions.getQuestion3())) {
+
+            qList.add(questions.getQuestion1());
+            qList.add(questions.getQuestion2());
+            qList.add(questions.getQuestion3());
+
+            log.info("받은 질문 리스트 = " + qList);
         }
+
+        // 스터디 등록
+        service.register(study, qList);
+
+        // 결과 모달에 띄워주기 위한 result 전달
+        rttr.addFlashAttribute("result", "register");
+
 
         // 그룹 페이징
         rttr.addAttribute("pageNum", cri.getPageNum());
@@ -189,7 +165,7 @@ public class StudyController {
         model.addAttribute("study", service.get(sn));
         model.addAttribute("cri", cri);
 
-        List<StudySurveyVO> qList = service.getSurveyList(sn);
+        List<StudySurveyVO> qList = surveyService.getSurveyList(sn);
 
         for(int i = 0; i < qList.size(); i++) {
             log.info((i+1) + "번째 질문 = " + qList.get(i));
@@ -217,46 +193,24 @@ public class StudyController {
         study.setStartDate(study.getStartDate() + ' ' + study.getStartTime());
         study.setEndDate(study.getEndDate() + ' ' + study.getEndTime());
 
-
-        if(service.modify(study) == 1) {
-            rttr.addFlashAttribute("result", "update");
-        }else {
-            rttr.addFlashAttribute("result", "update error");
-        }
-
-        // 이전 질문 모두 지우기
-        service.removeSurvey(study.getSn());
-
         log.info("첫번째 질문 = " + questions.getQuestion1());
         log.info("두번째 질문 = " + questions.getQuestion2());
         log.info("세번째 질문 = " + questions.getQuestion3());
 
         // 설문 새로 등록
+        List<String> qList = new ArrayList<>();
+
         if(!"".equals(questions.getQuestion1()) || !"".equals(questions.getQuestion2()) || !"".equals(questions.getQuestion3())) {
 
-            List<String> qList = new ArrayList<>();
             qList.add(questions.getQuestion1());
             qList.add(questions.getQuestion2());
             qList.add(questions.getQuestion3());
 
-            int order = 1;
-            long stdSn = study.getSn();
-
-            // 질문이 있으면 surveyVO 객체만들어서 등록해주기
-            for(int i = 0; i < qList.size(); i++) {
-
-                if(!"".equals(qList.get(i))) {
-                    StudySurveyVO survey= new StudySurveyVO();
-                    survey.setStdSn(stdSn);
-                    survey.setQuestionSn(order++);
-                    survey.setQuestion(qList.get(i));
-
-                    service.registerSurvey(survey);
-
-                    log.info(order-1 + "번째 질문 등록 완료!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                }
-            }
+            log.info("받은 질문 리스트 = " + qList);
         }
+
+        service.modify(study, qList);
+        rttr.addFlashAttribute("result", "update");
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
@@ -269,8 +223,6 @@ public class StudyController {
     @PostMapping("/remove")
     @PreAuthorize("principal.username == #representation")
     public String remove(long sn, long grpSn, StudyCriteria cri, String representation, RedirectAttributes rttr) { // 스터디번호 들어옴
-
-        log.info("=======================================remove cri = " + cri);
 
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(sn);
