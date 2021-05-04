@@ -27,7 +27,8 @@ public class StudyAttendController {
     // 스터디 명단에 해당 id가 있는지 확인
     @GetMapping(value="/get/{grpSn}/{userId}/{stdSn}")
     public ResponseEntity<String> get (@PathVariable("grpSn") long grpSn, @PathVariable("userId") String userId, @PathVariable("stdSn") long stdSn) {
-        // 1. 그룹명단에 해당 id가 있는지 확인/ 없으면 group not attend 반환
+
+        // 그룹명단에 해당 id가 있는지 확인/ 없으면 group not attend 반환
         // userId, grpSn 필요
         GroupAttendVO groupAttendVO = new GroupAttendVO();
         groupAttendVO.setGrpSn(grpSn);
@@ -36,7 +37,7 @@ public class StudyAttendController {
         GroupAttendVO groupAttend = groupAttendService.readByGrpSnUserId(groupAttendVO);
 
         if(groupAttend == null || !"GRUS01".equals(groupAttend.getStatus())) {
-            log.info("그룹에 없다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            // 1. 그룹에 없거나 그룹에 참가상태가 아니면
             return new ResponseEntity<>("group not attend", HttpStatus.OK);
 
         }else {
@@ -50,31 +51,26 @@ public class StudyAttendController {
 
             // 3-1. 해당 스터디 명단에 없으면 not attend 반환
             if(attendant == null) {
-                log.info("스터디에 없다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 return new ResponseEntity<>("not attend", HttpStatus.OK);
 
             } else {
                 // 3-2. 있고, 탈퇴 상태면 not attend 반환
                 if("STUS02".equals(attendant.getStatus())) {
-                    log.info("탈퇴했다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     return new ResponseEntity<>("not attend", HttpStatus.OK);
                 }
 
                 // 3-3. 있고, 가입상태면 attend 반환
                 if("STUS01".equals(attendant.getStatus())) {
-                    log.info("이미 가입했다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     return new ResponseEntity<>("attend", HttpStatus.OK);
                 }
 
                 // 3-4. 있고, 검토중인 상태면 waiting 반환
                 if("STUS03".equals(attendant.getStatus())) {
-                    log.info("검토중이다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     return new ResponseEntity<>("waiting", HttpStatus.OK);
                 }
 
                 // 3-5. 있고, 영구탈퇴인 상태면 kicked 반환
                 if("STUS04".equals(attendant.getStatus())) {
-                    log.info("영구탈퇴!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     return new ResponseEntity<>("kicked", HttpStatus.OK);
                 }
 
@@ -88,8 +84,8 @@ public class StudyAttendController {
     @PostMapping(value = "/register", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> register(@RequestBody StudyParamVO studyParam) {
         //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
-        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+        log.info("register stdSn = " + studyParam.getStdSn());
+        log.info("register userId = " + studyParam.getUserId());
 
         //2. 이미 참가명단에 있는지 확인
         StudyListVO attendant = service.getAttendant(studyParam);
@@ -126,8 +122,8 @@ public class StudyAttendController {
     @PostMapping(value = "/cancel", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> cancel(@RequestBody StudyParamVO studyParam) {
         //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
-        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+        log.info("cancel stdSn = " + studyParam.getStdSn());
+        log.info("cancel userId = " + studyParam.getUserId());
 
         //2. 이미 참가명단에 있는지 확인
         StudyListVO attendant = service.getAttendant(studyParam);
@@ -148,8 +144,8 @@ public class StudyAttendController {
     @PostMapping(value = "/ban", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> ban(@RequestBody StudyParamVO studyParam) {
         //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
-        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+        log.info("ban stdSn = " + studyParam.getStdSn());
+        log.info("ban userId = " + studyParam.getUserId());
 
         //2. 이미 참가명단에 있는지 확인
         StudyListVO attendant = service.getAttendant(studyParam);
@@ -170,8 +166,8 @@ public class StudyAttendController {
     @PostMapping(value = "/cancelBan", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> cancelBan(@RequestBody StudyParamVO studyParam) {
         //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
-        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+        log.info("cancelBan stdSn = " + studyParam.getStdSn());
+        log.info("cancelBan userId = " + studyParam.getUserId());
 
         //2. 이미 참가명단에 있는지 확인
         StudyListVO attendant = service.getAttendant(studyParam);
@@ -192,8 +188,8 @@ public class StudyAttendController {
     @PostMapping(value = "/reject", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> reject(@RequestBody StudyParamVO studyParam) {
         //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
-        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
-        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+        log.info("reject stdSn = " + studyParam.getStdSn());
+        log.info("reject userId = " + studyParam.getUserId());
 
         //2. 이미 참가명단에 있는지 확인
         StudyListVO attendant = service.getAttendant(studyParam);
