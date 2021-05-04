@@ -188,13 +188,14 @@ public class StudyServiceTests {
 
     @Test
     public void testGetWish() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(82L);
-        param.setUserId("aaa@naver.com");
 
-        WishStudyVO wish = service.getWish(param);
+        WishStudyVO wishParam = new WishStudyVO();
+        wishParam.setStdSn(82L);
+        wishParam.setUserId("aaa@naver.com");
 
-        assert (wish != null && wish.getSn() == 82L && "jiho@naver.com".equals(wish.getUserId()));
+        WishStudyVO wish = service.getWish(wishParam);
+
+        assert (wish != null && wish.getStdSn() == 82L && "aaa@naver.com".equals(wish.getUserId()));
     }
 
     @Test
@@ -203,14 +204,10 @@ public class StudyServiceTests {
         wish.setStdSn(82L);
         wish.setUserId("aaa@naver.com");
 
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(82L);
-        param.setUserId("aaa@naver.com");
-
-        if(service.getWish(param) != null) return;
+        if(service.getWish(wish) != null) return;
 
         assert (service.registerWish(wish) == 1);
-        assert (service.getWish(param) != null);
+        assert (service.getWish(wish) != null);
     }
 
     @Test
@@ -220,12 +217,12 @@ public class StudyServiceTests {
         wish.setUserId("jiho@naver.com");
         service.registerWish(wish);
 
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(368L);
-        param.setUserId("jiho@naver.com");
+        WishStudyVO wishParam = new WishStudyVO();
+        wishParam.setStdSn(368L);
+        wishParam.setUserId("jiho@naver.com");
 
-        assert (service.removeWish(param) == 1);
-        assert (service.getWish(param) == null);
+        assert (service.removeWish(wishParam) == 1);
+        assert (service.getWish(wishParam) == null);
     }
 
     //StudyList

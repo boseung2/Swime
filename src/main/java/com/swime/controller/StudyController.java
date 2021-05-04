@@ -122,6 +122,7 @@ public class StudyController {
         model.addAttribute("grpSn", grpSn);
         model.addAttribute("cri", cri);
 
+        // 지도 api key 전달
         Environment env = context.getEnvironment();
         log.info("key = " + env.getProperty("key"));
 
@@ -133,44 +134,17 @@ public class StudyController {
     @PreAuthorize("isAuthenticated()")
     public String register(StudyVO study, StudyCriteria cri, StudyQuestionVO questions, RedirectAttributes rttr) {
 
-        log.info("그룳 페이징 = " + cri);
-        log.info("study onOff = " + study.getOnOff());
-
-        log.info("register/ study startDate = " + study.getStartDate());
-        log.info("register/ study starTime = " + study.getStartTime());
-        log.info("register/ study endDate = " + study.getEndDate());
-        log.info("register/ study endTime = " + study.getEndTime());
-
-        log.info("register/ study repeatCycle = " + study.getRepeatCycle());
-        log.info("register/ study expense = " + study.getExpense());
-
-        // startDate, endDate 시간 더해주기
-        study.setStartDate(study.getStartDate() + ' ' + study.getStartTime());
-        study.setEndDate(study.getEndDate() + ' ' + study.getEndTime());
-
-        try {
-            // 스터디 등록
-            service.register(study);
-            rttr.addFlashAttribute("result", "register");
-        }catch (Exception e) {
-            rttr.addFlashAttribute("result", "register error");
-        }
-        
-        log.info("첫번째 질문 = " + questions.getQuestion1());
-        log.info("두번째 질문 = " + questions.getQuestion2());
-        log.info("세번째 질문 = " + questions.getQuestion3());
-
         // 질문이 하나라도 있으면 설문 등록
         if(!"".equals(questions.getQuestion1()) || !"".equals(questions.getQuestion2()) || !"".equals(questions.getQuestion3())) {
-            
+
             List<String> qList = new ArrayList<>();
             qList.add(questions.getQuestion1());
             qList.add(questions.getQuestion2());
             qList.add(questions.getQuestion3());
-            
+
             int order = 1;
             long stdSn = study.getSn();
-            
+
             // 질문이 있으면 surveyVO 객체만들어서 등록해주기
             for(int i = 0; i < qList.size(); i++) {
 
@@ -181,12 +155,26 @@ public class StudyController {
                     survey.setQuestion(qList.get(i));
 
                     service.registerSurvey(survey);
-                    
-                    log.info(order-1 + "번째 질문 등록 완료!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
                 }
             }
         }
 
+        // startDate, endDate 시간 더해주기
+        study.setStartDate(study.getStartDate() + ' ' + study.getStartTime());
+        study.setEndDate(study.getEndDate() + ' ' + study.getEndTime());
+
+        try {
+            // 스터디 등록
+            service.register(study);
+
+            // 결과 모달에 띄워주기 위한 result 전달
+            rttr.addFlashAttribute("result", "register");
+        }catch (Exception e) {
+            rttr.addFlashAttribute("result", "register error");
+        }
+
+        // 그룹 페이징
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 

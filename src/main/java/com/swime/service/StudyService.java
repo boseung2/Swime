@@ -39,13 +39,13 @@ public interface StudyService {
     public List<StudyVO> getWishList(StudyCriteria cri, String userId);
 
     // 유저의 스터디 찜 여부 반환
-    public WishStudyVO getWish(StudyParamVO param);
+    public WishStudyVO getWish(WishStudyVO wish);
 
     // 스터디 찜
     public int registerWish(WishStudyVO wish);
 
     // 스터디 찜 취소
-    public int removeWish(StudyParamVO param);
+    public int removeWish(WishStudyVO wish);
 
     // StudyList
     

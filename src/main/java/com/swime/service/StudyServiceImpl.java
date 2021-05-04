@@ -123,8 +123,8 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public WishStudyVO getWish(StudyParamVO param) {
-        return WishMapper.get(param);
+    public WishStudyVO getWish(WishStudyVO wish) {
+        return WishMapper.get(wish);
     }
 
     @Override
@@ -133,8 +133,8 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
-    public int removeWish(StudyParamVO param) {
-        return WishMapper.delete(param);
+    public int removeWish(WishStudyVO wish) {
+        return WishMapper.delete(wish);
     }
 
     // StudyList
