@@ -279,6 +279,9 @@ public class UserController {
         model.addAttribute("MemberVo", service.get(id));
     }
 
+    @GetMapping("chat")
+    public void chat(){
 
+    }
 
 }

@@ -15,7 +15,6 @@
 <div class="container">
     <!-- Content Row -->
     <h2>생성한 스터디</h2>
-
     <div class="row" id="make"></div>
     <div id="makepagi"></div>
 
@@ -51,7 +50,6 @@
         getMakeList("before");
         getMakeList("after");
         getMakeList("wish");
-        // pagiActive();
     });
 
     function cardClick() {
