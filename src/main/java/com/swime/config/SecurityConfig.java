@@ -44,12 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .authorizeRequests()
-                .antMatchers("/css","/img","/js", "/vendor/**").permitAll()
+                .antMatchers("/css/**","/img/**","/js/**", "/vendor/**").permitAll()
                 .antMatchers("/group","/include","/user", "/study").permitAll()
                 .antMatchers("/group/register").access("isAuthenticated()")
                 .antMatchers("/study/register").access("isAuthenticated()")
                 .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
-                .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
+                .antMatchers("/admin/**").access("hasAuthority('ADMIN')")
         .and()
             .formLogin()
                 .usernameParameter("id")

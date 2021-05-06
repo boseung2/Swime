@@ -96,10 +96,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> register(MemberVO vo, RedirectAttributes rttr){
         log.info(vo);
-        boolean result = false;
-        boolean result1 = false;
-        boolean result2 = false;
-        boolean result3 = false;
+        boolean result = false, result1 = false, result2 = false, result3 = false;
         vo.setPassword(passwordEncoder.encode(vo.getPassword()));
         result = service.registerHistory(vo);
         result1 = service.register(vo);
