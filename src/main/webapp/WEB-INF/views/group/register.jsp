@@ -3,15 +3,29 @@
 
 <%@include file="../includes/header.jsp" %>
 
-<div class="container">
-    <h2>모임 만들기</h2>
-    <hr/>
+<!-- 상단 이미지 -->
+<div class="head-image">
+    <div class="head-content" onclick="location.href='/group/register'">
+        <p>모임만들기</p>
+        회원들과 함께 모임을 이끌어 보세요.
+    </div>
+</div>
+<!-- 상단 이미지 -->
+
+<div class="container group-register">
     <form role="form" action="/group/register" method="post">
+        <h4 style="margin-top : 3rem; margin-bottom : 3rem;">모임정보입력</h4>
         <div class="form-group">
-            <label for="userId">아이디</label>
+            <label for="userId" hidden>아이디</label>
             <input type="text" class="form-control" id="userId" name="userId" required
-            value="${pinfo.username}" readonly="readonly">
+            value="${pinfo.username}" readonly="readonly" hidden>
         </div>
+
+        <div class="form-group">
+            <label for="name">모임명</label>
+            <input type="text" class="form-control" name="name" id="name" required>
+        </div>
+
         <div class="form-group">
             <label for="category">카테고리</label>
             <select class="form-control" id="category" name="category" required>
@@ -29,27 +43,18 @@
                 <option value="GRCA11">교양 · 기타</option>
             </select>
         </div>
-        <div class="form-group">
-            <label for="name">모임명</label>
-            <input type="text" class="form-control" name="name" id="name" required>
-        </div>
-        <div class="form-group uploadDiv">
-            <label for="uploadFile">대표사진</label>
-            <input type="file" class="form-control" id="uploadFile" name="uploadFile" accept="image/*">
-            <div class="uploadResult">
-                <ul>
 
-                </ul>
-            </div>
-        </div>
         <div class="form-group">
             <label for="description">간단소개</label>
             <textarea class="form-control" rows="2" id="description" name="description" required></textarea>
         </div>
+
         <div class="form-group">
-            <label for="info">정보 (모임에 대해 자세히 적어주세요)</label>
-            <textarea class="form-control" rows="5" id="info" name="info" required></textarea>
+            <label for="info">모임정보 - 모임에 대해 자세히 적어주세요(운영계획, 공부할 책제목 등)</label>
+            <textarea class="form-control" rows="20" id="info" name="info" required></textarea>
         </div>
+
+        <div class="form-group">
         <div class="form-row">
             <div class="col">
             <label for="sido">시/도</label>
@@ -124,34 +129,26 @@
                 </select>
             </div>
         </div>
-        <!-- 시/군/구를 시/도에 맞게 변경-->
-        <script>
-            $(document).ready(function() {
-                $('#sido').on("change", function() {
-                    let options = $('#sigungu option');
+        </div>
 
-                    for(let i=1; i<options.length; i++) {
-                        options[i].setAttribute("hidden", "hidden");
-                    }
 
-                    if($('#sido option:selected').val() == "LODO01") {
-                        // 서울특별시일때
-                        for(let i=0; i<options.length; i++) {
-                            if(options[i].value.substr(0,4) == "LOGU") {
-                                options[i].removeAttribute("hidden");
-                            }
-                        }
-                    }else if($('#sido option:selected').val() == "LODO02") {
-                        // 경기도일때
-                        for(let i=0; i<options.length; i++) {
-                            if(options[i].value.substr(0,4) == "LOSI") {
-                                options[i].removeAttribute("hidden");
-                            }
-                        }
-                    }
-                })
-            })
-        </script>
+        <p>대표사진</p>
+        <div class="form-group">
+            <div class="uploadDiv">
+            <div class="custom-file">
+            <label for="uploadFile" class="custom-file-label">없음</label>
+            <input type="file" class="form-control custom-file-input" id="uploadFile" name="uploadFile" accept="image/*">
+            <div class="uploadResult">
+                <ul>
+
+                </ul>
+            </div>
+            </div>
+            </div>
+        </div>
+
+
+
         <div class="form-group">
             <label for="tags">태그</label>
             <select class="form-control" id="tags" name="tags">
@@ -198,6 +195,8 @@
                 <option value="GRTG40">Excel</option>
             </select>
         </div>
+
+
 
         <sec:csrfInput/>
         <button type="submit" class="btn btn-primary">등록</button>
@@ -366,6 +365,8 @@
 
             let targetLI = $(this).closest("li");
 
+            $('.custom-file-label').html("없음");
+
             $.ajax({
                 url: '/deleteFile',
                 data: {fileName: targetFile, type:type},
@@ -412,9 +413,9 @@
                     str += "<li data-path='"+obj.uploadPath+"'";
                     str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'";
                     str += "><div>";
-                    str += "<span> "+obj.fileName+"</span>";
-                    str += "<button type='button' class='btn btn-secondary btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button><br>";
+                    //str += "<span> "+obj.fileName+"</span>";
                     str += "<img src='/display?fileName="+fileCallPath+"'>";
+                    str += "<button type='button' class='btn btn-dark btn-circle' data-file=\'"+fileCallPath+"\' data-type='image'>X</button>";
                     str += "</div>";
                     str += "</li>";
                 } else {
@@ -426,6 +427,43 @@
         }
 
     })
+</script>
+
+
+<!-- 시/군/구를 시/도에 맞게 변경-->
+<script>
+    $(document).ready(function() {
+        $('#sido').on("change", function() {
+            let options = $('#sigungu option');
+
+            for(let i=1; i<options.length; i++) {
+                options[i].setAttribute("hidden", "hidden");
+            }
+
+            if($('#sido option:selected').val() == "LODO01") {
+                // 서울특별시일때
+                for(let i=0; i<options.length; i++) {
+                    if(options[i].value.substr(0,4) == "LOGU") {
+                        options[i].removeAttribute("hidden");
+                    }
+                }
+            }else if($('#sido option:selected').val() == "LODO02") {
+                // 경기도일때
+                for(let i=0; i<options.length; i++) {
+                    if(options[i].value.substr(0,4) == "LOSI") {
+                        options[i].removeAttribute("hidden");
+                    }
+                }
+            }
+        })
+    })
+</script>
+<script>
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
 </script>
 
 

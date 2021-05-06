@@ -49,9 +49,25 @@ let studyMemberService = (function(){
         })
     }
 
+    function getBanList(stdSn, callback, error) {
+
+        console.log("getBanList stdSn = " + stdSn);
+
+        $.get("/study/banList/" + stdSn, function (result) {
+            if (callback) {
+                callback(result);
+            }
+        }).fail(function (xhr, status, err) {
+            if (error) {
+                error();
+            }
+        })
+    }
+
     return {
         getAttendList : getAttendList,
         getWaitingList : getWaitingList,
-        getAttendListWithPaging : getAttendListWithPaging
+        getAttendListWithPaging : getAttendListWithPaging,
+        getBanList : getBanList
     };
 })();

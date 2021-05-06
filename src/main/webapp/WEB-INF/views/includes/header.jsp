@@ -20,8 +20,6 @@
 
     <title>SWIME</title>
 
-    <title>SWIME</title>
-
 
     <!-- Bootstrap core CSS -->
     <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -77,6 +75,9 @@
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
             <a href="/user/infoDetail?id=<sec:authentication property='principal.username'/>"><sec:authentication property="principal.memberVO.name"/> 님 안녕하세요</a>
+            <sec:authorize access="hasAuthority('ADMIN')">
+                <a href="/admin/adminIndex">어드민 페이지</a>
+            </sec:authorize>
             <a href="#" onclick="document.getElementById('logout').submit();">로그아웃</a>
         </sec:authorize>
     </div>

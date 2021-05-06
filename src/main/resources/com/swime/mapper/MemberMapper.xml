@@ -47,8 +47,8 @@
     </select>
 
     <insert id="insert">
-        insert into TUSER(id, password, name)
-        values(#{id}, #{password}, #{name})
+        insert into TUSER(id, password, name, status, reg_path)
+        values(#{id}, #{password}, #{name}, nvl(#{status, jdbcType=VARCHAR}, ''), nvl(#{regPath, jdbcType=VARCHAR}, ''))
     </insert>
 
     <insert id="insertWithAuth">
