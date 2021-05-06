@@ -92,3 +92,17 @@
     margin-top: 0px;
     margin-bottom: 0px;">
 
+<!-- 알림 -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script>
+    // 전역변수 socket
+    let socket = null;
+
+    $(document).ready(function() {
+        //웹소켓 연결
+        sock = new SockJS('/myHandler');
+        socket = sock;
+
+
+    })
+</script>

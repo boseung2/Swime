@@ -23,9 +23,9 @@
 
 <!-- nav -->
 <div class="topnav tab" style="margin-bottom: 10px;">
-    <a href="#member" class="tablinks active" onclick="openTab(event, 'member')">참여 멤버</a>
-    <a href="#waitingMember" class="tablinks" onclick="openTab(event, 'waitingMember')">승인 대기 멤버</a>
-    <a href="#waitingMember" class="tablinks" onclick="openTab(event, 'banMember')" id = "banMemberTab" hidden="true">영구강퇴 멤버</a>
+    <a href="#member" class="tablinks active navMember" onclick="openTab(event, 'member')">참여 멤버</a>
+    <a href="#waitingMember" class="tablinks navWaitingMember" onclick="openTab(event, 'waitingMember')">승인 대기 멤버</a>
+    <a href="#waitingMember" class="tablinks navBanMember" onclick="openTab(event, 'banMember')" id = "banMemberTab" hidden="true">영구강퇴 멤버</a>
 </div>
 <!-- /nav -->
 
@@ -180,6 +180,9 @@
                 return;
             }
 
+            let cnt = result.length;
+            $('.navMember')[0].innerText = "참여멤버 (" + cnt + "명)";
+
             let str = "";
 
             for(let i = 0; i < result.length; i++) {
@@ -221,6 +224,9 @@
                 return;
             }
 
+            let cnt = result.length;
+            $('.navWaitingMember')[0].innerText = "승인 대기멤버 (" + cnt + "명)";
+
             let str = "";
 
             for(let i = 0; i < result.length; i++) {
@@ -257,6 +263,9 @@
                 $('#banList').html("");
                 return;
             }
+
+            let cnt = result.length;
+            $('.navBanMember')[0].innerText = "영구강퇴멤버 (" + cnt + "명)";
 
             let str = "";
 

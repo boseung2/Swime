@@ -97,8 +97,8 @@ public class StudyAttendController {
 
             return new ResponseEntity<>("success", HttpStatus.OK);
         }else {
-            // 3-2. 있고, 탈퇴상태면 참석상태로 update
-            if("STUS02".equals(attendant.getStatus())) {
+            // 3-2. 있고, 탈퇴상태면 참석상태로 update / 3-3. 있고, 검토중이면 참석상태로 update
+            if("STUS02".equals(attendant.getStatus()) || "STUS03".equals(attendant.getStatus())) {
                 studyParam.setStatus("STUS01");
                 service.modifyAttendant(studyParam);
 
@@ -106,12 +106,12 @@ public class StudyAttendController {
             }
 
             // 3-3. 있고, 검토중이면 참석상태로 update
-            if("STUS03".equals(attendant.getStatus())) {
-                studyParam.setStatus("STUS01");
-                service.modifyAttendant(studyParam);
-
-                return new ResponseEntity<>("success", HttpStatus.OK);
-            }
+//            if("STUS03".equals(attendant.getStatus())) {
+//                studyParam.setStatus("STUS01");
+//                service.modifyAttendant(studyParam);
+//
+//                return new ResponseEntity<>("success", HttpStatus.OK);
+//            }
 
             // 그 외의 상태 (가입, 검토중, 영구탈퇴)는 참가 실패
             return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);

@@ -15,9 +15,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.print.attribute.standard.Media;
@@ -90,7 +92,7 @@ public class StudyController {
 
         if(study == null) {
             // 해당스터디가 존재하지 않으면 에러페이지로 이동
-            return "redirect:/study/error";
+            return "redirect:/custom404";
         }
 
         return "study/get";

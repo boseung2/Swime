@@ -209,6 +209,26 @@
 <!-- 유효성검사 -->
 <script type="text/javascript" src="/resources/js/studyValidation.js"></script>
 
+
+<script>
+    // 제출시
+    $(document).ready(function() {
+        let formObj = $('#modifyForm');
+
+        $('button[type="submit"]').on("click", function(e) {
+            e.preventDefault();
+
+            // 유효성 검사
+            if(!validation()) {
+                return;
+            }
+
+            formObj.submit();
+        })
+    })
+
+</script>
+
 <script>
     $(document).ready(function() {
 
@@ -334,25 +354,6 @@
         }
 
     })
-</script>
-
-<script>
-    // 제출시
-    $(document).ready(function() {
-        let formObj = $('#modifyForm');
-
-        $('button[type="submit"]').on("click", function(e) {
-            e.preventDefault();
-
-            // 유효성 검사
-            if(!validation()) {
-                return;
-            }
-
-            formObj.submit();
-        })
-    })
-
 </script>
 
 <!-- 구글 맵 -->
