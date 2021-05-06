@@ -42,13 +42,27 @@ public interface BoardMapper {
 
 
 
-
-
     //전체 게시물 개수 - 현재 사용 x / 나중에 사용 가능성 있어서 냅둠
     public int getTotalCount(BoardCriteria cri);
 
     //댓글 개수 (trpl(댓글테이블)의 개수를 가져옴) - 필요없음
     //public int getReplyCnt(Long brdSn);
+
+
+
+    //---------- 관리자 게시판 (나중에 관리자 매퍼로 이동 시킬 예정)--------------
+    //나중에 조건 줘서 1개로 메서드 만들기 mapper포함
+    List<BoardVO> adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
+
+    List<BoardVO> adminGetListWithPagingByRegDate(@Param("cri") BoardCriteria cri);
+
+    List<BoardVO> adminGetListWithPagingByState(@Param("cri") BoardCriteria cri);
+
+    int adminRemove(Long sn);
+
+    int adminUpdate(BoardVO board);
+
+
 
 
 

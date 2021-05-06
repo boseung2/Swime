@@ -16,5 +16,9 @@ public class ServiceCenterController {
     public void list(){
 
     }
+    @GetMapping("/adminTest")
+        public void adminTest(){
+
+    }
 
 }

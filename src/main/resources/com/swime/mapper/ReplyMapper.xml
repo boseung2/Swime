@@ -121,4 +121,33 @@
         where sn = #{sn};
     </update>
 
+
+    <!--관리자 댓글 페이징-->
+
+    <!--번호순 정렬렬-->
+    <select id="adminGetListWithPagingBySn" resultType="com.swime.domain.ReplyVO">
+    <![CDATA[
+    select *
+        from
+        (
+        select rownum rn,sn, brd_sn, comment_group, user_id, name, content, status, reg_date, upd_date
+        from
+        (
+            select r.sn, r.brd_sn, r.comment_group, r.user_id, u.name, r.content, r.status, r.reg_date, r.upd_date
+            from
+                trpl r,tuser u
+            where
+                r.user_id = u.id
+            order by
+                sn asc
+        )
+        where rownum #{cri.pageNum} * #{cri.amount})
+        )
+        where rn > (#{cri.pageNum} -1) * #{cri.amount}
+
+        ]]>
+    </select>
+
+
+
 </mapper>

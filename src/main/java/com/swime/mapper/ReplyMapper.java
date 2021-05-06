@@ -38,4 +38,13 @@ public interface ReplyMapper {
     //댓글 개수를 게시판에 보여주는 메서드 -- 미사용
     //public int getReplyCnt(Long brdSn);
 
+
+    //----------------------관리자 댓글 (나중에 관리자 파일로 옮기기)------------------------
+
+    List<ReplyVO> adminGetListWithPaging();
+
+    int adminRemove(Long sn);
+
+    int adminUpdate(ReplyVO reply);
+
 }

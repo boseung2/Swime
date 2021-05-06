@@ -150,11 +150,12 @@
                     <c:forEach var = "attendant" items="${groupAttendList}">
                         <c:if test="${not done}">
                             <c:choose>
-                                <c:when test="${group.grpRole eq 'GRRO01'}"> <!--모임장이면 다 수정 -->
+                                <%--모임장이면 전체 수정--%>
+                                <c:when test="${group.grpRole eq 'GRRO01'}">
                                     <button data-oper='modify' class="btn btn-primary">수정</button>
                                 </c:when>
-
-                                <c:when test="${group.grpRole eq 'GRRO02' and board.grpRole ne 'GRRO01'}">
+                                <%--운영자는 일반회원, 자기 자신 /But 운영자이면서 다른 사람이면 수정x--%>
+                                <c:when test="${group.grpRole eq 'GRRO02' and board.grpRole ne 'GRRO01' and mv.id eq board.userId}">
 
                                     <button data-oper='modify' class="btn btn-primary">수정</button>
                                 </c:when>
@@ -167,10 +168,6 @@
                         </c:if>
                     </c:forEach>
                 </sec:authorize>
-
-
-
-
 
                 <button data-oper="list" class="btn btn-dark">취소</button>
 

@@ -91,7 +91,7 @@ public class BoardController {
         groupAttend.setGrpSn(grpSn);
         groupAttend.setUserId(userId);
 
-        //readByGrp~에 넣어준다.
+        //readByGrp~에 넣어준다.(해당멤버)
         //게시판 상위 고정을 하기 위해서 해당 사용자의 그룹정보를 가져와야지 모임역할을 알 수 있다.
         //모임 역할은 1.모임장 2.운영진 3.일반회원이 있다.
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
