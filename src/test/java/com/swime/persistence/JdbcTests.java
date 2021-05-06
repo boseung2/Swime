@@ -23,7 +23,7 @@ public class JdbcTests {
 	@Test
 	public void testConnection() {
 		System.setProperty("oracle.jdbc.fanEnabled","false");
-		System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
+		System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime/");
 		try(Connection con =
 				DriverManager.getConnection(
 						"jdbc:log4jdbc:oracle:thin:@swime_tp",
@@ -42,7 +42,7 @@ public class JdbcTests {
 //		try (Connection con = DriverManager.getConnection(
 //				"jdbc:oracle:thin:@localhost:1521:XE",
 //				"book_ex",
-//				"book_ex")){
+//				"1234")){
 //			log.info(con);
 //		}catch(Exception e) {
 //			fail(e.getMessage());
