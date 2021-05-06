@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.BoardMapper">
 
+    <!--모든 게시판을 출력 (현재 사용x, 관리자 게시판 만들때 사용 예정..?)-->
     <select id="getList" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
     <![CDATA[
 
@@ -71,6 +72,7 @@
         ]]>
     </select>
 
+    <!--게시판 페이징-->
     <select id="getListWithPaging" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
     <![CDATA[
         select *
@@ -110,7 +112,7 @@
     ]]>
     </select>
 
-
+    <!--게시판 등록 (현재 사용x)-->
     <insert id="insert">
         insert ALL
         into
@@ -132,6 +134,7 @@
         select * from dual
     </insert>
 
+    <!--게시판 등록-->
     <insert id="insertSelectKey">
 
         <selectKey resultType="long" order="BEFORE" keyProperty="sn">
@@ -155,6 +158,7 @@
         select * from dual
     </insert>
 
+    <!--게시판 상세 정보 읽기-->
     <select id="read" resultType="com.swime.domain.BoardVO">
         <![CDATA[
         select b.sn,
@@ -185,10 +189,12 @@
         ]]>
     </select>
 
+    <!--게시판 삭제(게시판 상태를 업데이트한다. BOST02는 '삭제상태' BOST01은 '정상상태')-->
     <update id="delete">
         update tbrd set status = 'BOST02' where sn = #{sn}
     </update>
 
+    <!--게시판 업데이트-->
     <update id="update">
         update tbrd
         set
@@ -201,18 +207,21 @@
         where sn = #{sn}
     </update>
 
+    <!--게시판 내용을 업데이트-->
     <update id="updateContent">
         update tbrd_det
         set content = #{content}
         where brd_sn = #{sn}
     </update>
 
+    <!--게시판 댓글 수를 증가 감소 업데이트-->
     <update id="updateReplyCnt">
         update tbrd
         set reply_cnt = reply_cnt + #{amount}
         where sn = #{sn}
     </update>
 
+    <!--모임의 게시판 수를 알려준다. 페이징 할 때 필요해서 사용 했음.-->
     <select id="getCountBySn" resultType="int">
         <![CDATA[
             select count(sn)
@@ -224,6 +233,7 @@
         ]]>
     </select>
 
+    <!--게시판 총 개수인데 현재 사용x (관리자 게시판 만들 때 사용 예정?)-->
     <select id="getTotalCount" resultType="int">
         select count(*) from tbrd where sn > 0
     </select>

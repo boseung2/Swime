@@ -48,11 +48,8 @@ public class ReplyServiceImpl implements ReplyService{
         log.info("parentComment:" + parentComment);
         log.info("register: " + reply);
 
-
-        //댓글 개수 업데이트
+        //댓글 개수 업데이트 - 댓글이 달리면 +1
         boardMapper.updateReplyCnt(reply.getBrdSn(), 1);
-
-
 
         replyMapper.insert(reply);
 
@@ -100,7 +97,7 @@ public class ReplyServiceImpl implements ReplyService{
         // 댓글 등록은 ReplyVo 안에 번호가 존재 했지만 삭제는 번호만 받기 때문에
         // 해당 게시물을 읽어와서 삭제 처리 해준다.
         ReplyVO reply = replyMapper.read(sn);
-        //댓글 개수 감소
+        //댓글 개수 감소 - 댓글이 지워지면 -1
         boardMapper.updateReplyCnt(reply.getBrdSn(), -1);
 
         return replyMapper.delete(sn);

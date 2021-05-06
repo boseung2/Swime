@@ -61,7 +61,6 @@
 </head>
 
 <body>
-
 <!-- header -->
 <div class="header">
     <a href="/" class="logo"><img src="../../../resources/img/logo2.png"></a>
@@ -70,7 +69,7 @@
 
     <div class="header-right">
         <sec:authorize access="isAuthenticated()">
-        <a href="/notice/list">고객센터</a>
+        <a href="/serviceCenter/list">고객센터</a>
         </sec:authorize>
         <sec:authorize access="isAnonymous()">
             <a href="/user/register">회원가입</a>

@@ -164,7 +164,11 @@
 <%--            <label for="topFix">게시물 상위고정</label>--%>
 <%--            <input type="checkbox" class="form-control" name="topFix" id="topFix">--%>
 <%--        </div>--%>
-        <!--게시글 상위고정은 모임장, 운영진만 가능하니까 일반회원은 안보이게한다.-->
+        <!--
+            게시글 상위고정은 모임장, 운영진만 가능하니까 일반회원은 안보이게한다.
+            GRRO01 : 모임장
+            GRRO02 : 운영진
+            GRRO03 : 회원-->
 
         <div class="form-check">
             <c:choose>

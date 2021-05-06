@@ -23,7 +23,6 @@ public class BoardLikeServiceImpl implements BoardLikeService{
         // 좋아요 누른 회원을 insert한다. 여기까지는 테스트 ok
         boardLikeMapper.insert(boardLike);
 
-
         /*
         1. 좋아요 누를 시 tbrd 테이블 좋아요 개수가 증가한다.
             나중에 Transaction으로 처리하기.
@@ -34,9 +33,8 @@ public class BoardLikeServiceImpl implements BoardLikeService{
         BoardVO board = boardMapper.read(brnSn);
 
         log.info("board..........."+board);
-        // 게시글의 좋아요 개수를 가져와서 게시물 좋아요 개수를 넣는다.
+        // 게시글의 좋아요 개수를 가져와서 set한다
         board.setLikeCnt(boardLikeMapper.getBoardLikeCnt(brnSn));
-
 
         boardMapper.update(board);
 
@@ -45,14 +43,14 @@ public class BoardLikeServiceImpl implements BoardLikeService{
 
     @Override
     public int remove(long brdSn, String userId) {
-
+        //transaction으로 바꿀 수 있을 것 같은데.
         log.info("remove: " + brdSn);
         boardLikeMapper.delete(brdSn, userId);
         //게시글 번호를 읽는다
         BoardVO board = boardMapper.read(brdSn);
-        //게시글의 좋아요 개수를 가져와서 게시물 좋아요 개수에 넣는다.
+        //게시글의 좋아요 개수를 가져온다
         board.setLikeCnt(boardLikeMapper.getBoardLikeCnt(brdSn));
-
+        //board 게시판의 likeCnt 업데이트
         boardMapper.update(board);
 
         return 1;

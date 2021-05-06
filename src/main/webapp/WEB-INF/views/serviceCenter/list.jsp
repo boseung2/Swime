@@ -15,9 +15,11 @@
         font-size: 100px;
         color: #6f42c1;
     }
-    img {
+    img.zz{
         display: block;
         margin: 0px auto;
+        width: 1000px;
+
     }
     html {
         height: 100%;
@@ -60,7 +62,7 @@
 
 
 <div class="snow">
-    <img class="zz" src="../../../resources/img/1.png">
+    <img class="zz" src="../../../resources/img/2.png">
     <div class="ing">구현중입니다</div>
 </div>
 

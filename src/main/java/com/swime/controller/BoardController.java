@@ -61,7 +61,9 @@ public class BoardController {
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
+
         log.info(">>>>>>>>>>>>>  " + grpSn);
+        //게시판 페이지당 3개의 게시글을 보여준다.
         BoardCriteria cri = new BoardCriteria(page, 3);
         log.info("cri>>>>>>>>>>"+cri);
 
@@ -76,29 +78,29 @@ public class BoardController {
 //
 //    }
 
-    //게시판 생성 페이지
+    //게시판 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
     public void register(@RequestParam("grpSn") long grpSn, String userId,Model model){
         model.addAttribute("grpSn", grpSn);
         model.addAttribute("userId", userId);
 
-        //상위고정하기위해서 그룹참석자의 가져온다.
+
+        //모임번호, 유저아이디로 groupAttend에 set해서 groupAttend에 저장하고
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(grpSn);
         groupAttend.setUserId(userId);
 
+        //readByGrp~에 넣어준다.
+        //게시판 상위 고정을 하기 위해서 해당 사용자의 그룹정보를 가져와야지 모임역할을 알 수 있다.
+        //모임 역할은 1.모임장 2.운영진 3.일반회원이 있다.
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
 
         log.info("groupAttend 가져왔나용?!!!!!!!!!"+groupAttendVO);
 
         model.addAttribute("group", groupAttendVO);
 
-        //현재 모임의 참가명단에 접근해서 모임역할을 가져와야한다.
-        //-> readByGrpSnUserId() 접근하면 도미
-//        GroupAttendVO groupAttend = groupAttendService.get(grpSn);
-//        model.addAttribute("group", groupAttend);
-//        log.info("groupAttend>>>>>" + groupAttend);
+
     }
 
 
@@ -119,7 +121,6 @@ public class BoardController {
     public String register(BoardVO board, long grpSn, RedirectAttributes rttr) {
 
 
-        log.info("-----------------------------");
         if(board.getAttachList() != null){
             board.getAttachList().forEach(attach-> log.info(attach));
         }
@@ -144,19 +145,21 @@ public class BoardController {
 
 
 
-        //그룹 참석자 가져온다
+
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(grpSn);
         groupAttend.setUserId(userId);
 
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
 
-        //그룹을 가입한 리스트 출력
+        //그룹을 가입한 리스트 출력 : 로그인 여부 / 모임가입 여부에 따라
+        //댓글 작성 할 수 있는지...
         List<GroupAttendVO> groupList = groupAttendService.getList(grpSn);
 
         model.addAttribute("groupAttendList", groupList);
         model.addAttribute("group", groupAttendVO);
         model.addAttribute("board", service.get(sn));
+        //(x)
         model.addAttribute("reply", replyService.get(sn));
 
         log.info("groupList>>>>>>>"+groupList);
@@ -166,6 +169,8 @@ public class BoardController {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
 
     }
+
+
     @GetMapping("/modify")
     public void modify(@RequestParam("sn") Long sn, long grpSn, String userId,
                     Model model, @ModelAttribute("cri") BoardCriteria cri,RedirectAttributes rttr) {
@@ -180,8 +185,9 @@ public class BoardController {
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
 
         model.addAttribute("board", service.get(sn));
-        model.addAttribute("reply", replyService.get(sn));
         model.addAttribute("group", groupAttendVO);
+        //(x)
+        model.addAttribute("reply", replyService.get(sn));
 
         log.info("groupAttend 가져왔나용?!!!!!!!!!"+groupAttendVO);
         log.info("replyServiceGet : "+replyService.get(sn));
@@ -194,9 +200,6 @@ public class BoardController {
     public String modify(BoardVO board, long grpSn, @ModelAttribute("cri") BoardCriteria cri,
                          RedirectAttributes rttr) {
 
-        //상위 고정도 나중에하기.
-//        BoardVO boardVO = service.get(board.getSn());
-//        if(board.getTopFix().equals("")) board.setTopFix("BOFI02");
 
         log.info("modify: " + board);
         try{
@@ -204,7 +207,7 @@ public class BoardController {
                 rttr.addFlashAttribute("result", "success");
             }else{
                 //fail처리
-                //rttr.addFlashAttribute("result", "success");
+                //rttr.addFlashAttribute("result", "fail");
             }
         }catch (Exception e){
             e.getMessage();
@@ -243,7 +246,7 @@ public class BoardController {
     }
 
     //좋아요 눌렀는지 여부 판단
-    // userId:.+ => 아이디 가져 올 때 .com 안가져와서 넣어주면 가져옴
+    // userId:.+ => 아이디 가져 올 때 .com 못 가져옴 넣어주면 가져옴
     @GetMapping(value = "/like/{brdSn}/{userId:.+}")
     public ResponseEntity<String> getLike(@PathVariable("brdSn") long brdSn,
                                           @PathVariable("userId") String userId){
@@ -254,19 +257,20 @@ public class BoardController {
         //boardLike.setUserId("toywar94@gmail.com");
         log.info("brdSn>>>>>>>>"+brdSn);
         log.info("userId>>>>>>>>"+userId);
-
         log.info("....boardLike>>>>>>> : " + boardLike);
 
+        // 게시판 번호, 유저아이디로 읽어온다.
         BoardLikeVO getBoardLike = boardLikeService.read(boardLike);
 
 
         log.info("....getBoardLike>>>>>> " + getBoardLike);
 
+        //
         // 좋아요가 없으면 빈하트
-        // 있으면 채워진 하트
         if (getBoardLike == null){
             log.info("....null>>>>>> ");
             return new ResponseEntity<>("notExist",HttpStatus.OK);
+        // 있으면 채워진 하트
         }else{
             log.info("... else>>>>>> ");
             return new ResponseEntity<>("exist", HttpStatus.OK);
@@ -281,25 +285,62 @@ public class BoardController {
         log.info("getBrdSn : " + boardLike.getBrdSn());
         log.info("getUserId : " + boardLike.getUserId());
 
-        //좋아요 누른 게시물 번호, 유저 아이디를 가져온다.
+        //좋아요 누른 게시물 번호, 유저 아이디를 가져와서 set한다
        BoardLikeVO getBoardLike = new BoardLikeVO();
        getBoardLike.setBrdSn(boardLike.getBrdSn());
        getBoardLike.setUserId(boardLike.getUserId());
 
        log.info("getBoardLike : "+getBoardLike);
+        // 게시판 번호, 유저아이디로 좋아요를 읽어온다.
+       BoardLikeVO likeExist = boardLikeService.read(getBoardLike);
+
 
        //좋아요가 존재하면 삭제한다.
-       if(boardLikeService.read(getBoardLike) != null){
-           return boardLikeService.remove(boardLike.getBrdSn(), boardLike.getUserId()) == 1
-                   //좋아요 개수를 보낸다.
-                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
-                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+       if (likeExist != null){
+
+           try {
+               //좋아요 삭제에 성공하면 좋아요 개수를 반환
+               if (boardLikeService.remove(boardLike.getBrdSn(), boardLike.getUserId()) == 1){
+                   return new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK);
+               }else{
+                   return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+               }
+           } catch(Exception e) {
+               return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+           }
+       //좋아요가 존재x 등록한다.
        }else{
-           //좋아요가 존재하지 않으면 등록한다.
-           return boardLikeService.register(boardLike) == 1
-                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
-                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+           try {
+                //좋아요 등록에 성공하면 개수를 반환한다.
+               if(boardLikeService.register(boardLike) == 1){
+                   return new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK);
+               }else{
+                   return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+               }
+
+           } catch(Exception e) {
+
+               return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+           }
+
        }
+
+       //좋아요가 존재하면 삭제한다.
+//       if(boardLikeService.read(getBoardLike) != null){
+//
+//           return boardLikeService.remove(boardLike.getBrdSn(), boardLike.getUserId()) == 1
+//                   //좋아요 개수를 보낸다.
+//                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
+//                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//       }else{
+//           //좋아요가 존재하지 않으면 등록한다.
+//           return boardLikeService.register(boardLike) == 1
+//                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
+//                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//       }
 
     }
 
@@ -340,11 +381,6 @@ public class BoardController {
        });//end foreach
 
     }
-
-
-
-
-
 
 }
 

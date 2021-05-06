@@ -32,7 +32,7 @@ public class BoardServiceImpl implements BoardService{
 
         mapper.insertSelectKey(board);
 
-        //두개의 테이블(tbrd, tbrd_atch(첨부파일))을 동시에 넣기 때문에 transaction사용
+        //두개의 테이블(tbrd(게시판), tbrd_atch(첨부파일))을 동시에 넣기 때문에 transaction사용
         if (board.getAttachList() != null){
             //파일 등록
             board.getAttachList().forEach(attach ->{
@@ -108,16 +108,12 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public GroupBoardPageDTO getListWithPaging(BoardCriteria cri, long grpSn){
 
+        //getCountBySn 모임안에 게시글의 개수
         return new GroupBoardPageDTO(
                 mapper.getCountBySn(grpSn),
                 mapper.getListWithPaging(cri, grpSn));
     }
 
-    @Override
-    public int getTotal(BoardCriteria cri) {
-
-        return mapper.getTotalCount(cri);
-    }
 
     @Override
     public List<BoardAttachVO> getAttachList(Long brdSn) {
@@ -126,6 +122,12 @@ public class BoardServiceImpl implements BoardService{
         return boardAttachMapper.findByBrdSn(brdSn);
     }
 
+    //현재 사용x(컨트롤러에서 사용안함.)
+    @Override
+    public int getTotal(BoardCriteria cri) {
+
+        return mapper.getTotalCount(cri);
+    }
 
 //    @Override
 //    public List<BoardVO> getList() {
