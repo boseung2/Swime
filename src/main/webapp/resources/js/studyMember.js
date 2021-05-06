@@ -17,6 +17,22 @@ let studyMemberService = (function(){
         })
     }
 
+    function getAttendListWithPaging(stdSn, callback, error) {
+
+        // stdSn, pageNum(1), amount(10) 필요
+        console.log("getAttendListWithPaging stdSn = " + stdSn);
+
+        $.get("/study/attendList/" + stdSn + '/' + 1 + '/' + 10, function (result) {
+            if (callback) {
+                callback(result);
+            }
+        }).fail(function (xhr, status, err) {
+            if (error) {
+                error();
+            }
+        })
+    }
+
     function getWaitingList(stdSn, callback, error) {
 
         console.log("getWaitingList stdSn = " + stdSn);
@@ -33,8 +49,25 @@ let studyMemberService = (function(){
         })
     }
 
+    function getBanList(stdSn, callback, error) {
+
+        console.log("getBanList stdSn = " + stdSn);
+
+        $.get("/study/banList/" + stdSn, function (result) {
+            if (callback) {
+                callback(result);
+            }
+        }).fail(function (xhr, status, err) {
+            if (error) {
+                error();
+            }
+        })
+    }
+
     return {
         getAttendList : getAttendList,
-        getWaitingList : getWaitingList
+        getWaitingList : getWaitingList,
+        getAttendListWithPaging : getAttendListWithPaging,
+        getBanList : getBanList
     };
 })();

@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -20,7 +19,9 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.sql.DataSource;
@@ -41,14 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
 
-
         http
             .authorizeRequests()
+                .antMatchers("/css/**","/img/**","/js/**", "/vendor/**","/adminPageDemo/*").permitAll()
                 .antMatchers("/group","/include","/user", "/study").permitAll()
                 .antMatchers("/group/register").access("isAuthenticated()")
                 .antMatchers("/study/register").access("isAuthenticated()")
                 .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
-                .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
+                .antMatchers("/admin/**").access("hasAuthority('ADMIN')")
         .and()
             .formLogin()
                 .usernameParameter("id")
@@ -69,27 +70,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //                    .disable()
+        .and()
+            .cors()
+                .configurationSource(corsConfigurationSource())
+//        .and()
+//            .oauth2Login()
+//                .authorizationEndpoint()
+//                .baseUri("/user/login/authorize")
+//                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+//            .and()
+//                .redirectionEndpoint()
+//                .baseUri("/oauth2/callback/*")
+//            .and()
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
         ;
-//        http
-//            .authorizeRequests()
-//                .antMatchers("/어떠한 페이지")
-//                    // 모두허용
-//                    .permitAll()
-//                    // 모두거부
-//                    .denyAll()
-//                    // 익명이면
-//                    .access("isAnonymous()")
-//                    // 인증된 사용자면
-//                    .access("isAuthenticated()")
-//                    // 인증된 사용자인데 without remember-me
-//                    .access("isFullyAuthenticated()")
-//        ;
-
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(detailsService()).passwordEncoder(passwordEncoder());
+        auth
+            .userDetailsService(detailsService())
+            .passwordEncoder(passwordEncoder())
+        ;
+
     }
 
     @Bean
@@ -113,5 +117,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         repo.setDataSource(dataSource);
         return repo;
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        log.info("cors config....");
+
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 
 }

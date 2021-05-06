@@ -5,7 +5,14 @@
     border-radius: 50%;
 }
 
-* {box-sizing: border-box;}
+footer {
+    margin-top : 3rem;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif
+}
 
 body {
     margin: 0;
@@ -92,6 +99,7 @@ body {
     padding-top : 4%;
     margin-left : auto;
     margin-right : auto;
+    cursor : pointer;
 
 }
 
@@ -103,7 +111,8 @@ body {
 
 .caption .flex-container {
     display: flex;
-    margin-top : 50px;
+    margin-top : 1rem;
+    margin-bottom : 1rem;
     justify-content: space-around;
 }
 
@@ -148,14 +157,23 @@ ul {
 
 /* 첨부파일 */
 
-.uploadResult image{
-    width: 100px;
-    height: 100px;
+.uploadResult {
+    display : block;
 }
 
-/*
+.uploadResult button {
+    display : inline;
+    margin-left : 1rem;
+}
+
+.uploadResult image{
+    width: 200px;
+    height: 200px;
+}
+
+
 .uploadResult ul{
-    display:flex;
+    display:block;
     flex-flow: row;
     justify-content: center;
     align-items: center;
@@ -168,15 +186,18 @@ ul {
     text-align: center;
 }
 
+
 .uploadResult ul li img {
-    width: 100px;
+
 }
 
+/*
 .uploadResult ul li span {
     color: white;
 }
+*/
 
- */
+
 
 .bigPictureWrapper {
     position: absolute;
@@ -229,7 +250,7 @@ ul {
 
 span.st_on {
     position: absolute;
-    z-index: 10;
+    z-index: 1;
     background-position: 0 -690px;
 }
 
@@ -254,24 +275,68 @@ span.st_on {
 .boardHeader {
     height: 20%;
     /*background-color: #efefef;*/
-    border-radius: 2%;
-    padding-left: 10px;
-    padding-top: 10px;
+    padding: 1rem;
+    border : 1px solid rgba(0,0,0,.125);
+    cursor : pointer;
+    border-radius: 0.5rem;
+    background-color : white;
+    margin-bottom : 2px;
 }
+
+.boardHeader:hover {
+    left:-1px;
+    top:-1px;
+    width:calc(100% - 1px);
+    height:calc(100% - 1px);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius:5px;
+
+}
+
+.board-body {
+    border-radius: 0.5rem;
+    border : 1px solid #f1f1f1;
+
+}
+
+.board-body img {
+    width : 21px;
+    height : 21px;
+
+}
+
+
+
 #boardNotice{
-    margin-left: 38px;
+    color : red;
+    margin-bottom: 10px;
 }
 
 #boardName{
     margin-left: 10px;
 }
+
 #grpBrdRole{
     margin-left: 1px;
 }
+
 #boardRegDate{
     float: right;
-    margin-right: 100px;
-    margin-top: 13px;
+    margin-right : 50px;
+}
+
+#boardDivBox {
+    margin-bottom : 1rem;
+}
+
+#board-title {
+    font-weight : bold;
+    font-size : 1.3rem;
+    color : black;
+}
+
+.boardPageFooter .pagination {
+    margin-top : 1rem;
 }
 
 .card-body {
@@ -296,7 +361,7 @@ span.st_on {
     left : 0px;
     width:100%;
     height:100%;
-    padding-top:117px;
+    padding-top:57px;
     background : rgba(0,0,0,0.6);
     opacity:0;
     -moz-transition: all 0.2s ease-in-out;
@@ -328,4 +393,167 @@ span.st_on {
 #card-title-name {
 
 
+}
+
+.gray-background {
+    background-color: #f1f1f1;
+
+}
+
+
+.get-header .row {
+    margin : 20px;
+}
+
+.get-header .uploadResult {
+    width : 500px;
+    height : 350px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.7rem;
+
+}
+
+.get-header img {
+    width:100%;
+    height:100%;
+
+}
+
+.get-header p {
+    margin : 0px;
+}
+
+.get-header div {
+    margin : 5px 0px;
+}
+
+.get-header .info {
+    margin : 40px 0px;
+}
+
+.get-body #groupAttend .header{
+    background-color: #f1f1f1;
+    padding : 4px;
+}
+
+.get-body h4 {
+    margin-bottom : 30px;
+}
+
+.get-body #info pre{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-all
+
+}
+
+.get-body h4 .btn {
+    float : right;
+}
+
+.studyList .card{
+    cursor : pointer;
+    border-radius: 0.3rem;
+    margin-right : auto;
+}
+
+.studyList .card-body p{
+    text-align: left;
+    color : #808080;
+}
+
+.studyList .card-body h2{
+    text-align: left;
+    font-weight: bold;
+    font-size : 1.9em;
+}
+
+.studyList .blue-text {
+    color : white !important;
+    text-align: center;
+    margin-bottom : 5px;
+}
+
+.studyList .btn {
+    float : right;
+}
+
+.studyList .card-footer {
+    background-color: rgba(0, 123, 255, 0.5);
+}
+
+.studyList .card:hover {
+    left:-1px;
+    top:-1px;
+    width:calc(100% - 1px);
+    height:calc(100% - 1px);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius:5px;
+
+}
+
+/* group/get rating */
+.group-rating {
+    background-color: white;
+    border-radius: 0.5rem;
+    border : 1px solid rgba(0,0,0,.125);
+    margin-bottom : 1rem;
+}
+
+.group-rating .header {
+    border-radius: 0.5rem;
+    padding : 0px;
+    margin-bottom : 0.5rem;
+    margin-top : 0.5rem;
+
+}
+
+.group-rating .group-rating-content{
+    padding : 0.5rem 1.5rem;
+    border-bottom : 1px solid rgba(0,0,0,.125);
+}
+
+.group-rating .group-rating-content p {
+    cursor : pointer;
+}
+
+/* 모임만들기 */
+.group-register {
+    margin-top : 1rem;
+}
+
+/* 스터디 상세 */
+#map {
+    width : 100%;
+    height: 400px;
+}
+
+#member li {
+    padding : 4px;
+}
+
+.get-body #study-place {
+    margin-bottom : 1rem;
+}
+
+.study-buttons {
+    margin-bottom : 3rem;
+    display : flex;
+    justify-content: flex-end;
+    padding-right : 11rem;
+}
+
+#study-get-header {
+    padding-top : 3rem;
+    padding-bottom : 3rem;
+}
+
+.study-buttons a {
+    margin :  0px 3px;
 }

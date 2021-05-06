@@ -20,11 +20,11 @@
         </div>
 
         <c:if test="${userId == MemberVo.id}">
-            <div class="form-group">
+            <div class="form-group" ${MemberVo.regPath == 'REPA01' ? '' : 'hidden'}>
                 <label for="password">비밀번호</label>
                 <input type="password" class="form-control" name="password" id="password" readonly>
             </div>
-            <div class="form-group">
+            <div class="form-group" ${MemberVo.regPath == 'REPA01' ? '' : 'hidden'}>
                 <label for="passwordConfirm">비밀번호 확인</label>
                 <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" readonly>
             </div>

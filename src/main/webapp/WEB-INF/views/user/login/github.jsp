@@ -9,62 +9,82 @@
          pageEncoding="UTF-8"%>
 <%@include file="../../includes/header.jsp" %>
 
-github 데이터 확인용
+
 
 <script>
 
-    // let code = $('?code').val();
-    let urlParams = new URLSearchParams(window.location.search);
-    let code = urlParams.get("code");
-    console.log(code);
+    $(document).ready(function (){
+        let id = "${ghPerson.login}";
 
-    let clientID = '190944c4173bf58cc6e5';
-    let clientSecret = '6cef3b8bb7a83ca00207f602539850c53f549dff';
-
-
-    $.ajax({
-        crossOrigin : true,
-        url: 'https://github.com/login/oauth/access_token',
-        type: 'POST',
-        headers: {
-            accept: 'application/json',
-        },
-        xhrFields: {
-            withCredentials: false
-        },
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Accept", "application/json");
-        },
-        data: {
-            client_id : clientID,
-            client_secret : clientSecret,
-            code : code
-        },
-        success: function(result) {
-            console.log(result);
-
-        },
-        error : function (msg) {
-
+        if(id === ''){
+            $(location).attr('href', '/user/login');
+            return;
         }
-    });
-    <%--const app = express();--%>
 
-    <%--app.get('/callback', (req, res) => {--%>
-    <%--    //'/callback': 인증 정보를 바탕으로 access token을 받아올 수 있도록 도와주는 라우터이다.--%>
-    <%--    const requestToken = req.query.code //이 req.query.code가 위의 'code=[Authorization Code]' 에 해당한다.--%>
-    <%--    axios({--%>
-    <%--        method: 'post',--%>
-    <%--        url: `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${requestToken}`,--%>
-    <%--        headers: {--%>
-    <%--            accept: 'application/json',--%>
-    <%--        },--%>
-    <%--    }).then((response) => {--%>
-    <%--        const accessToken = response.data.access_token //Github가 access_token을 응답으로 줄 것이다.--%>
-    <%--        res.redirect(`/welcome.html?access_token=${accessToken}`) //그리고 이렇게 accessToken을 받은 사용자에 한해서만 welcome 페이지로 리다이렉트 된다.--%>
-    <%--        //그리고 welcome 페이지를 구성하는 client에서 get fetch를 통해 token및 데이터를 받아오게 된다.--%>
-    <%--    }).catch((err) => {--%>
-    <%--        console.error(err)--%>
-    <%--    })--%>
-    <%--})--%>
+        isAlready(id);
+
+
+    });
+
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+    });
+
+
+    function isAlready(id) {
+        $.ajax({
+            url: '/user/already',
+            type: 'GET',
+            data: {
+                id : id
+            },
+            success: function(result) {
+                let isAlready = result.documentElement.textContent === "true";
+                if(isAlready){
+                    console.log("있는 아이디");
+                    login();
+                }else{
+                    console.log("없는 아이디");
+                    register();
+                }
+
+            }
+        });
+    }
+
+    function register(){
+        console.log("register");
+
+        $.ajax({
+            url: '/user/registerSocial',
+            type: 'POST',
+            data: {
+                id : "${ghPerson.login}",
+                name : "${ghPerson.name}",
+                password : "github",
+                regPath : "REPA02",
+                status : "USST01"
+            },
+            success: function(result) {
+                console.log(result);
+                login();
+            }
+        });
+    }
+
+    function login(){
+        console.log("login");
+
+        $.ajax({
+            url: '/user/login',
+            type: 'POST',
+            data: {
+                id : "${ghPerson.login}",
+                password : "github"
+            },
+            success: function(result) {
+                $(location).attr('href', '/');
+            }
+        });
+    }
 </script>

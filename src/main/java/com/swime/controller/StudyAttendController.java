@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/study")
+@RequestMapping("/study/attend")
 @RestController
 @Log4j
 @AllArgsConstructor
@@ -24,8 +24,8 @@ public class StudyAttendController {
     private GroupAttendService groupAttendService;
 
     // 스터디 명단에 해당 id가 있는지 확인
-    @GetMapping(value="/getAttend/{grpSn}/{userId}/{stdSn}")
-    public ResponseEntity<String> getAttend (@PathVariable("grpSn") long grpSn, @PathVariable("userId") String userId, @PathVariable("stdSn") long stdSn) {
+    @GetMapping(value="/get/{grpSn}/{userId}/{stdSn}")
+    public ResponseEntity<String> get (@PathVariable("grpSn") long grpSn, @PathVariable("userId") String userId, @PathVariable("stdSn") long stdSn) {
         // 1. 그룹명단에 해당 id가 있는지 확인/ 없으면 group not attend 반환
         // userId, grpSn 필요
         GroupAttendVO groupAttendVO = new GroupAttendVO();
@@ -84,8 +84,8 @@ public class StudyAttendController {
     }
 
     // 스터디 참가
-    @PostMapping(value = "/attend", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<String> attend(@RequestBody StudyParamVO studyParam) {
+    @PostMapping(value = "/register", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<String> register(@RequestBody StudyParamVO studyParam) {
         //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
         log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
         log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
@@ -162,6 +162,54 @@ public class StudyAttendController {
         }
 
         // 그 외의 상태 (미가입, 가입, 검토중, 탈퇴)는 영구강퇴 실패
+        return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
+    }
+
+    // 스터디 영구탈퇴 취소
+    @PostMapping(value = "/cancelBan", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<String> cancelBan(@RequestBody StudyParamVO studyParam) {
+        //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
+        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+
+        //2. 이미 참가명단에 있는지 확인
+        StudyListVO attendant = service.getAttendant(studyParam);
+
+        // 3. 참가명단에 있고, 영구탈퇴 상태이면 탈퇴 상태로 update
+        if(attendant != null && "STUS04".equals(attendant.getStatus())) {
+            studyParam.setStatus("STUS02");
+            service.modifyAttendant(studyParam);
+
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        }
+
+        // 그 외의 상태 (미가입, 가입, 검토중, 탈퇴)는 영구강퇴취소 실패
+        return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
+    }
+
+    // 검토중인 회원 거절
+    @PostMapping(value = "/reject", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<String> reject(@RequestBody StudyParamVO studyParam) {
+        //1. 여기로 요청 보낼때 stdSn, userId 넘겨줘야함
+        log.info("잘 왔니?======================================stdSn = " + studyParam.getStdSn());
+        log.info("잘 왔니?======================================UserId = " + studyParam.getUserId());
+
+        //2. 이미 참가명단에 있는지 확인
+        StudyListVO attendant = service.getAttendant(studyParam);
+
+        // 3. 참가명단에 있고, 검토중인 상태이면
+        if(attendant != null && "STUS03".equals(attendant.getStatus())) {
+            try {
+                //참여명단에서 삭제하고, 해당 스터디에있는 해당 유저의 답변을 모두 삭제
+                service.removeAttendant(studyParam);
+
+                return new ResponseEntity<>("success", HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        // 그 외의 상태는 거절 못함
         return new ResponseEntity<>("fail", HttpStatus.BAD_GATEWAY);
     }
 }

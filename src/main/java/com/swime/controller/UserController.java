@@ -6,24 +6,34 @@ import com.swime.service.AuthService;
 import com.swime.service.MemberService;
 import com.swime.service.ProfileService;
 import com.swime.util.GmailSend;
+import com.swime.util.HttpRequest;
 import com.swime.util.MakeRandomValue;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.kohsuke.github.GHPerson;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 @Controller
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
+@CrossOrigin("*")
 public class UserController {
 
     MemberService service;
@@ -46,9 +56,17 @@ public class UserController {
     public void login(){
     }
 
-    @CrossOrigin
     @GetMapping("/login/github")
-    public void gitHubLogin(){
+    public void github(String code, Model model) throws Exception{
+        if(code == null) return;
+
+        log.info("code = " + code);
+        HttpRequest httpRequest = new HttpRequest();
+        String ac = httpRequest.getGithubAccessCode(code);
+        log.info(ac);
+        GHPerson ghPerson = httpRequest.connectGithub(ac);
+        log.info(ghPerson);
+        model.addAttribute("ghPerson", ghPerson);
     }
 
     @GetMapping("/register")
@@ -56,13 +74,29 @@ public class UserController {
     }
 
     @Transactional
-    @PostMapping("/register")
-    public ResponseEntity<String> register(MemberVO vo, RedirectAttributes rttr){
+    @PostMapping("/registerSocial")
+    public ResponseEntity<String> registerSocial(MemberVO vo, RedirectAttributes rttr){
         log.info(vo);
         boolean result = false;
         boolean result1 = false;
-        boolean result2 = false;
         boolean result3 = false;
+        vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+        result = service.registerHistory(vo);
+        result1 = service.register(vo);
+        result3 = authService.register(vo.getId(),"MEMBER");
+        rttr.addFlashAttribute("vo", vo);
+//        return "redirect:/user/registerSuccess";
+        boolean all = result && result1 && result3;
+        return all ?
+                new ResponseEntity<>("Register Success", HttpStatus.OK) :
+                new ResponseEntity<>("Register Fail", HttpStatus.BAD_REQUEST);
+    }
+
+    @Transactional
+    @PostMapping("/register")
+    public ResponseEntity<String> register(MemberVO vo, RedirectAttributes rttr){
+        log.info(vo);
+        boolean result = false, result1 = false, result2 = false, result3 = false;
         vo.setPassword(passwordEncoder.encode(vo.getPassword()));
         result = service.registerHistory(vo);
         result1 = service.register(vo);
@@ -242,6 +276,9 @@ public class UserController {
         model.addAttribute("MemberVo", service.get(id));
     }
 
+    @GetMapping("chat")
+    public void chat(){
 
+    }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -103,6 +104,24 @@ public class StudyServiceTests {
         cri.setAmount(3);
 
         GroupStudyListDTO groupStudyListDTO = service.getList(cri, 222);
+
+        List<StudyVO> list = groupStudyListDTO.getList();
+        list.forEach(study -> log.info(study));
+        log.info(groupStudyListDTO.getCount());
+
+        for (StudyVO li : list) {
+            assert ("STST01".equals(li.getStatus()) || "STST03".equals(li.getStatus()));
+        }
+        assert (0 <= list.size() && list.size() <= 3);
+    }
+
+    @Test
+    public void testGetPastListWithPaging() {
+        StudyCriteria cri = new StudyCriteria();
+        cri.setPageNum(1);
+        cri.setAmount(3);
+
+        GroupStudyListDTO groupStudyListDTO = service.getPastList(cri, 1040);
 
         List<StudyVO> list = groupStudyListDTO.getList();
         list.forEach(study -> log.info(study));
@@ -257,6 +276,16 @@ public class StudyServiceTests {
     }
 
     @Test
+    public void testGetBanList() {
+        List<StudyListVO> list = service.getBanList(1747L);
+        if (list.size() == 0) return;
+
+        for(StudyListVO li : list) {
+            assert (li.getStdSn() == 1747L);
+        }
+    }
+
+    @Test
     public void testGetStudiesOfGroup() {
         service.getStudiesOfGroup(720, "test1@naver.com").forEach(study -> log.info(study));
 
@@ -286,6 +315,27 @@ public class StudyServiceTests {
 
         assert (service.registerAttendant(param) == 1);
         assert (service.getAttendant(param) != null);
+    }
+
+    @Test
+    public void testModifyAttendant() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(561L);
+        param.setUserId("hong7073@service.com");
+        param.setStatus("STUS02");
+
+        service.modifyAttendant(param);
+
+        assert ("STUS02".equals(service.getAttendant(param).getStatus()));
+    }
+
+    @Test
+    public void testRemoveAttendant() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(561L);
+        param.setUserId("hong7073@service.com");
+
+        assert (service.removeAttendant(param) == 1);
     }
 
     @Test
@@ -351,24 +401,34 @@ public class StudyServiceTests {
     @Test
     public void testRegisterAnswer() {
         StudyAnswerVO answer = new StudyAnswerVO();
-        answer.setStdSn(222L);
+        answer.setStdSn(223L);
         answer.setUserId("aaa@naver.com");
         answer.setQuestionSn(1);
         answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
         answer.setAnswer("네. 괜찮습니다.");
 
+        List<StudyAnswerVO> answers = new ArrayList<>();
+        answers.add(answer);
+
         StudyParamVO param = new StudyParamVO();
-        param.setStdSn(222L);
+        param.setStdSn(223L);
         param.setUserId("aaa@naver.com");
 
         int before=  service.getAnswer(param).size();
 
-        int result = service.registerAnswer(answer);
+        String result = "";
 
-        assert(result == 2 || result == -1);
+        try {
+            service.registerAnswers(answers);
+            result =  "success";
+        }catch (Exception e) {
+            result =  "fail";
+        }
 
-        if(result == 2) assert(service.getAnswer(param).size() > before);
-        if(result == -1) assert (service.getAnswer(param).size() == before);
+        assert("success".equals(result));
+
+        if("success".equals(result)) assert(service.getAnswer(param).size() > before);
+        if("fail".equals(result)) assert (service.getAnswer(param).size() == before);
     }
 
     @Test
@@ -379,7 +439,11 @@ public class StudyServiceTests {
         answer.setQuestionSn(1);
         answer.setQuestion("해당 스터디는 상황에따라 조금 더 진행될 수도 있는데 괜찮으십니까?");
         answer.setAnswer("네. 괜찮습니다.");
-        service.registerAnswer(answer);
+
+        List<StudyAnswerVO> answers = new ArrayList<>();
+        answers.add(answer);
+
+        service.registerAnswers(answers);
 
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(84L);

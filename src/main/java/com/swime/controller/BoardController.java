@@ -3,6 +3,7 @@ package com.swime.controller;
 import com.swime.domain.*;
 import com.swime.service.BoardLikeService;
 import com.swime.service.BoardService;
+import com.swime.service.GroupAttendService;
 import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -34,6 +35,7 @@ public class BoardController {
     private BoardService service;
     private BoardLikeService boardLikeService;
     private ReplyService replyService;
+    private GroupAttendService groupAttendService;
 
 
 //    @GetMapping("/list")
@@ -60,7 +62,7 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
         log.info(">>>>>>>>>>>>>  " + grpSn);
-        BoardCriteria cri = new BoardCriteria(page, 10);
+        BoardCriteria cri = new BoardCriteria(page, 3);
         log.info("cri>>>>>>>>>>"+cri);
 
         GroupBoardPageDTO list = service.getListWithPaging(cri, grpSn);
@@ -77,8 +79,26 @@ public class BoardController {
     //게시판 생성 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
-    public void register(@RequestParam("grpSn") long grpSn, Model model){
+    public void register(@RequestParam("grpSn") long grpSn, String userId,Model model){
         model.addAttribute("grpSn", grpSn);
+        model.addAttribute("userId", userId);
+
+        //상위고정하기위해서 그룹참석자의 가져온다.
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(grpSn);
+        groupAttend.setUserId(userId);
+
+        GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
+
+        log.info("groupAttend 가져왔나용?!!!!!!!!!"+groupAttendVO);
+
+        model.addAttribute("group", groupAttendVO);
+
+        //현재 모임의 참가명단에 접근해서 모임역할을 가져와야한다.
+        //-> readByGrpSnUserId() 접근하면 도미
+//        GroupAttendVO groupAttend = groupAttendService.get(grpSn);
+//        model.addAttribute("group", groupAttend);
+//        log.info("groupAttend>>>>>" + groupAttend);
     }
 
 
@@ -105,53 +125,97 @@ public class BoardController {
         }
 
         log.info("register...." + board);
-
-        service.register(board);
-
-        //rttr.addFlashAttribute("result", board.getSn());
-        rttr.addFlashAttribute("boardResult", "registerSuccess");
-
+        try{
+            service.register(board);
+            rttr.addFlashAttribute("boardResult", "registerSuccess");
+        }catch (Exception e){
+            rttr.addFlashAttribute("boardResult", "registerFail");
+            e.getMessage();
+        }
 
        return "redirect:/group/get?sn="+grpSn;
         //return "redirect:/board/get?sn="+board.getSn();
     }
 
-    @GetMapping({"/get","/modify"})
-    public void get(@RequestParam("sn") Long sn, Model model,
-                    @ModelAttribute("cri") BoardCriteria cri) {
+//
+    @GetMapping("/get")
+    public void get(@RequestParam("sn") Long sn, long grpSn, String userId,
+                    Model model, @ModelAttribute("cri") BoardCriteria cri) {
 
-        log.info("/get or modify");
+
+
+        //그룹 참석자 가져온다
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(grpSn);
+        groupAttend.setUserId(userId);
+
+        GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
+
+        //그룹을 가입한 리스트 출력
+        List<GroupAttendVO> groupList = groupAttendService.getList(grpSn);
+
+        model.addAttribute("groupAttendList", groupList);
+        model.addAttribute("group", groupAttendVO);
         model.addAttribute("board", service.get(sn));
-
-
         model.addAttribute("reply", replyService.get(sn));
 
-
+        log.info("groupList>>>>>>>"+groupList);
+        log.info("groupAttendVO : " + groupAttendVO);
+        log.info("/get");
         log.info("replyServiceGet : "+replyService.get(sn));
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
 
     }
+    @GetMapping("/modify")
+    public void modify(@RequestParam("sn") Long sn, long grpSn, String userId,
+                    Model model, @ModelAttribute("cri") BoardCriteria cri,RedirectAttributes rttr) {
+
+        log.info("/modify");
+
+
+        GroupAttendVO groupAttend = new GroupAttendVO();
+        groupAttend.setGrpSn(grpSn);
+        groupAttend.setUserId(userId);
+
+        GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
+
+        model.addAttribute("board", service.get(sn));
+        model.addAttribute("reply", replyService.get(sn));
+        model.addAttribute("group", groupAttendVO);
+
+        log.info("groupAttend 가져왔나용?!!!!!!!!!"+groupAttendVO);
+        log.info("replyServiceGet : "+replyService.get(sn));
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
+    }
+
+
     @PreAuthorize("principal.username == #board.userId")
     @PostMapping("/modify")
-    public String modify(BoardVO board, @ModelAttribute("cri") BoardCriteria cri,
+    public String modify(BoardVO board, long grpSn, @ModelAttribute("cri") BoardCriteria cri,
                          RedirectAttributes rttr) {
 
         //상위 고정도 나중에하기.
-        BoardVO boardVO = service.get(board.getSn());
-        if(board.getTopFix().equals("")) board.setTopFix("BOFI02");
+//        BoardVO boardVO = service.get(board.getSn());
+//        if(board.getTopFix().equals("")) board.setTopFix("BOFI02");
 
         log.info("modify: " + board);
-
-        if (service.modify(board)) {
-            rttr.addFlashAttribute("result", "success");
-        }else{
-            //fail처리
+        try{
+            if (service.modify(board)) {
+                rttr.addFlashAttribute("result", "success");
+            }else{
+                //fail처리
+                //rttr.addFlashAttribute("result", "success");
+            }
+        }catch (Exception e){
+            e.getMessage();
         }
+
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
 
-        return "redirect:/board/get?sn="+board.getSn();
+        return "redirect:/group/get?sn="+grpSn;
+        //return "redirect:/board/get?sn="+board.getSn();
     }
 
     @PreAuthorize("principal.username == #userId")

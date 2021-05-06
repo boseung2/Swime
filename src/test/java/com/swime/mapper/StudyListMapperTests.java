@@ -124,6 +124,17 @@ public class StudyListMapperTests {
         assert ("STUS03".equals(mapper.getAttendant(param).getStatus()));
     }
 
+
+    @Test
+    public void testDelete() {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(366L);
+        param.setUserId("jungbs3726@naver.com");
+        param.setStatus("STUS03");
+
+        assert (mapper.delete(param) == 1);
+    }
+
     @Test
     public void testCount() {
         assertNotNull(mapper.count(307L));

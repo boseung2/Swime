@@ -101,6 +101,17 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
+    public GroupStudyListDTO getPastList(StudyCriteria cri, long grpSn) {
+        GroupStudyListDTO groupStudyList = new GroupStudyListDTO();
+        groupStudyList.setList(mapper.getPastListWithPaging(cri, grpSn));
+        groupStudyList.setCount(mapper.countPastStudy(grpSn));
+
+        groupStudyList.getList().forEach(study -> study.setAttendants(listMapper.count(study.getSn())));
+
+        return groupStudyList;
+    }
+
+    @Override
     public int countStudy(long grpSn) {
         return mapper.countStudy(grpSn);
     }
@@ -162,6 +173,14 @@ public class StudyServiceImpl implements StudyService{
     }
 
     @Override
+    public List<StudyListVO> getBanList(long stdSn) {
+        StudyParamVO param = new StudyParamVO();
+        param.setStdSn(stdSn);
+        param.setStatus("STUS04");
+        return listMapper.getList(param);
+    }
+
+    @Override
     public StudyListVO getAttendant(StudyParamVO param) {
         return listMapper.getAttendant(param);
     }
@@ -179,6 +198,26 @@ public class StudyServiceImpl implements StudyService{
     @Override
     public int modifyAttendant(StudyParamVO param) {
         return listMapper.update(param);
+    }
+
+    // 스터디 참여명단에서 삭제하고 해당 스터디에 해당 유저의 설문답변이 남아있으면 지운다.
+    @Transactional
+    @Override
+    public int removeAttendant(StudyParamVO param) {
+
+        int cnt = 0;
+
+        // 해당 유저를 해당스터디 참여명단에서 삭제한다.
+        cnt += listMapper.delete(param);
+
+        // 해당 스터디에 해당 유저의 설문 답변이 있으면 삭제한다.
+        List<StudyAnswerVO> answers = answerMapper.get(param);
+
+        if (answers.size() > 0) {
+            answerMapper.delete(param);
+        }
+
+        return cnt;
     }
 
     @Override
@@ -211,34 +250,35 @@ public class StudyServiceImpl implements StudyService{
     // Tx: 설문 답변 후 참가명단에 insert
     @Transactional
     @Override
-    public int registerAnswer(StudyAnswerVO answer) {
-        int cnt = 0;
+    public void registerAnswers(List<StudyAnswerVO> answers) {
 
         StudyParamVO param = new StudyParamVO();
-        param.setStdSn(answer.getStdSn());
-        param.setUserId(answer.getUserId());
-        
-        // 설문 답변 등록 후에 상태는 검토중이어야하므로
-        param.setStatus("STUS03");
+        param.setStdSn(answers.get(0).getStdSn());
+        param.setUserId(answers.get(0).getUserId());
 
         // 1. 해당유저의 참여상태를 확인
         int check = checkAttendantForRegister(param);
-        
-        // 가입상태 : 가입/검토중/영구강퇴
-        if (check == -1) return -1;
 
-        //2. 답변을 등록한다.
-        cnt += answerMapper.insert(answer);
-        
-        // 참여명단에 없음
-        if (check == 1) {
-            cnt += listMapper.insert(param);
-        } else {
-            // 가입상태 : 탈퇴
-            cnt += listMapper.update(param);
+        // 가입상태 : 가입/검토중/영구강퇴는 return
+        if (check == -1) return;
+
+        //2. 답변들을 모두 등록한다.
+        for(int i = 0; i < answers.size(); i++) {
+            answerMapper.insert(answers.get(i));
         }
 
-        return cnt; // 정상적으로 등록될 경우 결과값이 2여야함
+        // 설문 답변 등록 후에 상태는 무조건 검토중
+        param.setStatus("STUS03");
+
+        // 참여명단에 검토중으로 넣는다.
+        if (check == 1) {
+            // 가입상태 : 미가입
+            listMapper.insert(param);
+        } else {
+            // 가입상태 : 탈퇴
+            listMapper.update(param);
+        }
+        
     }
 
     // 등록을 위해 해당 스터디의 유저 가입상태를 확인해주는 함수
