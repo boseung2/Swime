@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<%@include file="../includes/tagLib.jsp" %>
 
-<script src="../../../resources/js/adminPageDemo/chart-area-demo.js"></script>
+<%--<script src="../../../resources/js/adminPageDemo/chart-area-demo.js"></script>--%>
 <script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>
 <script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>
 <script src="../../../resources/js/adminPageDemo/chart-pie-demo.js"></script>
@@ -114,3 +115,23 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    $(document).ready(function () {
+        getData("countUser");
+        getData("countStudy");
+        getData("countGroup");
+    });
+
+    function getData(url){
+        $.ajax({
+            url : "/adminData/" + url,
+            dataType : "json"
+        }).done(function (result) {
+            $("#"+url).html(result);
+        });
+    }
+
+
+</script>

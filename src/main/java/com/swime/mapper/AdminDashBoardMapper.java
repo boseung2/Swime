@@ -1,7 +1,7 @@
 package com.swime.mapper;
 
 
-public interface AdminDashBoard {
+public interface AdminDashBoardMapper {
 
     int countTodayUserRegister();
 

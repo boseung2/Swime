@@ -1,6 +1,6 @@
 package com.swime.service;
 
-import com.swime.mapper.AdminDashBoard;
+import com.swime.mapper.AdminDashBoardMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class AdminDashBoardServiceImpl implements AdminDashBoardService{
 
     @Setter(onMethod_ = @Autowired)
-    private AdminDashBoard mapper;
+    private AdminDashBoardMapper mapper;
 
 
     @Override
