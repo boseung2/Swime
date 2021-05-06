@@ -61,7 +61,7 @@
 </style>
 
 
-    <a href="/serviceCenter/adminTest"/>
+<%--    <a href="/serviceCenter/adminTest"/>--%>
 <div class="snow">
     <img class="zz" src="../../../resources/img/2.png">
     <div class="ing">구현중입니다</div>
