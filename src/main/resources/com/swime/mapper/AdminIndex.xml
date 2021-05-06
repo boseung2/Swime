@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.AdminDashBoard">
+
+    <select id="countTodayUserRegister" resultType="int">
+        <![CDATA[
+        select count(*)
+        from tuser
+        where current_date -1 <= reg_date and reg_date < current_date
+        ]]>
+    </select>
+
+    <select id="countTodayGroupRegister" resultType="int">
+        <![CDATA[
+        select count(*)
+        from tgrp
+        where current_date -1 <= reg_date and reg_date < current_date
+        ]]>
+    </select>
+
+    <select id="countTodayStudyRegister" resultType="int">
+        <![CDATA[
+        select count(*)
+        from tstd
+        where current_date -1 <= reg_date and reg_date < current_date
+        ]]>
+    </select>
+
+
+</mapper>

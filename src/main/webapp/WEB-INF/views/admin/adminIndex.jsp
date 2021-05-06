@@ -137,15 +137,16 @@
 
 
     function loadByAjax(href) {
-        $.ajax({
-            url : href,
-            type: 'GET',
-            success:function(result) {
-                $("#ContentsPlace").html(result);
-            },
-            error : function (result) {
-
-            }
+        $.ajax(href).done(function(result) {
+            $("#ContentsPlace").html(result);
         });
+
+        // $.ajax({
+        //     url : href,
+        //     type: 'GET',
+        //     success:function(result) {
+        //         $("#ContentsPlace").html(result);
+        //     }
+        // });
     }
 </script>

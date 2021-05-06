@@ -15,7 +15,14 @@
     <div class="row">
         <div class="col-xl-4 col-md-4">
             <div class="card bg-primary text-white mb-4">
-                <div class="card-body">당일 가입자수</div>
+                <div class="card-body">
+                    <div style="float: Left;">
+                        당일 가입자수
+                    </div>
+                    <div id="countUser" style="float: Right;">
+                        1
+                    </div>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -24,7 +31,14 @@
         </div>
         <div class="col-xl-4 col-md-4">
             <div class="card bg-warning text-white mb-4">
-                <div class="card-body">당일 생성 모임수</div>
+                <div class="card-body">
+                    <div style="float: Left;">
+                        당일 생성 모임수
+                    </div>
+                    <div id="countGroup" style="float: Right;">
+                        1
+                    </div>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -33,7 +47,14 @@
         </div>
         <div class="col-xl-4 col-md-4">
             <div class="card bg-success text-white mb-4">
-                <div class="card-body">당일 생성 스터디수</div>
+                <div class="card-body">
+                    <div style="float: Left;">
+                        당일 생성 스터디수
+                    </div>
+                    <div id="countStudy" style="float: Right;">
+                        1
+                    </div>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -93,7 +114,3 @@
         </div>
     </div>
 </div>
-
-<script>
-
-</script>
