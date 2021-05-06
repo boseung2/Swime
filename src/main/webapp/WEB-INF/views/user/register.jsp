@@ -162,8 +162,8 @@
                 },
                 error : function (msg) {
                     $("#submitBtn").attr("disabled", false);
-                    $("#spinnerBox").hide();
                     $("#spinnerBox").css("display","");
+                    $("#spinnerBox").hide();
                 }
             });
         }
