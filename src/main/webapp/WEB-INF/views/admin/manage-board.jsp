@@ -164,10 +164,11 @@
                                     <table class="table table-bordered" width='100%' cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>email</th>
-                                                <th>이름</th>
-                                                <th>가입일</th>
+                                                <th>#번호</th>
+                                                <th>유저 이메일</th>
+                                                <th>작성자</th>
+                                                <th>제목</th>
+                                                <th>작성일</th>
                                                 <th>수정일</th>
                                                 <th>상태</th>
                                             </tr>
@@ -176,6 +177,7 @@
                                             <td>1</td>
                                             <td>ssk900620@gmail.com</td>
                                             <td>신성권</td>
+                                            <td>제목입니다</td>
                                             <td>2009/01/01</td>
                                             <td>2010/03/12</td>
                                             <td>정상</td>
@@ -183,17 +185,19 @@
                                         <tr>
                                             <td>2</td>
                                             <td>ssk900620@gmail.com</td>
-                                            <td>신상권</td>
-                                            <td>2020/07/12</td>
-                                            <td>2020/07/12</td>
-                                            <td>비정상</td>
+                                            <td>신성권</td>
+                                            <td>제목입니다</td>
+                                            <td>2009/01/01</td>
+                                            <td>2010/03/12</td>
+                                            <td>삭제</td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
                                             <td>ssk900620@gmail.com</td>
-                                            <td>김성권</td>
-                                            <td>1990/06/20</td>
-                                            <td>1998/05/11</td>
+                                            <td>신성권</td>
+                                            <td>제목입니다</td>
+                                            <td>2009/01/01</td>
+                                            <td>2010/03/12</td>
                                             <td>정상</td>
                                         </tr>
                                     </table>

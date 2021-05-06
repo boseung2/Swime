@@ -37,7 +37,7 @@ public class RootConfig {
     @Bean
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
-        if(false){
+        if(true){
             System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         }else{
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
