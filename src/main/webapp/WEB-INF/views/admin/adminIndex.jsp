@@ -12,6 +12,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="../../../resources/js/adminPage.js"></script>
+<link href="../../../resources/css/adminPage.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 
@@ -19,6 +21,12 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 <script src="../../../resources/js/adminPageDemo/datatables-demo.js"></script>
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,9 +37,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Swime admin</title>
-    <link href="../../../resources/css/adminPage.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+
 </head>
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -51,6 +57,7 @@
             <!-- </div> -->
         </div>
     </form>
+
     <!-- Navbar-->
     <ul class="navbar-nav ml-auto ml-md-0">
         <!-- <li class="nav-item dropdown"> -->
@@ -111,33 +118,33 @@
 </html>
 
 <script>
-
-
-
     $(document).ready(function () {
-        let contentPlace = $("#ContentsPlace");
-        ajax(contentPlace, "/admin/dashBoard");
+        let first = $(".nav > .nav-link")[0];
+        $(first).addClass('active');
 
-        $(".nav > .nav-link").on("click", function (e) {
-            e.preventDefault();
-            $(".nav > .nav-link").removeClass('active');
-            $(this).addClass('active');
-            let href = this.attributes[1].nodeValue;
-            ajax(contentPlace, href);
-        })
-
+        loadByAjax(first.attributes[1].nodeValue);
     });
 
 
-    function ajax(contentPlace, href) {
+    $(".nav > .nav-link").on("click", function (e) {
+        e.preventDefault();
+        $(".nav > .nav-link").removeClass('active');
+        $(this).addClass('active');
+        let href = this.attributes[1].nodeValue;
+
+        loadByAjax(href);
+    });
+
+
+    function loadByAjax(href) {
         $.ajax({
             url : href,
             type: 'GET',
-            data : {
-
-            },
             success:function(result) {
-                $(contentPlace).html(result);
+                $("#ContentsPlace").html(result);
+            },
+            error : function (result) {
+
             }
         });
     }

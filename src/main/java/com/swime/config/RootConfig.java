@@ -40,13 +40,14 @@ public class RootConfig {
     @Bean
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
+        System.setProperty("java.security.egd", "file:///dev/urandom");
+
+
         if(true){
             System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         }else{
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
         }
-
-        System.setProperty("java.security.egd", "file:///dev/urandom");
 
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
