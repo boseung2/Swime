@@ -8,7 +8,7 @@
         <![CDATA[
         select count(*)
         from tuser
-        where current_date -1 <= reg_date and reg_date < current_date
+        where reg_date BETWEEN To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') and (To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 1)
         ]]>
     </select>
 
@@ -16,7 +16,7 @@
         <![CDATA[
         select count(*)
         from tgrp
-        where current_date -1 <= reg_date and reg_date < current_date
+        where reg_date BETWEEN To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') and (To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 1)
         ]]>
     </select>
 
@@ -24,7 +24,7 @@
         <![CDATA[
         select count(*)
         from tstd
-        where current_date -1 <= reg_date and reg_date < current_date
+        where reg_date BETWEEN To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') and (To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 1)
         ]]>
     </select>
 
