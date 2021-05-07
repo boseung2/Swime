@@ -301,14 +301,8 @@
                 case "register" :
                     $(".modal-body").html("스터디가 정상적으로 등록되었습니다.");
                     break;
-                case "register error" :
-                    $(".modal-body").html("스터디가 등록을 실패하였습니다.");
-                    break;
                 case "update" :
                     $(".modal-body").html("스터디가 정상적으로 수정되었습니다.");
-                    break;
-                case "update error" :
-                    $(".modal-body").html("스터디 수정을 실패하였습니다.");
                     break;
             }
 
@@ -478,6 +472,7 @@
                         console.log("attend > result = " + result);
 
                         if(result === "success") {
+
                             alert("스터디에 참석했습니다.");
 
                             // 참여인원 / 모집인원 불러오기

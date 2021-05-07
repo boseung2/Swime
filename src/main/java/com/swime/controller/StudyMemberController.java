@@ -2,6 +2,7 @@ package com.swime.controller;
 
 import com.swime.domain.StudyCriteria;
 import com.swime.domain.StudyListVO;
+import com.swime.service.StudyListService;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -24,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 public class StudyMemberController {
 
-    private StudyService service;
+    private StudyListService service;
 
     @GetMapping(value="/attendList/{stdSn}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<StudyListVO>> attendList(@PathVariable("stdSn") long stdSn) {

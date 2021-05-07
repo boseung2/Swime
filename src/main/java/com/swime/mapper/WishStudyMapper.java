@@ -13,9 +13,9 @@ public interface WishStudyMapper {
     public List<StudyVO> getList(@Param("cri") StudyCriteria cri, @Param("userId") String userId);
 
     // 해당 사용자가 해당 스터디를 찜했는지 안했는지 기록을 리턴
-    public WishStudyVO get(StudyParamVO param);
+    public WishStudyVO get(WishStudyVO wish);
 
     public int insert(WishStudyVO wish);
 
-    public int delete(StudyParamVO param);
+    public int delete(WishStudyVO wish);
 }
