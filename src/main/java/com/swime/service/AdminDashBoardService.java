@@ -13,4 +13,6 @@ public interface AdminDashBoardService {
     int countTodayGroupRegister();
 
     int countTodayStudyRegister();
+
+    Integer[] countUserRegisterByParam(@Param("year") int year, @Param("month") int month);
 }

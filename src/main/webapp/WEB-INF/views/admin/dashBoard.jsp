@@ -21,7 +21,7 @@
                         당일 가입자수
                     </div>
                     <div id="countUser" style="float: Right;">
-                        1
+                        0
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
@@ -37,7 +37,7 @@
                         당일 생성 모임수
                     </div>
                     <div id="countGroup" style="float: Right;">
-                        1
+                        0
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
@@ -53,7 +53,7 @@
                         당일 생성 스터디수
                     </div>
                     <div id="countStudy" style="float: Right;">
-                        1
+                        0
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
@@ -119,19 +119,104 @@
 <script>
 
     $(document).ready(function () {
-        getData("countUser");
-        getData("countStudy");
-        getData("countGroup");
+        getData("countUser", "number");
+        getData("countStudy", "number");
+        getData("countGroup", "number");
+        chartData("countUserForMonth", "chart");
     });
 
-    function getData(url){
+    function getData(url, type){
         $.ajax({
             url : "/adminData/" + url,
             dataType : "json"
         }).done(function (result) {
-            $("#"+url).html(result);
+            if(type === 'number'){
+                $("#"+url).html(result);
+            }
         });
     }
 
+    function chartData(url, type){
+        let cal = new Date();
 
+        $.ajax({
+            url : "/adminData/" + url,
+            dataType : "json",
+            data : {
+                year : cal.getFullYear(),
+                month : cal.getMonth() + 1
+            }
+        }).done(function (result) {
+            // console.log(result);
+            makeChart(result, cal);
+        });
+    }
+
+    function makeChart(result, cal) {
+
+        let max = Math.max.apply(null, result);
+        let label = [];
+        for (let i = 0; i < result.length; i++) {
+            label[i] = (i+1) + ' Day';
+        }
+
+
+
+
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#292b2c';
+
+        // Area Chart Example
+        var ctx = document.getElementById("myAreaChart");
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: "Register User",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(2,117,216,0.2)",
+                    borderColor: "rgba(2,117,216,1)",
+                    pointRadius: 5,
+                    pointBackgroundColor: "rgba(2,117,216,1)",
+                    pointBorderColor: "rgba(255,255,255,0.8)",
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                    pointHitRadius: 50,
+                    pointBorderWidth: 2,
+                    data: result,
+                }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: max,
+                            maxTicksLimit: 5
+                        },
+                        gridLines: {
+                            color: "rgba(0, 0, 0, .125)",
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                }
+            }
+        });
+
+    }
 </script>

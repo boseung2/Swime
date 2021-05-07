@@ -6,6 +6,8 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+
 
 @Log4j
 @Service
@@ -29,5 +31,21 @@ public class AdminDashBoardServiceImpl implements AdminDashBoardService{
     @Override
     public int countTodayStudyRegister() {
         return mapper.countTodayStudyRegister();
+    }
+
+    @Override
+    public Integer[] countUserRegisterByParam(int year, int month) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year,month-1,01);
+
+        int endDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        Integer[] list = new Integer[endDay];
+
+        for (int i = 0; i < endDay; i++) {
+            list[i] = mapper.countUserRegisterByParam(year, month, i+1);
+        }
+
+        return list;
     }
 }

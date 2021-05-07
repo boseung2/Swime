@@ -32,4 +32,9 @@ public class AdminDataController {
     public ResponseEntity<Integer> countStudy(){
         return new ResponseEntity<>(service.countTodayStudyRegister(), HttpStatus.OK);
     }
+
+    @GetMapping("/countUserForMonth")
+    public ResponseEntity<Integer[]> countUserForMonth(int year, int month){
+        return new ResponseEntity<>(service.countUserRegisterByParam(year, month), HttpStatus.OK);
+    }
 }

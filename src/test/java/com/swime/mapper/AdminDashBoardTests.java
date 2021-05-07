@@ -22,4 +22,10 @@ public class AdminDashBoardTests {
         log.info(mapper.countTodayGroupRegister());
         log.info(mapper.countTodayStudyRegister());
     }
+    @Test
+    public void date(){
+        log.info(mapper.test(2031,03, 12));
+        log.info(mapper.test(2021,5, 7));
+        log.info(mapper.countUserRegisterByParam(2021,5, 7));
+    }
 }
