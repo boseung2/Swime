@@ -1,5 +1,6 @@
 package com.swime.config;
 
+import com.swime.util.CustomCorsFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -42,6 +43,8 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
                 new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
+
+        CustomCorsFilter customCorsFilter = new CustomCorsFilter();
 
         return new Filter[]{characterEncodingFilter};
     }

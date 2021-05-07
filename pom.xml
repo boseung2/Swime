@@ -134,6 +134,18 @@
       <version>5.0.6.RELEASE</version>
     </dependency>
 
+    <!--  social login  -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-client</artifactId>
+      <version>5.0.6.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-jose</artifactId>
+      <version>5.0.6.RELEASE</version>
+    </dependency>
+
     <!-- Mail https://mvnrepository.com/artifact/javax.mail/mail -->
     <dependency>
       <groupId>javax.mail</groupId>
