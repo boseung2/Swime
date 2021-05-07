@@ -1,6 +1,8 @@
 package com.swime.mapper;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.ReplyCriteria;
+import com.swime.domain.ReplyPageDTO;
 import com.swime.domain.ReplyVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -37,5 +39,17 @@ public interface ReplyMapper {
 
     //댓글 개수를 게시판에 보여주는 메서드 -- 미사용
     //public int getReplyCnt(Long brdSn);
+
+
+    //----------------------관리자 댓글 (나중에 관리자 파일로 옮기기)------------------------
+    //게시판 댓글 페이징
+    List<ReplyVO> adminGetListWithPagingBySn(@Param("cri") ReplyCriteria cri);
+
+    //댓글 전체 개수
+    int getCountBySn();
+
+    int adminRemove(Long sn);
+
+    int adminUpdate(ReplyVO reply);
 
 }

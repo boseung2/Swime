@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.BoardAttachMapper">
 
+    <!--첨부파일 등록-->
     <insert id="insert">
         insert into tbrd_atch
             (uuid, brd_sn, uploadPath, file_name, file_type)
@@ -12,16 +13,18 @@
 
     </insert>
 
+    <!--첨부파일 삭제-->
     <delete id="delete">
         delete from tbrd_atch where uuid = #{uuid}
     </delete>
 
+    <!--게시글 첨부파일 읽기-->
     <select id="findByBrdSn" parameterType="com.swime.domain.BoardAttachVO" resultType="com.swime.domain.BoardAttachVO">
 
         select * from tbrd_atch where brd_sn = #{brdSn}
 
     </select>
-
+    <!--첨부파일 모두 삭제-->
     <delete id="deleteAll">
         delete tbrd_atch where brd_sn = #{brdSn}
     </delete>

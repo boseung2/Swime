@@ -29,11 +29,19 @@ public interface BoardService {
     public GroupBoardPageDTO getListWithPaging(@Param("cri") BoardCriteria cri,
                                                @Param("grpSn") long grpSn);
 
-
-    public int getTotal(BoardCriteria cri);
-
     // 첨부파일
     public List<BoardAttachVO> getAttachList(Long brdSn);
+
+
+    //현재 사용 x
+    public int getTotal(BoardCriteria cri);
+
+    //------------------------관리자 게시판----------------------------
+
+    //List<BoardVO> adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
+    AdminBoardPageDTO adminGetListWithPagingBySn(
+            @Param("cri") BoardCriteria cri);
+
 
 
 

@@ -13,6 +13,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/study/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/study" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/details/profile.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/details" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/details/reply.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/details" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/details/written.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/details" />
       </map>
     </option>
   </component>

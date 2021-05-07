@@ -15,7 +15,7 @@ let boardLikeService = (function(){
             success : function(result, status, xhr){
                 if(callback){
                     //result :..
-                    console.log("success : "+result);
+                    console.log(result);
                     callback(result)
                 }
             },
@@ -49,6 +49,7 @@ let boardLikeService = (function(){
         })
 
     }
+
     //remove 필요 없고 한번에 추가 삭제 가능 나중에 이거 지우기.
     function remove(boardLike, callback, error){
         console.log("boardAdd......");

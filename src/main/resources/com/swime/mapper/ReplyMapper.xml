@@ -3,11 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.ReplyMapper">
-
+    <!--commment_gorup에 시퀀스를 넣는다 댓글 묶기위해-->
     <select id="getSequence" resultType="int">
         select seq_trpl.nextval from dual
     </select>
-
+    <!--댓글 생성-->
     <insert id="insert">
         insert into trpl
             (sn,
@@ -19,7 +19,7 @@
         values
                (#{sn}, #{brdSn}, #{userId}, #{commentGroup}, #{content}, #{status})
     </insert>
-
+    <!--댓글 읽기-->
     <select id="read" resultType="com.swime.domain.ReplyVO">
         select r.sn,
                r.brd_sn,
@@ -35,11 +35,12 @@
         where r.user_id = u.id
         and sn = #{sn}
     </select>
-
+    <!--댓글 삭제-->
     <update id="delete">
         update trpl set status = 'RPST02' where sn = #{sn}
     </update>
 
+    <!--댓글 수정-->
     <update id="update">
         update trpl
         set
@@ -87,7 +88,7 @@
         ]]>
 
     </select>
-
+    <!--댓글 페이징 처리(페이지 아직 x)-->
     <select id="getListWithPaging" resultType="com.swime.domain.ReplyVO">
         <![CDATA[
         select sn, brd_sn, comment_group, user_id, name, content, cnt, status, reg_date, upd_date
@@ -103,6 +104,7 @@
 
     </select>
 
+    <!--게시글 댓글 개수-->
     <select id="getCountByBrdSn" resultType="int">
         select count(*) from trpl
         where
@@ -111,11 +113,45 @@
               brd_sn = #{brdSn}
     </select>
 
+    <!--댓글 수 증가/감소-->
     <update id="updateReplyCnt">
         update
             tbrd
         set reply_cnt = reply_cnt + #{amount}
         where sn = #{sn};
     </update>
+
+
+    <!--관리자 댓글 페이징-->
+
+    <select id="getCountBySn" resultType="int">
+        select count(*) from trpl where sn > 0
+    </select>
+
+    <!--번호순 정렬-->
+    <select id="adminGetListWithPagingBySn" resultType="com.swime.domain.ReplyVO">
+    <![CDATA[
+    select *
+        from
+        (
+        select rownum rn,sn, brd_sn, comment_group, user_id, name, content, status, reg_date, upd_date
+        from
+        (
+            select r.sn, r.brd_sn, r.comment_group, r.user_id, u.name, r.content, r.status, r.reg_date, r.upd_date
+            from
+                trpl r,tuser u
+            where
+                r.user_id = u.id
+            order by
+                sn asc
+        )
+        where rownum #{cri.pageNum} * #{cri.amount})
+        )
+        where rn > (#{cri.pageNum} -1) * #{cri.amount}
+
+        ]]>
+    </select>
+
+
 
 </mapper>

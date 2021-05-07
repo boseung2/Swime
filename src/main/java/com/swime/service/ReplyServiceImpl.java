@@ -1,9 +1,6 @@
 package com.swime.service;
 
-import com.swime.domain.BoardCriteria;
-import com.swime.domain.BoardVO;
-import com.swime.domain.ReplyPageDTO;
-import com.swime.domain.ReplyVO;
+import com.swime.domain.*;
 import com.swime.mapper.BoardMapper;
 import com.swime.mapper.ReplyMapper;
 import lombok.AllArgsConstructor;
@@ -48,11 +45,8 @@ public class ReplyServiceImpl implements ReplyService{
         log.info("parentComment:" + parentComment);
         log.info("register: " + reply);
 
-
-        //댓글 개수 업데이트
+        //댓글 개수 업데이트 - 댓글이 달리면 +1
         boardMapper.updateReplyCnt(reply.getBrdSn(), 1);
-
-
 
         replyMapper.insert(reply);
 
@@ -100,7 +94,7 @@ public class ReplyServiceImpl implements ReplyService{
         // 댓글 등록은 ReplyVo 안에 번호가 존재 했지만 삭제는 번호만 받기 때문에
         // 해당 게시물을 읽어와서 삭제 처리 해준다.
         ReplyVO reply = replyMapper.read(sn);
-        //댓글 개수 감소
+        //댓글 개수 감소 - 댓글이 지워지면 -1
         boardMapper.updateReplyCnt(reply.getBrdSn(), -1);
 
         return replyMapper.delete(sn);
@@ -121,6 +115,8 @@ public class ReplyServiceImpl implements ReplyService{
         return replyMapper.getListWithPaging(cri, brdSn);
     }
 
+
+
     @Override
     public ReplyPageDTO getListPage(BoardCriteria cri, Long brdSn) {
 
@@ -128,6 +124,15 @@ public class ReplyServiceImpl implements ReplyService{
                 replyMapper.getCountByBrdSn(brdSn),
                 replyMapper.getListWithPaging(cri,brdSn)
         );
+    }
+    //관리자 댓글
+    @Override
+    public ReplyPageDTO adminGetListWIthPagingBySn(ReplyCriteria cri) {
+
+        log.info("get adminReply Cri : " + cri);
+        return new ReplyPageDTO(
+                replyMapper.getCountBySn(),
+                replyMapper.adminGetListWithPagingBySn(cri));
     }
 
 }
