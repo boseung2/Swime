@@ -104,6 +104,13 @@
       <version>2.3.0</version>
     </dependency>
 
+    <!-- spring websocket -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-websocket</artifactId>
+      <version>${org.springframework-version}</version>
+    </dependency>
+
 
     <!-- security -->
     <dependency>

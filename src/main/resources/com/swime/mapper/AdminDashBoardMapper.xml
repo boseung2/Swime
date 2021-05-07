@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.AdminDashBoardMapper">
+
+    <select id="countTodayUserRegister" resultType="int">
+        <![CDATA[
+        select count(*)
+        from tuser
+        where reg_date BETWEEN
+              To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd')
+              and To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 0.99999
+        ]]>
+    </select>
+
+    <select id="countTodayGroupRegister" resultType="int">
+        <![CDATA[
+        select count(*)
+        from tgrp
+        where reg_date BETWEEN
+                  To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd')
+                  and To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 0.99999
+        ]]>
+    </select>
+
+    <select id="countTodayStudyRegister" resultType="int">
+        <![CDATA[
+        select count(*)
+        from tstd
+        where reg_date BETWEEN
+                  To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd')
+                  and To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 0.99999
+        ]]>
+    </select>
+
+    <select id="test" resultType="Date">
+        select To_date(nvl(${year}, 1900)||'/'||nvl(${month}, 01)||'/'||nvl(${day}, 01) ,'yyyy/mm/dd') from dual
+    </select>
+
+    <select id="countUserRegisterByParam" resultType="int">
+        <![CDATA[
+        select count(*)
+        from tuser
+        where reg_date BETWEEN
+            To_date(${year}||'/'||${month}||'/'||${day} ,'yyyy/mm/dd')
+            and To_date(${year}||'/'||${month}||'/'||${day} ,'yyyy/mm/dd') + 0.99999
+        ]]>
+    </select>
+
+    <select id="countUserRegisterByParam12321" resultType="int">
+        <![CDATA[
+        select count(*)
+        from tuser
+        where reg_date BETWEEN
+                  To_date(nvl(${year}, 1900)||'/'||nvl(${month}, 01)||'/'||nvl(${day}, 01) ,'yyyy/mm/dd')
+                  and (To_date(nvl(${year}, 1900)||'/'||nvl(${month}, 01)||'/'||nvl(${day}, 01) ,'yyyy/mm/dd'))
+        ]]>
+    </select>
+</mapper>
