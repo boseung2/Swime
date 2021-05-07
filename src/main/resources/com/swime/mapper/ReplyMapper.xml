@@ -128,7 +128,7 @@
         select count(*) from trpl where sn > 0
     </select>
 
-    <!--번호순 정렬렬-->
+    <!--번호순 정렬-->
     <select id="adminGetListWithPagingBySn" resultType="com.swime.domain.ReplyVO">
     <![CDATA[
     select *
