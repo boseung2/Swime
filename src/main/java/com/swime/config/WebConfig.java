@@ -10,7 +10,7 @@ import javax.servlet.ServletRegistration;
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{RootConfig.class, SecurityConfig.class};
+        return new Class[]{RootConfig.class, SecurityConfig.class, WebSocketConfig.class};
     }
 
     @Override

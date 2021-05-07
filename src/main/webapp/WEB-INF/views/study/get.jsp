@@ -472,6 +472,7 @@
                         console.log("attend > result = " + result);
 
                         if(result === "success") {
+
                             alert("스터디에 참석했습니다.");
 
                             // 참여인원 / 모집인원 불러오기

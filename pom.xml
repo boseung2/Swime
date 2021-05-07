@@ -110,19 +110,6 @@
       <artifactId>spring-websocket</artifactId>
       <version>${org.springframework-version}</version>
     </dependency>
-    <!-- 프론트단에서 사용하는 sockjs 라이브러리 -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>sockjs-client</artifactId>
-      <version>1.0.2</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-messaging</artifactId>
-      <version>${org.springframework-version}</version>
-    </dependency>
-
 
 
     <!-- security -->

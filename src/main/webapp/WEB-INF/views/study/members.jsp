@@ -85,6 +85,7 @@
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
 <script type="text/javascript" src="/resources/js/study.js"></script>
+<script type="text/javascript" src="/resources/js/notice.js"></script>
 
 <!-- tab 처리 -->
 <script>
@@ -177,6 +178,8 @@
 
             if(result == null || result.length == 0) {
                 $('#attendList').html("");
+
+                $('.navMember')[0].innerText = "참여멤버";
                 return;
             }
 
@@ -221,6 +224,8 @@
 
             if(result == null || result.length == 0) {
                 $('#waitingList').html("");
+
+                $('.navWaitingMember')[0].innerText = "승인 대기멤버";
                 return;
             }
 
@@ -261,6 +266,8 @@
 
             if(result == null || result.length == 0) {
                 $('#banList').html("");
+
+                $('.navBanMember')[0].innerText = "영구강퇴멤버";
                 return;
             }
 
@@ -416,22 +423,31 @@
             let userId = $('#permitBtn').data('userid');
 
             // 해당 신청자의 답변을 모두 삭제
-            studyAnswerService.remove({stdSn : ${stdSn}, userId : userId}, function (result) {
+            studyAnswerService.remove({stdSn : ${stdSn}, userId : userId}, function (answer) {
 
-                if(result === 'success') {
+                if(answer === 'success') {
                     // 성공하면 신청자의 스터디 참석을 진행
-                    studyAttendService.attend({stdSn : ${stdSn}, userId : userId}, function(result) {
-                        if(result === 'success') {
-                            alert('참석 승인 처리가 완료되었습니다.');
+                    studyAttendService.attend({stdSn : ${stdSn}, userId : userId}, function(attend) {
+                        if(attend === 'success') {
 
-                            // 스터디 참여인원과 모집인원 불러오기
-                            getCapacity();
+                            // 참석했다는 알림을 db에 저장하고 실시간 알림 전송
+                            noticeService.register(
+                                {sender : "${pinfo.username}", receiver : userId,
+                                    kind : "스터디", url : "http://localhost/study/get?sn=${stdSn}", content : "스터디 ${stdSn}에 참석되셨습니다."}, function(notice) {
+                                    if(notice === 'success') {
 
-                            // 참여 멤버 reload
-                            getAttendList();
+                                        alert('참석 승인 처리가 완료되었습니다.');
 
-                            // 대기 멤버 reload
-                            getWaitingList();
+                                        // 스터디 참여인원과 모집인원 불러오기
+                                        getCapacity();
+
+                                        // 참여 멤버 reload
+                                        getAttendList();
+
+                                        // 대기 멤버 reload
+                                        getWaitingList();
+                                    }
+                                })
 
                         }else {
                             alert('참석 승인 처리를 실패했습니다.');
