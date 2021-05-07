@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-<%@include file="../includes/tagLib.jsp" %>
-
-
+<script src="../../../resources/js/adminPageDemo/chart-area-demo.js"></script>
+<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>
+<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>
+<script src="../../../resources/js/adminPageDemo/chart-pie-demo.js"></script>
+<script src="../../../resources/js/adminPageDemo/chart-pie-demo2.js"></script>
 
 <div class="container-fluid">
     <!-- <h2 class="mt-4">대시보드</h2> -->
@@ -91,3 +93,7 @@
         </div>
     </div>
 </div>
+
+<script>
+
+</script>

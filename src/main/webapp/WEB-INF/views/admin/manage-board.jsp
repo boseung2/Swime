@@ -3,244 +3,255 @@
 
 <%@include file="../includes/tagLib.jsp" %>
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
-        <link href="css/styles.css" rel="stylesheet" />
-        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
-    </head>
-    <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/img/logo.png" class="swime-logo"/>
-            </a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-                <!-- <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-                    </div>
-                </div> -->
-            </form>
-            <!-- Navbar-->
-            <ul class="navbar-nav ml-auto ml-md-0">
-                <li class="nav-item dropdown">
-                    <!-- <a class="nav-link dropdown-toggle" id="userDropdown" href="#!" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a> -->
-                </li>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#!">Settings</a>
-                    <a class="dropdown-item" href="#!">Activity Log</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="login.html">Logout</a>
-                </div>
-            </ul>
-        </nav>
-        <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading"></div>
-                            <a class="nav-link" href="index.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                대시보드
-                            </a>
-                            <!-- <div class="sb-sidenav-menu-heading">Interface</div> -->
-                            <!-- <a class="nav-link collapsed" href="layout-static.html" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts"> -->
-                                <a class="nav-link" href="manage-user.jsp">
-                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i>
-
-                                </div>
-                                회원관리
-                                <!-- <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div> -->
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                                <!-- <nav class="sb-sidenav-menu-nested nav"> -->
-                                    <!-- <a class="nav-link" href="layout-static.html">Static Navigation</a> -->
-                                    <!-- <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a> -->
-                                <!-- </nav> -->
-                            </div>
-                            <!-- <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages"> -->
-                                <a class="nav-link" href="manage-group.jsp">
-
-                                    <div class="sb-nav-link-icon"><i class="far fa-handshake"></i></div>
-                                    모임관리
-                                    <!-- <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div> -->
-                                </a>
-                            
-                            <!-- <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="401.html">401 Page</a>
-                                            <a class="nav-link" href="404.html">404 Page</a>
-                                            <a class="nav-link" href="500.html">500 Page</a>
-                                        </nav>
-                                    </div>
-                                </nav>
-                            </div> -->
-                            <!-- <div class="sb-sidenav-menu-heading">Addons</div> -->
-                            <a class="nav-link" href="manage-study.jsp">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                스터디관리
-                            </a>
-                            <a class="nav-link" href="manage-board.jsp">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                게시물관리
-                            </a>
-                        </div>
-                    </div>
-                    <!-- <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
-                    </div> -->
-                </nav>
-            </div>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid">
-                        <!-- <h2 class="mt-4">게시물관리</h2> -->
-                        <ol class="breadcrumb mb-4">
-                            <!-- <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li> -->
-                            <li class="breadcrumb-item active">manage-board</li>
-                        </ol>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                            </div>
-                            <div class="card-body">
-                                <div class="option-search">
-                                    <div>
-                                        <select class="lines">
-                                            <option value="">--줄--</option>
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                        </select>
-                                    </div>
-                                    <div style="display: flex; margin-left: auto;">
-                                        <select>
-                                            <option value="">--전체--</option>
-                                            <option value="board">게시물</option>
-                                            <option value="reply">댓글</option>
-                                        </select> 
-                                        <select>
-                                            <option value="">--전체--</option>
-                                            <option value="codereview">코드리뷰</option>
-                                            <option value="freeboard">자유게시판</option>
-                                            <option value="studyreview">스터디리뷰</option>
-                                        </select> 
-                                        
-                                        <div class="search-bar">
-                                            <input type="text" placeholder="Search.." >
-                                            <button class="search-button"><i class="fas fa-search"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" width='100%' cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>#번호</th>
-                                                <th>유저 이메일</th>
-                                                <th>작성자</th>
-                                                <th>제목</th>
-                                                <th>작성일</th>
-                                                <th>수정일</th>
-                                                <th>상태</th>
-                                            </tr>
-                                        </thead>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>ssk900620@gmail.com</td>
-                                            <td>신성권</td>
-                                            <td>제목입니다</td>
-                                            <td>2009/01/01</td>
-                                            <td>2010/03/12</td>
-                                            <td>정상</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>ssk900620@gmail.com</td>
-                                            <td>신성권</td>
-                                            <td>제목입니다</td>
-                                            <td>2009/01/01</td>
-                                            <td>2010/03/12</td>
-                                            <td>삭제</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>ssk900620@gmail.com</td>
-                                            <td>신성권</td>
-                                            <td>제목입니다</td>
-                                            <td>2009/01/01</td>
-                                            <td>2010/03/12</td>
-                                            <td>정상</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div style="display: flex; justify-content: space-between;">
-
-                                    <div>
-                                        <button class="footer-button">수정</button>
-                                        <button class="footer-button2">삭제</button>
-                                    </div>
-                                    <div>
-                                        <button class="page-number"><</button>
-                                        <button class="page-number">1</button>
-                                        <button class="page-number">2</button>
-                                        <button class="page-number">3</button>
-                                        <button class="page-number">></button>
-                                        
-                                    </div> 
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Swime 2021</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-            </div>
+<div class="container-fluid">
+    <!-- <h2 class="mt-4">게시물관리</h2> -->
+    <ol class="breadcrumb mb-4">
+        <!-- <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li> -->
+        <li class="breadcrumb-item active">manage-board</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
         </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/datatables-demo.js"></script>
-    </body>
-</html>
+        <div class="card-body">
+
+            <div class="option-search">
+                <div>
+                    <select class="boardCntList" id="boardCntList" name="boardCntList">
+                        <option value="">--줄--</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+                <div style="display: flex; margin-left: auto;">
+                    <select>
+                        <option value="">--전체--</option>
+                        <option value="board">게시물</option>
+                        <option value="reply">댓글</option>
+                    </select>
+                    <select>
+                        <option value="">--전체--</option>
+                        <option value="snSort">번호순</option>
+                        <option value="dateSort">날짜순</option>
+                        <option value="statusSort">상태순</option>
+                    </select>
+
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search.." >
+                        <button class="search-button"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div> <!--option search-->
+
+            <div class="table-responsive">
+                <table class="table table-bordered" cellspacing="0">
+                    <thead>
+                    <tr class="boardHeader">
+                        <th>#</th>
+                        <th>email</th>
+                        <th>이름</th>
+                        <th>제목</th>
+                        <th>작성일</th>
+                        <th>수정일</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+
+                    <tr class="boardList">
+                        <td data-sn='12'></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div style="display: flex; justify-content: space-between;">
+
+                <div>
+                    <button class="footer-button">수정</button>
+                    <button class="footer-button2">삭제</button>
+                </div>
+                <!--admin 게시판 페이징 처리-->
+                <div class="adminPageFooter panel-footer">
+
+                </div>
+
+            </div>
+
+        </div><!--end card body-->
+    </div><!--end card md-->
+</div><!--end container-->
+
+<!-- BoardList Module-->
+<script type="text/javascript" src="/resources/js/adminBoardList.js"></script>
+
+<script type="text/javascript">
+
+    $('document').ready(function(){
+        let amount = 10, page = 1;
+
+        let boardUl = $('tbody'); //게시판 출력
+
+        let boardCntSort; //select optoin 10 25 50개 값을 넣어서 list뽑는다.
+
+
+        $('.boardCntList').on('change', function(){
+
+            //let boardCntOpt = $('.boardCntList option:selected').val();
+            amount = $('.boardCntList option:selected').val();
+
+            if(amount == 10){
+                boardCntSort = 10;
+            }else if(amount == 25){
+                boardCntSort = 25;
+            }else if(amount == 50){
+                boardCntSort = 50;
+            }
+            console.log("boardCntSort"+amount);
+            showBoardList(page, amount);
+        });
+
+
+
+        showBoardList(page, amount) //defalut값 1,10
+
+        function showBoardList(page,boardCntSort){
+            console.log("showBoardListPage : " +page);
+            console.log("boardCntSort : " + boardCntSort);
+
+
+            adminBoardListService.adminBoardList(page, boardCntSort, function(boardCnt, list){
+
+                let str = "";
+
+                if(page == -1){
+                    adminBoardPageNum = Math.ceil(boardCnt/10.0);
+                    showBoardList(adminBoardPageNum);
+                    return;
+                }
+
+                if(list == null || list.length == 0){
+                    boardUl.html("");
+                    return;
+                }
+
+                for(let i = 0, len = list.length||0; i < len; i++){
+
+                    console.log(list[i]);
+
+                    let status = "";
+
+                    let dat = "";
+
+                    if(list[i].status == "BOST01"){
+                        status = "정상"
+                    }else if(list[i].status == "BOST02"){
+                        status = "삭제";
+                    }else {
+                        status = "신고";
+                    }
+                    //제목이 20 글자가 넘으면 ...
+                    if(list[i].title.length >= 20){
+                        dat = "...";
+                    }
+
+                    str += "<tr class='boardList'>";
+                    //str += "<td>"+bno+"</td>"
+                    str += "<td data-sn='12'>"+list[i].sn+"</td>";
+                    str += "<td>"+list[i].userId+"</td>";
+                    str += "<td>"+list[i].name+"</td>";
+                    str += "<td>"+list[i].title.substring(0,20)+dat+"</td>";
+                    str += "<td>"+adminBoardListService.boardDisplayTime(list[i].regDate)+"</td>";
+                    str += "<td>"+adminBoardListService.boardDisplayTime(list[i].updDate)+"</td>";
+                    str += "<td>"+status+"</td>";
+                    str += "</tr>";
+
+                }
+                boardUl.html(str);
+                //call
+                showAdminBoardPage(boardCnt);
+
+            });// end adminBoardList
+
+        } // end showBoardList
+
+
+        let adminBoardPageNum = 1;
+        let adminBoardPageFooter = $('.adminPageFooter');
+        <!--게시글 페이지-->
+        function showAdminBoardPage(boardCnt){
+
+            console.log('boardCnt' + boardCnt + "개");
+            let endNum = Math.ceil(adminBoardPageNum / 10.0) * 10;
+            let startNum = endNum - 9;
+
+            let prev = startNum != 1;
+            let next = false;
+
+            if (endNum * 10 >= boardCnt) {
+                endNum = Math.ceil(boardCnt / 10.0);
+            }
+
+            if (endNum * 10 < boardCnt) {
+                next = true;
+            }
+
+            console.log("boardCount = " + boardCnt);
+            console.log("startNum = " + startNum);
+            console.log("endNum = " + endNum);
+            console.log("prev = " + prev);
+            console.log("next = " + next);
+
+
+            let str = "<ul class ='pagination'>";
+
+            if (prev) {
+                str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
+            }
+
+            for (let i = startNum; i <= endNum; i++) {
+                console.log("i=" + i);
+                let active = adminBoardPageNum == i ? "active" : "";
+
+                str += "<li id='board-item' class = 'page-item " + active + " '><a id='board-link' class='page-link' href='" + i + "'>" + i + "</a></li>";
+            }
+
+            if (next) {
+                str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
+            }
+
+            str += "</ul></div>";
+
+            console.log("brdStr : " + str);
+
+            adminBoardPageFooter.html(str);
+
+        }
+
+        adminBoardPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function (e) {
+
+            e.preventDefault();
+
+            console.log("board page click");
+
+            let targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            adminBoardPageNum = targetPageNum;
+
+            page = targetPageNum;
+
+            showBoardList(page,amount);
+
+
+        });
+
+    });// end ready
+
+</script>

@@ -129,8 +129,28 @@ public class BoardServiceImpl implements BoardService{
         return mapper.getTotalCount(cri);
     }
 
+
+
+
+    //------------------------------관리자 게시판
 //    @Override
-//    public List<BoardVO> getList() {
-//        return mapper.getList();
+//    public List<BoardVO> adminGetListWithPagingBySn(BoardCriteria cri) {
+//
+//        log.info("get adminBoard cri" + cri);
+//
+//        return mapper.adminGetListWithPagingBySn(cri);
 //    }
+
+    @Override
+    public AdminBoardPageDTO adminGetListWithPagingBySn(BoardCriteria cri) {
+
+        log.info("get adminBoard cri :" + cri);
+
+        return new AdminBoardPageDTO(
+                mapper.adminGetCountBySn(),
+                mapper.adminGetListWithPagingBySn(cri));
+
+    }
+
+
 }
