@@ -93,16 +93,24 @@
     margin-bottom: 0px;">
 
 <!-- 알림 -->
+<!-- sockJS -->
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script>
+
+<script type="text/javascript">
     // 전역변수 socket
     let socket = null;
 
     $(document).ready(function() {
         //웹소켓 연결
-        sock = new SockJS('/myHandler');
+        let sock = new SockJS('/notice');
         socket = sock;
 
+        socket.onmessage = onMessage;
+        socket.onclose = onClose;
+
+        function onMessage() {}
+
+        function onClose() {}
 
     })
 </script>
