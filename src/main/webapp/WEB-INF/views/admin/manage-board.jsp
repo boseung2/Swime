@@ -17,14 +17,14 @@
             <div class="option-search">
                 <div>
                     <select class="boardCntList" id="boardCntList" name="boardCntList">
-                        <option value="">--줄--</option>
+                        <option value="">--개수--</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                     </select>
                 </div>
                 <div style="display: flex; margin-left: auto;">
-                    <select>
+                    <select class="bbsOrReply" id="bbsOrReply" name="bbsOrReply">
                         <option value="">--전체--</option>
                         <option value="board">게시물</option>
                         <option value="reply">댓글</option>
@@ -99,7 +99,12 @@
 
         let boardCntSort; //select optoin 10 25 50개 값을 넣어서 list뽑는다.
 
+        //게시판or댓글 select option
+        $('.bbsOrReply').on('change',function(){
+            //let = $('.bbsOrReply option:selected').val();
+        })
 
+        //10/25/50 개수 select option
         $('.boardCntList').on('change', function(){
 
             //let boardCntOpt = $('.boardCntList option:selected').val();

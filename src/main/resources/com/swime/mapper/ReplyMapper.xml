@@ -124,6 +124,10 @@
 
     <!--관리자 댓글 페이징-->
 
+    <select id="getCountBySn" resultType="int">
+        select count(*) from trpl where sn > 0
+    </select>
+
     <!--번호순 정렬렬-->
     <select id="adminGetListWithPagingBySn" resultType="com.swime.domain.ReplyVO">
     <![CDATA[

@@ -1,9 +1,8 @@
 package com.swime.controller;
 
-import com.swime.domain.AdminBoardPageDTO;
-import com.swime.domain.BoardCriteria;
-import com.swime.domain.BoardVO;
+import com.swime.domain.*;
 import com.swime.service.BoardService;
+import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +24,7 @@ import java.util.List;
 public class AdminController {
 
     private BoardService boardService;
+    private ReplyService replyService;
 
 
     @GetMapping("/adminIndex")
@@ -46,11 +46,13 @@ public class AdminController {
             @PathVariable("page") int page,
             @RequestParam(value = "amount") int amount){
 
-        BoardCriteria cri = new BoardCriteria(page,amount);
-        log.info("adminBoardCri : "+ cri);
+        BoardCriteria boardCri = new BoardCriteria(page,amount);
+        //ReplyCriteria replyCri = new ReplyCriteria(page, amount);
+        log.info("adminBoardCri : "+ boardCri);
         log.info("controller page pram :" + page);
 
-        AdminBoardPageDTO list = boardService.adminGetListWithPagingBySn(cri);
+        AdminBoardPageDTO list = boardService.adminGetListWithPagingBySn(boardCri);
+        //ReplyPageDTO replyList = replyService.adminGetListWIthPagingBySn(replyCri);
 
         return new ResponseEntity<>(list,HttpStatus.OK);
 //        return new ResponseEntity<>(boardService

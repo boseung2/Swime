@@ -1,9 +1,6 @@
 package com.swime.service;
 
-import com.swime.domain.BoardCriteria;
-import com.swime.domain.BoardVO;
-import com.swime.domain.ReplyPageDTO;
-import com.swime.domain.ReplyVO;
+import com.swime.domain.*;
 import com.swime.mapper.BoardMapper;
 import com.swime.mapper.ReplyMapper;
 import lombok.AllArgsConstructor;
@@ -118,6 +115,8 @@ public class ReplyServiceImpl implements ReplyService{
         return replyMapper.getListWithPaging(cri, brdSn);
     }
 
+
+
     @Override
     public ReplyPageDTO getListPage(BoardCriteria cri, Long brdSn) {
 
@@ -125,6 +124,15 @@ public class ReplyServiceImpl implements ReplyService{
                 replyMapper.getCountByBrdSn(brdSn),
                 replyMapper.getListWithPaging(cri,brdSn)
         );
+    }
+    //관리자 댓글
+    @Override
+    public ReplyPageDTO adminGetListWIthPagingBySn(ReplyCriteria cri) {
+
+        log.info("get adminReply Cri : " + cri);
+        return new ReplyPageDTO(
+                replyMapper.getCountBySn(),
+                replyMapper.adminGetListWithPagingBySn(cri));
     }
 
 }
