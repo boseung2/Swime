@@ -7,13 +7,11 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -25,8 +23,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 
@@ -49,10 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/group","/include","/user", "/study", "/notice/*").permitAll()
+                .antMatchers("/css/**","/img/**","/js/**", "/vendor/**").permitAll()
+                .antMatchers("/group","/include","/user", "/study").permitAll()
                 .antMatchers("/group/register").access("isAuthenticated()")
                 .antMatchers("/study/register").access("isAuthenticated()")
                 .antMatchers("/sample/member").access("hasAuthority('MEMBER')")
-                .antMatchers("/sample/admin").access("hasAuthority('ADMIN')")
+                .antMatchers("/admin/**").access("hasAuthority('ADMIN')")
         .and()
             .formLogin()
                 .usernameParameter("id")
@@ -76,39 +74,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
             .cors()
                 .configurationSource(corsConfigurationSource())
+//        .and()
+//            .oauth2Login()
+//                .authorizationEndpoint()
+//                .baseUri("/user/login/authorize")
+//                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+//            .and()
+//                .redirectionEndpoint()
+//                .baseUri("/oauth2/callback/*")
+//            .and()
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
         ;
-//        http
-//            .authorizeRequests()
-//                .antMatchers("/어떠한 페이지")
-//                    // 모두허용
-//                    .permitAll()
-//                    // 모두거부
-//                    .denyAll()
-//                    // 익명이면
-//                    .access("isAnonymous()")
-//                    // 인증된 사용자면
-//                    .access("isAuthenticated()")
-//                    // 인증된 사용자인데 without remember-me
-//                    .access("isFullyAuthenticated()")
-//        ;
-
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        // 디테일서비스로 대신함
-//        String getUserQuery = "";
-//        String getUserDetailQuery = "";
-
         auth
-            .userDetailsService(detailsService()).passwordEncoder(passwordEncoder())
-        // 디테일서비스로 대신함
-//            .jdbcAuthentication()
-//                .dataSource(dataSource)
-//                .passwordEncoder(passwordEncoder())
-//                .usersByUsernameQuery(getUserQuery)
-//                .authoritiesByUsernameQuery(getUserDetailQuery)
-//            .inMemoryAuthentication().withUser("member@naver.com").password("$2a$10$9aBxt4EPMViG6RQ62xGmteIpNubwy.PHjHoQ/W0UgqtXgqye7HA7.").roles("MEMBER")
+            .userDetailsService(detailsService())
+            .passwordEncoder(passwordEncoder())
         ;
 
     }
