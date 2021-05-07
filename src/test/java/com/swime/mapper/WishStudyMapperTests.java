@@ -42,23 +42,20 @@ public class WishStudyMapperTests {
         wish.setStdSn(stdSn);
         wish.setUserId(userId);
 
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(stdSn);
-        param.setUserId(userId);
-
         // 이미 명단에 있으면 리턴
-        if(mapper.get(param) != null) return;
+        if(mapper.get(wish) != null) return;
 
         assert (mapper.insert(wish) == 1);
     }
 
     @Test
     public void testGet() { // 사용자가 해당 스터디를 찜했는지 안했는지 확인
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(368L);
-        param.setUserId("jiho@naver.com");
 
-        WishStudyVO wish = mapper.get(param);
+        WishStudyVO wishParam = new WishStudyVO();
+        wishParam.setStdSn(368L);
+        wishParam.setUserId("jiho@naver.com");
+
+        WishStudyVO wish = mapper.get(wishParam);
 
         Assert.assertNotNull(wish);
     }
@@ -66,11 +63,11 @@ public class WishStudyMapperTests {
 
     @Test
     public void testDelete() {
-        StudyParamVO param = new StudyParamVO();
-        param.setStdSn(368L);
-        param.setUserId("jiho@naver.com");
+        WishStudyVO wish = new WishStudyVO();
+        wish.setStdSn(368L);
+        wish.setUserId("jiho@naver.com");
 
-        assert (mapper.delete(param) == 1);
-        assert (mapper.get(param) == null);
+        assert (mapper.delete(wish) == 1);
+        assert (mapper.get(wish) == null);
     }
 }

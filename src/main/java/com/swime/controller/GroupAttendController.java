@@ -4,6 +4,7 @@ import com.swime.domain.GroupAttendVO;
 import com.swime.domain.GroupRatingVO;
 import com.swime.domain.StudyParamVO;
 import com.swime.service.GroupAttendService;
+import com.swime.service.StudyListService;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -23,7 +24,7 @@ import java.util.List;
 public class GroupAttendController {
 
     private GroupAttendService service;
-    private StudyService studyService;
+    private StudyListService studyService;
 
     @PostMapping(value= "/new",
             consumes = "application/json",
