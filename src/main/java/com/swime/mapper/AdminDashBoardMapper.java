@@ -17,7 +17,9 @@ public interface AdminDashBoardMapper {
 
     Date test(@Param("year") int year, @Param("month") int month, @Param("day") int day);
 
+    int getVisitCount();
 
+    int visitCountUp();
 
-
+    Integer getVisitCountByTime(@Param("year") int year, @Param("month") int month, @Param("day") int day, @Param("hour") int hour);
 }

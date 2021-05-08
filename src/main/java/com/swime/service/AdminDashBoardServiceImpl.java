@@ -48,4 +48,21 @@ public class AdminDashBoardServiceImpl implements AdminDashBoardService{
 
         return list;
     }
+
+    @Override
+    public void visitCountUp() {
+        mapper.visitCountUp();
+    }
+
+    @Override
+    public Integer[] getVisitCountByTime(int year, int month, int day) {
+        Integer[] list = new Integer[24];
+        Integer tmp;
+
+        for (int i = 0; i < 24; i++) {
+            tmp = mapper.getVisitCountByTime(year, month, day,i);
+            list[i] = tmp == null ? 0 : tmp;
+        }
+        return list;
+    }
 }

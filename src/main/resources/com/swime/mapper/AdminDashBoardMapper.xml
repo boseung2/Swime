@@ -9,8 +9,10 @@
         select count(*)
         from tuser
         where reg_date BETWEEN
-              To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd')
-              and To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 0.99999
+            trunc(current_date, 'dd')
+            and trunc(current_date, 'dd') + 0.99999
+--               To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd')
+--               and To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 0.99999
         ]]>
     </select>
 
@@ -19,8 +21,8 @@
         select count(*)
         from tgrp
         where reg_date BETWEEN
-                  To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd')
-                  and To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 0.99999
+            trunc(current_date, 'dd')
+            and trunc(current_date, 'dd') + 0.99999
         ]]>
     </select>
 
@@ -29,8 +31,8 @@
         select count(*)
         from tstd
         where reg_date BETWEEN
-                  To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd')
-                  and To_date(To_char(current_date, 'yyyy/mm/dd'), 'yyyy/mm/dd') + 0.99999
+            trunc(current_date, 'dd')
+            and trunc(current_date, 'dd') + 0.99999
         ]]>
     </select>
 
@@ -48,13 +50,35 @@
         ]]>
     </select>
 
-    <select id="countUserRegisterByParam12321" resultType="int">
-        <![CDATA[
-        select count(*)
-        from tuser
-        where reg_date BETWEEN
-                  To_date(nvl(${year}, 1900)||'/'||nvl(${month}, 01)||'/'||nvl(${day}, 01) ,'yyyy/mm/dd')
-                  and (To_date(nvl(${year}, 1900)||'/'||nvl(${month}, 01)||'/'||nvl(${day}, 01) ,'yyyy/mm/dd'))
-        ]]>
+    <update id="visitCountUp">
+        {call
+            declare
+            begin
+                insert into tvisit_count(visit_date, count)
+                select trunc(current_date, 'hh24'), 0
+                from dual
+                where not exists(
+                    select visit_date
+                    from tvisit_count
+                    where visit_date = trunc(current_date, 'hh24')
+                );
+
+                update tvisit_count
+                set count = (count + 1)
+                where visit_date = trunc(current_date, 'hh24');
+            end
+        }
+    </update>
+
+    <select id="getVisitCountByTime" resultType="Integer">
+        select count
+        from tvisit_count
+        where visit_date = To_date(${year}||'/'||${month}||'/'||${day}||' '||${hour} ,'yyyy/mm/dd hh24')
+    </select>
+
+    <select id="getVisitCount" resultType="int">
+        select count
+        from tvisit_count
+        where visit_date = trunc(current_date, 'hh24')
     </select>
 </mapper>

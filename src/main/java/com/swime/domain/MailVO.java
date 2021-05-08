@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class MailVO {
-    String Subject = "";
+    String subject = "";
     String Text = "";
     String receiver = "";
 
@@ -16,6 +16,6 @@ public class MailVO {
     public MailVO(String receiver, String subject, String text){
         this.receiver = receiver;
         this.Text = text;
-        this.receiver = receiver;
+        this.subject = subject;
     }
 }
