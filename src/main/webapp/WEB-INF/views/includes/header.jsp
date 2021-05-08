@@ -54,6 +54,35 @@
                 width: 1000px;
             }
         }
+
+        <!-- 알림 드롭다운-->
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 330px;
+        }
+
+        .dropdown a:hover {background-color: #ddd;}
+
+        .show {display: block;}
     </style>
 
 </head>
@@ -83,6 +112,15 @@
     </div>
 </div>
 
+<sec:authorize access="isAuthenticated()">
+    <div class="dropdown">
+        <img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;">
+        <ul id="myDropdown" class="dropdown-content">
+<%--            <li><a href="">알림1</a></li>--%>
+        </ul>
+    </div>
+</sec:authorize>
+
 <form id="logout" action="/user/logout" method="post">
     <%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
     <sec:csrfInput/>
@@ -96,11 +134,15 @@
 <!-- sockJS -->
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
+<script type="text/javascript", src="/resources/js/notice.js"></script>
+
+<!-- 웹소켓-->
 <script type="text/javascript">
     // 전역변수 socket
     let socket = null;
 
     $(document).ready(function() {
+
         //웹소켓 연결
         let sock = new SockJS('/notice');
         socket = sock;
@@ -111,19 +153,102 @@
         function onMessage(e) {
             let data = e.data;
 
-            // alert(data);
-
             let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
             toast += "<div class='toast-header'><i class='fas fa-bell mr-2'></i><strong class='mr-auto'>알림</strong>";
             toast += "<small class='text-muted'>just now</small><button type='button' class='ml-2 mb-1 close' data-dismiss='toast' aria-label='Close'>";
             toast += "<span aria-hidden='true'>&times;</span></button>";
             toast += "</div> <div class='toast-body'>" + data + "</div></div>";
             $("#msgStack").append(toast);   // msgStack div에 생성한 toast 추가
-            $(".toast").toast({"animation": true, "autohide": false});
+            $(".toast").toast({"animation": true, "delay": 3000});
             $('.toast').toast('show');
+
+            // notice 이미지를 바꿔준다.
+            $('#notice')[0].src = "../../../resources/img/exist_notice.png";
         }
 
     })
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        // 로그인된 상태이면 알림버튼 띄우기
+        if("${pinfo.username}" !== "") {
+            getNoticeButton();
+        }
+    })
+
+    // 안읽은 알림이 있으면 활성화된 알림버튼을 띄운다.
+    function getNoticeButton() {
+        noticeService.getList("${pinfo.username}", function(data) {
+
+            if(data.length > 0) {
+                $('#notice')[0].src = "../../../resources/img/exist_notice.png";
+
+            }else if(data.length === 0) {
+                $('#notice')[0].src = "../../../resources/img/notice.png";
+            }
+        })
+    }
+
+    // 알림버튼 눌리면
+    $('#notice').on("click", function() {
+
+        // 안읽은 알림을 가져와서 드롭다운 리스트에 띄워준다.
+        noticeService.getList("${pinfo.username}", function(data) {
+
+            console.log(data);
+
+            if(data == null || data.length <= 0) return;
+
+            let str = '';
+
+            for(let i = 0; i < data.length; i++) {
+                str += '<li class="noticeList" data-sn="' + data[i].sn + '">';
+                str += '<a href="' + data[i].url +'">';
+                str += '<strong>[' + data[i].kind + ']</strong> ';
+                str += data[i].content;
+                str += '<br>';
+
+                let tempDate = new Date(data[i].sendDate);
+                // 월
+                let month = tempDate.getMonth()+1;
+                month = (month < 10 ? "0" : "") + month;
+                // 일
+                let date = tempDate.getDate();
+                date = (date < 10 ? "0" : "") + date;
+                // 시간
+                let hours = tempDate.getHours();
+                hours = (hours < 10 ? "0" : "") + hours;
+                // 분
+                let min = tempDate.getMinutes();
+                min = (min < 10 ? "0" : "") + min;
+
+                str += tempDate.getFullYear() + '-' + month + '-' + date;
+                str += ' ' + hours + ':' + min;
+
+                str += '</a>';
+                str += '</li>';
+            }
+
+            $('#myDropdown').html(str);
+        })
+
+        $("#myDropdown")[0].classList.toggle("show");
+    })
+
+    // 알림 리스트가 눌리면
+    $('#myDropdown').on("click", "li", function(){
+        let sn = $(this).data("sn");
+
+        // 해당 알림을 읽음처리
+        noticeService.modify({sn : sn}, function(result) {
+            if(result === "success") {
+                console.log('해당 알림을 읽음처리했음!');
+            }
+        })
+    })
+
 </script>
 
 <body>

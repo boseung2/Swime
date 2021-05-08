@@ -85,7 +85,7 @@
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
 <script type="text/javascript" src="/resources/js/study.js"></script>
-<script type="text/javascript" src="/resources/js/notice.js"></script>
+<%--<script type="text/javascript" src="/resources/js/notice.js"></script>--%>
 
 <!-- tab 처리 -->
 <script>
