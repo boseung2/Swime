@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -51,16 +53,25 @@ public class AdminController {
         log.info("amount : " + amount);
         log.info("bbs : " + bbs);
 
+        Map<String,Object> map = new HashMap<>();
+
+
         if (bbs.equals("board")){
             BoardCriteria boardCri = new BoardCriteria(page,amount);
             log.info("adminBoardCri : "+ boardCri);
-            AdminBoardPageDTO list = boardService.adminGetListWithPagingBySn(boardCri);
-            return new ResponseEntity<>(list,HttpStatus.OK);
+            AdminBoardPageDTO boardList = boardService.adminGetListWithPagingBySn(boardCri);
+            map.put("board", boardList);
+            map.put("boardCompare", "isBoard");
+            //return new ResponseEntity<>(list,HttpStatus.OK);
+            return new ResponseEntity<>(map,HttpStatus.OK);
         }else{
             ReplyCriteria replyCri = new ReplyCriteria(page, amount);
             ReplyPageDTO replyList = replyService.adminGetListWIthPagingBySn(replyCri);
             log.info("adminReplyCri : " + replyCri);
-            return new ResponseEntity<>(replyList, HttpStatus.OK);
+            map.put("reply", replyList);
+            map.put("replyCompare", "isReply");
+//            return new ResponseEntity<>(replyList,HttpStatus.OK);
+            return new ResponseEntity<>(map,HttpStatus.OK);
 
         }
 
