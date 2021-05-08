@@ -20,8 +20,6 @@
 
     <title>SWIME</title>
 
-    <title>SWIME</title>
-
 
     <!-- Bootstrap core CSS -->
     <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -61,7 +59,6 @@
 </head>
 
 <body>
-
 <!-- header -->
 <div class="header">
     <a href="/" class="logo"><img src="../../../resources/img/logo2.png"></a>
@@ -70,7 +67,7 @@
 
     <div class="header-right">
         <sec:authorize access="isAuthenticated()">
-        <a href="/notice/list">고객센터</a>
+        <a href="/serviceCenter/list">고객센터</a>
         </sec:authorize>
         <sec:authorize access="isAnonymous()">
             <a href="/user/register">회원가입</a>
@@ -78,6 +75,9 @@
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
             <a href="/user/infoDetail?id=<sec:authentication property='principal.username'/>"><sec:authentication property="principal.memberVO.name"/> 님 안녕하세요</a>
+            <sec:authorize access="hasAuthority('ADMIN')">
+                <a href="/admin/adminIndex">어드민 페이지</a>
+            </sec:authorize>
             <a href="#" onclick="document.getElementById('logout').submit();">로그아웃</a>
         </sec:authorize>
     </div>
@@ -92,3 +92,40 @@
     margin-top: 0px;
     margin-bottom: 0px;">
 
+<!-- 알림 -->
+<!-- sockJS -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+
+<script type="text/javascript">
+    // 전역변수 socket
+    let socket = null;
+
+    $(document).ready(function() {
+        //웹소켓 연결
+        let sock = new SockJS('/notice');
+        socket = sock;
+
+        // 데이터 전달받았을 때
+        sock.onmessage = onMessage;
+
+        function onMessage(e) {
+            let data = e.data;
+
+            // alert(data);
+
+            let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
+            toast += "<div class='toast-header'><i class='fas fa-bell mr-2'></i><strong class='mr-auto'>알림</strong>";
+            toast += "<small class='text-muted'>just now</small><button type='button' class='ml-2 mb-1 close' data-dismiss='toast' aria-label='Close'>";
+            toast += "<span aria-hidden='true'>&times;</span></button>";
+            toast += "</div> <div class='toast-body'>" + data + "</div></div>";
+            $("#msgStack").append(toast);   // msgStack div에 생성한 toast 추가
+            $(".toast").toast({"animation": true, "autohide": false});
+            $('.toast').toast('show');
+        }
+
+    })
+</script>
+
+<body>
+<div id="msgStack"></div>
+</body>

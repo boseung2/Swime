@@ -208,7 +208,7 @@
     <select id="wishStudyCount" resultType="int">
         select count(*)
         from TSTD_WISH w LEFT OUTER JOIN tstd s on w.std_sn = s.sn
-        where w.user_id = 'tht1234551@gmail.com' and s.status in ('STST01', 'STST03')
+        where w.user_id = #{id} and s.status in ('STST01', 'STST03')
     </select>
 
     <select id="writeContentsList" resultType="com.swime.domain.BoardVO">
@@ -246,7 +246,7 @@
                         select *
                         from trpl
                         where status != 'RPST02' and user_id = #{id}
-                        order by sn
+                        order by sn desc
                     )
                 where rownum <= #{cri.pageNum} * #{cri.amount}
             )

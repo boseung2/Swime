@@ -30,7 +30,6 @@ public class ProfileDataController {
             })
     @ResponseBody
     public ResponseEntity<GroupStudyListDTO> getMakeStudyList(String id, ProfileCriteria cri){
-//        List<StudyVO> list = service.makeStudyList(id, cri);
         return new ResponseEntity<>(service.makeBoth(id, cri), HttpStatus.OK);
     }
 

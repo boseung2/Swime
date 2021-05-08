@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/notice/*")
+@RequestMapping("/*")
 @Log4j
 @AllArgsConstructor
-public class NoticeController {
+public class MainController {
 
-    @GetMapping("/list")
-    public void noticeList(){
+    @GetMapping("/mainBody")
+    public void body(){
 
     }
-
 }

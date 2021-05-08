@@ -248,10 +248,13 @@
 
             if("registerSuccess" === boardResult){
                 $(".boardModal").html("게시글이 정상적으로 등록되었습니다.");
-            }
-            if("registerFail" === boardResult){
+            }else if("registerFail" === boardResult){
                 $(".boardModal").html("게시글이 등록이 실패되었습니다.");
             }
+
+            // if("registerFail" === boardResult){
+            //     $(".boardModal").html("게시글이 등록이 실패되었습니다.");
+            // }
 
 
 

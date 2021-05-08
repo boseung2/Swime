@@ -150,11 +150,12 @@
                     <c:forEach var = "attendant" items="${groupAttendList}">
                         <c:if test="${not done}">
                             <c:choose>
-                                <c:when test="${group.grpRole eq 'GRRO01'}"> <!--모임장이면 다 수정 -->
+                                <%--모임장이면 전체 수정--%>
+                                <c:when test="${group.grpRole eq 'GRRO01'}">
                                     <button data-oper='modify' class="btn btn-primary">수정</button>
                                 </c:when>
-
-                                <c:when test="${group.grpRole eq 'GRRO02' and board.grpRole ne 'GRRO01'}">
+                                <%--운영자는 일반회원, 자기 자신 /But 운영자이면서 다른 사람이면 수정x--%>
+                                <c:when test="${group.grpRole eq 'GRRO02' and board.grpRole ne 'GRRO01' and mv.id eq board.userId}">
 
                                     <button data-oper='modify' class="btn btn-primary">수정</button>
                                 </c:when>
@@ -167,10 +168,6 @@
                         </c:if>
                     </c:forEach>
                 </sec:authorize>
-
-
-
-
 
                 <button data-oper="list" class="btn btn-dark">취소</button>
 
@@ -294,14 +291,12 @@
             로그인 O 모입가입 O : 댓글 입력 O
 
             로그인 안한 사람 -> "로그인한 후 입력해주세요!"
-            [1] 변수 match ->0 /1
-            로그인한 계정 : toywar / 참석자 계정 : toywar -> "댓글입력해주세요" (match =1 )
+            [1] 변수 exist ->t/f
+            로그인한 계정 : toywar / 참석자 계정 : toywar -> "댓글입력해주세요" (exist =1 )
             로그인한 계정 : toywar / 참석자리스트에 없을 경우 -> "모임 가입 후 댓글입력해주세요"
 
-            [2] display : match == 1
+            [2] display : exist == t/f
             pinfo.username forloop match! -> 댓글입력
-
-
 
         -->
 
@@ -729,12 +724,9 @@
             console.log("getBoardLike 호출..........")
             boardLikeService.getLike({brdSn : snValue, userId : userId},function(result){
 
-
                console.log("brdSn : " + snValue);
                console.log("userId : " + userId);
                console.log("likeResult : "+ result);
-
-
 
                // $("#likeCnt").val();
                if(result === "notExist"){
@@ -772,6 +764,7 @@
                 isLogin = '<sec:authentication property="principal.username"/>'
             </sec:authorize>
 
+            //로그인이 안되어있으면
             if(!isLogin){
                 alert("로그인 해주세요");
                 return;

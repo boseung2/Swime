@@ -97,11 +97,15 @@
         let updDate = obj.updDate;
         let userId = obj.userId;
 
+        let grpSn = obj.grpSn;
+
+
+
 
         let str = "" +
             "<div class='col-md-4 mb-5'>" +
             "    <div class='card h-100'>" +
-            "        <div class='card-body' data-sn='" + brdSn + "'>" +
+            "        <div class='card-body' data-sn='" + brdSn + "' data-grpSn='" + grpSn + "' data-userId='" + userId + "'>" +
             "            <div class='card-body-top' style='display:flex;'>" +
             "                <div class='uploadResult'>" +
             "                    <img class='img-fluid rounded mb-4 mb-lg-0' src='' alt=''>" +
@@ -175,11 +179,12 @@
         return str;
     }
 
-    // board/get?sn=595
+    // board/get?sn=595&userId=toy@naver.com&grpSn=
     function cardActive() {
         $(".card-body").on("click", function () {
             // console.log("click");
-            $(location).attr('href', '/board/get?sn=' + this.dataset.sn);
+
+            $(location).attr('href', '/board/get?sn=' + this.dataset.sn + "&userId=" + this.dataset.userid + "&grpSn="+0);
         });
     }
 

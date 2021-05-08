@@ -12,9 +12,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 
@@ -37,8 +40,14 @@ public class RootConfig {
     @Bean
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
-        System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         System.setProperty("java.security.egd", "file:///dev/urandom");
+
+
+        if(true){
+            System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
+        }else{
+            System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
+        }
 
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
@@ -74,6 +83,5 @@ public class RootConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }

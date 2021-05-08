@@ -214,6 +214,8 @@
                 formObj.find("input[name='topFix']").remove();
                 formObj.find("input[name='grpSn']").remove();
                 formObj.find("input[name='status']").remove();
+                //수정..
+                formObj.find("input[name='uploadFile']").remove();
                 formObj.append("<input type='hidden' name = 'sn' value='" + ${board.grpSn} + "'>");
                 formObj.submit();
                 // let pageNumTag = $("input[name='pageNum']").clone();

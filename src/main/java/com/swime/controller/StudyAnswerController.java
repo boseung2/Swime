@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.swime.domain.StudyAnswerVO;
 import com.swime.domain.StudyParamVO;
 import com.swime.domain.StudySurveyVO;
+import com.swime.service.StudyAnswerService;
 import com.swime.service.StudyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -26,7 +27,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class StudyAnswerController {
 
-    private StudyService answerService;
+    private StudyAnswerService service;
 
     @GetMapping(value="/get/{userId}/{stdSn}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StudyAnswerVO>> get(@PathVariable("stdSn") long stdSn, @PathVariable("userId") String userId) {
@@ -38,7 +39,7 @@ public class StudyAnswerController {
         param.setUserId(userId);
 
         try {
-            List<StudyAnswerVO> answers = answerService.getAnswer(param);
+            List<StudyAnswerVO> answers = service.getAnswer(param);
             return new ResponseEntity<>(answers, HttpStatus.OK);
 
         }catch (Exception e) {
@@ -62,7 +63,7 @@ public class StudyAnswerController {
 
         try {
             // 답변들 등록
-            answerService.registerAnswers(answers);
+            service.registerAnswers(answers);
             return new ResponseEntity<>("success", HttpStatus.OK);
 
         }catch (Exception e) {
@@ -79,7 +80,7 @@ public class StudyAnswerController {
 
         try {
             // 해당 스터디에 해당 유저의 답변을 모두 삭제
-            answerService.removeAnswer(param);
+            service.removeAnswer(param);
             return new ResponseEntity<>("success", HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);

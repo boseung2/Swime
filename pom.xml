@@ -104,6 +104,13 @@
       <version>2.3.0</version>
     </dependency>
 
+    <!-- spring websocket -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-websocket</artifactId>
+      <version>${org.springframework-version}</version>
+    </dependency>
+
 
     <!-- security -->
     <dependency>
@@ -124,6 +131,18 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-taglibs</artifactId>
+      <version>5.0.6.RELEASE</version>
+    </dependency>
+
+    <!--  social login  -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-client</artifactId>
+      <version>5.0.6.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-jose</artifactId>
       <version>5.0.6.RELEASE</version>
     </dependency>
 
@@ -151,6 +170,21 @@
       <artifactId>github-api</artifactId>
       <version>1.128</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-websocket</artifactId>
+      <version>5.2.3.RELEASE</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-messaging</artifactId>
+      <version>5.2.3.RELEASE</version>
+    </dependency>
+
+
 
 
 

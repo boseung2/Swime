@@ -1,8 +1,10 @@
 package com.swime.service;
 
 import com.swime.domain.BoardCriteria;
+import com.swime.domain.ReplyCriteria;
 import com.swime.domain.ReplyPageDTO;
 import com.swime.domain.ReplyVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,6 +26,9 @@ public interface ReplyService {
 
     //일단 냅두고...해결되면 지우기 *주석하기*
     public List<ReplyVO> getList(BoardCriteria cri, Long brdSn);
+
+    //---------------------------관리자 댓글---------------------------
+    ReplyPageDTO adminGetListWIthPagingBySn(@Param("cri")ReplyCriteria cri);
 
 
 }

@@ -58,7 +58,8 @@
                 // console.log(result);
                 showHtmlByAjax(result, place, pagiPlace, pageNum, kind);
                 pagiActive(pageNumInput);
-                cardActive();
+                //console.log(result);
+                cardActive(result);
             },
             error : function (msg) {
 
@@ -77,6 +78,9 @@
         let resultStr2 = "";
         for (let i = 0; i < result.list.length; i++) {
             resultStr1 += convertHtml(result.list[i]);
+            console.log(result.list[i]);
+            // console.log(result.list[i].userId);
+            // console.log(result.list[i].grpSn);
         }
         resultStr2 += makePagi(result.boardCnt, pageNum, kind);
 
@@ -101,10 +105,13 @@
         let userId = obj.userId;
         let status = obj.status;
 
+        console.log(grpSn);
+        console.log(userId);
+
         let str = "" +
             "<div class='col-md-4 mb-5'>" +
             "    <div class='card h-100'>" +
-            "        <div class='card-body' data-sn='" + sn + "'>" +
+            "        <div class='card-body' data-sn='" + sn + "' data-grpSn='" + grpSn + "' data-userId='" + userId + "'>" +
             "            <div class='card-body-top' style='display:flex;'>" +
             "                <div class='uploadResult'>" +
             "                    <img class='img-fluid rounded mb-4 mb-lg-0' src='' alt=''>" +
@@ -125,6 +132,7 @@
             "        </div>" +
             "    </div>" +
             "</div>"
+
         ;
         // let str = "???";
 
@@ -178,11 +186,20 @@
         return str;
     }
 
-    // board/get?sn=595
-    function cardActive() {
+    //1.댓글 게시글 url : 유저아이디 모임번호 넣어놓기
+    // board/get?sn=595&grpSn=1184&userId=test1@naver.com
+
+    function cardActive(result) {
+
+        console.log(result);
+
         $(".card-body").on("click", function () {
-            // console.log("click");
-            $(location).attr('href', '/board/get?sn=' + this.dataset.sn);
+
+            console.log("click");
+            console.log(this);
+            // $(location).attr('href', '/board/get?sn=' + this.dataset.sn);
+            $(location).attr('href', '/board/get?sn=' + this.dataset.sn + "&userId=" + this.dataset.userid + "&grpSn=" + this.dataset.grpsn);
+
         });
     }
 

@@ -185,11 +185,5 @@ public class BoardMapperTests {
         log.info(count);
     }
 
-//    @Test
-//    public void testGetBoardCnt(){
-//
-//        int boardCnt = mapper.getBoardCnt(3L);
-//
-//        log.info("boardCnt" + boardCnt);
-//    }
+
 }
