@@ -28,7 +28,7 @@ import java.util.List;
 public class GroupController {
 
     private GroupService groupService;
-    //private GroupAttendService groupAttendService;
+    private GroupAttendService groupAttendService;
 
     @GetMapping(value = "/list")
     public void list(GroupCriteria cri, Model model) {
@@ -67,7 +67,7 @@ public class GroupController {
     @GetMapping({"/get", "modify"})
     public void get(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, Model model) {
         model.addAttribute("group", groupService.get(sn));
-        //model.addAttribute("attendList", groupAttendService.getList(sn));
+        model.addAttribute("attendList", groupAttendService.getList(sn));
     }
 
     @PreAuthorize("principal.username == #group.userId")
