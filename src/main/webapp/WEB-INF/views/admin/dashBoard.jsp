@@ -2,9 +2,9 @@
          pageEncoding="UTF-8"%>
 <%@include file="../includes/tagLib.jsp" %>
 
+
 <%--<script src="../../../resources/js/adminPageDemo/chart-area-demo.js"></script>--%>
-<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>
-<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>
+<%--<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>--%>
 <script src="../../../resources/js/adminPageDemo/chart-pie-demo.js"></script>
 <script src="../../../resources/js/adminPageDemo/chart-pie-demo2.js"></script>
 
@@ -100,7 +100,7 @@
                     모임언어
                 </div>
                 <div class="card-body"><canvas id="myPieChart" width="100%" height="50"></canvas></div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+<%--                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>--%>
             </div>
         </div>
         <div class="col-lg-6">
@@ -110,113 +110,85 @@
                     모임지역
                 </div>
                 <div class="card-body"><canvas id="myPieChart2" width="100%" height="50"></canvas></div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+<%--                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>--%>
             </div>
         </div>
     </div>
 </div>
 
+
+<script src="../../../resources/js/adminDashBoard/lineChart.js"></script>
+<script src="../../../resources/js/adminDashBoard/barChart.js"></script>
+
 <script>
 
     $(document).ready(function () {
-        getData("countUser", "number");
-        getData("countStudy", "number");
-        getData("countGroup", "number");
-        chartData("countUserForMonth", "chart");
+        let writeInnerHtml = function (result, place) {
+            $(place).html(result);
+        };
+
+        let makeChart = function (result, place) {
+            let label = [];
+            for (let i = 0; i < result.length; i++) {
+                label[i] = (i+1);
+            }
+
+            lineChartMaker(place, label, result);
+        };
+
+        let barChart = function (result, place) {
+            let label = [];
+            let tmp, tmp2, prefix, suffix;
+            for (let i = 0; i < result.length; i++) {
+                tmp = i + "";
+                tmp2 = i + 1 + "";
+                prefix = tmp.length === 1 ? 0 + tmp + ':00' : tmp + ':00';
+                suffix = tmp2.length === 1 ? 0 + tmp2 + ':00' : tmp2 + ':00';
+                // if(i === result.length - 1)
+                label[i] = prefix;
+            }
+
+            barChartMaker(place, label, result)
+        };
+
+
+
+        chartData("countUser", "number", $("#countUser"), writeInnerHtml);
+        chartData("countStudy", "number", $("#countStudy"), writeInnerHtml);
+        chartData("countGroup", "number", $("#countGroup"), writeInnerHtml);
+        chartData("countUserForMonth", "line", $("#myAreaChart"), makeChart);
+        chartData("getVisitCountByTime", "graph", $("#myBarChart"), barChart);
+
+
     });
 
-    function getData(url, type){
-        $.ajax({
-            url : "/adminData/" + url,
-            dataType : "json"
-        }).done(function (result) {
-            if(type === 'number'){
-                $("#"+url).html(result);
-            }
-        });
-    }
 
-    function chartData(url, type){
+
+    function chartData(url, type, place, func){
         let cal = new Date();
+        let data = {};
+
+        if(type === "line"){
+            data = {
+                year : cal.getFullYear(),
+                month : cal.getMonth() + 1
+            };
+        }else if(type === "graph"){
+            data = {
+                year : cal.getFullYear(),
+                month : cal.getMonth() + 1,
+                day : cal.getDate()
+            };
+        }
 
         $.ajax({
             url : "/adminData/" + url,
             dataType : "json",
-            data : {
-                year : cal.getFullYear(),
-                month : cal.getMonth() + 1
-            }
+            data : data
         }).done(function (result) {
-            // console.log(result);
-            makeChart(result, cal);
+            func(result, place);
         });
     }
 
-    function makeChart(result, cal) {
 
-        let max = Math.max.apply(null, result);
-        let label = [];
-        for (let i = 0; i < result.length; i++) {
-            label[i] = (i+1) + ' Day';
-        }
-
-
-
-
-        // Set new default font family and font color to mimic Bootstrap's default styling
-        Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-        Chart.defaults.global.defaultFontColor = '#292b2c';
-
-        // Area Chart Example
-        var ctx = document.getElementById("myAreaChart");
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: label,
-                datasets: [{
-                    label: "Register User",
-                    lineTension: 0.3,
-                    backgroundColor: "rgba(2,117,216,0.2)",
-                    borderColor: "rgba(2,117,216,1)",
-                    pointRadius: 5,
-                    pointBackgroundColor: "rgba(2,117,216,1)",
-                    pointBorderColor: "rgba(255,255,255,0.8)",
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                    pointHitRadius: 50,
-                    pointBorderWidth: 2,
-                    data: result,
-                }],
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        time: {
-                            unit: 'date'
-                        },
-                        gridLines: {
-                            display: false
-                        },
-                        ticks: {
-                            maxTicksLimit: 7
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            max: max,
-                            maxTicksLimit: 5
-                        },
-                        gridLines: {
-                            color: "rgba(0, 0, 0, .125)",
-                        }
-                    }],
-                },
-                legend: {
-                    display: false
-                }
-            }
-        });
-
-    }
 </script>

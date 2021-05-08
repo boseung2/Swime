@@ -14,8 +14,10 @@ import javax.servlet.http.HttpSessionListener;
 import javax.sql.DataSource;
 import java.util.Date;
 
+
+//Not used
 @Log4j
-@WebListener
+//@WebListener
 public class VisitSessionListener implements HttpSessionListener {
 
     VisitCountDao dao = VisitCountDao.getInstance();
@@ -25,7 +27,7 @@ public class VisitSessionListener implements HttpSessionListener {
         log.info("sessionCreated...");
 
         try {
-            se.getSession().;
+            se.getSession();
 
 
         } catch (Exception e) {

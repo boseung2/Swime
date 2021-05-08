@@ -129,3 +129,15 @@
 <body>
 <div id="msgStack"></div>
 </body>
+
+<%-- countVisitor --%>
+<script>
+    visitorCountRequest();
+
+    function visitorCountRequest() {
+        $.ajax({
+            url : "/adminData/countVisitor",
+        }).done(function (result) {
+        });
+    }
+</script>

@@ -7,6 +7,7 @@ import java.sql.*;
 
 import static java.lang.Integer.parseInt;
 
+//Not used
 @Log4j
 public class VisitCountDao {
     private static VisitCountDao instance;
