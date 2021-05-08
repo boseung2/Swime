@@ -29,7 +29,7 @@
                         <option value="board">게시물</option>
                         <option value="reply">댓글</option>
                     </select>
-                    <select>
+                    <select class="sort" id="sort" name="sort">
                         <option value="">--전체--</option>
                         <option value="snSort">번호순</option>
                         <option value="dateSort">날짜순</option>
@@ -65,6 +65,7 @@
 <%--                        <td></td>--%>
 <%--                        <td></td>--%>
 <%--                        <td></td>--%>
+
                     </tr>
 
                     <tr class="replyList">
@@ -106,15 +107,35 @@
         let bbsOrReplyVal;
         let bbsOrReplyVar = "board"; // select option 게시글 or 댓글 defalut값
 
+        //정렬 select option
+        $('#sort').on('change',function(){
+
+            $('#sort').each(function(){
+                if($(this).val() === 'snSort'){
+                    // $(this).attr("selected","selected");
+                    console.log("번호순");
+                }else if($(this).val() == 'dateSort'){
+                    console.log("날짜순");
+                }else{
+                    console.log("상태순");
+                }
+            })
+
+        });
+
+
         //게시판or댓글 select option
         $('.bbsOrReply').on('change',function(){
+
             bbsOrReplyVal = $('.bbsOrReply option:selected').val();
 
-            if(bbsOrReplyVal == 'board') {
-                bbsOrReplyVar = 'board';
-            }else{
-                bbsOrReplyVar = 'reply';
-            }
+            $('.bbsOrReply').each(function(){
+                if($(this).val() === 'board'){
+                    bbsOrReplyVar = 'board';
+                }else{
+                    bbsOrReplyVar = 'reply';
+                }
+            });
 
             console.log("bbsOrReplyVal : "+bbsOrReplyVar);
             showBoardList(page,amount,bbsOrReplyVar);
@@ -127,13 +148,17 @@
             //let boardCntOpt = $('.boardCntList option:selected').val();
             amount = $('.boardCntList option:selected').val();
 
-            if(amount == 10){
-                boardCntSort = 10;
-            }else if(amount == 25){
-                boardCntSort = 25;
-            }else if(amount == 50){
-                boardCntSort = 50;
-            }
+            $('.boardCntList').each(function (){
+
+                if($(this).val() === 10){
+                    boardCntSort = 10;
+                }else if($(this).val() === 20){
+                    boardCntSort = 25;
+                }else{
+                    boardCntSort = 50;
+                }
+            });
+
             console.log("boardCntSort"+amount);
             showBoardList(page, amount, bbsOrReplyVar);
 
@@ -147,138 +172,104 @@
             console.log("boardCntSort : " + boardCntSort);
             console.log("bbsOrReplyVar : " + bbsOrReplyVar);
 
-            //default는 게시글이고 게시글 눌렀을때 게시글 댓글 눌렀을때 댓글 목록을 추가해준다
-            if (bbsOrReplyVar == 'board'){
-                listCall(page, boardCntSort, bbsOrReplyVar);
-
-            } else {
-                // adminBoardListService.adminBoardList(page, boardCntSort,
-                //     bbsOrReplyVar, function(replyCnt, replyList){
-                //     });
-                console.log("call reply........");
-                listCall(page, boardCntSort, bbsOrReplyVar);
-            }
-
-            function listCall(page, boardCntSort, bbsOrReplyVar) {
-
                 adminBoardListService.adminBoardList(page, boardCntSort, bbsOrReplyVar,
                     function (cnt, list, compare) {
 
-                        let boardStr = "";
-                        let replyStr = "";
+                        let str = "";
 
                         console.log("-----------callback data-------------");
                         console.log(cnt);
                         console.log(list);
                         console.log(compare);
 
+                        //board or reply
                         if (compare === 'isBoard') {
+                            listPrint(compare);
 
-                            $('tr > th:eq(3)').html('제목');
-
-                            boardStr = "";
-
-                            if (page == -1) {
-                                adminBoardPageNum = Math.ceil(cnt / 10.0);
-                                showBoardList(adminBoardPageNum);
-                                return;
-                            }
-
-                            if (list == null || list.length == 0) {
-                                boardUl.html("");
-                                return;
-                            }
-
-                            for (let i = 0, len = list.length || 0; i < len; i++) {
-
-                                //console.log(list[i]);
-                                let status = "";
-                                let dat = "";
-
-                                if (list[i].status == "BOST01") {
-                                    status = "정상"
-                                } else if (list[i].status == "BOST02") {
-                                    status = "삭제";
-                                } else {
-                                    status = "신고";
-                                }
-                                //제목이 20 글자가 넘으면 ...
-                                if (list[i].title.length >= 20) {
-                                    dat = "...";
-                                }
-
-                                boardStr += "<tr class='boardList'>";
-                                // str += "<td>"+list[i].index+"</td>"
-                                boardStr += "<td data-sn='12'>" + list[i].sn + "</td>";
-                                boardStr += "<td>" + list[i].userId + "</td>";
-                                boardStr += "<td>" + list[i].name + "</td>";
-                                boardStr += "<td>" + list[i].title.substring(0, 20) + dat + "</td>";
-                                boardStr += "<td>" + adminBoardListService.boardDisplayTime(list[i].regDate) + "</td>";
-                                boardStr += "<td>" + adminBoardListService.boardDisplayTime(list[i].updDate) + "</td>";
-                                boardStr += "<td>" + status + "</td>";
-                                boardStr += "</tr>";
-
-                            }//end for
-
-                            //댓글이면
                         } else {
-
-                            $('tr > th:eq(3)').html('댓글 내용');
-
-                            replyStr = "";
-
-                            if (page == -1) {
-                                adminBoardPageNum = Math.ceil(cnt / 10.0);
-                                showBoardList(adminBoardPageNum);
-                                return;
-                            }
-
-                            if (list == null || list.length == 0) {
-                                boardUl.html("");
-                                return;
-                            }
-
-                            for (let i = 0, len = list.length || 0; i < len; i++) {
-
-                                //console.log(list[i]);
-                                let status = "";
-                                let dat = "";
-
-                                if (list[i].status == "RPST01") {
-                                    status = "정상"
-                                } else if (list[i].status == "RPST02") {
-                                    status = "삭제";
-                                } else {
-                                    status = "신고";
-                                }
-                                //댓글내용이 20 글자가 넘으면 ...
-                                if (list[i].content.length >= 20) {
-                                    dat = "...";
-                                }
-
-                                replyStr += "<tr class='boardList'>";
-                                // str += "<td>"+list[i].index+"</td>"
-                                replyStr += "<td data-sn='12'>" + list[i].sn + "</td>";
-                                replyStr += "<td>" + list[i].userId + "</td>";
-                                replyStr += "<td>" + list[i].name + "</td>";
-                                replyStr += "<td>" + list[i].content.substring(0, 20) + dat + "</td>";
-                                replyStr += "<td>" + adminBoardListService.boardDisplayTime(list[i].regDate) + "</td>";
-                                replyStr += "<td>" + adminBoardListService.boardDisplayTime(list[i].updDate) + "</td>";
-                                replyStr += "<td>" + status + "</td>";
-                                replyStr += "</tr>";
-
-                            }//end for
-
+                            listPrint(compare);
                         } // end else
 
-                        if (boardStr.length > 0) {
-                            boardUl.html(boardStr);
-                        } else {
-                            boardUl.html(replyStr);
-                        }
+                        function listPrint(compare){
 
-                        // boardUl.html(boardStr);
-                        // boardUl.html(replyStr);
+                            if(compare === 'isBoard'){
+                                $('tr > th:eq(3)').html('제목');
+                                //str = "";
+                            }else{
+                                $('tr > th:eq(3)').html('댓글 내용');
+                                //str = "";
+                            }
+
+                            if (page == -1) {
+                                adminBoardPageNum = Math.ceil(cnt / 10.0);
+                                showBoardList(adminBoardPageNum);
+                                return;
+                            }
+
+                            if (list == null || list.length == 0) {
+                                boardUl.html("");
+                                return;
+                            }
+
+
+                            for (let i = 0, len = list.length || 0; i < len; i++) {
+
+                                let status = "";
+                                let dat = "";
+                                let statusVar = list[i].status;
+
+                                // board or reply
+                                if(compare === 'isBoard'){
+                                    statusToText(statusVar);
+                                }else{
+                                    statusToText(statusVar);
+                                }
+
+                                //status 코드 -> 한글
+                                function statusToText(statusVar){
+                                    //console.log("statusVar :"+statusVar);
+                                    switch (statusVar) {
+                                        case "BOST01":
+                                            status = "정상";
+                                            break;
+                                        case "BOST02":
+                                            status = "삭제";
+                                            break;
+                                        case "BOST03":
+                                            status = "신고";
+                                            break;
+                                        case "RPST01":
+                                            status = "정상";
+                                            break;
+                                        case "RPST02":
+                                            status = "삭제";
+                                            break;
+                                        case "RPST03":
+                                            status = "신고";
+                                            break;
+                                    }
+
+                                }
+
+                                str += "<tr class='boardList'>";
+                                // str += "<td>"+list[i].index+"</td>"
+                                str += "<td data-sn='12'>" + list[i].sn + "</td>";
+                                str += "<td>" + list[i].userId + "</td>";
+                                str += "<td>" + list[i].name + "</td>";
+                                if(compare === 'isBoard'){
+                                    str += "<td>" + list[i].title.substring(0, 20) + dat + "</td>";
+                                }else{
+                                    str += "<td>" + list[i].content.substring(0, 20) + dat + "</td>";
+                                }
+                                str += "<td>" + adminBoardListService.boardDisplayTime(list[i].regDate) + "</td>";
+                                str += "<td>" + adminBoardListService.boardDisplayTime(list[i].updDate) + "</td>";
+                                str += "<td>" + status + "</td>";
+                                str += "</tr>";
+
+                            }//end for
+
+                        }//end listPrint
+                        boardUl.html(str);
 
                         console.log("board or reply Cnt" + cnt);
                         showAdminBoardPage(cnt);
@@ -357,7 +348,7 @@
 
                 });
 
-            } //end listCall
+            //} //end listCall
 
 
 
