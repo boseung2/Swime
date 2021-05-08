@@ -42,19 +42,31 @@ public class AdminController {
     //, @RequestParam(value = "amount", defaultValue = "10")int amount
     @GetMapping(value ="/manageBoard/{page}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AdminBoardPageDTO> adminGetListWithPaging(
+    public ResponseEntity<?> adminGetListWithPaging(
             @PathVariable("page") int page,
-            @RequestParam(value = "amount") int amount){
+            @RequestParam(value = "amount") int amount,
+            @RequestParam(value = "bbs") String bbs){
 
-        BoardCriteria boardCri = new BoardCriteria(page,amount);
-        //ReplyCriteria replyCri = new ReplyCriteria(page, amount);
-        log.info("adminBoardCri : "+ boardCri);
         log.info("controller page pram :" + page);
+        log.info("amount : " + amount);
+        log.info("bbs : " + bbs);
 
-        AdminBoardPageDTO list = boardService.adminGetListWithPagingBySn(boardCri);
-        //ReplyPageDTO replyList = replyService.adminGetListWIthPagingBySn(replyCri);
+        if (bbs.equals("board")){
+            BoardCriteria boardCri = new BoardCriteria(page,amount);
+            log.info("adminBoardCri : "+ boardCri);
+            AdminBoardPageDTO list = boardService.adminGetListWithPagingBySn(boardCri);
+            return new ResponseEntity<>(list,HttpStatus.OK);
+        }else{
+            ReplyCriteria replyCri = new ReplyCriteria(page, amount);
+            ReplyPageDTO replyList = replyService.adminGetListWIthPagingBySn(replyCri);
+            log.info("adminReplyCri : " + replyCri);
+            return new ResponseEntity<>(replyList, HttpStatus.OK);
 
-        return new ResponseEntity<>(list,HttpStatus.OK);
+        }
+
+
+
+
 //        return new ResponseEntity<>(boardService
 //                .adminGetListWithPagingBySn(cri), HttpStatus.OK);
     }

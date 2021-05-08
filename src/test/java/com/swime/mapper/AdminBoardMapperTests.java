@@ -16,7 +16,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class})
 @Log4j
-public class adminBoardMapperTests {
+public class AdminBoardMapperTests {
 
     @Setter(onMethod_ = @Autowired)
     private BoardMapper mapper;

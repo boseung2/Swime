@@ -18,7 +18,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class})
 @Log4j
-public class adminBoardServiceTest {
+public class AdminBoardServiceTest {
 
     @Setter(onMethod_ = {@Autowired})
     private BoardService service;

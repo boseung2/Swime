@@ -93,15 +93,26 @@
 <script type="text/javascript">
 
     $('document').ready(function(){
-        let amount = 10, page = 1;
-
+        //5/8일 댓글 리스트 출력하기.............................
         let boardUl = $('tbody'); //게시판 출력
 
         let boardCntSort; //select optoin 10 25 50개 값을 넣어서 list뽑는다.
+        let amount = 10, page = 1; //페이징 default 값
+
+        let bbsOrReplyVal;
+        let bbsOrReplyVar = "board"; // select option 게시글 or 댓글 defalut값
 
         //게시판or댓글 select option
         $('.bbsOrReply').on('change',function(){
-            //let = $('.bbsOrReply option:selected').val();
+            bbsOrReplyVal = $('.bbsOrReply option:selected').val();
+
+            if(bbsOrReplyVal == 'board') {
+                bbsOrReplyVar = 'board';
+            }else{
+                bbsOrReplyVar = 'reply';
+            }
+            console.log("bbsOrReplyVal : "+bbsOrReplyVar);
+            showBoardList(page,amount,bbsOrReplyVar);
         })
 
         //10/25/50 개수 select option
@@ -118,19 +129,20 @@
                 boardCntSort = 50;
             }
             console.log("boardCntSort"+amount);
-            showBoardList(page, amount);
+            showBoardList(page, amount, bbsOrReplyVar);
         });
 
 
+        showBoardList(page, amount, bbsOrReplyVar) //defalut값 1,10
 
-        showBoardList(page, amount) //defalut값 1,10
-
-        function showBoardList(page,boardCntSort){
+        function showBoardList(page, boardCntSort, bbsOrReplyVar){
             console.log("showBoardListPage : " +page);
             console.log("boardCntSort : " + boardCntSort);
+            console.log("bbsOrReplyVar : " + bbsOrReplyVar);
 
 
-            adminBoardListService.adminBoardList(page, boardCntSort, function(boardCnt, list){
+            adminBoardListService.adminBoardList(page, boardCntSort,
+                bbsOrReplyVar, function(boardCnt, list, replyCnt, replyList){
 
                 let str = "";
 
@@ -148,9 +160,7 @@
                 for(let i = 0, len = list.length||0; i < len; i++){
 
                     console.log(list[i]);
-
                     let status = "";
-
                     let dat = "";
 
                     if(list[i].status == "BOST01"){
@@ -252,7 +262,7 @@
 
             page = targetPageNum;
 
-            showBoardList(page,amount);
+            showBoardList(page,amount, bbsOrReplyVar);
 
 
         });

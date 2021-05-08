@@ -1,22 +1,20 @@
-console.log("adminBoardList Module");
-
 let adminBoardListService = (function(){
 
-    function adminBoardList(page, amount, callback, error){
+    function adminBoardList(page, amount, bbs, callback, error){
         //let page = param.page || 1;
         //let amount2 = amount || 10;
 
         console.log("adminBoardListCall........")
-        console.log(page);
         console.log("js/page : " + page);
         console.log("js/amount : " + amount);
+        console.log("js/bbs : " + bbs);
         // + "/?amount="+amount2
-        $.getJSON("/admin/manageBoard/" + page + "/?amount="+amount,
+        $.getJSON("/admin/manageBoard/" + page + "?amount="+amount + "&bbs="+bbs,
             function(data){
-                // console.log(data);
-                // console.dir(data);
+                console.log(data);
+                console.dir(data);
                 if(callback) {
-                    callback(data.boardCnt, data.list);
+                    callback(data.boardCnt, data.list, data.replyList);
 
                 }
             })
