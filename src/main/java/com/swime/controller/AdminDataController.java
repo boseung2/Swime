@@ -1,5 +1,6 @@
 package com.swime.controller;
 
+import com.swime.domain.CodeTable;
 import com.swime.domain.DashBoardLangVO;
 import com.swime.service.AdminDashBoardService;
 import com.swime.util.CookieUtils;
@@ -87,7 +88,10 @@ public class AdminDataController {
                     MediaType.APPLICATION_JSON_VALUE
             })
     public ResponseEntity<List<DashBoardLangVO>> getDashBoardLang(){
-        return new ResponseEntity<>(service.getDashBoardLang(), HttpStatus.OK);
+        List<DashBoardLangVO> list = service.getDashBoardLang();
+        list.forEach(vo -> vo.setName(CodeTable.valueOf(vo.getName()).getValue()));
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 

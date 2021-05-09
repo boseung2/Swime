@@ -5,8 +5,8 @@
 
 <%--<script src="../../../resources/js/adminPageDemo/chart-area-demo.js"></script>--%>
 <%--<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>--%>
-<script src="../../../resources/js/adminPageDemo/chart-pie-demo.js"></script>
-<script src="../../../resources/js/adminPageDemo/chart-pie-demo2.js"></script>
+<%--<script src="../../../resources/js/adminPageDemo/chart-pie-demo.js"></script>--%>
+<%--<script src="../../../resources/js/adminPageDemo/chart-pie-demo2.js"></script>--%>
 
 <div class="container-fluid">
     <!-- <h2 class="mt-4">대시보드</h2> -->
@@ -117,8 +117,16 @@
 </div>
 
 
+<script src="../../../resources/js/adminDashBoard/chartGlobalSettings.js"></script>
 <script src="../../../resources/js/adminDashBoard/lineChart.js"></script>
 <script src="../../../resources/js/adminDashBoard/barChart.js"></script>
+<script src="../../../resources/js/adminDashBoard/pieChart.js"></script>
+<script src="../../../resources/js/adminDashBoard/pieChart2.js"></script>
+
+
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
 <script>
 
@@ -151,6 +159,19 @@
             barChartMaker(place, label, result)
         };
 
+        let pieChart = function (result, place){
+            let label = [], data = [];
+            console.log(result);
+
+            for (let i = 0; i < result.length; i++) {
+                label[i] = result[i].name;
+                data[i] = result[i].count;
+            }
+            
+            
+
+            pieChartMaker(place, label, data);
+        }
 
 
         chartData("countUser", "number", $("#countUser"), writeInnerHtml);
@@ -158,10 +179,31 @@
         chartData("countGroup", "number", $("#countGroup"), writeInnerHtml);
         chartData("countUserForMonth", "line", $("#myAreaChart"), makeChart);
         chartData("getVisitCountByTime", "graph", $("#myBarChart"), barChart);
-
+        chartData("getDashBoardLang", "pie", $("#myPieChart"), pieChart);
 
     });
 
+    function calculatePoint(i, intervalSize, colorRangeInfo) {
+        var { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;
+        return (useEndAsStart
+            ? (colorEnd - (i * intervalSize))
+            : (colorStart + (i * intervalSize)));
+    }
+
+    function interpolateColors(dataLength, colorScale, colorRangeInfo) {
+        var { colorStart, colorEnd } = colorRangeInfo;
+        var colorRange = colorEnd - colorStart;
+        var intervalSize = colorRange / dataLength;
+        var i, colorPoint;
+        var colorArray = [];
+
+        for (i = 0; i < dataLength; i++) {
+            colorPoint = calculatePoint(i, intervalSize, colorRangeInfo);
+            colorArray.push(colorScale(colorPoint));
+        }
+
+        return colorArray;
+    }
 
 
     function chartData(url, type, place, func){
@@ -187,6 +229,18 @@
             data : data
         }).done(function (result) {
             func(result, place);
+        });
+    }
+
+
+
+    function test(){
+        $.ajax({
+            url : "/adminData/" + 'getDashBoardLang',
+            dataType : "json"
+        }).done(function (result) {
+            // func(result, place);
+            console.log(result);
         });
     }
 
