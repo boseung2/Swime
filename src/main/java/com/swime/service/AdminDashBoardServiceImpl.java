@@ -1,5 +1,6 @@
 package com.swime.service;
 
+import com.swime.domain.DashBoardLangVO;
 import com.swime.mapper.AdminDashBoardMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 
 
 @Log4j
@@ -64,5 +66,10 @@ public class AdminDashBoardServiceImpl implements AdminDashBoardService{
             list[i] = tmp == null ? 0 : tmp;
         }
         return list;
+    }
+
+    @Override
+    public List<DashBoardLangVO> getDashBoardLang() {
+        return mapper.getDashBoardLang();
     }
 }

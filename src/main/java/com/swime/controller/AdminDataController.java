@@ -1,5 +1,6 @@
 package com.swime.controller;
 
+import com.swime.domain.DashBoardLangVO;
 import com.swime.service.AdminDashBoardService;
 import com.swime.util.CookieUtils;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/adminData")
@@ -77,6 +79,15 @@ public class AdminDataController {
             })
     public ResponseEntity<Integer[]> getVisitCountByTime(int year, int month, int day){
         return new ResponseEntity<>(service.getVisitCountByTime(year,month,day), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getDashBoardLang",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<List<DashBoardLangVO>> getDashBoardLang(){
+        return new ResponseEntity<>(service.getDashBoardLang(), HttpStatus.OK);
     }
 
 

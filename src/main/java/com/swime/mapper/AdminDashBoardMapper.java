@@ -1,9 +1,11 @@
 package com.swime.mapper;
 
 
+import com.swime.domain.DashBoardLangVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface AdminDashBoardMapper {
 
@@ -22,4 +24,6 @@ public interface AdminDashBoardMapper {
     int visitCountUp();
 
     Integer getVisitCountByTime(@Param("year") int year, @Param("month") int month, @Param("day") int day, @Param("hour") int hour);
+
+    List<DashBoardLangVO> getDashBoardLang();
 }
