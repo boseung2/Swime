@@ -46,6 +46,7 @@ $(document).ready(function () {
 
         let COLORS = interpolateColors(data.length, colorScale, colorRangeInfo);
 
+
         new Chart(ctx, {
             type: 'pie',
             data: {
