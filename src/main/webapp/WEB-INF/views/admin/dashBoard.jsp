@@ -157,7 +157,6 @@
             tmp2 = i + 1 + "";
             prefix = tmp.length === 1 ? 0 + tmp + ':00' : tmp + ':00';
             suffix = tmp2.length === 1 ? 0 + tmp2 + ':00' : tmp2 + ':00';
-            // if(i === result.length - 1)
             label[i] = prefix;
         }
 
@@ -203,16 +202,6 @@
     }
 
 
-
-    function test(){
-        $.ajax({
-            url : "/adminData/" + 'getDashBoardLang',
-            dataType : "json"
-        }).done(function (result) {
-            // func(result, place);
-            console.log(result);
-        });
-    }
 
 
 </script>
