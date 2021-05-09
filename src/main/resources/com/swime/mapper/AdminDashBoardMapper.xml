@@ -86,5 +86,6 @@
         select name, COUNT(name) count
         from tgrp_tag
         group by name
+        order by count desc
     </select>
 </mapper>

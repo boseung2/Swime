@@ -1,5 +1,8 @@
 function barChartMaker(ctx, label, data) {
 
+    // data = [0,0,0,0,0,
+    // 0,0,0,0,0,0,0];
+
     let max = Math.max.apply(null, data);
     let labelMax = label.length;
 
@@ -25,7 +28,7 @@ function barChartMaker(ctx, label, data) {
                         display: false
                     },
                     ticks: {
-                        maxTicksLimit: data.length
+                        maxTicksLimit: labelMax
                     }
                 }],
                 yAxes: [{

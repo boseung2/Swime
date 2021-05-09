@@ -124,9 +124,6 @@
 <script src="../../../resources/js/adminDashBoard/pieChart2.js"></script>
 
 
-<script src="https://d3js.org/d3-color.v1.min.js"></script>
-<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
 <script>
 
@@ -182,28 +179,6 @@
         chartData("getDashBoardLang", "pie", $("#myPieChart"), pieChart);
 
     });
-
-    function calculatePoint(i, intervalSize, colorRangeInfo) {
-        var { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;
-        return (useEndAsStart
-            ? (colorEnd - (i * intervalSize))
-            : (colorStart + (i * intervalSize)));
-    }
-
-    function interpolateColors(dataLength, colorScale, colorRangeInfo) {
-        var { colorStart, colorEnd } = colorRangeInfo;
-        var colorRange = colorEnd - colorStart;
-        var intervalSize = colorRange / dataLength;
-        var i, colorPoint;
-        var colorArray = [];
-
-        for (i = 0; i < dataLength; i++) {
-            colorPoint = calculatePoint(i, intervalSize, colorRangeInfo);
-            colorArray.push(colorScale(colorPoint));
-        }
-
-        return colorArray;
-    }
 
 
     function chartData(url, type, place, func){
