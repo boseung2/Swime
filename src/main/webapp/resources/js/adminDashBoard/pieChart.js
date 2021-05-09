@@ -44,7 +44,7 @@ $(document).ready(function () {
             return colorArray;
         }
 
-        let COLORS = interpolateColors(data.length, colorScale, colorRangeInfo);
+        let colors = interpolateColors(data.length, colorScale, colorRangeInfo);
 
 
         new Chart(ctx, {
@@ -53,7 +53,7 @@ $(document).ready(function () {
                 labels: label,
                 datasets: [{
                     data: data,
-                    backgroundColor: COLORS,
+                    backgroundColor: colors,
                 }],
             },
         });

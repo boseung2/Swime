@@ -126,51 +126,7 @@
 
 
 <script>
-
     $(document).ready(function () {
-        let writeInnerHtml = function (result, place) {
-            $(place).html(result);
-        };
-
-        let makeChart = function (result, place) {
-            let label = [];
-            for (let i = 0; i < result.length; i++) {
-                label[i] = (i+1);
-            }
-
-            lineChartMaker(place, label, result);
-        };
-
-        let barChart = function (result, place) {
-            let label = [];
-            let tmp, tmp2, prefix, suffix;
-            for (let i = 0; i < result.length; i++) {
-                tmp = i + "";
-                tmp2 = i + 1 + "";
-                prefix = tmp.length === 1 ? 0 + tmp + ':00' : tmp + ':00';
-                suffix = tmp2.length === 1 ? 0 + tmp2 + ':00' : tmp2 + ':00';
-                // if(i === result.length - 1)
-                label[i] = prefix;
-            }
-
-            barChartMaker(place, label, result)
-        };
-
-        let pieChart = function (result, place){
-            let label = [], data = [];
-            console.log(result);
-
-            for (let i = 0; i < result.length; i++) {
-                label[i] = result[i].name;
-                data[i] = result[i].count;
-            }
-            
-            
-
-            pieChartMaker(place, label, data);
-        }
-
-
         chartData("countUser", "number", $("#countUser"), writeInnerHtml);
         chartData("countStudy", "number", $("#countStudy"), writeInnerHtml);
         chartData("countGroup", "number", $("#countGroup"), writeInnerHtml);
@@ -179,6 +135,45 @@
         chartData("getDashBoardLang", "pie", $("#myPieChart"), pieChart);
 
     });
+
+    let writeInnerHtml = function (result, place) {
+        $(place).html(result);
+    };
+
+    let makeChart = function (result, place) {
+        let label = [];
+        for (let i = 0; i < result.length; i++) {
+            label[i] = (i+1);
+        }
+
+        lineChartMaker(place, label, result);
+    };
+
+    let barChart = function (result, place) {
+        let label = [];
+        let tmp, tmp2, prefix, suffix;
+        for (let i = 0; i < result.length; i++) {
+            tmp = i + "";
+            tmp2 = i + 1 + "";
+            prefix = tmp.length === 1 ? 0 + tmp + ':00' : tmp + ':00';
+            suffix = tmp2.length === 1 ? 0 + tmp2 + ':00' : tmp2 + ':00';
+            // if(i === result.length - 1)
+            label[i] = prefix;
+        }
+
+        barChartMaker(place, label, result)
+    };
+
+    let pieChart = function (result, place){
+        let label = [], data = [];
+
+        for (let i = 0; i < result.length; i++) {
+            label[i] = result[i].name;
+            data[i] = result[i].count;
+        }
+
+        pieChartMaker(place, label, data);
+    };
 
 
     function chartData(url, type, place, func){

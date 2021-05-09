@@ -12,19 +12,11 @@ addScript("https://d3js.org/d3-scale-chromatic.v1.min.js");
 
 
 
-let colorScale;
-let colorRangeInfo;
 let calculatePoint;
 let interpolateColors;
 
 $(document).ready(function () {
-    // colorScale = d3.interpolateRainbow;
-    //
-    // colorRangeInfo = {
-    //     colorStart: 0,
-    //     colorEnd: 1,
-    //     useEndAsStart: false,
-    // };
+
 
     calculatePoint = function (i, intervalSize, colorRangeInfo) {
         let { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;
