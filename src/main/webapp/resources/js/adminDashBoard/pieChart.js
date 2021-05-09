@@ -11,9 +11,19 @@ let pieChartMaker;
 
 $(document).ready(function () {
     pieChartMaker = function (ctx, label, data) {
-        // Pie Chart Example
-        // var ctx = document.getElementById("myPieChart");
-        //
+
+        let result = 0;
+
+
+        for (let i = 0; i < data.length; i++) {
+            result += data[i];
+        }
+
+        for (let i = 0; i < data.length; i++) {
+            let tmp = data[i] * 100 / result;
+            console.log(tmp);
+        }
+
         const colorScale = d3.interpolateRainbow;
 
         const colorRangeInfo = {

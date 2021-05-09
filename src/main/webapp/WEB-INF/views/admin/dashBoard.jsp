@@ -134,6 +134,7 @@
         chartData("getVisitCountByTime", "graph", $("#myBarChart"), barChart);
         chartData("getDashBoardLang", "pie", $("#myPieChart"), pieChart);
 
+
     });
 
     let writeInnerHtml = function (result, place) {
