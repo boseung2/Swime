@@ -149,21 +149,19 @@
     });
     
     function showModal() {
-        let {modalSetting, modalHide, modalShow} = modal($("#modalPlace"));
+        let {modalSetting, modalShow} = modal($("#modalPlace"));
         // console.log(a);
 
         $(".stretched-link").on("click", function () {
             let hrefTags = $(".stretched-link");
 
-            let who = 0;
             for (let i = 0; i < hrefTags.length; i++) {
                 if(hrefTags[i] === this) {
                     let title = String($(".row1 > div:nth-child(" + (i + 1) + ") > div > div.card-body > div:nth-child(1)")[0].innerHTML);
-                    modalSetting(title, "몸1", 'alert');
+                    modalSetting(title, "미구현이올시다", 'alert');
                     break;
                 }
             }
-
 
             modalShow();
         });
