@@ -1,6 +1,7 @@
 package com.swime.service;
 
 import com.swime.domain.DashBoardLangVO;
+import com.swime.domain.DashBoardLocaleVO;
 import com.swime.mapper.AdminDashBoardMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -71,5 +72,10 @@ public class AdminDashBoardServiceImpl implements AdminDashBoardService{
     @Override
     public List<DashBoardLangVO> getDashBoardLang() {
         return mapper.getDashBoardLang();
+    }
+
+    @Override
+    public List<DashBoardLocaleVO> getDashBoardLocale() {
+        return mapper.getDashBoardLocale();
     }
 }

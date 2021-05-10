@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 import com.swime.domain.DashBoardLangVO;
+import com.swime.domain.DashBoardLocaleVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -47,6 +48,14 @@ public class AdminDashBoardTests {
     @Test
     public void tag(){
         List<DashBoardLangVO> list = mapper.getDashBoardLang();
+
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void locale(){
+        List<DashBoardLocaleVO> list = mapper.getDashBoardLocale();
 
         Assert.assertNotNull(list);
         list.forEach(log::info);

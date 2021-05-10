@@ -123,69 +123,102 @@
 <script src="../../../resources/js/adminDashBoard/pieChart.js"></script>
 <script src="../../../resources/js/adminDashBoard/pieChart2.js"></script>
 
+<div class="modal">
+    <div class="modal_content" title="클릭하면 창이 닫힙니다.">
+        여기에 모달창 내용을 적어줍니다.<br>
+        이미지여도 좋고 글이어도 좋습니다.
+    </div>
+</div>
+
 
 
 <script>
-    $(document).ready(function () {
-        chartData("countUser", "number", $("#countUser"), writeInnerHtml);
-        chartData("countStudy", "number", $("#countStudy"), writeInnerHtml);
-        chartData("countGroup", "number", $("#countGroup"), writeInnerHtml);
-        chartData("countUserForMonth", "line", $("#myAreaChart"), makeChart);
-        chartData("getVisitCountByTime", "graph", $("#myBarChart"), barChart);
-        chartData("getDashBoardLang", "pie", $("#myPieChart"), pieChart);
+    $(document).ready(async function () {
+        let writeInnerHtml = function (result, place) {
+            $(place).html(result);
+        };
+
+        let makeChart = function (result, place) {
+            let label = [];
+            for (let i = 0; i < result.length; i++) {
+                label[i] = (i+1);
+            }
+
+            lineChartMaker(place, label, result);
+        };
+
+        let barChart = function (result, place) {
+            let label = [];
+            let tmp, tmp2, prefix, suffix;
+            for (let i = 0; i < result.length; i++) {
+                tmp = i + "";
+                tmp2 = i + 1 + "";
+                prefix = tmp.length === 1 ? 0 + tmp + ':00' : tmp + ':00';
+                suffix = tmp2.length === 1 ? 0 + tmp2 + ':00' : tmp2 + ':00';
+                label[i] = prefix;
+            }
+
+            barChartMaker(place, label, result)
+        };
+
+        let pieChart = function (result, place){
+            let label = [], data = [];
+
+            for (let i = 0; i < result.length; i++) {
+                label[i] = result[i].name;
+                data[i] = result[i].count;
+            }
+
+            pieChartMaker(place, label, data);
+        };
 
 
+        await chartData("countUser", "none", $("#countUser"), writeInnerHtml);
+        await chartData("countStudy", "none", $("#countStudy"), writeInnerHtml);
+        await chartData("countGroup", "none", $("#countGroup"), writeInnerHtml);
+        await chartData("countUserForMonth", "month", $("#myAreaChart"), makeChart);
+        await chartData("getVisitCountByTime", "day", $("#myBarChart"), barChart);
+        await chartData("getDashBoardLang", "none", $("#myPieChart"), pieChart);
+        await chartData("getDashBoardLocale", "none", $("#myPieChart2"), pieChart);
+
+        console.log();
+
+        $(".stretched-link").on("click", function () {
+            let hrefTags = $(".stretched-link");
+
+            let who = 0;
+            for (let i = 0; i < hrefTags.length; i++) {
+                if(hrefTags[i] === this) {
+                    who = i;
+                    break;
+                }
+            }
+
+            console.log("modal");
+
+            $("#myModal").fadeIn();
+        });
+
+
+
+        $(".modal-footer > button").click(function(){
+            $(".modal").fadeOut();
+        });
     });
 
-    let writeInnerHtml = function (result, place) {
-        $(place).html(result);
-    };
 
-    let makeChart = function (result, place) {
-        let label = [];
-        for (let i = 0; i < result.length; i++) {
-            label[i] = (i+1);
-        }
-
-        lineChartMaker(place, label, result);
-    };
-
-    let barChart = function (result, place) {
-        let label = [];
-        let tmp, tmp2, prefix, suffix;
-        for (let i = 0; i < result.length; i++) {
-            tmp = i + "";
-            tmp2 = i + 1 + "";
-            prefix = tmp.length === 1 ? 0 + tmp + ':00' : tmp + ':00';
-            suffix = tmp2.length === 1 ? 0 + tmp2 + ':00' : tmp2 + ':00';
-            label[i] = prefix;
-        }
-
-        barChartMaker(place, label, result)
-    };
-
-    let pieChart = function (result, place){
-        let label = [], data = [];
-
-        for (let i = 0; i < result.length; i++) {
-            label[i] = result[i].name;
-            data[i] = result[i].count;
-        }
-
-        pieChartMaker(place, label, data);
-    };
 
 
     function chartData(url, type, place, func){
         let cal = new Date();
         let data = {};
 
-        if(type === "line"){
+        if(type === "month"){
             data = {
                 year : cal.getFullYear(),
                 month : cal.getMonth() + 1
             };
-        }else if(type === "graph"){
+        }else if(type === "day"){
             data = {
                 year : cal.getFullYear(),
                 month : cal.getMonth() + 1,

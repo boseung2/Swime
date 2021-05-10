@@ -4,99 +4,52 @@
 <html>
 <head>
     <title>Title</title>
+    <style>
+        .modal{
+            position:absolute;
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,0.8);
+            top:0;
+            left:0;
+            display:none;
+        }
+
+        .modal_content{
+            margin: auto;
+        }
+
+    </style>
 </head>
 <body>
 test
-    <div class="app-container">
-        <div class="chart-container">
-            <canvas id="pie-chart"></canvas>
+
+
+    <button>모달창</button>
+
+    <div class="modal">
+        <div class="modal_content" title="클릭하면 창이 닫힙니다.">
+            여기에 모달창 내용을 적어줍니다.<br>
+            이미지여도 좋고 글이어도 좋습니다.
         </div>
     </div>
+
 </body>
 </html>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="../../../resources/js/adminDashBoard/ColorMaker.js" crossorigin="anonymous"></script>
-
+<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>--%>
+<%--<script src="https://d3js.org/d3-color.v1.min.js"></script>--%>
+<%--<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>--%>
+<%--<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>--%>
 
 <script>
-
-    console.log("script");
-
-    $(document).ready(function () {
-        test();
+    $("button").click(function(){
+        $(".modal").fadeIn();
     });
 
-    /* Set up Chart.js Pie Chart */
-    function createChart(chartId, chartData, colorScale, colorRangeInfo) {
-        console.log("createChart");
-        /* Grab chart element by id */
-        const chartElement = document.getElementById(chartId);
-
-        const dataLength = chartData.data.length;
-
-        /* Create color array */
-        var COLORS = interpolateColors(dataLength, colorScale, colorRangeInfo);
-
-
-        /* Create chart */
-        const myChart = new Chart(chartElement, {
-            type: 'doughnut',
-            data: {
-                labels: chartData.labels,
-                datasets: [
-                    {
-                        backgroundColor: COLORS,
-                        hoverBackgroundColor: COLORS,
-                        data: chartData.data
-                    }
-                ],
-            },
-            options: {
-                responsive: true,
-                legend: {
-                    display: false,
-                },
-                hover: {
-                    onHover: function(e) {
-                        var point = this.getElementAtEvent(e);
-                        e.target.style.cursor = point.length ? 'pointer' : 'default';
-                    },
-                },
-            }
-        });
-        return myChart;
-    }
-
-    function getRandomNumber(min, max) {
-        console.log("getRandomNumber");
-        return Math.round(Math.random() * (max - min) + min);
-    }
-
-
-    function test() {
-        console.log("onload");
-        /* Example Data */
-        const arrayLength = 10;
-        const min = 20;
-        const max = 110;
-
-        var i;
-        var data = [];
-        var labels = [];
-
-        for (i = 0; i < arrayLength; i++) {
-            data.push(getRandomNumber(min, max));
-            labels.push(`Label ${i + 1}`);
-        }
-
-        const chartData = {
-            labels: labels,
-            data: data,
-        };
-
-        createChart('pie-chart', chartData, colorScale, colorRangeInfo);
-    }
+    $(".modal_content").click(function(){
+        $(".modal").fadeOut();
+    });
 
 
 </script>

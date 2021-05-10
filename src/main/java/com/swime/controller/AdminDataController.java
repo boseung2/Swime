@@ -2,6 +2,7 @@ package com.swime.controller;
 
 import com.swime.domain.CodeTable;
 import com.swime.domain.DashBoardLangVO;
+import com.swime.domain.DashBoardLocaleVO;
 import com.swime.service.AdminDashBoardService;
 import com.swime.util.CookieUtils;
 import lombok.AllArgsConstructor;
@@ -90,6 +91,22 @@ public class AdminDataController {
     public ResponseEntity<List<DashBoardLangVO>> getDashBoardLang(){
         List<DashBoardLangVO> list = service.getDashBoardLang();
         list.forEach(vo -> vo.setName(CodeTable.valueOf(vo.getName()).getValue()));
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getDashBoardLocale",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<List<DashBoardLocaleVO>> getDashBoardLocale(){
+        List<DashBoardLocaleVO> list = service.getDashBoardLocale();
+        list.forEach(vo -> {
+            String pre = CodeTable.valueOf(vo.getSido()).getValue();
+            String suf = CodeTable.valueOf(vo.getSigungu()).getValue();
+            vo.setName(pre + " " + suf);
+        });
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
