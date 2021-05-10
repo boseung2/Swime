@@ -1,4 +1,4 @@
-
+console.log("modal module...");
 
 function modal(ctx){
     let modalStr = (
@@ -20,25 +20,16 @@ function modal(ctx){
 
 
 
-    $("#myModal > div > div > div.modal-header > button").click(function(){
-        $(".modal").fadeOut();
-    });
-
-    $(".modal-footer > button").click(function(){
-        $(".modal").fadeOut();
-    });
-
-
-
-    function modalSetting(title, body, footer, footerAct) {
+    function modalSetting(title, body, footer, footerFunc) {
         $("#myModalLabel").html(title);
         $("#myModalBody").html(body);
-        footerSetting(footer);
+        footerSetting(footer, footerFunc);
 
+        $(".close").on("click", function () {
+            $(".modal").fadeOut();
+        });
 
-
-
-        function footerSetting(footer, footerAct) {
+        function footerSetting(footer, footerFunc) {
 
             $(".modal-footer > button").unbind("click");
 
@@ -58,20 +49,23 @@ function modal(ctx){
             else $("#myModalFooter").hide();
 
             $(".modal-footer > button").on("click",function () {
-                if(footerAct !== undefined) footerAct();
+                if(footerFunc !== undefined) footerFunc();
                 else $(".modal").fadeOut();
             });
         }
     }
 
-    this.modalHide = function (){
-        $(".modal").fadeOut();
-    };
-    this.modalShow = function (){
-        $("#myModal").fadeIn();
-    };
-    this.modalSetting = function (){
-        modalSetting();
-    };
+
+
     $(ctx).html(modalStr);
-};
+
+    return {
+        modalHide : function (){
+            $(".modal").fadeOut();
+        },
+        modalShow :function (){
+            $("#myModal").fadeIn();
+        },
+        modalSetting : modalSetting
+    };
+}

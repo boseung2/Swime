@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@include file="../includes/tagLib.jsp" %>
+<%--<%@include file="../includes/tagLib.jsp" %>--%>
 
 
 <div class="container-fluid">
@@ -145,12 +145,12 @@
         await chartData("getDashBoardLocale", "none", $("#myPieChart2"), pieChart);
 
 
-
-        // showModal();
+        showModal();
     });
     
     function showModal() {
-        let {modalShow, modalHide, modalSetting} = modal($("#modalPlace"));
+        let {modalSetting, modalHide, modalShow} = modal($("#modalPlace"));
+        // console.log(a);
 
         $(".stretched-link").on("click", function () {
             let hrefTags = $(".stretched-link");
