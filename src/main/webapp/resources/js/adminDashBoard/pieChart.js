@@ -1,12 +1,4 @@
-function addScript(src) {
-    let script = document.createElement('script');
-    script.src = src;
-    document.head.appendChild(script);
-}
 
-addScript("https://d3js.org/d3-color.v1.min.js");
-addScript("https://d3js.org/d3-interpolate.v1.min.js");
-addScript("https://d3js.org/d3-scale-chromatic.v1.min.js");
 
 
 
