@@ -81,4 +81,19 @@
         from tvisit_count
         where visit_date = trunc(current_date, 'hh24')
     </select>
+
+    <select id="getDashBoardLang" resultType="com.swime.domain.DashBoardLangVO">
+        select name, COUNT(name) count
+        from tgrp_tag
+        group by name
+        order by count desc
+    </select>
+
+    <select id="getDashBoardLocale" resultType="com.swime.domain.DashBoardLocaleVO">
+        select sido, sigungu, count(sigungu) count
+        from tgrp
+        group by sigungu, sido
+        order by sido, count desc
+    </select>
+
 </mapper>
