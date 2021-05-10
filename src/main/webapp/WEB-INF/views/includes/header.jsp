@@ -116,7 +116,7 @@
     <div class="dropdown">
         <img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;">
         <ul id="myDropdown" class="dropdown-content">
-<%--            <li><a href="">알림1</a></li>--%>
+            <li>알림이 없습니다.</li>
         </ul>
     </div>
 </sec:authorize>
@@ -239,6 +239,11 @@
 
     // 알림 리스트가 눌리면
     $('#myDropdown').on("click", "li", function(){
+
+        if($(this).attr("class") === undefined) {
+            return;
+        }
+
         let sn = $(this).data("sn");
 
         // 해당 알림을 읽음처리
