@@ -22,20 +22,22 @@
                     </select>
                 </div>
                 <div style="display: flex; margin-left: auto;">
-                    <select>
+                    <select class="bbsOrReply">
                         <option value="">--전체--</option>
                         <option value="upcomingstudy">예정된스터디</option>
                         <option value="passedstudy">지난스터디</option>
                     </select>
-                    <select>
+                    <select class="bbsOrReply">
                         <option value="">--전체--</option>
                         <option value="studyname">스터디명</option>
                         <option value="studyhost">스터디장명</option>
                     </select>
 
                     <div class="search-bar">
-                        <input type="text" placeholder="Search.." >
+                        <input class="inputButton" type="text" placeholder="Search..." maxlength="20" >
+<%--                        <input type="button" class="search-button">--%>
                         <button class="search-button"><i class="fas fa-search"></i></button>
+
                     </div>
                 </div>
             </div>

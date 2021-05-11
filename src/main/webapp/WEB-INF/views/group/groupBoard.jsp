@@ -147,6 +147,7 @@
         function showBoardPage(boardCnt) {
 
             console.log('boardCnt' + boardCnt + "개");
+
             let endNum = Math.ceil(boardPageNum / 10.0) * 10;
             let startNum = endNum - 9;
 

@@ -271,6 +271,10 @@
 
             console.log('click');
 
+            // 정렬기준 가져와서 order input 에 넣기
+            let orderValue = $('#orderSelect option:selected').val();
+            $('#order').prop("value", orderValue);
+
             searchForm.find("input[name='pageNum']").val($(this).attr("href"));
             searchForm.submit();
         })

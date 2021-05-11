@@ -1,3 +1,5 @@
+@import "//netdna.bootstrapcdn.com/font-awesome/3.0/css/font-awesome.css";
+
 @charset "UTF-8";
 /*!
 * Start Bootstrap - SB Admin v6.0.3 (https://startbootstrap.com/template/sb-admin)
@@ -10719,20 +10721,61 @@ body {
 .option-search {
   display: flex;
   flex-direction: row;
-  height: 30px;
-  margin-bottom: 1rem;
+  height: 25px;
+  margin: 1rem 0;
 }
 .search-bar {
-  display: flex;
+  color: darkgray;
+  height: 25px;
   margin-left: auto;
+  border: 1px;
+
+
 }
+.inputButton{
+  display: inline;
+  height: 25px;
+  font-size: 15px;
+  width: 170px;
+  border-radius: 5px;
+  border: 1px solid rgb(118, 118, 118);
+
+}
+/*.inputButton::-webkit-input-placeholder {*/
+/*  font-family: FontAwesome;*/
+/*  font-weight: normal;*/
+/*  overflow: visible;*/
+/*  vertical-align: top;*/
+/*  display: inline-block !important;*/
+/*  padding-left: 5px;*/
+/*  padding-top: 2px;*/
+/*  color: hsl(9, 40%, 60%);*/
+/*}*/
+
 .lines {
   height: 100%;
+  color: rgb(118, 118, 118);
+  border: 1px solid rgb(118, 118, 118);
+  font-size: 15px;
+  border-radius: 5px;
 }
 .search-button {
-  background-color: #e9ecef;
-  border: black;
-  color: darkgray;
+  display: inline;
+  position: absolute;
+  background-color: transparent;
+  color: #5596db;
+  border: none;
+  padding: 3px;
+  margin-left: -23px;
+  margin-top: 2px;
+  /*display: inline-block;*/
+  /*vertical-align: top;*/
+  /*overflow: visible;*/
+  /*position: absolute;*/
+
+  /*justify-content: flex-end;*/
+  /*display: inline-flex;*/
+
 }
 .footer-button {
   border: none;
@@ -10758,4 +10801,18 @@ body {
 .page-number:hover {
   background-color: #5596db;
   color: white;
+}
+.boardCntList{
+  height: 100%;
+  color: rgb(118, 118, 118);
+  border: 1px solid rgb(118, 118, 118);
+  font-size: 15px;
+  border-radius: 5px;
+}
+.bbsOrReply{
+  margin-right: 0.5rem;
+  color: rgb(118, 118, 118);
+  border: 1px solid rgb(118, 118, 118);
+  font-size: 15px;
+  border-radius: 5px;
 }
