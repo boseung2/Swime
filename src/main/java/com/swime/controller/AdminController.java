@@ -26,8 +26,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class AdminController {
 
-    private BoardService boardService;
-    private ReplyService replyService;
+    //private BoardService boardService;
+    //private ReplyService replyService;
     private AdminBoardService adminBoardService;
 
 
@@ -61,7 +61,7 @@ public class AdminController {
 
 
         if(bbs.equals("board")){
-            AdminBoardCriteria boardCri = new AdminBoardCriteria(page,amount);
+            AdminBoardCriteria boardCri = new AdminBoardCriteria(page,amount,type);
             log.info("adminBoardCri : "+ boardCri);
             AdminBoardPageDTO boardList = adminBoardService.adminGetListWithPagingBySn(boardCri);
 
@@ -69,17 +69,10 @@ public class AdminController {
             map.put("boardCompare", "isBoard");
 
             return new ResponseEntity<>(map,HttpStatus.OK);
-//            BoardCriteria boardCri = new BoardCriteria(page,amount);
-//            log.info("adminBoardCri : "+ boardCri);
-//            AdminBoardPageDTO boardList = boardService.adminGetListWithPagingBySn(boardCri);
 //
-//            map.put("board", boardList);
-//            map.put("boardCompare", "isBoard");
-//
-//            return new ResponseEntity<>(map,HttpStatus.OK);
         }else{
-            ReplyCriteria replyCri = new ReplyCriteria(page, amount);
-            ReplyPageDTO replyList = replyService.adminGetListWIthPagingBySn(replyCri);
+            AdminReplyCriteria replyCri = new AdminReplyCriteria(page, amount, type);
+            ReplyPageDTO replyList = adminBoardService.adminReplyGetListWithPagingBySn(replyCri);
             log.info("adminReplyCri : " + replyCri);
 
             map.put("reply", replyList);

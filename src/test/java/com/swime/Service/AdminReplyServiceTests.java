@@ -27,18 +27,18 @@ public class AdminReplyServiceTests {
     private ReplyMapper mapper;
 
 
-    @Test
-    public void testAdminGetWithPagingBySn(){
-
-        ReplyCriteria cri = new ReplyCriteria();
-        cri.setPageNum(1);
-        cri.setAmount(10);
-
-        int replyCnt = mapper.getCountBySn();
-
-        ReplyPageDTO list = service.adminGetListWIthPagingBySn(cri);
-
-        log.info(replyCnt);
-        log.info(list);
-    }
+//    @Test
+//    public void testAdminGetWithPagingBySn(){
+//
+//        ReplyCriteria cri = new ReplyCriteria();
+//        cri.setPageNum(1);
+//        cri.setAmount(10);
+//
+//        int replyCnt = mapper.getCountBySn();
+//
+//        ReplyPageDTO list = service.adminGetListWIthPagingBySn(cri);
+//
+//        log.info(replyCnt);
+//        log.info(list);
+//    }
 }

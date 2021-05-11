@@ -28,8 +28,8 @@ public interface ReplyService {
     public List<ReplyVO> getList(BoardCriteria cri, Long brdSn);
 
     //---------------------------관리자 댓글---------------------------
-    ReplyPageDTO adminGetListWIthPagingBySn(
-            @Param("cri")ReplyCriteria cri);
+//    ReplyPageDTO adminGetListWIthPagingBySn(
+//            @Param("cri")ReplyCriteria cri);
 
 
 }

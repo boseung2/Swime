@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 
+import com.swime.domain.AdminBoardCriteria;
 import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 import lombok.Setter;
@@ -19,7 +20,7 @@ import java.util.List;
 public class AdminBoardMapperTests {
 
     @Setter(onMethod_ = @Autowired)
-    private BoardMapper mapper;
+    private AdminBoardMapper mapper;
 
 //    @Test
 //    public void testAdminGetListWithPagingBySn(){
@@ -43,14 +44,12 @@ public class AdminBoardMapperTests {
 
     @Test
     public void testAdminGetListWithPagingBySnStatus(){
-        BoardCriteria cri = new BoardCriteria();
+        AdminBoardCriteria cri = new AdminBoardCriteria();
         //cri.setPageNum(1);
         //cri.setAmount(10);
-        //cri.setType("S");
+        cri.setType("D");
         //cri.setType("SS");
-        cri.setType("SS");
         //cri.setKeyword("삭제");
-
         List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
         list.forEach(board -> log.info(board));
     }

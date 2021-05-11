@@ -126,13 +126,13 @@ public class ReplyServiceImpl implements ReplyService{
         );
     }
     //관리자 댓글
-    @Override
-    public ReplyPageDTO adminGetListWIthPagingBySn(ReplyCriteria cri) {
-
-        log.info("get adminReply Cri : " + cri);
-        return new ReplyPageDTO(
-                replyMapper.getCountBySn(),
-                replyMapper.adminGetListWithPagingBySn(cri));
-    }
+//    @Override
+//    public ReplyPageDTO adminGetListWIthPagingBySn(ReplyCriteria cri) {
+//
+//        log.info("get adminReply Cri : " + cri);
+//        return new ReplyPageDTO(
+//                replyMapper.getCountBySn(),
+//                replyMapper.adminGetListWithPagingBySn(cri));
+//    }
 
 }

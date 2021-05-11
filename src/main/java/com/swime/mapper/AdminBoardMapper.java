@@ -1,8 +1,7 @@
 package com.swime.mapper;
 
-import com.swime.domain.AdminBoardCriteria;
-import com.swime.domain.BoardCriteria;
-import com.swime.domain.BoardVO;
+import com.swime.domain.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,7 +18,19 @@ public interface AdminBoardMapper {
     //게시판 전체 개수를 가져온다
     int adminGetCountBySn();
 
-    int adminRemove(Long sn);
+    int adminBoardRemove(Long sn);
 
-    int adminUpdate(BoardVO board);
+    int adminBoardUpdate(BoardVO board);
+
+
+    //----------------------관리자 댓글 (나중에 관리자 파일로 옮기기)------------------------
+    //게시판 댓글 페이징
+    List<ReplyVO> adminReplyGetListWithPagingBySn(AdminReplyCriteria cri);
+
+    //댓글 전체 개수
+    int getCountBySn();
+
+    int adminReplyRemove(Long sn);
+
+    int adminReplyUpdate(ReplyVO reply);
 }

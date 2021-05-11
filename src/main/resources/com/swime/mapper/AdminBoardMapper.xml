@@ -9,7 +9,7 @@
     </select>
 
     <!--게시판 번호순 정렬-->
-    <select id="adminGetListWithPagingBySn2" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
+    <select id="adminGetListWithPagingBySn" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
         <![CDATA[
 
         select *
@@ -46,8 +46,8 @@
         ]]>
     </select>
 
-    <!---->
-    <select id="adminGetListWithPagingBySn" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
+    <!--테스트-->
+    <select id="adminGetListWithPagingBySn2" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
     <![CDATA[
 
         select *
@@ -68,6 +68,74 @@
                 where rownum <= #{pageNum} * #{amount}
             )
         where rn > (#{pageNum} - 1) * #{amount}
+
+        ]]>
+    </select>
+
+
+
+    <!--관리자 댓글 페이징-->
+
+    <select id="getCountBySn" resultType="int">
+        select count(*) from trpl where sn > 0
+    </select>
+
+    <!--번호순 정렬-->
+    <select id="adminReplyGetListWithPagingBySn" parameterType="com.swime.domain.ReplyVO" resultType="com.swime.domain.ReplyVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn,sn, brd_sn, comment_group, user_id, name, content, status, reg_date, upd_date
+                from
+                    (
+                        select r.sn, r.brd_sn, r.comment_group, r.user_id, u.name, r.content, r.status, r.reg_date, r.upd_date
+                        from
+                            trpl r,tuser u
+                        where
+                            r.user_id = u.id
+                        order by
+    ]]>
+            <choose>
+                <when test="type == 'S'.toString()">
+                    sn asc
+                </when>
+                <when test="type == 'D'.toString()">
+                    reg_Date desc
+                </when>
+                <when test="type == 'SS'.toString()">
+                    status asc
+                </when>
+            </choose>
+        )
+        <![CDATA[
+                where rownum <= #{pageNum} * #{amount}
+            )
+        where rn > (#{pageNum} -1) * #{amount}
+
+        ]]>
+    </select>
+
+    <!--테스트-->
+    <select id="adminReplyGetListWithPagingBySn2" parameterType="com.swime.domain.ReplyVO" resultType="com.swime.domain.ReplyVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn,sn, brd_sn, comment_group, user_id, name, content, status, reg_date, upd_date
+                from
+                    (
+                        select r.sn, r.brd_sn, r.comment_group, r.user_id, u.name, r.content, r.status, r.reg_date, r.upd_date
+                        from
+                            trpl r,tuser u
+                        where
+                            r.user_id = u.id
+                        order by
+                            sn asc
+                    )
+                where rownum <= #{pageNum} * #{amount}
+            )
+        where rn > (#{pageNum} -1) * #{amount}
 
         ]]>
     </select>

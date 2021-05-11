@@ -17,7 +17,7 @@
             <div class="option-search">
                 <div>
                     <select class="boardCntList" id="boardCntList" name="boardCntList">
-                        <option value="">--개수--</option>
+                        <option value="10">--개수--</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -25,12 +25,12 @@
                 </div>
                 <div style="display: flex; margin-left: auto;">
                     <select class="bbsOrReply" id="bbsOrReply" name="bbsOrReply">
-                        <option value="">--전체--</option>
+                        <option value="board">--전체--</option>
                         <option value="board">게시물</option>
                         <option value="reply">댓글</option>
                     </select>
                     <select class="sort" id="sort" name="sort">
-                        <option value="">--전체--</option>
+                        <option value="S">--전체--</option>
                         <option value="S">번호순</option>
                         <option value="D">날짜순</option>
                         <option value="SS">상태순</option>
@@ -47,7 +47,8 @@
                 <table class="table table-bordered" cellspacing="0">
                     <thead>
                     <tr class="boardHeader">
-                        <th>#</th>
+                        <th>번호</th>
+                        <th>번호2</th>
                         <th>email</th>
                         <th>이름</th>
                         <th id="change">제목</th>
@@ -219,7 +220,7 @@
 
 
                             for (let i = 0, len = list.length || 0; i < len; i++) {
-
+                                //let countNum = 1;
                                 let status = "";
                                 let dat = "";
                                 let statusVar = list[i].status;
@@ -257,8 +258,10 @@
 
                                 }
 
+                                //console.log("returnCountCall : " + resultNum);
+
                                 str += "<tr class='boardList'>";
-                                // str += "<td>"+list[i].index+"</td>"
+                                //str += "<td>"+resultNum+"</td>";
                                 str += "<td data-sn='12'>" + list[i].sn + "</td>";
                                 str += "<td>" + list[i].userId + "</td>";
                                 str += "<td>" + list[i].name + "</td>";
@@ -314,7 +317,7 @@
                     //ex) 10개 정렬에서 20페이지 눌렀을 때 50개 정렬 시 20페이지에 데이터가 없어서 안나온다.
                     function pagingCount(){
                         console.log("pageFunction : "+amount);
-                        console.log("endNumPagungFuntion"+endNum)
+                        console.log("endNumPagingFuntion"+endNum)
                         if (endNum * amount >= cnt) {
                             endNum = Math.ceil(cnt / amount);
                         }

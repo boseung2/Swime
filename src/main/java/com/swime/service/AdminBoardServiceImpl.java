@@ -1,8 +1,6 @@
 package com.swime.service;
 
-import com.swime.domain.AdminBoardCriteria;
-import com.swime.domain.AdminBoardPageDTO;
-import com.swime.domain.BoardCriteria;
+import com.swime.domain.*;
 import com.swime.mapper.AdminBoardMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -15,6 +13,7 @@ public class AdminBoardServiceImpl implements AdminBoardService{
 
     private AdminBoardMapper mapper;
 
+
     //------------------------------관리자 게시판
 //    @Override
 //    public List<BoardVO> adminGetListWithPagingBySn(BoardCriteria cri) {
@@ -23,7 +22,7 @@ public class AdminBoardServiceImpl implements AdminBoardService{
 //
 //        return mapper.adminGetListWithPagingBySn(cri);
 //    }
-
+    //관리자 게시판
     @Override
     public AdminBoardPageDTO adminGetListWithPagingBySn(AdminBoardCriteria cri) {
 
@@ -34,4 +33,17 @@ public class AdminBoardServiceImpl implements AdminBoardService{
                 mapper.adminGetListWithPagingBySn(cri));
 
     }
+
+    //관리자 댓글
+    @Override
+    public ReplyPageDTO adminReplyGetListWithPagingBySn(AdminReplyCriteria cri) {
+        log.info("get adminReply Cri : " + cri);
+        return new ReplyPageDTO(
+                mapper.getCountBySn(),
+                mapper.adminReplyGetListWithPagingBySn(cri));
+    }
+
+
+
+
 }

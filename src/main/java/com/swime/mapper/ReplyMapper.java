@@ -41,15 +41,12 @@ public interface ReplyMapper {
     //public int getReplyCnt(Long brdSn);
 
 
-    //----------------------관리자 댓글 (나중에 관리자 파일로 옮기기)------------------------
+    //---------------------
     //게시판 댓글 페이징
     List<ReplyVO> adminGetListWithPagingBySn(@Param("cri") ReplyCriteria cri);
 
     //댓글 전체 개수
     int getCountBySn();
 
-    int adminRemove(Long sn);
-
-    int adminUpdate(ReplyVO reply);
 
 }

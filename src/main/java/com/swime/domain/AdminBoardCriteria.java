@@ -14,16 +14,17 @@ public class AdminBoardCriteria {
 
     //검색
     private String type; // S : 번호순 SS: 상태순 D : 날짜순
-//    private String keyword;
-//    private String bbsOrReply;
+    private String bbsOrReply;
+    private String search;
 
     public AdminBoardCriteria(){
-        this(1,10);
+        this(1,10,"S");
     }
 
-    public AdminBoardCriteria(int pageNum, int amount){
+    public AdminBoardCriteria(int pageNum, int amount, String type){
         this.pageNum = pageNum;
         this.amount = amount;
+        this.type = type;
 
     }
 
