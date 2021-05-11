@@ -55,7 +55,7 @@
             }
         }
 
-        <!-- 알림 드롭다운-->
+        /*<!-- 알림 드롭다운-->*/
         .dropdown {
             position: relative;
             display: inline-block;
@@ -96,8 +96,9 @@
 
     <div class="header-right">
         <sec:authorize access="isAuthenticated()">
-        <a href="/serviceCenter/list">고객센터</a>
-        <a><img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;"></a>
+            <a href="/serviceCenter/list">고객센터</a>
+            <a><img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;"></a>
+            <div style="float: right; width: 100px; height: 100px;background-color: #0c5460;"></div>
         </sec:authorize>
         <sec:authorize access="isAnonymous()">
             <a href="/user/register">회원가입</a>
@@ -247,5 +248,26 @@
             }
         })
     })
+
+    $(document).ready(function (){
+
+
+        let noti = $("#notice")[0];
+
+        let drop = $(".dropdown");
+
+        drop.offset({top: noti.offsetTop + 30, left: noti.offsetLeft * 100 / (window.innerWidth - 17)});
+
+        console.log("!!!!!!!!!!!!!!!!!!!");
+        console.dir(document);
+        console.log(document);
+        console.log(window.innerWidth - 17);
+        console.log(noti.offsetLeft);
+        console.log(document);
+        console.log(noti);
+        console.log(drop[0]);
+    })
+
+
 
 </script>
