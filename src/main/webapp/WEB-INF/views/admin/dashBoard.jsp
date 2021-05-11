@@ -134,31 +134,33 @@
 
             pieChartMaker(place, label, data);
         };
+        let datalist = [];
 
+        // await chartData("countUser", "none", $("#countUser"), writeInnerHtml);
+        // await chartData("countStudy", "none", $("#countStudy"), writeInnerHtml);
+        // await chartData("countGroup", "none", $("#countGroup"), writeInnerHtml);
 
-        await chartData("countUser", "none", $("#countUser"), writeInnerHtml);
-        await chartData("countStudy", "none", $("#countStudy"), writeInnerHtml);
-        await chartData("countGroup", "none", $("#countGroup"), writeInnerHtml);
+        await chartData("todayUserRegister", "none", $("#countUser"), topData);
+        await chartData("todayGroupRegister", "none", $("#countGroup"), topData);
+        await chartData("todayStudyRegister", "none", $("#countStudy"), topData);
         await chartData("countUserForMonth", "month", $("#myAreaChart"), makeChart);
         await chartData("getVisitCountByTime", "day", $("#myBarChart"), barChart);
         await chartData("getDashBoardLang", "none", $("#myPieChart"), pieChart);
         await chartData("getDashBoardLocale", "none", $("#myPieChart2"), pieChart);
-        await chartData("todayUserRegister", "none", $("#myModalBody"), topData);
 
 
-        let datalist = [];
 
         function topData(result, place){
+            writeInnerHtml(result.count, place);
             datalist.push(result);
-            console.log(datalist)
         }
 
-        showModal();
+        showModal(datalist);
     });
 
 
     
-    function showModal() {
+    function showModal(datalist) {
         let {modalSetting, show, modalCssSetting} = modal($("#modalPlace"));
         // console.log(a);
         // let test = function () {
@@ -170,29 +172,27 @@
 
         modalCssSetting(800);
 
+
+
         $(".stretched-link").on("click", function () {
             let hrefTags = $(".stretched-link");
             let testStr = ("" +
-                "<div>jfkdsfdsj</div>" +
-                "<div>jfkdsfdsj</div>" +
-                "<div>jfkdsfdsj</div>" +
-                "<div>jfkdsfdsj</div>" +
-                "<div>jfkdsfdsjdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdssdfdsfsd</div>"
+                "<table border='1'>" +
+                "   <thead>" +
+                "       <tr>" +
+                "           <td>" +
+                "sadsadas" +
+                "           </td>" +
+                "       </td>" +
+                "   </thead>" +
+                "</table>"
             );
 
             for (let i = 0; i < hrefTags.length; i++) {
                 let title = String($(".row1 > div:nth-child(" + (i + 1) + ") > div > div.card-body > div:nth-child(1)")[0].innerHTML);
 
-                if(hrefTags[1] === this) {
-                    modalSetting(title, "버튼 테스트중", 'confirm', function () {
-                        for (let i = 0; i <3; i++) {
-                            console.log(i);
-                        }
-                        console.log("function 종료");
-                    });
-                    break;
-                }
                 if(hrefTags[i] === this) {
+                    console.log(datalist[i].list);
                     modalSetting(title, testStr, 'alert');
                     break;
                 }
@@ -206,33 +206,34 @@
 
 
     function chartData(url, dataInterval, place, func){
+        return new Promise((resolve,reject) => {
+            let cal = new Date();
+            let data = {};
 
-
-        let cal = new Date();
-        let data = {};
-
-        if(dataInterval === "month"){
-            data = {
-                year : cal.getFullYear(),
-                month : cal.getMonth() + 1
-            };
-        }else if(dataInterval === "day"){
-            data = {
-                year : cal.getFullYear(),
-                month : cal.getMonth() + 1,
-                day : cal.getDate()
-            };
-        }
-
-        $.ajax({
-            url : "/adminData/" + url,
-            dataType : "json",
-            data : data
-        }).done(function (result) {
-            // console.log(url);
-            if(func !== undefined) func(result, place);
-
-        });
+            if (dataInterval === "month") {
+                data = {
+                    year: cal.getFullYear(),
+                    month: cal.getMonth() + 1
+                };
+            } else if (dataInterval === "day") {
+                data = {
+                    year: cal.getFullYear(),
+                    month: cal.getMonth() + 1,
+                    day: cal.getDate()
+                };
+            }
+            $.ajax({
+                url: "/adminData/" + url,
+                dataType: "json",
+                data: data
+            }).done(function (result) {
+                console.log(url);
+                if (func !== undefined) func(result, place);
+                resolve();
+            }).fail(function () {
+                reject();
+            });
+        })
     }
 
 
