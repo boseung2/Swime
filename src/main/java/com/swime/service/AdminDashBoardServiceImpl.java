@@ -1,5 +1,7 @@
 package com.swime.service;
 
+import com.swime.domain.DashBoardLangVO;
+import com.swime.domain.DashBoardLocaleVO;
 import com.swime.mapper.AdminDashBoardMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 
 
 @Log4j
@@ -47,5 +50,32 @@ public class AdminDashBoardServiceImpl implements AdminDashBoardService{
         }
 
         return list;
+    }
+
+    @Override
+    public void visitCountUp() {
+        mapper.visitCountUp();
+    }
+
+    @Override
+    public Integer[] getVisitCountByTime(int year, int month, int day) {
+        Integer[] list = new Integer[24];
+        Integer tmp;
+
+        for (int i = 0; i < 24; i++) {
+            tmp = mapper.getVisitCountByTime(year, month, day,i);
+            list[i] = tmp == null ? 0 : tmp;
+        }
+        return list;
+    }
+
+    @Override
+    public List<DashBoardLangVO> getDashBoardLang() {
+        return mapper.getDashBoardLang();
+    }
+
+    @Override
+    public List<DashBoardLocaleVO> getDashBoardLocale() {
+        return mapper.getDashBoardLocale();
     }
 }

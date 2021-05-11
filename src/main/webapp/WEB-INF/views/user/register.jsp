@@ -1,19 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
-<%@include file="../includes/header.jsp" %>
+<%@include file="../includes/tagLib.jsp" %>
 
 <script type="text/javascript" src="../../../resources/js/validation.js"></script>
 <link href="/resources/css/user.css" rel="stylesheet">
 <link href="/resources/css/spinner.css" rel="stylesheet">
+<body>
+<%--<div id="errorMsgDiv"></div>--%>
+<div class="full">
 
-<div>
-    <main class="form-signin">
+    <div class="content">
         <div id="regdiv">
             <div id="errorMsgDiv"></div>
             <%--            <form id="regForm" action="/user/AuthSuccess">--%>
             <form id="regForm" action="/user/register" method="post">
-                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+                <h1 class="subtitle">SignUp</h1>
 
                 <label for="id" class="inp">
                     <input type="email" id="id" name="id" placeholder="&nbsp;" required>
@@ -39,17 +41,18 @@
                     <span class="focus-bg"></span>
                 </label>
                 <br>
-                <div class="checkbox mb-3">
+                <div class="autologin">
                     <label>
-                        <input id="agree" type="checkbox" value="이용약관" required> 본 사이트 이용약관에 동의합니다.
+                        <input id="agree" type="checkbox" value="이용약관" required> 본 사이트 <a href="terms">이용약관</a>에 동의합니다.
                     </label>
                 </div>
                 <sec:csrfInput/>
                 <%--            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
             </form>
-            <button id="submitBtn" class="w-100 btn btn-lg btn-primary">
+            <div class="buttonForm">
+            <button id="submitBtn" class="loginButton">
                 <div style="margin: auto;width: 110px;">
-                    <div id="subDiv" style="display: flex;">
+                    <div id="subDiv" style="display: flex; justify-content: center">
                         <div class="btn-inner" id="spinnerBox">
                             <div class="loader" style="width:35px;">
                                 <svg class="circular" viewBox="25 25 50 50">
@@ -58,14 +61,16 @@
                             </div>
                         </div>
                         <div class="btn-inner">
-                            Sign up
+                            SignUp
                         </div>
                     </div>
                 </div>
             </button>
+            </div>
         </div>
-    </main>
+    </div>
 </div>
+</body>
 
 
 <script>
@@ -198,4 +203,4 @@
 </script>
 
 <link href="/resources/css/UserFooterPos.css" rel="stylesheet">
-<%@include file="../includes/footer.jsp" %>
+<%--<%@include file="../includes/footer.jsp" %>--%>

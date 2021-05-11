@@ -37,10 +37,36 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Swime admin</title>
-
+    <style>
+        #myModal{
+            position:absolute;
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,0.8);
+            top:0;
+            left:0;
+            display:none;
+            z-index: 2000;
+        }
+    </style>
 </head>
 <body class="sb-nav-fixed">
+    <div class="modal" style="display:none;" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-modal="true" style="padding-right: 17px; display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">내용.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+
 
 
     <a class="navbar-brand" href="/">
@@ -118,6 +144,8 @@
 </html>
 
 <script>
+    let pieChartMaker;
+
     $(document).ready(function () {
         let first = $(".nav > .nav-link")[0];
         $(first).addClass('active');
