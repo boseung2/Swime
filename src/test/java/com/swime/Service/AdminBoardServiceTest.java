@@ -28,14 +28,14 @@ public class AdminBoardServiceTest {
 //        service.adminGetListWithPagingBySn(new BoardCriteria(3,10))
 //                .forEach(board -> log.info(board));
 //    }
-    @Test
-    public void testAdminGetListWithPagingBySn(){
-        BoardCriteria cri = new BoardCriteria();
-        cri.setPageNum(2);
-        cri.setAmount(10);
-
-        log.info(service.adminGetListWithPagingBySn(cri));
-
-    }
+//    @Test
+//    public void testAdminGetListWithPagingBySn(){
+//        BoardCriteria cri = new BoardCriteria();
+//        cri.setPageNum(2);
+//        cri.setAmount(10);
+//
+//        log.info(service.adminGetListWithPagingBySn(cri));
+//
+//    }
 
 }

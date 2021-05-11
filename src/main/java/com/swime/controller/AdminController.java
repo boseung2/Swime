@@ -47,36 +47,37 @@ public class AdminController {
     public ResponseEntity<?> adminGetListWithPaging(
             @PathVariable("page") int page,
             @RequestParam(value = "amount") int amount,
-            @RequestParam(value = "bbs") String bbs){
+            @RequestParam(value = "bbs") String bbs,
+            @RequestParam(value = "sort") String sort){
 
         log.info("controller page pram :" + page);
         log.info("amount : " + amount);
         log.info("bbs : " + bbs);
+        log.info("sort : " + sort);
 
         Map<String,Object> map = new HashMap<>();
 
 
-        if (bbs.equals("board")){
+        if(bbs.equals("board")){
             BoardCriteria boardCri = new BoardCriteria(page,amount);
             log.info("adminBoardCri : "+ boardCri);
             AdminBoardPageDTO boardList = boardService.adminGetListWithPagingBySn(boardCri);
+
             map.put("board", boardList);
             map.put("boardCompare", "isBoard");
-            //return new ResponseEntity<>(list,HttpStatus.OK);
+
             return new ResponseEntity<>(map,HttpStatus.OK);
         }else{
             ReplyCriteria replyCri = new ReplyCriteria(page, amount);
             ReplyPageDTO replyList = replyService.adminGetListWIthPagingBySn(replyCri);
             log.info("adminReplyCri : " + replyCri);
+
             map.put("reply", replyList);
             map.put("replyCompare", "isReply");
-//            return new ResponseEntity<>(replyList,HttpStatus.OK);
+
             return new ResponseEntity<>(map,HttpStatus.OK);
 
         }
-
-
-
 
 //        return new ResponseEntity<>(boardService
 //                .adminGetListWithPagingBySn(cri), HttpStatus.OK);

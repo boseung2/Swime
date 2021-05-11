@@ -39,8 +39,7 @@ public interface BoardService {
     //------------------------관리자 게시판----------------------------
 
     //List<BoardVO> adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
-    AdminBoardPageDTO adminGetListWithPagingBySn(
-            @Param("cri") BoardCriteria cri);
+    AdminBoardPageDTO adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
 
 
 

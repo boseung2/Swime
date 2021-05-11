@@ -27,18 +27,32 @@ public class AdminBoardMapperTests {
 //        List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
 //        list.forEach(board->log.info(board));
 //    }
-    @Test
-    public void testAdminGetListWithPagingBySn2(){
-        BoardCriteria cri = new BoardCriteria();
-        cri.setPageNum(2);
-        cri.setAmount(10);
-        List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
-
-        list.forEach(board-> log.info(board));
-    }
+//    @Test
+//    public void testAdminGetListWithPagingBySn2(){
+//        BoardCriteria cri = new BoardCriteria();
+//        cri.setPageNum(2);
+//        cri.setAmount(10);
+//        List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
+//
+//        list.forEach(board-> log.info(board));
+//    }
     @Test
     public void testAdminGEtCountBySn(){
         log.info(mapper.adminGetCountBySn());
+    }
+
+    @Test
+    public void testAdminGetListWithPagingBySnStatus(){
+        BoardCriteria cri = new BoardCriteria();
+        //cri.setPageNum(1);
+        //cri.setAmount(10);
+        //cri.setType("S");
+        //cri.setType("SS");
+        cri.setType("D");
+        //cri.setKeyword("삭제");
+
+        List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
+        list.forEach(board -> log.info(board));
     }
 
 
