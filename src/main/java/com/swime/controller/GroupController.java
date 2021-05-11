@@ -127,7 +127,7 @@ public class GroupController {
             }
         } catch(Exception e) {
             log.error("delete file error" + e.getMessage());
-        };
+        }
 
     }
 
