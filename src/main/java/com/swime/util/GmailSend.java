@@ -45,7 +45,7 @@ public class GmailSend {
             message.setSubject(vo.getSubject());
 
             // Text
-            message.setText(vo.getText());
+            message.setText(vo.getText(), "utf-8", "html");
 
             // send the message
             Transport.send(message);
