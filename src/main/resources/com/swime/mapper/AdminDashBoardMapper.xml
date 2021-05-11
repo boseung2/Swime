@@ -42,7 +42,7 @@
         select description string1, reg_date date1
         from tgrp
         where reg_date BETWEEN
-            trunc(current_date-10, 'dd')
+            trunc(current_date, 'dd')
             and trunc(current_date, 'dd') + 0.99999
     </select>
 
@@ -60,7 +60,7 @@
         select name string1, reg_date date1
         from tstd
         where reg_date BETWEEN
-                  trunc(current_date-10, 'dd')
+                  trunc(current_date, 'dd')
                   and trunc(current_date, 'dd') + 0.99999
     </select>
 

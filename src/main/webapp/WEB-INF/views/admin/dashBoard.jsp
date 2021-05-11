@@ -176,26 +176,65 @@
 
         $(".stretched-link").on("click", function () {
             let hrefTags = $(".stretched-link");
-            let testStr = ("" +
-                "<table border='1'>" +
-                "   <thead>" +
-                "       <tr>" +
-                "           <td>" +
-                "sadsadas" +
-                "           </td>" +
-                "       </td>" +
-                "   </thead>" +
-                "</table>"
-            );
+
 
             for (let i = 0; i < hrefTags.length; i++) {
                 let title = String($(".row1 > div:nth-child(" + (i + 1) + ") > div > div.card-body > div:nth-child(1)")[0].innerHTML);
 
                 if(hrefTags[i] === this) {
-                    console.log(datalist[i].list);
-                    modalSetting(title, testStr, 'alert');
+                    // console.log(datalist[i].list);
+                    let str = makeTable(datalist[i].list, i);
+                    modalSetting(title, str, 'alert');
                     break;
                 }
+            }
+            
+            function makeTable(list, who) {
+                if(list.length === 0) return "<div>데이터가 존재 하지 않습니다</div>";
+
+                let str = "";
+
+                let column1, column2, column3, column4;
+
+                if(who === 0){
+                    column1 = "아이디";
+                    column2 = "생성시간";
+                }
+                if(who === 1){
+                    column1 = "모임명";
+                    column2 = "생성시간";
+                }
+                if(who === 2){
+                    column1 = "스터디명";
+                    column2 = "생성시간";
+                }
+
+                str += "" +
+                    "<table border='1'>" +
+                    "   <thead>" +
+                    "       <tr>" +
+                    "           <td>" + column1 + "</td>" +
+                    "           <td>" + column2 + "</td>" +
+                    "       </tr>" +
+                    "   </thead>" +
+                    "   <tdody>"
+                ;
+
+                for (let i = 0; i < list.length; i++) {
+                    str += "" +
+                        "<tr>" +
+                        "   <td>" + list[i].string1 + "</td>" +
+                        "   <td>" + list[i].date1 + "</td>" +
+                        "</tr>"
+                    ;
+                }
+
+                str += ("" +
+                    "   </tdody>"
+                );
+
+                console.log(list);
+                return str;
             }
 
             show();
