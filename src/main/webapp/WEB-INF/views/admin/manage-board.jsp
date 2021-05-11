@@ -29,7 +29,7 @@
                         <option value="board">게시물</option>
                         <option value="reply">댓글</option>
                     </select>
-                    <select>
+                    <select class="bbsOrReply">
                         <option value="">--전체--</option>
                         <option value="snSort">번호순</option>
                         <option value="dateSort">날짜순</option>
@@ -37,7 +37,7 @@
                     </select>
 
                     <div class="search-bar">
-                        <input type="text" placeholder="Search.." >
+                        <input class="inputButton" type="text" placeholder="Search.." maxlength="20">
                         <button class="search-button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
