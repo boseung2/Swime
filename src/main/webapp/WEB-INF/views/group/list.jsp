@@ -17,10 +17,10 @@
     <div class="container">
         <!-- 검색필터 -->
         <div class="filter">
-            <h4 style="font-family: 'Roboto', sans-serif;">Filter</h4><br>
+            <h4 class="category">Filter</h4><br>
             <form id="searchForm" class="form" action="/group/list" method="get">
             <div class="form__group">
-                <label for="category">카테고리</label>
+                <label class="select" for="category">카테고리</label>
                 <select id="category" name="category" data-dropdown1>
                     <option value="">전체</option>
                     <option value="GRCA01">프론트엔드</option>
@@ -37,7 +37,7 @@
                 </select>
             </div>
             <div class="form__group">
-                <label for="sigungu">지역</label>
+                <label class="select" for="sigungu">지역</label>
                 <select id="sigungu" name="sigungu" data-dropdown2>
                     <option value="">전체</option>
                     <option value="LOGU01" hidden="hidden">서울시 강남구</option>
@@ -101,7 +101,7 @@
                 </select>
             </div>
             <div class="form__group">
-                <label for="groupName">모임명</label>
+                <label class="select" for="groupName">모임명</label>
                 <input id="groupName" name="groupName" placeholder="모임명">
             </div>
             <input type="hidden" name="order" value="rating" id="order">
