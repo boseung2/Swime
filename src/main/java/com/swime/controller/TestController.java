@@ -5,16 +5,16 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RequestMapping("/test")
 @Controller
-@RequestMapping("/")
 @Log4j
 @AllArgsConstructor
-public class MainController {
+public class TestController {
 
-    @GetMapping("/mainBody")
-    public void body(){
-
+    @GetMapping("/test1")
+    public void test() {
+        log.info("test ing....");
     }
-
 }

@@ -30,16 +30,6 @@ public class ServletConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry
-//            .addMapping("/**")
-//            .allowedOrigins("*")
-//            .allowedMethods("*")
-//            .maxAge(3000)
-//        ;
-//    }
-
     @Bean
     public MultipartResolver multipartResolver() {
         StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();

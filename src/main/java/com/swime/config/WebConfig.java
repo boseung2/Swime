@@ -1,14 +1,15 @@
 package com.swime.config;
 
 import com.swime.util.CustomCorsFilter;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import javax.servlet.Filter;
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletRegistration;
+import javax.servlet.*;
 
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{RootConfig.class, SecurityConfig.class, WebSocketConfig.class};
@@ -24,7 +25,6 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return new String[]{"/"};
     }
 
-
     //첨부파일
     @Override
     public void customizeRegistration(ServletRegistration.Dynamic registration) {
@@ -34,7 +34,6 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
                 ("C://upload//temp", 20971520,
                         41943040, 20971520);
         registration.setMultipartConfig(multipartConfig);
-
     }
 
     @Override
