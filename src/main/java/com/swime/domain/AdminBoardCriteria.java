@@ -14,21 +14,23 @@ public class AdminBoardCriteria {
 
     //검색
     private String type; // S : 번호순 SS: 상태순 D : 날짜순
-    private String bbsOrReply;
+    private String active;
     private String search;
+    //private String bbsOrReply;
 
     public AdminBoardCriteria(){
-        this(1,10,"S");
+        this(1,10,"S","AD");
     }
 
-    public AdminBoardCriteria(int pageNum, int amount, String type){
+    public AdminBoardCriteria(int pageNum, int amount, String type, String active){
         this.pageNum = pageNum;
         this.amount = amount;
         this.type = type;
+        this.active = active;
 
     }
 
-    public String[] getTypeArr2(){
+    public String[] getTypeArr(){
         return type == null? new String[] {}: type.split("");
     }
 

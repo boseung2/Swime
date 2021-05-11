@@ -29,11 +29,18 @@
                         <option value="board">게시물</option>
                         <option value="reply">댓글</option>
                     </select>
+
                     <select class="sort" id="sort" name="sort">
                         <option value="S">--전체--</option>
                         <option value="S">번호순</option>
                         <option value="D">날짜순</option>
                         <option value="SS">상태순</option>
+                    </select>
+
+                    <select class="act" id="act" name="act">
+                        <option value="AD">-정상/삭제-</option>
+                        <option value="A">정상</option>
+                        <option value="D">삭제</option>
                     </select>
 
                     <div class="search-bar">
@@ -47,8 +54,9 @@
                 <table class="table table-bordered" cellspacing="0">
                     <thead>
                     <tr class="boardHeader">
+                        <th>선택</th>
                         <th>번호</th>
-                        <th>번호2</th>
+                        <th>번호(sn)</th>
                         <th>email</th>
                         <th>이름</th>
                         <th id="change">제목</th>
@@ -111,6 +119,22 @@
         let bbsOrReplyVar = "board"; // select option 게시글 or 댓글 defalut값
 
         let sort = "S";
+        let active = "AD";
+        //정상/삭제 select option
+        $('#act').on('change',function(){
+            $('#act').each(function(){
+                if($(this).val() == 'A'){
+                    active = 'A';
+                }else if($(this).val() == 'D'){
+                    active = 'D';
+                }else{
+                    active = 'AD'
+                }
+            })
+            console.log(active);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active);
+
+        }) // end act function
 
         //정렬 select option
         $('#sort').on('change',function(){
@@ -125,7 +149,7 @@
                 }
             });
             console.log(sort);
-            showBoardList(page, amount, bbsOrReplyVar, sort);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active);
         });
 
 
@@ -143,8 +167,7 @@
             });
 
             console.log("bbsOrReplyVal : "+bbsOrReplyVar);
-            showBoardList(page,amount,bbsOrReplyVar,sort);
-
+            showBoardList(page, amount, bbsOrReplyVar, sort, active);
         })
 
         //10/25/50 개수 select option
@@ -165,20 +188,20 @@
             });
 
             console.log("boardCntSort"+amount);
-            showBoardList(page, amount, bbsOrReplyVar,sort);
-
+            showBoardList(page, amount, bbsOrReplyVar, sort, active);
         });
 
 
-        showBoardList(page, amount, bbsOrReplyVar, sort); //defalut값 1,10, 게시판
+        showBoardList(page, amount, bbsOrReplyVar, sort, active); //defalut값 1,10, 게시판
 
-        function showBoardList(page, boardCntSort, bbsOrReplyVar, sort){
+        function showBoardList(page, boardCntSort, bbsOrReplyVar, sort, active){
             console.log("showBoardListPage : " +page);
             console.log("boardCntSort : " + boardCntSort);
             console.log("bbsOrReplyVar : " + bbsOrReplyVar);
-            console.log("sort : " + sort)
+            console.log("sort : " + sort);
+            console.log("active : " + active);
 
-                adminBoardListService.adminBoardList(page, boardCntSort, bbsOrReplyVar, sort,
+                adminBoardListService.adminBoardList(page, boardCntSort, bbsOrReplyVar, sort, active,
                     function (cnt, list, compare) {
 
                         let str = "";
@@ -188,6 +211,7 @@
                         console.log("list"+list);
                         console.log("compare"+compare);
                         console.log("sort : "+sort);
+                        console.log("active : "+active);
 
                         //board or reply
                         if (compare === 'isBoard') {
@@ -261,7 +285,8 @@
                                 //console.log("returnCountCall : " + resultNum);
 
                                 str += "<tr class='boardList'>";
-                                //str += "<td>"+resultNum+"</td>";
+                                str += "<td>체크박스</td>";
+                                str += "<td>그냥번호</td>";
                                 str += "<td data-sn='12'>" + list[i].sn + "</td>";
                                 str += "<td>" + list[i].userId + "</td>";
                                 str += "<td>" + list[i].name + "</td>";
@@ -378,7 +403,7 @@
 
                     page = targetPageNum;
 
-                    showBoardList(page,amount, bbsOrReplyVar, sort);
+                    showBoardList(page,amount, bbsOrReplyVar, sort,active);
 
 
                 });

@@ -1,6 +1,6 @@
 let adminBoardListService = (function(){
 
-    function adminBoardList(page, amount, bbs, sort, callback, error){
+    function adminBoardList(page, amount, bbs, sort, active, callback, error){
         //let page = param.page || 1;
         //let amount2 = amount || 10;
 
@@ -9,9 +9,10 @@ let adminBoardListService = (function(){
         console.log("js/amount : " + amount);
         console.log("js/bbs : " + bbs);
         console.log("js/sort : " + sort);
+        console.log("js/active : " + active);
         // + "/?amount="+amount2
         $.getJSON("/admin/manageBoard/" + page + "?amount="+amount
-            + "&bbs=" + bbs + "&sort=" + sort,
+            + "&bbs=" + bbs + "&sort=" + sort + "&active=" + active,
             function(data){
                 console.log(data);
                 console.dir(data);

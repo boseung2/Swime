@@ -6,6 +6,17 @@
 
     <select id="adminGetCountBySn" resultType="int">
         select count(*) from tbrd where sn > 0
+        <trim prefix="AND">
+            <if test="active == 'A'.toString()">
+                status = 'BOST01'
+            </if>
+            <if test="active == 'D'.toString()">
+                status = 'BOST02'
+            </if>
+            <if test="active == 'AD'.toString()">
+                status in ('BOST01','BOST02')
+            </if>
+        </trim>
     </select>
 
     <!--게시판 번호순 정렬-->
@@ -24,8 +35,10 @@
                     tbrd b
                 where
                     u.id = b.user_id
+                ]]>
+                <include refid="boardActive"></include>
                 order by
-    ]]>
+
         <choose>
             <when test="type == 'S'.toString()">
                 sn asc
@@ -46,26 +59,54 @@
         ]]>
     </select>
 
+
+    <sql id="boardActive">
+        <trim prefix="AND">
+            <if test="active == 'A'.toString()">
+                b.status = 'BOST01'
+            </if>
+            <if test="active == 'D'.toString()">
+                b.status = 'BOST02'
+            </if>
+            <if test="active == 'AD'.toString()">
+                b.status in ('BOST01','BOST02')
+            </if>
+        </trim>
+    </sql>
+
     <!--테스트-->
     <select id="adminGetListWithPagingBySn2" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
-    <![CDATA[
+        <![CDATA[
 
         select *
         from
             (
-                select rownum rn,sn, user_id, name, title, reg_Date, upd_Date, status
+            select rownum rn,sn, user_id, name, title, reg_Date, upd_Date, status
+            from
+                (
+                select b.sn, b.user_id, u.name, b.title, b.reg_Date, b.upd_Date, b.status
                 from
-                    (
-                        select b.sn, b.user_id, u.name, b.title, b.reg_Date, b.upd_Date, b.status
-                        from
-                            tuser u,
-                            tbrd b
-                        where
-                            u.id = b.user_id
-                        order by
-                            sn asc
-                    )
-                where rownum <= #{pageNum} * #{amount}
+                    tuser u,
+                    tbrd b
+                where
+                    u.id = b.user_id
+                order by
+    ]]>
+
+        <choose>
+            <when test="type == 'S'.toString()">
+                sn asc
+            </when>
+            <when test="type == 'D'.toString()">
+                reg_Date desc
+            </when>
+            <when test="type == 'SS'.toString()">
+                status asc
+            </when>
+        </choose>
+        )
+        <![CDATA[
+            where rownum <= #{pageNum} * #{amount}
             )
         where rn > (#{pageNum} - 1) * #{amount}
 
@@ -74,10 +115,23 @@
 
 
 
-    <!--관리자 댓글 페이징-->
+
+
+    <!--****************************관리자 댓글 페이징*****************************-->
 
     <select id="getCountBySn" resultType="int">
         select count(*) from trpl where sn > 0
+        <trim prefix="AND">
+            <if test="active == 'A'.toString()">
+                status = 'RPST01'
+            </if>
+            <if test="active == 'D'.toString()">
+                status = 'RPST02'
+            </if>
+            <if test="active == 'AD'.toString()">
+                status in ('RPST01','RPST02')
+            </if>
+        </trim>
     </select>
 
     <!--번호순 정렬-->
@@ -86,16 +140,17 @@
         select *
         from
             (
-                select rownum rn,sn, brd_sn, comment_group, user_id, name, content, status, reg_date, upd_date
+            select rownum rn,sn, brd_sn, comment_group, user_id, name, content, status, reg_date, upd_date
+            from
+                (
+                select r.sn, r.brd_sn, r.comment_group, r.user_id, u.name, r.content, r.status, r.reg_date, r.upd_date
                 from
-                    (
-                        select r.sn, r.brd_sn, r.comment_group, r.user_id, u.name, r.content, r.status, r.reg_date, r.upd_date
-                        from
-                            trpl r,tuser u
-                        where
-                            r.user_id = u.id
-                        order by
+                    trpl r,tuser u
+                where
+                    r.user_id = u.id
     ]]>
+            <include refid="replyActive"></include>
+            order by
             <choose>
                 <when test="type == 'S'.toString()">
                     sn asc
@@ -116,6 +171,20 @@
         ]]>
     </select>
 
+    <sql id="replyActive">
+        <trim prefix="AND">
+            <if test="active == 'A'.toString()">
+                r.status = 'RPST01'
+            </if>
+            <if test="active == 'D'.toString()">
+                r.status = 'RPST02'
+            </if>
+            <if test="active == 'AD'.toString()">
+                r.status in ('RPST01','RPST02')
+            </if>
+        </trim>
+    </sql>
+
     <!--테스트-->
     <select id="adminReplyGetListWithPagingBySn2" parameterType="com.swime.domain.ReplyVO" resultType="com.swime.domain.ReplyVO">
     <![CDATA[
@@ -131,14 +200,49 @@
                         where
                             r.user_id = u.id
                         order by
-                            sn asc
+    ]]>
+                        <choose>
+                            <when test="type == 'S'.toString()">
+                                sn asc
+                            </when>
+                            <when test="type == 'D'.toString()">
+                                reg_Date desc
+                            </when>
+                            <when test="type == 'SS'.toString()">
+                                status asc
+                            </when>
+                        </choose>
+                        sn asc
                     )
+                <![CDATA[
                 where rownum <= #{pageNum} * #{amount}
             )
         where rn > (#{pageNum} -1) * #{amount}
 
         ]]>
     </select>
+
+
+
+<!--    select *-->
+<!--    from-->
+<!--    (-->
+<!--    select rownum rn,sn, brd_sn, comment_group, user_id, name, content, status, reg_date, upd_date-->
+<!--    from-->
+<!--    (-->
+<!--    select r.sn, r.brd_sn, r.comment_group, r.user_id, u.name, r.content, r.status, r.reg_date, r.upd_date-->
+<!--    from-->
+<!--    trpl r,tuser u-->
+<!--    where-->
+<!--    r.user_id = u.id-->
+<!--    order by-->
+<!--    -->
+<!--    sn asc-->
+<!--    )-->
+<!--    where rownum <= #{pageNum} * #{amount}-->
+<!--    )-->
+<!--    where rn > (#{pageNum} -1) * #{amount}-->
+
 
 
 </mapper>

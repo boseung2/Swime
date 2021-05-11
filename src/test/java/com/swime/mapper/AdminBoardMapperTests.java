@@ -39,7 +39,9 @@ public class AdminBoardMapperTests {
 //    }
     @Test
     public void testAdminGEtCountBySn(){
-        log.info(mapper.adminGetCountBySn());
+        AdminBoardCriteria cri = new AdminBoardCriteria();
+        cri.setActive("D");
+        log.info(mapper.adminGetCountBySn(cri));
     }
 
     @Test
@@ -48,11 +50,21 @@ public class AdminBoardMapperTests {
         //cri.setPageNum(1);
         //cri.setAmount(10);
         cri.setType("D");
-        //cri.setType("SS");
+        cri.setActive("D");
+        //cri.setActive("A");
         //cri.setKeyword("삭제");
         List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
         list.forEach(board -> log.info(board));
     }
+
+//    @Test
+//    public void testAdminGetCount(){
+////        AdminBoardCriteria cri = new AdminBoardCriteria();
+////        cri.setActive("D");
+////        cri.setActive("");
+//        int count = mapper.adminGetCountBySn();
+//        log.info(count);
+//    }
 
 
 
