@@ -23,9 +23,12 @@
 }
 
 .filter {
+    display: flex;
+    flex-direction: column;
     max-width: 100%;
-    margin: 0 auto;
-    padding: 50px 0px;
+    /*margin: 0 auto;*/
+    padding: 25px 0px;
+    line-height: 0;
 }
 
 .form {
@@ -169,7 +172,9 @@
 
 .order-box {
     display : flex;
-    margin-bottom : 50px;
+    margin-bottom : 1rem;
+    margin-left: 1rem;
+    opacity: 70%;
 }
 
 .order-box select {
@@ -179,4 +184,13 @@
 .order-box select:focus {
     border-color: #0062cc;
     box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+h4.category{
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    opacity: 70%;
+    font-family: 'Roboto', sans-serif;
+}
+label.select{
+    margin: 0.5rem;
 }

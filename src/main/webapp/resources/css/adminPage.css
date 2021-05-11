@@ -10715,6 +10715,8 @@ body {
 .option-search {
   display: flex;
   flex-direction: row;
+  height: 30px;
+  margin-bottom: 1rem;
 }
 .search-bar {
   display: flex;

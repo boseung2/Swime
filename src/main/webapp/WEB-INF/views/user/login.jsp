@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-<%@include file="../includes/header.jsp" %>
+<%@include file="../includes/tagLib.jsp" %>
 
 
 
@@ -30,13 +30,17 @@
 </style>
 
 <link href="/resources/css/user.css" rel="stylesheet">
+<body>
+
+<div class="full">
+<%--    <img src="../../../resources/img/background.jpg">--%>
 <div class="content">
     <div id="regdiv">
         <div id="errorMsgDiv">
 
         </div>
         <form id="regForm" action="/user/login" method="post">
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <h1 class="subtitle">Login</h1>
 
             <label for="email" class="inp">
                 <input type="email" id="email" name="id" placeholder="&nbsp;">
@@ -52,24 +56,34 @@
             </label>
             <br>
 
-            <div>
+            <div class="autologin">
+                <div>
                 <input type="checkbox" id="check" name="remember-me">
                 <label for="check">자동로그인</label>
+                </div>
+                <a href="/user/register">아직 회원이 아니신가요?</a>
             </div>
 
             <sec:csrfInput/>
             <%--        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
 
-            <div>
-                <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login"></button>
+            <div class="buttonForm">
+                <input type="submit" class="loginButton" value="로그인">
             </div>
         </form>
         <%--        <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login"></button>--%>
-        <a class="w-100 btn btn-lg btn-primary" style="margin-top: 30px;"
-           href="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://localhost/user/login/github&scope=repo,user"
-        >GitHub 아이디로 로그인</a>
+
+        <div class="buttonForm" >
+
+            <a class="loginButton2" href="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://localhost/user/login/github&scope=repo,user"
+            ><i class="fab fa-github" style="margin-right: 10px"></i> <span class="git">GitHub 아이디로 로그인</span></a>
+        </div>
     </div>
 </div>
+
+</div>
+
+</body>
 
 
 
@@ -116,4 +130,4 @@
 </script>
 
 <link href="/resources/css/UserFooterPos.css" rel="stylesheet">
-<%@include file="../includes/footer.jsp" %>
+<%--<%@include file="../includes/footer.jsp" %>--%>

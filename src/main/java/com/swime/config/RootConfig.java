@@ -44,7 +44,7 @@ public class RootConfig {
         System.setProperty("java.security.egd", "file:///dev/urandom");
 
 
-        if(true){
+        if(false){
             System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         }else{
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
@@ -52,6 +52,7 @@ public class RootConfig {
 
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+
 
         if(true) {
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
@@ -66,6 +67,7 @@ public class RootConfig {
 //            hikariConfig.setUsername("swime1");
 //            hikariConfig.setPassword("1234");
         }
+
         return new HikariDataSource(hikariConfig);
     }
 
