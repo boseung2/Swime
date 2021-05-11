@@ -16,6 +16,18 @@
         ]]>
     </select>
 
+    <select id="todayUserRegister" resultType="com.swime.domain.DashBoardModalDataVO">
+        <![CDATA[
+        select id string1
+        from tuser
+        where reg_date BETWEEN
+            trunc(current_date-10, 'dd')
+            and trunc(current_date, 'dd') + 0.99999
+        ]]>
+    </select>
+    <select id="todayGroupRegister" resultType="com.swime.domain.DashBoardModalDataVO"></select>
+    <select id="todayStudyRegister" resultType="com.swime.domain.DashBoardModalDataVO"></select>
+
     <select id="countTodayGroupRegister" resultType="int">
         <![CDATA[
         select count(*)

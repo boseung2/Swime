@@ -3,7 +3,7 @@ console.log("modal module...");
 function modal(ctx){
     let modalStr = (
         "    <div class='modal' style='display:none;' id='myModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-modal='true' style='padding-right: 17px; display: block;'>\n" +
-        "        <div class='modal-dialog'>\n" +
+        "        <div class='custom-modal-dialog'>\n" +
         "            <div class='modal-content'>\n" +
         "                <div class='modal-header'>\n" +
         "                    <h4 class='modal-title' id='myModalLabel'>Modal title</h4>\n" +
@@ -64,16 +64,22 @@ function modal(ctx){
     }
 
 
+    function modalCssSetting(width){
+        $(".custom-modal-dialog").css('width', (width || 500) + 'px');
+    }
 
     $(ctx).html(modalStr);
+    modalCssSetting();
+
 
     return {
-        modalHide : function (){
+        hide : function (){
             $(".modal").fadeOut();
         },
-        modalShow :function (){
+        show :function (){
             $("#myModal").fadeIn();
         },
-        modalSetting : modalSetting
+        modalSetting : modalSetting,
+        modalCssSetting : modalCssSetting
     };
 }

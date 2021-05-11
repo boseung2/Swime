@@ -5927,6 +5927,10 @@ a.close.disabled {
     margin: 1.75rem auto;
   }
 
+  .custom-modal-dialog {
+    margin: 1.75rem auto;
+  }
+
   .modal-dialog-scrollable {
     max-height: calc(100% - 3.5rem);
   }
@@ -10590,7 +10594,7 @@ body {
   margin: 0;
 }
 .sb-topnav.navbar-dark #sidebarToggle {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(71, 71, 71, 0.5);
 }
 .sb-topnav.navbar-light #sidebarToggle {
   color: #212529;

@@ -149,48 +149,64 @@
     });
     
     function showModal() {
-        let {modalSetting, modalShow} = modal($("#modalPlace"));
+        let {modalSetting, show, modalCssSetting} = modal($("#modalPlace"));
         // console.log(a);
-        let test = function () {
-            for (let i = 0; i <3; i++) {
-                console.log(i);
-            }
-            console.log("function 종료");
-        }
+        // let test = function () {
+        //     for (let i = 0; i <3; i++) {
+        //         console.log(i);
+        //     }
+        //     console.log("function 종료");
+        // }
+
+        modalCssSetting(800);
 
         $(".stretched-link").on("click", function () {
             let hrefTags = $(".stretched-link");
+            let testStr = ("" +
+                "<div>jfkdsfdsj</div>" +
+                "<div>jfkdsfdsj</div>" +
+                "<div>jfkdsfdsj</div>" +
+                "<div>jfkdsfdsj</div>" +
+                "<div>jfkdsfdsjdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdssdfdsfsd</div>"
+            );
 
             for (let i = 0; i < hrefTags.length; i++) {
                 let title = String($(".row1 > div:nth-child(" + (i + 1) + ") > div > div.card-body > div:nth-child(1)")[0].innerHTML);
 
                 if(hrefTags[1] === this) {
-                    modalSetting(title, "버튼 테스트중", 'confirm', test);
+                    modalSetting(title, "버튼 테스트중", 'confirm', function () {
+                        for (let i = 0; i <3; i++) {
+                            console.log(i);
+                        }
+                        console.log("function 종료");
+                    });
                     break;
                 }
                 if(hrefTags[i] === this) {
-                    modalSetting(title, "미구현이올시다", 'alert');
+                    modalSetting(title, testStr, 'alert');
                     break;
                 }
             }
 
-            modalShow();
+            show();
         });
 
     }
 
 
 
-    function chartData(url, type, place, func){
+    function chartData(url, dataInterval, place, func){
+
+
         let cal = new Date();
         let data = {};
 
-        if(type === "month"){
+        if(dataInterval === "month"){
             data = {
                 year : cal.getFullYear(),
                 month : cal.getMonth() + 1
             };
-        }else if(type === "day"){
+        }else if(dataInterval === "day"){
             data = {
                 year : cal.getFullYear(),
                 month : cal.getMonth() + 1,
@@ -203,9 +219,12 @@
             dataType : "json",
             data : data
         }).done(function (result) {
+            // console.log(url);
             func(result, place);
         });
     }
+
+
 
 
 
