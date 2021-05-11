@@ -50,11 +50,12 @@
                 </div>
             </div> <!--option search-->
 
+            <input type="checkbox" id="allCheck" name="allChk">전체선택
             <div class="table-responsive">
                 <table class="table table-bordered" cellspacing="0">
                     <thead>
                     <tr class="boardHeader">
-                        <th>선택</th>
+                        <th></th>
                         <th>번호</th>
                         <th>번호(sn)</th>
                         <th>email</th>
@@ -243,8 +244,8 @@
                             }
 
 
+
                             for (let i = 0, len = list.length || 0; i < len; i++) {
-                                //let countNum = 1;
                                 let status = "";
                                 let dat = "";
                                 let statusVar = list[i].status;
@@ -282,11 +283,17 @@
 
                                 }
 
-                                //console.log("returnCountCall : " + resultNum);
 
+                                //(i+1) + page * (amount - 1)
+
+                                //페이지 번호 amount = 10 25 50
+                                // i+1+(amount*(page-1))
+                                let resultNum = i+1+(amount*(page-1));
+                                console.log(typeof(i));
+                                console.log(typeof(i+1));
                                 str += "<tr class='boardList'>";
-                                str += "<td>체크박스</td>";
-                                str += "<td>그냥번호</td>";
+                                str += "<td><input type='checkbox' id='check' name='check'></td>";
+                                str += "<td>"+resultNum+"</td>";
                                 str += "<td data-sn='12'>" + list[i].sn + "</td>";
                                 str += "<td>" + list[i].userId + "</td>";
                                 str += "<td>" + list[i].name + "</td>";
