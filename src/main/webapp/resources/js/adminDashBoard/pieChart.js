@@ -1,8 +1,4 @@
 
-
-
-
-
 $(document).ready(function () {
     pieChartMaker = function (ctx, label, data) {
 

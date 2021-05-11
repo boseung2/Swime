@@ -151,13 +151,24 @@
     function showModal() {
         let {modalSetting, modalShow} = modal($("#modalPlace"));
         // console.log(a);
+        let test = function () {
+            for (let i = 0; i <3; i++) {
+                console.log(i);
+            }
+            console.log("function 종료");
+        }
 
         $(".stretched-link").on("click", function () {
             let hrefTags = $(".stretched-link");
 
             for (let i = 0; i < hrefTags.length; i++) {
+                let title = String($(".row1 > div:nth-child(" + (i + 1) + ") > div > div.card-body > div:nth-child(1)")[0].innerHTML);
+
+                if(hrefTags[1] === this) {
+                    modalSetting(title, "버튼 테스트중", 'confirm', test);
+                    break;
+                }
                 if(hrefTags[i] === this) {
-                    let title = String($(".row1 > div:nth-child(" + (i + 1) + ") > div > div.card-body > div:nth-child(1)")[0].innerHTML);
                     modalSetting(title, "미구현이올시다", 'alert');
                     break;
                 }

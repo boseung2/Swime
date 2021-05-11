@@ -21,6 +21,8 @@ function modal(ctx){
 
 
     function modalSetting(title, body, footer, footerFunc) {
+
+
         $("#myModalLabel").html(title);
         $("#myModalBody").html(body);
         footerSetting(footer, footerFunc);
@@ -33,9 +35,9 @@ function modal(ctx){
 
             $(".modal-footer > button").unbind("click");
 
-            let alert = "<button type='button' class='btn btn-primary' data-dismiss='modal'>확인</button>";
-            let confirm = "<button type='button' class='btn btn-primary' data-dismiss='modal'>확인</button>" +
-                "<button type='button' class='btn btn-danger' data-dismiss='modal'>취소</button>";
+            let alert = "<button type='button' class='btn btn-primary' data-is='ok' data-dismiss='modal'>확인</button>";
+            let confirm = "<button type='button' class='btn btn-primary' data-is='ok' data-dismiss='modal'>확인</button>" +
+                "<button type='button' class='btn btn-danger' data-is='cancel' data-dismiss='modal'>취소</button>";
 
 
             if(footer !== undefined) {
@@ -49,8 +51,14 @@ function modal(ctx){
             else $("#myModalFooter").hide();
 
             $(".modal-footer > button").on("click",function () {
-                if(footerFunc !== undefined) footerFunc();
-                else $(".modal").fadeOut();
+                if(this.dataset.is === 'ok') {
+                    if(footerFunc !== undefined) footerFunc();
+                    else console.log('확인버튼이 클릭되었으나 지정된 function 이 존재하지 않습니다')
+                }
+                else {
+                    console.log("cancel");
+                }
+                $(".modal").fadeOut();
             });
         }
     }

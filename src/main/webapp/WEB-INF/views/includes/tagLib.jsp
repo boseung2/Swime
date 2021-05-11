@@ -28,9 +28,6 @@
 <!-- filter -->
 <link href="/resources/css/filter.css" rel="stylesheet">
 
-<!-- jquery -->
-<%--<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--%>
-
 <!-- fontawsome icon -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
@@ -48,7 +45,6 @@
 <script src="../../../resources/js/adminDashBoard/lineChart.js"></script>
 <script src="../../../resources/js/adminDashBoard/barChart.js"></script>
 <script src="../../../resources/js/adminDashBoard/pieChart.js"></script>
-<script src="../../../resources/js/adminDashBoard/pieChart2.js"></script>
 
 <%-- chart color--%>
 <script src="https://d3js.org/d3-color.v1.min.js"></script>
