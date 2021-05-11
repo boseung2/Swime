@@ -97,6 +97,7 @@
     <div class="header-right">
         <sec:authorize access="isAuthenticated()">
         <a href="/serviceCenter/list">고객센터</a>
+        <a><img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;"></a>
         </sec:authorize>
         <sec:authorize access="isAnonymous()">
             <a href="/user/register">회원가입</a>
@@ -114,12 +115,14 @@
 
 <sec:authorize access="isAuthenticated()">
     <div class="dropdown">
-        <img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;">
         <ul id="myDropdown" class="dropdown-content">
             <li>알림이 없습니다.</li>
         </ul>
     </div>
 </sec:authorize>
+
+<%--toast 알림--%>
+<%--<div id="msgStack"></div>--%>
 
 <form id="logout" action="/user/logout" method="post">
     <%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
@@ -152,15 +155,6 @@
 
         function onMessage(e) {
             let data = e.data;
-
-            let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
-            toast += "<div class='toast-header'><i class='fas fa-bell mr-2'></i><strong class='mr-auto'>알림</strong>";
-            toast += "<small class='text-muted'>just now</small><button type='button' class='ml-2 mb-1 close' data-dismiss='toast' aria-label='Close'>";
-            toast += "<span aria-hidden='true'>&times;</span></button>";
-            toast += "</div> <div class='toast-body'>" + data + "</div></div>";
-            $("#msgStack").append(toast);   // msgStack div에 생성한 toast 추가
-            $(".toast").toast({"animation": true, "delay": 3000});
-            $('.toast').toast('show');
 
             // notice 이미지를 바꿔준다.
             $('#notice')[0].src = "../../../resources/img/exist_notice.png";
@@ -255,7 +249,3 @@
     })
 
 </script>
-
-<body>
-<div id="msgStack"></div>
-</body>
