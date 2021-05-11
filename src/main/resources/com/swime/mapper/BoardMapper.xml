@@ -269,7 +269,6 @@
                     u.id = b.user_id
                 order by
     ]]>
-            <foreach collection="typeArr" item="type">
                 <choose>
                      <when test="type == 'S'.toString()">
                          sn asc
@@ -281,13 +280,11 @@
                          status asc
                      </when>
                 </choose>
-            </foreach>
-
                 )
         <![CDATA[
-            where rownum <= #{cri.pageNum} * #{cri.amount}
+            where rownum <= #{pageNum} * #{amount}
             )
-        where rn > (#{cri.pageNum} - 1) * #{cri.amount}
+        where rn > (#{pageNum} - 1) * #{amount}
 
         ]]>
     </select>

@@ -1,6 +1,7 @@
 package com.swime.controller;
 
 import com.swime.domain.*;
+import com.swime.service.AdminBoardService;
 import com.swime.service.BoardService;
 import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class AdminController {
 
     private BoardService boardService;
     private ReplyService replyService;
+    private AdminBoardService adminBoardService;
 
 
     @GetMapping("/adminIndex")
@@ -48,25 +50,33 @@ public class AdminController {
             @PathVariable("page") int page,
             @RequestParam(value = "amount") int amount,
             @RequestParam(value = "bbs") String bbs,
-            @RequestParam(value = "sort") String sort){
+            @RequestParam(value = "sort") String type){
 
         log.info("controller page pram :" + page);
         log.info("amount : " + amount);
         log.info("bbs : " + bbs);
-        log.info("sort : " + sort);
+        log.info("type : " + type);
 
         Map<String,Object> map = new HashMap<>();
 
 
         if(bbs.equals("board")){
-            BoardCriteria boardCri = new BoardCriteria(page,amount);
+            AdminBoardCriteria boardCri = new AdminBoardCriteria(page,amount);
             log.info("adminBoardCri : "+ boardCri);
-            AdminBoardPageDTO boardList = boardService.adminGetListWithPagingBySn(boardCri);
+            AdminBoardPageDTO boardList = adminBoardService.adminGetListWithPagingBySn(boardCri);
 
             map.put("board", boardList);
             map.put("boardCompare", "isBoard");
 
             return new ResponseEntity<>(map,HttpStatus.OK);
+//            BoardCriteria boardCri = new BoardCriteria(page,amount);
+//            log.info("adminBoardCri : "+ boardCri);
+//            AdminBoardPageDTO boardList = boardService.adminGetListWithPagingBySn(boardCri);
+//
+//            map.put("board", boardList);
+//            map.put("boardCompare", "isBoard");
+//
+//            return new ResponseEntity<>(map,HttpStatus.OK);
         }else{
             ReplyCriteria replyCri = new ReplyCriteria(page, amount);
             ReplyPageDTO replyList = replyService.adminGetListWIthPagingBySn(replyCri);

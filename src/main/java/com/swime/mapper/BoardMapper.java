@@ -55,8 +55,8 @@ public interface BoardMapper {
 //    List<BoardVO> adminGetListWithPagingByRegDate(@Param("cri") BoardCriteria cri);
 //    List<BoardVO> adminGetListWithPagingByState(@Param("cri") BoardCriteria cri);
 
-    List<BoardVO> adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
-    //List<BoardVO> adminGetListWithPagingBySn2(BoardCriteria cri);
+    List<BoardVO> adminGetListWithPagingBySn(BoardCriteria cri);
+    //List<BoardVO> adminGetListWithPagingBySn2(@Param("cri") BoardCriteria cri);
 
     //게시판 전체 개수를 가져온다
     int adminGetCountBySn();
