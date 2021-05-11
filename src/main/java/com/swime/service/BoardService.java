@@ -36,13 +36,5 @@ public interface BoardService {
     //현재 사용 x
     public int getTotal(BoardCriteria cri);
 
-    //------------------------관리자 게시판----------------------------
-
-    //List<BoardVO> adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
-    AdminBoardPageDTO adminGetListWithPagingBySn(
-            @Param("cri") BoardCriteria cri);
-
-
-
 
 }

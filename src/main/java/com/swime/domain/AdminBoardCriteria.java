@@ -1,28 +1,36 @@
 package com.swime.domain;
 
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Setter
 @Getter
 @ToString
-public class BoardCriteria {
-
+public class AdminBoardCriteria {
     private int pageNum;
     private int amount;
 
-    public BoardCriteria(){
-        this(1,10);
+    //검색
+    private String type; // S : 번호순 SS: 상태순 D : 날짜순
+    private String bbsOrReply;
+    private String search;
+
+    public AdminBoardCriteria(){
+        this(1,10,"S");
     }
 
-    public BoardCriteria(int pageNum, int amount){
+    public AdminBoardCriteria(int pageNum, int amount, String type){
         this.pageNum = pageNum;
         this.amount = amount;
+        this.type = type;
 
     }
 
+    public String[] getTypeArr2(){
+        return type == null? new String[] {}: type.split("");
+    }
 
     //게시물 삭제 후 페이지 번호 검색 조건 유지
     //지금 필요 없을듯..
