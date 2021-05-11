@@ -1,9 +1,7 @@
 package com.swime.service;
 
 
-import com.swime.domain.AuthVO;
-import com.swime.domain.DashBoardLangVO;
-import com.swime.domain.DashBoardLocaleVO;
+import com.swime.domain.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,10 +9,13 @@ import java.util.List;
 public interface AdminDashBoardService {
 
     int countTodayUserRegister();
+    DashBoardModalDataDTO todayUserRegister();
 
     int countTodayGroupRegister();
+    DashBoardModalDataDTO todayGroupRegister();
 
     int countTodayStudyRegister();
+    DashBoardModalDataDTO todayStudyRegister();
 
     Integer[] countUserRegisterByParam(@Param("year") int year, @Param("month") int month);
 

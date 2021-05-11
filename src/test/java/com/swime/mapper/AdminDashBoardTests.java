@@ -69,4 +69,20 @@ public class AdminDashBoardTests {
         list.forEach(log::info);
 
     }
+
+    @Test
+    public void getTodayGroupRegister(){
+        List<DashBoardModalDataVO> list = mapper.todayGroupRegister();
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+
+    }
+
+    @Test
+    public void getTodayStudyRegister(){
+        List<DashBoardModalDataVO> list = mapper.todayStudyRegister();
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+
+    }
 }

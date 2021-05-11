@@ -2,6 +2,8 @@ package com.swime.domain;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class DashBoardModalDataVO {
     String string1;
@@ -13,4 +15,9 @@ public class DashBoardModalDataVO {
     Integer integer2;
     Integer integer3;
     Integer integer4;
+
+    Date date1;
+    Date date2;
+    Date date3;
+    Date date4;
 }

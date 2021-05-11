@@ -143,10 +143,20 @@
         await chartData("getVisitCountByTime", "day", $("#myBarChart"), barChart);
         await chartData("getDashBoardLang", "none", $("#myPieChart"), pieChart);
         await chartData("getDashBoardLocale", "none", $("#myPieChart2"), pieChart);
+        await chartData("todayUserRegister", "none", $("#myModalBody"), topData);
 
+
+        let datalist = [];
+
+        function topData(result, place){
+            datalist.push(result);
+            console.log(datalist)
+        }
 
         showModal();
     });
+
+
     
     function showModal() {
         let {modalSetting, show, modalCssSetting} = modal($("#modalPlace"));
@@ -220,7 +230,8 @@
             data : data
         }).done(function (result) {
             // console.log(url);
-            func(result, place);
+            if(func !== undefined) func(result, place);
+
         });
     }
 
