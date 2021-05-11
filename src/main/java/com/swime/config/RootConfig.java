@@ -1,5 +1,6 @@
 package com.swime.config;
 
+import com.swime.util.CookieUtils;
 import com.swime.util.GmailSend;
 import com.swime.util.MakeRandomValue;
 import com.zaxxer.hikari.HikariConfig;
@@ -43,7 +44,7 @@ public class RootConfig {
         System.setProperty("java.security.egd", "file:///dev/urandom");
 
 
-        if(true){
+        if(false){
             System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         }else{
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
@@ -51,6 +52,7 @@ public class RootConfig {
 
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+
 
         if(true) {
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
@@ -65,23 +67,21 @@ public class RootConfig {
 //            hikariConfig.setUsername("swime1");
 //            hikariConfig.setPassword("1234");
         }
+
         return new HikariDataSource(hikariConfig);
     }
 
 
     @Bean
-    public GmailSend gmailSend(){
-        return new GmailSend();
-    }
+    public GmailSend gmailSend(){ return new GmailSend(); }
 
     @Bean
-    public MakeRandomValue makeRandomValue(){
-        return new MakeRandomValue();
-    }
+    public MakeRandomValue makeRandomValue(){ return new MakeRandomValue(); }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+
+    @Bean
+    public CookieUtils cookieUtils() { return new CookieUtils(); }
 
 }

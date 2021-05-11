@@ -2,11 +2,11 @@
          pageEncoding="UTF-8"%>
 <%@include file="../includes/tagLib.jsp" %>
 
+
 <%--<script src="../../../resources/js/adminPageDemo/chart-area-demo.js"></script>--%>
-<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>
-<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>
-<script src="../../../resources/js/adminPageDemo/chart-pie-demo.js"></script>
-<script src="../../../resources/js/adminPageDemo/chart-pie-demo2.js"></script>
+<%--<script src="../../../resources/js/adminPageDemo/chart-bar-demo.js"></script>--%>
+<%--<script src="../../../resources/js/adminPageDemo/chart-pie-demo.js"></script>--%>
+<%--<script src="../../../resources/js/adminPageDemo/chart-pie-demo2.js"></script>--%>
 
 <div class="container-fluid">
     <!-- <h2 class="mt-4">대시보드</h2> -->
@@ -100,7 +100,7 @@
                     모임언어
                 </div>
                 <div class="card-body"><canvas id="myPieChart" width="100%" height="50"></canvas></div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+<%--                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>--%>
             </div>
         </div>
         <div class="col-lg-6">
@@ -110,113 +110,132 @@
                     모임지역
                 </div>
                 <div class="card-body"><canvas id="myPieChart2" width="100%" height="50"></canvas></div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+<%--                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>--%>
             </div>
         </div>
     </div>
 </div>
 
-<script>
 
-    $(document).ready(function () {
-        getData("countUser", "number");
-        getData("countStudy", "number");
-        getData("countGroup", "number");
-        chartData("countUserForMonth", "chart");
+<script src="../../../resources/js/adminDashBoard/chartGlobalSettings.js"></script>
+<script src="../../../resources/js/adminDashBoard/lineChart.js"></script>
+<script src="../../../resources/js/adminDashBoard/barChart.js"></script>
+<script src="../../../resources/js/adminDashBoard/pieChart.js"></script>
+<script src="../../../resources/js/adminDashBoard/pieChart2.js"></script>
+
+<div class="modal">
+    <div class="modal_content" title="클릭하면 창이 닫힙니다.">
+        여기에 모달창 내용을 적어줍니다.<br>
+        이미지여도 좋고 글이어도 좋습니다.
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(async function () {
+        let writeInnerHtml = function (result, place) {
+            $(place).html(result);
+        };
+
+        let makeChart = function (result, place) {
+            let label = [];
+            for (let i = 0; i < result.length; i++) {
+                label[i] = (i+1);
+            }
+
+            lineChartMaker(place, label, result);
+        };
+
+        let barChart = function (result, place) {
+            let label = [];
+            let tmp, tmp2, prefix, suffix;
+            for (let i = 0; i < result.length; i++) {
+                tmp = i + "";
+                tmp2 = i + 1 + "";
+                prefix = tmp.length === 1 ? 0 + tmp + ':00' : tmp + ':00';
+                suffix = tmp2.length === 1 ? 0 + tmp2 + ':00' : tmp2 + ':00';
+                label[i] = prefix;
+            }
+
+            barChartMaker(place, label, result)
+        };
+
+        let pieChart = function (result, place){
+            let label = [], data = [];
+
+            for (let i = 0; i < result.length; i++) {
+                label[i] = result[i].name;
+                data[i] = result[i].count;
+            }
+
+            pieChartMaker(place, label, data);
+        };
+
+
+        await chartData("countUser", "none", $("#countUser"), writeInnerHtml);
+        await chartData("countStudy", "none", $("#countStudy"), writeInnerHtml);
+        await chartData("countGroup", "none", $("#countGroup"), writeInnerHtml);
+        await chartData("countUserForMonth", "month", $("#myAreaChart"), makeChart);
+        await chartData("getVisitCountByTime", "day", $("#myBarChart"), barChart);
+        await chartData("getDashBoardLang", "none", $("#myPieChart"), pieChart);
+        await chartData("getDashBoardLocale", "none", $("#myPieChart2"), pieChart);
+
+        console.log();
+
+        $(".stretched-link").on("click", function () {
+            let hrefTags = $(".stretched-link");
+
+            let who = 0;
+            for (let i = 0; i < hrefTags.length; i++) {
+                if(hrefTags[i] === this) {
+                    who = i;
+                    break;
+                }
+            }
+
+            console.log("modal");
+
+            $("#myModal").fadeIn();
+        });
+
+
+
+        $(".modal-footer > button").click(function(){
+            $(".modal").fadeOut();
+        });
     });
 
-    function getData(url, type){
-        $.ajax({
-            url : "/adminData/" + url,
-            dataType : "json"
-        }).done(function (result) {
-            if(type === 'number'){
-                $("#"+url).html(result);
-            }
-        });
-    }
 
-    function chartData(url, type){
+
+
+    function chartData(url, type, place, func){
         let cal = new Date();
+        let data = {};
+
+        if(type === "month"){
+            data = {
+                year : cal.getFullYear(),
+                month : cal.getMonth() + 1
+            };
+        }else if(type === "day"){
+            data = {
+                year : cal.getFullYear(),
+                month : cal.getMonth() + 1,
+                day : cal.getDate()
+            };
+        }
 
         $.ajax({
             url : "/adminData/" + url,
             dataType : "json",
-            data : {
-                year : cal.getFullYear(),
-                month : cal.getMonth() + 1
-            }
+            data : data
         }).done(function (result) {
-            // console.log(result);
-            makeChart(result, cal);
+            func(result, place);
         });
     }
 
-    function makeChart(result, cal) {
-
-        let max = Math.max.apply(null, result);
-        let label = [];
-        for (let i = 0; i < result.length; i++) {
-            label[i] = (i+1) + ' Day';
-        }
 
 
 
-
-        // Set new default font family and font color to mimic Bootstrap's default styling
-        Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-        Chart.defaults.global.defaultFontColor = '#292b2c';
-
-        // Area Chart Example
-        var ctx = document.getElementById("myAreaChart");
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: label,
-                datasets: [{
-                    label: "Register User",
-                    lineTension: 0.3,
-                    backgroundColor: "rgba(2,117,216,0.2)",
-                    borderColor: "rgba(2,117,216,1)",
-                    pointRadius: 5,
-                    pointBackgroundColor: "rgba(2,117,216,1)",
-                    pointBorderColor: "rgba(255,255,255,0.8)",
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                    pointHitRadius: 50,
-                    pointBorderWidth: 2,
-                    data: result,
-                }],
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        time: {
-                            unit: 'date'
-                        },
-                        gridLines: {
-                            display: false
-                        },
-                        ticks: {
-                            maxTicksLimit: 7
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            max: max,
-                            maxTicksLimit: 5
-                        },
-                        gridLines: {
-                            color: "rgba(0, 0, 0, .125)",
-                        }
-                    }],
-                },
-                legend: {
-                    display: false
-                }
-            }
-        });
-
-    }
 </script>

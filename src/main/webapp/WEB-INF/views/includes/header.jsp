@@ -264,3 +264,15 @@
 
 
 </script>
+
+<%-- countVisitor --%>
+<script>
+    visitorCountRequest();
+
+    function visitorCountRequest() {
+        $.ajax({
+            url : "/adminData/countVisitor",
+        }).done(function (result) {
+        });
+    }
+</script>
