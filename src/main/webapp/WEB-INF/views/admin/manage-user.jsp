@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-<%@include file="../includes/tagLib.jsp" %>
 
 <div class="container-fluid">
     <!-- <h2 class="mt-4">회원관리</h2> -->
