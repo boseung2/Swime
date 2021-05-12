@@ -5,19 +5,33 @@
 <mapper namespace="com.swime.mapper.AdminBoardMapper">
 
     <select id="adminGetCountBySn" resultType="int">
-        select count(*) from tbrd where sn > 0
+        select count(*) from tbrd b, tuser u
+        where sn > 0
+        and u.id = b.user_id
         <trim prefix="AND">
             <if test="active == 'A'.toString()">
-                status = 'BOST01'
+                b.status = 'BOST01'
             </if>
             <if test="active == 'D'.toString()">
-                status = 'BOST02'
+                b.status = 'BOST02'
             </if>
             <if test="active == 'AD'.toString()">
-                status in ('BOST01','BOST02')
+                b.status in ('BOST01','BOST02')
+            </if>
+        </trim>
+        <trim prefix="AND">
+            <if test="keyword == 'E'.toString()">
+                u.id like '%'||#{search}||'%'
+            </if>
+            <if test="keyword == 'N'.toString()">
+                u.name like '%'||#{search}||'%'
+            </if>
+            <if test="keyword == 'EN'.toString()">
+                u.id || u.name like '%'||#{search}||'%'
             </if>
         </trim>
     </select>
+
 
     <!--게시판 번호순 정렬-->
     <select id="adminGetListWithPagingBySn" parameterType="com.swime.domain.BoardVO" resultType="com.swime.domain.BoardVO">
@@ -72,6 +86,18 @@
                 b.status in ('BOST01','BOST02')
             </if>
         </trim>
+        <trim prefix="AND">
+            <if test="keyword == 'E'.toString()">
+                u.id like '%'||#{search}||'%'
+            </if>
+            <if test="keyword == 'N'.toString()">
+                u.name like '%'||#{search}||'%'
+            </if>
+            <if test="keyword == 'EN'.toString()">
+                u.id || u.name like '%'||#{search}||'%'
+            </if>
+
+        </trim>
     </sql>
 
     <!--테스트-->
@@ -120,18 +146,32 @@
     <!--****************************관리자 댓글 페이징*****************************-->
 
     <select id="getCountBySn" resultType="int">
-        select count(*) from trpl where sn > 0
+        select count(*) from trpl r, tuser u
+        where sn > 0
+        and r.user_id = u.id
         <trim prefix="AND">
             <if test="active == 'A'.toString()">
-                status = 'RPST01'
+                r.status = 'RPST01'
             </if>
             <if test="active == 'D'.toString()">
-                status = 'RPST02'
+                r.status = 'RPST02'
             </if>
             <if test="active == 'AD'.toString()">
-                status in ('RPST01','RPST02')
+                r.status in ('RPST01','RPST02')
             </if>
         </trim>
+        <trim prefix="AND">
+            <if test="keyword == 'E'.toString()">
+                u.id like '%'||#{search}||'%'
+            </if>
+            <if test="keyword == 'N'.toString()">
+                u.name like '%'||#{search}||'%'
+            </if>
+            <if test="keyword == 'EN'.toString()">
+                u.id || u.name like '%'||#{search}||'%'
+            </if>
+        </trim>
+
     </select>
 
     <!--번호순 정렬-->
@@ -181,6 +221,17 @@
             </if>
             <if test="active == 'AD'.toString()">
                 r.status in ('RPST01','RPST02')
+            </if>
+        </trim>
+        <trim prefix="AND">
+            <if test="keyword == 'E'.toString()">
+                u.id like '%'||#{search}||'%'
+            </if>
+            <if test="keyword == 'N'.toString()">
+                u.name like '%'||#{search}||'%'
+            </if>
+            <if test="keyword == 'EN'.toString()">
+                u.id || u.name like '%'||#{search}||'%'
             </if>
         </trim>
     </sql>

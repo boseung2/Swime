@@ -51,6 +51,8 @@ public class AdminBoardMapperTests {
         //cri.setAmount(10);
         cri.setType("D");
         cri.setActive("D");
+        cri.setKeyword("E");
+        cri.setSearch("toyw");
         //cri.setActive("A");
         //cri.setKeyword("삭제");
         List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);

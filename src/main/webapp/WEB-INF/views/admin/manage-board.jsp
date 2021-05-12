@@ -32,14 +32,14 @@
                     </select>
 
                     <select class="searchKeyword" id="searchKeyword" name="searchKeyword">
-                        <option value="">--email/id--</option>
+                        <option value="EN">--email/id--</option>
                         <option value="E">email</option>
                         <option value="N">name</option>
                     </select>
 
 
                     <div class="search-bar">
-                        <input type="text" placeholder="Search.." >
+                        <input type="text" id="search" name="search" placeholder="Search.." >
                         <button class="search-button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
@@ -132,9 +132,10 @@
         let bbsOrReplyVal;
         let bbsOrReplyVar = "board"; // select option 게시글 or 댓글 defalut값
 
-        let sort = "S";
-        let active = "AD";
-        let keyword = "EN";
+        let sort = "S"; // 최신 / 오래된
+        let active = "AD"; // 정상 / 삭제
+        let keyword = "EN"; // email / id
+        let searchResult = ""; //검색 input창
 
         //checkbox 전체선택
         $('#allCheck').on('click', function(){
@@ -171,8 +172,15 @@
             console.log("잉 클릭이 안되네..");
         }
 
-        //email / id - E : email, N : name
+        //input 검색창 search
+        $('#search').keyup(function (){
+            let searchResult = $(this).val();
+            console.log("searchResult : "+searchResult);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
 
+        })
+
+        //email / id - E : email, N : name
         $('#searchKeyword').on('change', function(){
             $(this).each(function(){
                 if ($(this).val() == 'E'){
@@ -184,7 +192,7 @@
                 }
             })
             console.log(keyword);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
         })
 
 
@@ -200,7 +208,7 @@
                 }
             })
             console.log(active);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
 
         }) // end act function
 
@@ -217,7 +225,7 @@
                 }
             });
             console.log(sort);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
         });
 
 
@@ -235,7 +243,7 @@
             });
 
             console.log("bbsOrReplyVal : "+bbsOrReplyVar);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
         })
 
         //10/25/50 개수 select option
@@ -256,21 +264,23 @@
             });
 
             console.log("boardCntSort"+amount);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
         });
 
 
-        showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword); //defalut값 1,10, 게시판
+        showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult); //defalut값 1,10, 게시판
 
-        function showBoardList(page, boardCntSort, bbsOrReplyVar, sort, active, keyword){
+        function showBoardList(page, boardCntSort, bbsOrReplyVar, sort, active, keyword, searchResult){
             console.log("showBoardListPage : " +page);
             console.log("boardCntSort : " + boardCntSort);
             console.log("bbsOrReplyVar : " + bbsOrReplyVar);
             console.log("sort : " + sort);
             console.log("active : " + active);
             console.log("keyword : " + keyword);
+            console.log("searchResult : " + searchResult);
 
-                adminBoardListService.adminBoardList(page, boardCntSort, bbsOrReplyVar, sort, active, keyword,
+                adminBoardListService.adminBoardList(page, boardCntSort, bbsOrReplyVar, sort,
+                    active, keyword, searchResult,
                     function (cnt, list, compare) {
 
                         let str = "";
@@ -475,7 +485,7 @@
 
                     page = targetPageNum;
 
-                    showBoardList(page,amount, bbsOrReplyVar, sort, active, keyword);
+                    showBoardList(page,amount, bbsOrReplyVar, sort, active, keyword, searchResult);
 
 
                 });
