@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.ChatRoomMapper">
+
+    <select id="getRoomList" resultType="com.swime.domain.ChatRoomVO">
+        select * from tchat_room
+    </select>
+
+    <select id="getRoomListById" resultType="com.swime.domain.ChatAttendVO">
+        select *
+        from tchat_attend
+        where attend_id = #{userId}
+    </select>
+
+    <insert id="insertRoom">
+        insert into tchat_room (sn, id)
+        values (seq_tchat_room.nextval, #{id})
+    </insert>
+
+    <insert id="insertAttendant">
+        insert into tchat_attend (sn, chat_room_id, attend_id)
+        values(seq_tchat_attend.nextval, #{id}, #{userId})
+    </insert>
+
+    <select id="getOldChatRoom" resultType="String">
+        select chat_room_id
+        from tchat_attend
+        where attend_id = #{you} and
+                chat_room_id = (
+                select chat_room_id
+                from tchat_attend
+                where attend_id = #{me}
+            )
+    </select>
+
+</mapper>

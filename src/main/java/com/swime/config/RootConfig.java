@@ -44,7 +44,7 @@ public class RootConfig {
         System.setProperty("java.security.egd", "file:///dev/urandom");
 
 
-        if(false){
+        if(true){
             System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         }else{
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");

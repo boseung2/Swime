@@ -85,10 +85,6 @@ public class NoticeHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 
-        // 로그인된 세션이 연결해제되면
-
-        log.info("로그인 세션 해제");
-
         log.info("session principal = " + session.getPrincipal().getName());
         
         if(users.get(session.getPrincipal().getName()) != null) {
