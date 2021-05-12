@@ -224,7 +224,7 @@
                     str += "" +
                         "<tr>" +
                         "   <td>" + list[i].string1 + "</td>" +
-                        "   <td>" + list[i].date1 + "</td>" +
+                        "   <td>" + boardDisplayTime(list[i].date1) + "</td>" +
                         "</tr>"
                     ;
                 }
@@ -242,7 +242,22 @@
 
     }
 
+    function boardDisplayTime(timeValue) {
 
+        let date = new Date(timeValue);
+
+        let year = date.getFullYear().toString().slice(-2); //년도 뒤에 두자리
+        let month = ("0" + (date.getMonth() + 1)).slice(-2); //월 2자리 (01, 02 ... 12)
+        let day = ("0" + date.getDate()).slice(-2); //일 2자리 (01, 02 ... 31)
+        let hour = ("0" + date.getHours()).slice(-2); //시 2자리 (00, 01 ... 23)
+        let minute = ("0" + date.getMinutes()).slice(-2); //분 2자리 (00, 01 ... 59)
+        let second = ("0" + date.getSeconds()).slice(-2); //초 2자리 (00, 01 ... 59)
+
+        let returnDate = year + "/" + month + "/" + day + " "+ hour + ":" + minute + ":" + second;
+
+        return returnDate;
+
+    }
 
     function chartData(url, dataInterval, place, func){
         return new Promise((resolve,reject) => {

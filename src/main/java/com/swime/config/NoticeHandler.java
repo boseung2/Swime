@@ -89,17 +89,23 @@ public class NoticeHandler extends TextWebSocketHandler {
 
         log.info("로그인 세션 해제");
 
-        log.info("session principal = " + session.getPrincipal().getName());
-        
-        if(users.get(session.getPrincipal().getName()) != null) {
-            String senderId = session.getPrincipal().getName();
+        try {
+            log.info("session principal = " + session.getPrincipal().getName());
 
-            if(senderId != null) {
-                log.info(senderId + " 연결 종료됨");
-                users.remove(senderId);
-                log.info("users = " + users);
+            if(users.get(session.getPrincipal().getName()) != null) {
+                String senderId = session.getPrincipal().getName();
+
+                if(senderId != null) {
+                    log.info(senderId + " 연결 종료됨");
+                    users.remove(senderId);
+                    log.info("users = " + users);
+                }
             }
+        } catch (Exception exception) {
+            exception.getMessage();
         }
+
+
 
     }
 

@@ -45,7 +45,13 @@ public class RootConfig {
 
 
         if(true){
+            System.setProperty("oracle.net.tns_admin"
+                    , System.getProperty("user.dir").replace('\\','/')+"/src/main/resources/wallet");
+            System.out.println(System.getProperty("user.dir").replace('\\','/')+"/src/main/resources/wallet");
+            System.out.println("C:/Wallet_swime");
+
             System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
+
         }else{
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
         }

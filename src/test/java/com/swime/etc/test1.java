@@ -10,7 +10,10 @@ import java.util.Scanner;
 public class test1{
     public static void main(String[] args) {
 //        new Exercise4_15();
-        new number();
+//        new number();
+        String path = System.getProperty("user.dir");
+        System.out.println(System.getProperty("user.dir").replace('\\','/')+"/src/main/resources/wallet/");
+        System.out.println(path);
     }
 }
 
