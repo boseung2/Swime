@@ -3,6 +3,7 @@ package com.swime.controller;
 import com.swime.domain.CodeTable;
 import com.swime.domain.DashBoardLangVO;
 import com.swime.domain.DashBoardLocaleVO;
+import com.swime.domain.DashBoardModalDataDTO;
 import com.swime.service.AdminDashBoardService;
 import com.swime.util.CookieUtils;
 import lombok.AllArgsConstructor;
@@ -111,5 +112,31 @@ public class AdminDataController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/todayUserRegister",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<DashBoardModalDataDTO> todayUserRegister(){
+        return new ResponseEntity<>(service.todayUserRegister(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/todayGroupRegister",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<DashBoardModalDataDTO> todayGroupRegister(){
+        return new ResponseEntity<>(service.todayGroupRegister(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/todayStudyRegister",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<DashBoardModalDataDTO> todayStudyRegister(){
+        return new ResponseEntity<>(service.todayStudyRegister(), HttpStatus.OK);
+    }
 
 }

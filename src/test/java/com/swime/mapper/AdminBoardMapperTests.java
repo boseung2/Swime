@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 
+import com.swime.domain.AdminBoardCriteria;
 import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
 import lombok.Setter;
@@ -16,10 +17,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class})
 @Log4j
-public class adminBoardMapperTests {
+public class AdminBoardMapperTests {
 
     @Setter(onMethod_ = @Autowired)
-    private BoardMapper mapper;
+    private AdminBoardMapper mapper;
 
 //    @Test
 //    public void testAdminGetListWithPagingBySn(){
@@ -27,18 +28,30 @@ public class adminBoardMapperTests {
 //        List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
 //        list.forEach(board->log.info(board));
 //    }
-    @Test
-    public void testAdminGetListWithPagingBySn2(){
-        BoardCriteria cri = new BoardCriteria();
-        cri.setPageNum(2);
-        cri.setAmount(10);
-        List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
-
-        list.forEach(board-> log.info(board));
-    }
+//    @Test
+//    public void testAdminGetListWithPagingBySn2(){
+//        BoardCriteria cri = new BoardCriteria();
+//        cri.setPageNum(2);
+//        cri.setAmount(10);
+//        List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
+//
+//        list.forEach(board-> log.info(board));
+//    }
     @Test
     public void testAdminGEtCountBySn(){
         log.info(mapper.adminGetCountBySn());
+    }
+
+    @Test
+    public void testAdminGetListWithPagingBySnStatus(){
+        AdminBoardCriteria cri = new AdminBoardCriteria();
+        //cri.setPageNum(1);
+        //cri.setAmount(10);
+        cri.setType("D");
+        //cri.setType("SS");
+        //cri.setKeyword("삭제");
+        List<BoardVO> list = mapper.adminGetListWithPagingBySn(cri);
+        list.forEach(board -> log.info(board));
     }
 
 

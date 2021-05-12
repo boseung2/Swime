@@ -1,6 +1,7 @@
 package com.swime.controller;
 
 import com.swime.domain.*;
+import com.swime.service.AdminBoardService;
 import com.swime.service.BoardService;
 import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -23,8 +26,9 @@ import java.util.List;
 @AllArgsConstructor
 public class AdminController {
 
-    private BoardService boardService;
-    private ReplyService replyService;
+    //private BoardService boardService;
+    //private ReplyService replyService;
+    private AdminBoardService adminBoardService;
 
 
     @GetMapping("/adminIndex")
@@ -42,19 +46,42 @@ public class AdminController {
     //, @RequestParam(value = "amount", defaultValue = "10")int amount
     @GetMapping(value ="/manageBoard/{page}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AdminBoardPageDTO> adminGetListWithPaging(
+    public ResponseEntity<?> adminGetListWithPaging(
             @PathVariable("page") int page,
-            @RequestParam(value = "amount") int amount){
+            @RequestParam(value = "amount") int amount,
+            @RequestParam(value = "bbs") String bbs,
+            @RequestParam(value = "sort") String type){
 
-        BoardCriteria boardCri = new BoardCriteria(page,amount);
-        //ReplyCriteria replyCri = new ReplyCriteria(page, amount);
-        log.info("adminBoardCri : "+ boardCri);
         log.info("controller page pram :" + page);
+        log.info("amount : " + amount);
+        log.info("bbs : " + bbs);
+        log.info("type : " + type);
 
-        AdminBoardPageDTO list = boardService.adminGetListWithPagingBySn(boardCri);
-        //ReplyPageDTO replyList = replyService.adminGetListWIthPagingBySn(replyCri);
+        Map<String,Object> map = new HashMap<>();
 
-        return new ResponseEntity<>(list,HttpStatus.OK);
+
+        if(bbs.equals("board")){
+            AdminBoardCriteria boardCri = new AdminBoardCriteria(page,amount,type);
+            log.info("adminBoardCri : "+ boardCri);
+            AdminBoardPageDTO boardList = adminBoardService.adminGetListWithPagingBySn(boardCri);
+
+            map.put("board", boardList);
+            map.put("boardCompare", "isBoard");
+
+            return new ResponseEntity<>(map,HttpStatus.OK);
+//
+        }else{
+            AdminReplyCriteria replyCri = new AdminReplyCriteria(page, amount, type);
+            ReplyPageDTO replyList = adminBoardService.adminReplyGetListWithPagingBySn(replyCri);
+            log.info("adminReplyCri : " + replyCri);
+
+            map.put("reply", replyList);
+            map.put("replyCompare", "isReply");
+
+            return new ResponseEntity<>(map,HttpStatus.OK);
+
+        }
+
 //        return new ResponseEntity<>(boardService
 //                .adminGetListWithPagingBySn(cri), HttpStatus.OK);
     }
