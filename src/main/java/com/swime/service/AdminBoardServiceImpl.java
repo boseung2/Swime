@@ -34,6 +34,13 @@ public class AdminBoardServiceImpl implements AdminBoardService{
 
     }
 
+    @Override
+    public int adminBoardRemove(String sn) {
+
+        return mapper.adminBoardRemove(sn);
+
+    }
+
     //관리자 댓글
     @Override
     public ReplyPageDTO adminReplyGetListWithPagingBySn(AdminReplyCriteria cri) {

@@ -18,7 +18,7 @@ public interface AdminBoardMapper {
     //게시판 전체 개수를 가져온다
     int adminGetCountBySn(AdminBoardCriteria cri);
 
-    int adminBoardRemove(Long sn);
+    int adminBoardRemove(String sn);
 
     int adminBoardUpdate(BoardVO board);
 

@@ -103,7 +103,7 @@
 
                 <div>
                     <button class="footer-button">수정</button>
-                    <button class="footer-button2">삭제</button>
+                    <button class="footer-button2" id="remove">삭제</button>
                 </div>
                 <!--admin 게시판 페이징 처리-->
                 <div class="adminPageFooter panel-footer">
@@ -145,18 +145,11 @@
             allCheck(this);
         })
 
-        //checkbox 1개 선택 $('td input[id="check"]')
-        //'input[id="check"]'
-        // $('td input[id="check"]').each(function (){
-        // })
-        $('td input[id="check"]').each(function (){
-            $(this).on('click', function(){
-                console.log("dfs");
-            })
+
+        $('#remove').on('click', function(){
+            oneCheck();
 
         })
-
-
 
         //'input[id="check"]'
         function allCheck(obj){
@@ -165,6 +158,7 @@
 
             if(isAllChecked) {
                 $('input[id="check"]').prop('checked', true);
+                oneCheck();
             }else{
                 $('input[id="check"]').prop('checked', false);
             }
@@ -172,8 +166,36 @@
         }
 
         function oneCheck(){
-            this.checked = true;
-            console.log("잉 클릭이 안되네..");
+            console.log("remove click!!");
+
+            let dataArr = [];
+            let checkList = $('.boardCkBox:checked');
+            let deleteConfirm = confirm('삭제 하시겠습니까?');
+
+            checkList.each(function(index){
+
+                let tr = $(this).parent().parent().eq(0);
+
+                let snResult = tr.children().eq(2).text();
+
+                if(checkList[index]){
+                    dataArr.push(snResult);
+                }
+                console.log(tr);
+            });
+            console.log(dataArr);
+
+
+            if(dataArr.length == 0){
+
+                alert('삭제할 데이터가 없습니다.');
+            }else{
+                if(deleteConfirm){
+                    adminBoardListService.adminDelete(dataArr);
+                }
+
+            }
+
         }
 
 
@@ -373,7 +395,7 @@
                                 let resultNum = (i + 1) + (amount * (page - 1));
 
                                 str += "<tr class='boardList'>";
-                                str += "<td><input type='checkbox' id='check' name='check'></td>";
+                                str += "<td  data-sn='"+list[i].sn+"'><input type='checkbox' id='check' name='check' class='boardCkBox'></td>";
                                 str += "<td>"+resultNum+"</td>";
                                 str += "<td data-sn='12'>" + list[i].sn + "</td>";
                                 str += "<td>" + list[i].userId + "</td>";
@@ -391,6 +413,7 @@
                                 str += "</tr>";
 
                             }//end for
+
 
                         }//end listPrint
                         boardUl.html(str);

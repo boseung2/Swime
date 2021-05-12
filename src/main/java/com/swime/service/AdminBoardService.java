@@ -12,6 +12,8 @@ public interface AdminBoardService {
     AdminBoardPageDTO adminGetListWithPagingBySn(AdminBoardCriteria cri);
     //AdminBoardPageDTO adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
 
+    int adminBoardRemove(String sn);
+
 
     //---------------------------관리자 댓글---------------------------
     ReplyPageDTO adminReplyGetListWithPagingBySn(AdminReplyCriteria cri);
