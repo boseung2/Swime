@@ -16,6 +16,7 @@
 
             <div class="option-search">
                 <div>
+<%--                    <span>전체선택</span>--%>
                     <select class="boardCntList" id="boardCntList" name="boardCntList">
                         <option value="10">--개수--</option>
                         <option value="10">10</option>
@@ -30,18 +31,12 @@
                         <option value="reply">댓글</option>
                     </select>
 
-                    <select class="sort" id="sort" name="sort">
-                        <option value="S">--전체--</option>
-                        <option value="S">번호순</option>
-                        <option value="D">날짜순</option>
-                        <option value="SS">상태순</option>
+                    <select class="searchKeyword" id="searchKeyword" name="searchKeyword">
+                        <option value="">--email/id--</option>
+                        <option value="E">email</option>
+                        <option value="N">name</option>
                     </select>
 
-                    <select class="act" id="act" name="act">
-                        <option value="AD">-정상/삭제-</option>
-                        <option value="A">정상</option>
-                        <option value="D">삭제</option>
-                    </select>
 
                     <div class="search-bar">
                         <input type="text" placeholder="Search.." >
@@ -50,20 +45,38 @@
                 </div>
             </div> <!--option search-->
 
-            <input type="checkbox" id="allCheck" name="allChk">전체선택
+
             <div class="table-responsive">
                 <table class="table table-bordered" cellspacing="0">
                     <thead>
                     <tr class="boardHeader">
-                        <th></th>
+                        <th>
+                            <input type="checkbox" id="allCheck" name="allChk">
+                        </th>
                         <th>번호</th>
                         <th>번호(sn)</th>
                         <th>email</th>
                         <th>이름</th>
                         <th id="change">제목</th>
-                        <th>작성일</th>
+
+                        <th>작성일
+                            <select class="sort" id="sort" name="sort">
+                                <option value="D">--전체--</option>
+                                <option value="D">최신등록순</option>
+                                <option value="S">오래된등록순</option>
+<%--                                <option value="SS">상태순</option>--%>
+                            </select>
+                        </th>
+
                         <th>수정일</th>
-                        <th>상태</th>
+
+                        <th>상태
+                            <select class="act" id="act" name="act">
+                            <option value="AD">-정상/삭제-</option>
+                            <option value="A">정상</option>
+                            <option value="D">삭제</option>
+                        </select>
+                        </th>
                     </tr>
                     </thead>
                     <%--게시판 리스트--%>
@@ -121,7 +134,61 @@
 
         let sort = "S";
         let active = "AD";
-        //정상/삭제 select option
+        let keyword = "EN";
+
+        //checkbox 전체선택
+        $('#allCheck').on('click', function(){
+            allCheck(this);
+        })
+
+        //checkbox 1개 선택 $('td input[id="check"]')
+        $('input[id="check"]').each(function (){
+            console.log("하 ..");
+
+        })
+        // $('td input[id="check"]').each(function (){
+        //     console.log("checkboxChecked");
+        //
+        // })
+
+
+        //'input[id="check"]'
+        function allCheck(obj){
+
+            let isAllChecked = $(obj).prop('checked');
+
+            if(isAllChecked) {
+                $('input[id="check"]').prop('checked', true);
+            }else{
+                $('input[id="check"]').prop('checked', false);
+            }
+
+
+        }
+
+        function oneCheck(){
+            this.checked = true;
+            console.log("잉 클릭이 안되네..");
+        }
+
+        //email / id - E : email, N : name
+
+        $('#searchKeyword').on('change', function(){
+            $(this).each(function(){
+                if ($(this).val() == 'E'){
+                    keyword = 'E';
+                }else if($(this).val() == 'N'){
+                    keyword = 'N';
+                }else{
+                    keyword = 'EN';
+                }
+            })
+            console.log(keyword);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
+        })
+
+
+       // 정상/삭제 select option
         $('#act').on('change',function(){
             $('#act').each(function(){
                 if($(this).val() == 'A'){
@@ -133,7 +200,7 @@
                 }
             })
             console.log(active);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
 
         }) // end act function
 
@@ -146,11 +213,11 @@
                 }else if($(this).val() == 'D'){
                     sort = "D";
                 }else{
-                    sort = "SS";
+                    //sort = "SS";
                 }
             });
             console.log(sort);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
         });
 
 
@@ -168,7 +235,7 @@
             });
 
             console.log("bbsOrReplyVal : "+bbsOrReplyVar);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
         })
 
         //10/25/50 개수 select option
@@ -189,20 +256,21 @@
             });
 
             console.log("boardCntSort"+amount);
-            showBoardList(page, amount, bbsOrReplyVar, sort, active);
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword);
         });
 
 
-        showBoardList(page, amount, bbsOrReplyVar, sort, active); //defalut값 1,10, 게시판
+        showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword); //defalut값 1,10, 게시판
 
-        function showBoardList(page, boardCntSort, bbsOrReplyVar, sort, active){
+        function showBoardList(page, boardCntSort, bbsOrReplyVar, sort, active, keyword){
             console.log("showBoardListPage : " +page);
             console.log("boardCntSort : " + boardCntSort);
             console.log("bbsOrReplyVar : " + bbsOrReplyVar);
             console.log("sort : " + sort);
             console.log("active : " + active);
+            console.log("keyword : " + keyword);
 
-                adminBoardListService.adminBoardList(page, boardCntSort, bbsOrReplyVar, sort, active,
+                adminBoardListService.adminBoardList(page, boardCntSort, bbsOrReplyVar, sort, active, keyword,
                     function (cnt, list, compare) {
 
                         let str = "";
@@ -225,11 +293,11 @@
                         function listPrint(compare){
 
                             if(compare === 'isBoard'){
-                                $('tr > th:eq(3)').html('제목');
-                                //str = "";
+                                $('tr > th:eq(5)').html('제목');
+
                             }else{
-                                $('tr > th:eq(3)').html('댓글 내용');
-                                //str = "";
+                                $('tr > th:eq(5)').html('댓글 내용');
+
                             }
 
                             if (page == -1) {
@@ -283,14 +351,11 @@
 
                                 }
 
-
-                                //(i+1) + page * (amount - 1)
-
                                 //페이지 번호 amount = 10 25 50
                                 // i+1+(amount*(page-1))
+                                //번호 1 ~ 게시글 or 댓글 개수
                                 let resultNum = i+1+(amount*(page-1));
-                                console.log(typeof(i));
-                                console.log(typeof(i+1));
+
                                 str += "<tr class='boardList'>";
                                 str += "<td><input type='checkbox' id='check' name='check'></td>";
                                 str += "<td>"+resultNum+"</td>";
@@ -410,7 +475,7 @@
 
                     page = targetPageNum;
 
-                    showBoardList(page,amount, bbsOrReplyVar, sort,active);
+                    showBoardList(page,amount, bbsOrReplyVar, sort, active, keyword);
 
 
                 });
