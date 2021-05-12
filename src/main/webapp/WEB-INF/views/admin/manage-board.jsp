@@ -23,18 +23,20 @@
                         <option value="25">25</option>
                         <option value="50">50</option>
                     </select>
-                </div>
-                <div style="display: flex; margin-left: auto;">
+
                     <select class="bbsOrReply" id="bbsOrReply" name="bbsOrReply">
                         <option value="board">--전체--</option>
                         <option value="board">게시물</option>
                         <option value="reply">댓글</option>
                     </select>
+                </div>
 
+
+                <div style="display: flex; margin-left: auto;">
                     <select class="searchKeyword" id="searchKeyword" name="searchKeyword">
-                        <option value="EN">--email/id--</option>
-                        <option value="E">email</option>
-                        <option value="N">name</option>
+                        <option value="EN">--이메일/이름--</option>
+                        <option value="E">이메일</option>
+                        <option value="N">이름</option>
                     </select>
 
 
@@ -127,11 +129,12 @@
         let boardUl = $('tbody'); //게시판 출력
 
         let boardCntSort; //select optoin 10 25 50개 값을 넣어서 list뽑는다.
-        let amount = 10, page = 1; //페이징 default 값
 
         let bbsOrReplyVal;
-        let bbsOrReplyVar = "board"; // select option 게시글 or 댓글 defalut값
 
+        //default 값
+        let amount = 10, page = 1; //페이징 default 값
+        let bbsOrReplyVar = "board"; // select option 게시글 or 댓글 defalut값
         let sort = "S"; // 최신 / 오래된
         let active = "AD"; // 정상 / 삭제
         let keyword = "EN"; // email / id
@@ -139,18 +142,20 @@
 
         //checkbox 전체선택
         $('#allCheck').on('click', function(){
+
             allCheck(this);
         })
 
         //checkbox 1개 선택 $('td input[id="check"]')
-        $('input[id="check"]').each(function (){
-            console.log("하 ..");
+        //'input[id="check"]'
+        // $('td input[id="check"]').each(function (){
+        // })
+        $('td input[id="check"]').each(function (){
+            $(this).on('click', function(){
+                console.log("dfs");
+            })
 
         })
-        // $('td input[id="check"]').each(function (){
-        //     console.log("checkboxChecked");
-        //
-        // })
 
 
         //'input[id="check"]'
@@ -164,13 +169,13 @@
                 $('input[id="check"]').prop('checked', false);
             }
 
-
         }
 
         function oneCheck(){
             this.checked = true;
             console.log("잉 클릭이 안되네..");
         }
+
 
         //input 검색창 search
         $('#search').keyup(function (){
@@ -302,6 +307,7 @@
 
                         function listPrint(compare){
 
+                            //board reply 변경 시 header 변경
                             if(compare === 'isBoard'){
                                 $('tr > th:eq(5)').html('제목');
 
@@ -322,7 +328,7 @@
                             }
 
 
-
+                            //리스트 출력
                             for (let i = 0, len = list.length || 0; i < len; i++) {
                                 let status = "";
                                 let dat = "";
@@ -364,7 +370,7 @@
                                 //페이지 번호 amount = 10 25 50
                                 // i+1+(amount*(page-1))
                                 //번호 1 ~ 게시글 or 댓글 개수
-                                let resultNum = i+1+(amount*(page-1));
+                                let resultNum = (i + 1) + (amount * (page - 1));
 
                                 str += "<tr class='boardList'>";
                                 str += "<td><input type='checkbox' id='check' name='check'></td>";
