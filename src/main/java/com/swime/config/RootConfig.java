@@ -21,6 +21,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.net.URL;
 
 @Configuration
 @ComponentScan(basePackages = {"com.swime.task", "com.swime.service", "com.swime.aop"})
@@ -42,16 +44,14 @@ public class RootConfig {
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
         System.setProperty("java.security.egd", "file:///dev/urandom");
+//        C:\Users\tht12\git\Swime\src\main\resources\Wallet_swime
+//        C:/apache/bin/src/main/resources/wallet
 
 
         if(true){
-            System.setProperty("oracle.net.tns_admin"
-                    , System.getProperty("user.dir").replace('\\','/')+"/src/main/resources/wallet");
-            System.out.println(System.getProperty("user.dir").replace('\\','/')+"/src/main/resources/wallet");
-            System.out.println("C:/Wallet_swime");
-
-            System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
-
+            String walletPath = (this.getClass().getResource("").getPath()).substring(1)+"../../../Wallet_swime";
+            System.setProperty("oracle.net.tns_admin", walletPath);
+//            System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
         }else{
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
         }
@@ -89,5 +89,6 @@ public class RootConfig {
 
     @Bean
     public CookieUtils cookieUtils() { return new CookieUtils(); }
+
 
 }
