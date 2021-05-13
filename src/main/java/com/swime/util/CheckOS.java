@@ -43,12 +43,12 @@ public class CheckOS {
 
     public String withoutDeleteFilePath(){
         String filePath = "";
-//        if(isWindows())
-//            filePath = "c:/upload/";
-//
-//
-//        if(!isWindows())
-//            filePath = (this.getClass().getResource("").getPath()) + "../../../../../resources/upload/";
+        if(isWindows())
+            filePath = "c:/upload/";
+        else if(isMac())
+            filePath = (this.getClass().getResource("").getPath()) + "../../../../../resources/upload/";
+        else if(isLinux())
+            filePath = (this.getClass().getResource("").getPath()) + "../../../../../../staticFiles/upload/";
 
         return filePath;
     }
