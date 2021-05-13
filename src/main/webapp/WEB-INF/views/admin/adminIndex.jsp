@@ -23,9 +23,7 @@
 <script src="../../../resources/js/adminPageDemo/datatables-demo.js"></script>
 <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-
-
-
+<script src="../../../resources/js/adminDashBoard/chartGlobalSettings.js"></script>
 
 
 <!DOCTYPE html>
