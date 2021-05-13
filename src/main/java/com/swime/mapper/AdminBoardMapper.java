@@ -16,7 +16,7 @@ public interface AdminBoardMapper {
     //List<BoardVO> adminGetListWithPagingBySn2(@Param("cri") BoardCriteria cri);
 
     //게시판 전체 개수를 가져온다
-    int adminGetCountBySn();
+    int adminGetCountBySn(AdminBoardCriteria cri);
 
     int adminBoardRemove(Long sn);
 
@@ -28,7 +28,7 @@ public interface AdminBoardMapper {
     List<ReplyVO> adminReplyGetListWithPagingBySn(AdminReplyCriteria cri);
 
     //댓글 전체 개수
-    int getCountBySn();
+    int getCountBySn(AdminReplyCriteria cri);
 
     int adminReplyRemove(Long sn);
 

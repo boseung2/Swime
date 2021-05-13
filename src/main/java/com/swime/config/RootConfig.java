@@ -1,5 +1,6 @@
 package com.swime.config;
 
+import com.swime.util.CheckOS;
 import com.swime.util.CookieUtils;
 import com.swime.util.GmailSend;
 import com.swime.util.MakeRandomValue;
@@ -21,9 +22,13 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.net.URL;
+import java.util.Locale;
 
 @Configuration
-@ComponentScan(basePackages = {"com.swime.task", "com.swime.service", "com.swime.aop"})
+@ComponentScan(basePackages = {//"com.swime.task",
+        "com.swime.service", "com.swime.aop", "com.swime.util"})
 @EnableScheduling
 @MapperScan(basePackages = {"com.swime.mapper"})
 public class RootConfig {
@@ -38,16 +43,21 @@ public class RootConfig {
         return sqlSessionFactory.getObject();
     }
 
+
     @Bean
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
         System.setProperty("java.security.egd", "file:///dev/urandom");
 
 
-        if(true){
+        if(checkOS().isWindows())
             System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
-        }else{
+        else if(checkOS().isMac())
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
+        else if(checkOS().isLinux()){
+            String walletPath = (this.getClass().getResource("").getPath()) + "../../../Wallet_swime";
+            System.out.println(walletPath);
+            System.setProperty("oracle.net.tns_admin", walletPath);
         }
 
         HikariConfig hikariConfig = new HikariConfig();
@@ -83,5 +93,9 @@ public class RootConfig {
 
     @Bean
     public CookieUtils cookieUtils() { return new CookieUtils(); }
+
+    @Bean
+    public CheckOS checkOS() { return new CheckOS(); }
+
 
 }
