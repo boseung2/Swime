@@ -21,6 +21,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.net.URL;
+import java.util.Locale;
 
 @Configuration
 @ComponentScan(basePackages = {"com.swime.task", "com.swime.service", "com.swime.aop"})
@@ -38,16 +41,23 @@ public class RootConfig {
         return sqlSessionFactory.getObject();
     }
 
+    final String OS = System.getProperty("os.name").toLowerCase();
+
     @Bean
     public DataSource dataSource() {
         System.setProperty("oracle.jdbc.fanEnabled","false");
         System.setProperty("java.security.egd", "file:///dev/urandom");
 
+        System.out.println(OS);
 
-        if(true){
+        if(OS.contains("win"))
             System.setProperty("oracle.net.tns_admin","C:/Wallet_swime");
-        }else{
+        else if(OS.contains("mac"))
             System.setProperty("oracle.net.tns_admin","/Users/sinseonggwon/Wallet_swime");
+        else if(OS.contains("linux")){
+            String walletPath = (this.getClass().getResource("").getPath()) + "../../../Wallet_swime";
+            System.out.println(walletPath);
+            System.setProperty("oracle.net.tns_admin", walletPath);
         }
 
         HikariConfig hikariConfig = new HikariConfig();
@@ -83,5 +93,6 @@ public class RootConfig {
 
     @Bean
     public CookieUtils cookieUtils() { return new CookieUtils(); }
+
 
 }
