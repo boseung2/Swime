@@ -85,4 +85,10 @@ public class AdminDashBoardTests {
         list.forEach(log::info);
 
     }
+
+    @Test
+    public void testDate2(){
+        mapper.test2();
+        log.info(mapper.test2());
+    }
 }
