@@ -32,7 +32,6 @@ public class CheckOS {
         String filePath = "";
         if(isWindows()){
             filePath = "c:/upload/";
-            log.info("Use OS is " + OS);
         }
 
         if(!isWindows())
