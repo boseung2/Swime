@@ -3,6 +3,7 @@ package com.swime.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swime.domain.ChatMessageVO;
 import com.swime.domain.ChatRoomVO;
+import com.swime.domain.MessageType;
 import com.swime.service.ChatRoomService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -11,6 +12,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import sun.plugin2.message.Message;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +24,11 @@ public class ChatHandler extends TextWebSocketHandler {
     ChatRoomService chatRoomService;
 
     // 현재 존재하는 채팅방
-    Map<String, ChatRoomVO> rooms = new ConcurrentHashMap<>();
+    static Map<String, ChatRoomVO> rooms;
+    static {
+        if(rooms == null)
+            rooms = new ConcurrentHashMap<>();
+    }
 
     // 방 말고 채팅자체에 접속한 유저
     Map<String, WebSocketSession> users = new ConcurrentHashMap<>();
@@ -62,18 +68,34 @@ public class ChatHandler extends TextWebSocketHandler {
         log.info("ChatHandler session = " + session + ", message = " + msg);
 
         ChatMessageVO chatMessage = new ObjectMapper().readValue(msg, ChatMessageVO.class);
-        ChatRoomVO chatRoom = rooms.get(chatMessage.getChatRoomId());
+        log.info("받은 메시지 = " + chatMessage);
 
-        // rooms map에서 받은 chatRoom을 가지고 메시지를 처리한다.
-        chatRoom.handleMessage(session, chatMessage);
+        // 사용자가 로그인된 경우
+        if(session.getPrincipal()!= null) {
+            // 메시지 타입이 ENTER인 경우
+            if(MessageType.ENTER.equals(chatMessage.getType())) {
 
-        // 사용자가 해당 채팅방에 입장했을때 메시지를 보낸다.
-        // 이는 입장/채팅 메시지가 될 수 있으며
-        // 메시지에는 항상 채팅방 id를 수반해야한다.
-        // 입장 메시지가 왔을때 챗핸들러는 해당 채팅방에 사용자의 세션을 등록해준다.
-        // 채팅 메시지가 왔을때는 해당 메시지를 db에 등록해주고 채팅방에 있는 유저들에게 실시간으로 메시지를 뿌려준다. -> 채팅방 메시지에 동적으로 추가
-        // 또한 채팅방에 상대방 유저세션이 없더라도 전체 세션에 상대방 유저가 있으면 메시지를 보내준다. -> 받은사람은 리스트를 새로고침
-        // 퇴장 메시지가 왔을때는 해당 채팅방에서 사용자의 세션을 지운다.
+                // 송신자 id
+                String userId = chatMessage.getSenderId();
+
+                // 채팅방 id
+                String roomId = chatMessage.getChatRoomId();
+
+                // rooms에서 해당 채팅방 가져오기
+                ChatRoomVO room = rooms.get(roomId);
+
+                // 해당 유저를 해당 채팅방의 세션리스트에 등록
+                room.registerSession(userId, session);
+
+                log.info(roomId + "의 sessions = " + rooms.get(roomId).getSessions());
+                log.info("rooms = " + rooms);
+
+            } else if(MessageType.CHAT.equals(chatMessage.getType())) { // 메시지 타입이 CHAT인 경우
+
+
+            }
+        }
+
 
     }
 
@@ -105,6 +127,8 @@ public class ChatHandler extends TextWebSocketHandler {
 
                 if (userSessions.containsKey(userId)) {
                     userSessions.remove(userId);
+
+                    log.info(roomId + "에서 " + userId + "의 세션이 삭제되었습니다.");
                 }
             }
         }

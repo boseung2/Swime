@@ -90,19 +90,9 @@ public class ChatController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/room/{id}")
-    public String room(@PathVariable String id) {
+    public String room(@PathVariable String id, Model model) {
 
-        // 채팅방에 들어가자마자 웹소켓연결하고 연결하자마자 ENTER 메시지 보내서 채팅방 세션맵에 해당 유저를 등록한다.
-
-        // js - 웹소켓에 연결/종료/메시지전송에 따라 ENTER/LEAVE/CHAT 타입을 담고,
-        // 송신자와 채팅방아이디를 담아 웹소켓으로 메시지를 보낸다.
-
-        // 웹소켓 - 받은 메시지에서 id 통해 Map에서 가져온 ChatRoomVO의 sessionList에 해당 송신자가 없으면 등록한다.
-
-        // js - 해당 id를 가진 채팅방의 메시지들을 가져와서 발신자를 구별하여 화면에 뿌려준다.
-        
-        // js - 메시지가 오면 html에 추가해준다.
-
+        model.addAttribute("chatRoomId", id);
         return "/chat/room";
     }
 }

@@ -17,6 +17,15 @@ public class ChatRoomVO {
     private String id;
     private Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
+    public void registerSession(String userId, WebSocketSession session) {
+
+        log.info("chatRoomVO > put 전 sessions = " + sessions);
+
+        this.sessions.put(userId, session);
+
+        log.info("chatRoomVO > put 완료 sessions = " + sessions);
+    }
+
     public void handleMessage(WebSocketSession session, ChatMessageVO chatMessage) throws Exception{
 
         // 입장 메시지

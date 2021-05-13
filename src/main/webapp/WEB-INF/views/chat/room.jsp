@@ -227,8 +227,16 @@
         let sock = new SockJS('/chat');
         chatSocket = sock;
 
+        // 연결됐을 때
+        sock.onopen = onOpen;
         // 데이터 전달받았을 때
         sock.onmessage = onMessage;
+
+        function onOpen() {
+            sock.send(JSON.stringify({chatRoomId : "${chatRoomId}", type: "ENTER", senderId : "${pinfo.username}"}));
+
+        }
+
 
         function onMessage(e) {
             let data = e.data;
