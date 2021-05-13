@@ -139,6 +139,10 @@
         let keyword = "EN"; // email / id
         let searchResult = ""; //검색 input창
 
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+        });
+
         //checkbox 전체선택
         $('#allCheck').on('click', function(){
 
@@ -158,7 +162,7 @@
 
             if(isAllChecked) {
                 $('input[id="check"]').prop('checked', true);
-                oneCheck();
+                //oneCheck();
             }else{
                 $('input[id="check"]').prop('checked', false);
             }
@@ -170,28 +174,39 @@
 
             let dataArr = [];
             let checkList = $('.boardCkBox:checked');
-            let deleteConfirm = confirm('삭제 하시겠습니까?');
+
 
             checkList.each(function(index){
 
                 let tr = $(this).parent().parent().eq(0);
-
+                //sn번호
                 let snResult = tr.children().eq(2).text();
+                // let snResult = {
+                //     boardSnArr : tr.children().eq(2).text()
+                // }
 
-                if(checkList[index]){
+                if(checkList.get(index)){
                     dataArr.push(snResult);
                 }
-                console.log(tr);
+                //console.log(tr);
             });
             console.log(dataArr);
+            console.log(dataArr.length);
+
 
 
             if(dataArr.length == 0){
 
                 alert('삭제할 데이터가 없습니다.');
+
             }else{
+                let deleteConfirm = confirm('삭제 하시겠습니까?');
                 if(deleteConfirm){
-                    adminBoardListService.adminDelete(dataArr);
+
+                    adminBoardListService.adminDelete(dataArr, function(result) {
+                        console.log("-------callback-------");
+                        console.log(result);
+                    });
                 }
 
             }

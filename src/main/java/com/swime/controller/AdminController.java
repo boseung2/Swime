@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,22 +88,38 @@ public class AdminController {
 
     }
 
-    @DeleteMapping(value = "/sn")
-    public ResponseEntity<String> remove(RequestBody BoardVO, @PathVariable("sn") String[] sn){
+    //@DeleteMapping(value = "board/{list}")
+    @PostMapping(value = "/board/dataArr")
+    public ResponseEntity<String> adminBoardRemove(@RequestBody String[] list){
+        //@PathVariable(value = "dataArr") List<String> list,
 
-        log.info("BoardVO : " + BoardVO);
-        log.info("sn : " + sn);
-
-        String[] deleteList = sn;
-        int deleteResult = 0;
-        for(int i = deleteList.length; i > 0; i--){
-            deleteResult = adminBoardService.adminBoardRemove(deleteList[i]);
+        log.info("list : " + list);
+        int result = 0;
+        for (int i = 0; i < list.length; i++){
+            log.info(list[i]);
+            result = adminBoardService.adminBoardRemove(list[i]);
         }
 
 
-        return deleteResult == 1
+//        String[] deleteList = list;
+//        int deleteResult = 0;
+//        for(int i = 0; i < deleteList.length; i++){
+//            deleteResult = adminBoardService.adminBoardRemove(deleteList[i]);
+//        }
+//        int deleteResult = 0;
+//        ArrayList<Integer> deleteList = new ArrayList<>();
+//        for (int i = 0; i < deleteList.size(); i++){
+//            deleteResult = adminBoardService.adminBoardRemove("1");
+//            log.info(deleteResult);
+//        }
+
+
+        return result == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        return deleteResult == 1
+//                ? new ResponseEntity<>("success", HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     //end 관리자 게시판
 

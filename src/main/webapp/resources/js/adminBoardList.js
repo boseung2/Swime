@@ -43,9 +43,31 @@ let adminBoardListService = (function(){
 
     }// end adminBoardList
 
-    function adminDelete(dataArr){
+    function adminDelete(dataArr, callback, error){
+        //traditional : 배열 보낼 때 [] 보내지는데 없애준다.
+        console.log("js/");
+        let test = JSON.stringify(dataArr);
+        console.log(test);
 
-    }
+        $.ajax({
+            type : 'POST',
+            //traditional : true,
+            url : '/admin/board/dataArr',
+            data :  JSON.stringify(dataArr),
+            contentType : "application/json; charset=utf-8",
+            success : function(deleteResult, status, xhr){
+                if(callback){
+                    callback(deleteResult);
+                }
+            },
+            error : function(xhr, status, er){
+                if (error){
+                    error(er)
+                }
+            }
+        });
+
+    }// end adminDelete
 
     function boardDisplayTime(timeValue) {
 
@@ -68,7 +90,7 @@ let adminBoardListService = (function(){
     return {
         adminBoardList:adminBoardList,
         boardDisplayTime:boardDisplayTime,
-        adminDelete:adminDelete()
+        adminDelete:adminDelete
     }
 })();
 

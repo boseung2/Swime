@@ -19,6 +19,7 @@ public interface AdminBoardMapper {
     int adminGetCountBySn(AdminBoardCriteria cri);
 
     int adminBoardRemove(String sn);
+//    int adminBoardRemove(Long sn);
 
     int adminBoardUpdate(BoardVO board);
 

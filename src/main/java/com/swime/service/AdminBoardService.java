@@ -13,6 +13,7 @@ public interface AdminBoardService {
     //AdminBoardPageDTO adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
 
     int adminBoardRemove(String sn);
+//    int adminBoardRemove(Long sn);
 
 
     //---------------------------관리자 댓글---------------------------
