@@ -29,7 +29,7 @@ public class AdminBoardServiceImpl implements AdminBoardService{
         log.info("get adminBoard cri :" + cri);
 
         return new AdminBoardPageDTO(
-                mapper.adminGetCountBySn(),
+                mapper.adminGetCountBySn(cri),
                 mapper.adminGetListWithPagingBySn(cri));
 
     }
@@ -39,7 +39,7 @@ public class AdminBoardServiceImpl implements AdminBoardService{
     public ReplyPageDTO adminReplyGetListWithPagingBySn(AdminReplyCriteria cri) {
         log.info("get adminReply Cri : " + cri);
         return new ReplyPageDTO(
-                mapper.getCountBySn(),
+                mapper.getCountBySn(cri),
                 mapper.adminReplyGetListWithPagingBySn(cri));
     }
 

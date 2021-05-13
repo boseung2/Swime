@@ -50,18 +50,24 @@ public class AdminController {
             @PathVariable("page") int page,
             @RequestParam(value = "amount") int amount,
             @RequestParam(value = "bbs") String bbs,
-            @RequestParam(value = "sort") String type){
+            @RequestParam(value = "sort") String type,
+            @RequestParam(value = "active") String active,
+            @RequestParam(value = "keyword") String keyword,
+            @RequestParam(value = "searchResult", required = false) String search){
 
         log.info("controller page pram :" + page);
         log.info("amount : " + amount);
         log.info("bbs : " + bbs);
         log.info("type : " + type);
+        log.info("active : " + active);
+        log.info("keyword : " + keyword);
+        log.info("search : " + search);
 
         Map<String,Object> map = new HashMap<>();
 
 
         if(bbs.equals("board")){
-            AdminBoardCriteria boardCri = new AdminBoardCriteria(page,amount,type);
+            AdminBoardCriteria boardCri = new AdminBoardCriteria(page, amount, type, active, keyword, search);
             log.info("adminBoardCri : "+ boardCri);
             AdminBoardPageDTO boardList = adminBoardService.adminGetListWithPagingBySn(boardCri);
 
@@ -69,9 +75,9 @@ public class AdminController {
             map.put("boardCompare", "isBoard");
 
             return new ResponseEntity<>(map,HttpStatus.OK);
-//
+
         }else{
-            AdminReplyCriteria replyCri = new AdminReplyCriteria(page, amount, type);
+            AdminReplyCriteria replyCri = new AdminReplyCriteria(page, amount, type, active, keyword, search);
             ReplyPageDTO replyList = adminBoardService.adminReplyGetListWithPagingBySn(replyCri);
             log.info("adminReplyCri : " + replyCri);
 
