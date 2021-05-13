@@ -352,6 +352,9 @@
                 success: function(result) {
                     console.log(">>>>>>>" + result);
                     showUploadResult(result);
+                },
+                error: function (result) {
+                    console.log(">>>>>>>" + result);
                 }
             })
 

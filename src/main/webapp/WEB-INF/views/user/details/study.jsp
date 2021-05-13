@@ -9,39 +9,64 @@
 <c:set var="cardTitleLength" value="9"/>
 
 
-<h1>스터디</h1>
-<hr>
+<%--<h2>스터디</h2>--%>
 
-<div class="container">
+
+<%--<div class="container">--%>
     <!-- Content Row -->
-    <h2>생성한 스터디</h2>
+    <div class="subContainer">
+        <div class="h3cover" >
+<%--    <h3 class="h3title">생성한 스터디</h3>--%>
+            <h4 class="h3title">생성한 스터디</h4>
+        </div>
+        <div class="subBody">
+
     <div class="row" id="make"></div>
     <div id="makepagi"></div>
 
     <input type="hidden" name="pageNum" id="pageNum1" value="1">
     <input type="hidden" name="amount" id="amount1" value="6">
+        </div>
+    </div>
+    <div class="subContainer">
+        <div class="h3cover">
+    <h4 class="h3title">예정된 스터디</h4>
+        </div>
+        <div class="subBody">
 
-    <h2>예정된 스터디</h2>
     <div class="row" id="before"></div>
     <div id="beforepagi"></div>
 
     <input type="hidden" name="pageNum" id="pageNum2" value="1">
     <input type="hidden" name="amount" id="amount2" value="6">
+        </div>
+    </div>
 
-    <h2>종료된 스터디</h2>
+<div class="subContainer">
+    <div class="h3cover">
+        <h4 class="h3title">종료된 스터디</h4>
+    </div>
+    <div class="subBody">
     <div class="row" id="after"></div>
     <div id="afterpagi"></div>
-
     <input type="hidden" name="pageNum" id="pageNum3" value="1">
     <input type="hidden" name="amount" id="amount3" value="6">
+    </div>
+</div>
 
-    <h2>관심 스터디</h2>
+<div class="subContainer">
+    <div class="h3cover">
+        <h4 class="h3title">관심 스터디</h4>
+    </div>
+    <div class="subBody">
     <div class="row" id="wish"></div>
     <div id="wishpagi"></div>
 
     <input type="hidden" name="pageNum" id="pageNum4" value="1">
     <input type="hidden" name="amount" id="amount4" value="6">
+    </div>
 </div>
+<%--</div>--%>
 
 
 <script>

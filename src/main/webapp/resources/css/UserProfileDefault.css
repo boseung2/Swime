@@ -5,6 +5,8 @@
         text-align: left;
         font-size: 13px;
         height: 40px;
+        /*color: #f1f1f1;*/
+
     }
 
 }
@@ -22,4 +24,51 @@ footer {
 
 .topnav > a {
     cursor: pointer;
+}
+#imgPlace{
+    width: 100px;
+    height: 100px;
+    /*border: solid 1px grey;*/
+    border-radius: 50px;
+    box-sizing: border-box;
+    align-items: center;
+    /*margin: 1rem;*/
+    margin-right: 1rem;
+}
+#namePlace{
+    font-weight: 300;
+    font-size: 2.5rem;
+}
+.userbar{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    /*height: 100%;*/
+    margin: 0;
+    padding: 1rem;
+    /*background: #f1f1f1;*/
+}
+.userbarunder{
+    width: 80%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    border-bottom: grey 2px solid;
+    padding: 2rem;
+
+    /*justify-content: initial;*/
+}
+.topnav{
+    display: flex;
+    justify-content: space-evenly;
+    /*border-top: solid grey 1px;*/
+    background: #eeeeee;
+    border-radius: 10px;
+}
+.userContainer{
+    background: #eeeeee;
+    border-radius: 10px;
+    margin: 3rem 0;
+    color: grey;
 }

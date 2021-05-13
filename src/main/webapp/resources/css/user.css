@@ -129,8 +129,24 @@ div.autologin{
     font-family: 'Roboto', sans-serif;
     opacity: 50%;
     display: flex;
-    justify-content: space-between;
-    margin: 10px 0 50px 0;
+    justify-content: flex-start;
+    margin: 10px 0 0 0;
+}
+div.registerid{
+    font-family: 'Roboto', sans-serif;
+    opacity: 50%;
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 5px 0;
+}
+
+
+div.forgetpw{
+    font-family: 'Roboto', sans-serif;
+    opacity: 50%;
+    display: flex;
+    justify-content: center;
+    margin: 0 0 10px 0;
 
 }
 .loginButton{
@@ -147,7 +163,10 @@ div.autologin{
     background-color: #3083e4;
     border-color: #4d90fe;
     text-decoration: none;
-    margin-top: 50px;
+    margin-top: 30px;
+}
+.loginButton:hover{
+    background: skyblue;
 }
 .loginButton2{
     display: flex;
@@ -163,7 +182,11 @@ div.autologin{
     color:#ffffff;
     background-color: black;
     border-color: black;
-    text-decoration: none;
+    text-decoration: none !important;
+}
+.loginButton2:hover{
+    background: darkgray;
+    color: white;
 }
 
 div.buttonForm{
@@ -174,4 +197,5 @@ div.buttonForm{
 span.git{
     display: block;
     margin-top: 4px;
+    text-decoration: none;
 }
