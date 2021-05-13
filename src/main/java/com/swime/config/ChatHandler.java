@@ -7,6 +7,8 @@ import com.swime.domain.MessageType;
 import com.swime.service.ChatRoomService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -24,11 +26,7 @@ public class ChatHandler extends TextWebSocketHandler {
     ChatRoomService chatRoomService;
 
     // 현재 존재하는 채팅방
-    static Map<String, ChatRoomVO> rooms;
-    static {
-        if(rooms == null)
-            rooms = new ConcurrentHashMap<>();
-    }
+    static Map<String, ChatRoomVO> rooms = new ConcurrentHashMap<>();
 
     // 방 말고 채팅자체에 접속한 유저
     Map<String, WebSocketSession> users = new ConcurrentHashMap<>();
@@ -45,7 +43,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
         for(int i= 0; i < chatRoomList.size(); i++) {
 
-            if(!rooms.containsKey(chatRoomList.get(i))) {
+            if(!rooms.containsKey(chatRoomList.get(i).getId())) {
                 rooms.put(chatRoomList.get(i).getId(), chatRoomList.get(i));
             }
         }
@@ -80,15 +78,11 @@ public class ChatHandler extends TextWebSocketHandler {
 
                 // 채팅방 id
                 String roomId = chatMessage.getChatRoomId();
-
-                // rooms에서 해당 채팅방 가져오기
-                ChatRoomVO room = rooms.get(roomId);
-
-                // 해당 유저를 해당 채팅방의 세션리스트에 등록
-                room.registerSession(userId, session);
+                
+                // rooms의 해당 채팅방의 session에 userId를 추가
+                rooms.get(roomId).getSessions().put(userId, session);
 
                 log.info(roomId + "의 sessions = " + rooms.get(roomId).getSessions());
-                log.info("rooms = " + rooms);
 
             } else if(MessageType.CHAT.equals(chatMessage.getType())) { // 메시지 타입이 CHAT인 경우
 
