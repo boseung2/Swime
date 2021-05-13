@@ -4,6 +4,7 @@ package com.swime.service;
 import com.swime.domain.*;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AdminDashBoardService {
@@ -26,4 +27,6 @@ public interface AdminDashBoardService {
     List<DashBoardLangVO> getDashBoardLang();
 
     List<DashBoardLocaleVO> getDashBoardLocale();
+
+    Date test2();
 }

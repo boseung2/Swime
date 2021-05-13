@@ -151,3 +151,4 @@ buildNumber.properties
 
 # api keys #
 map_key.properties
+/src/main/resources/Wallet_swime/
