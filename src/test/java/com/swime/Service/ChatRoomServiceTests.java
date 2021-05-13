@@ -29,6 +29,11 @@ public class ChatRoomServiceTests {
     }
 
     @Test
+    public void testGetRoomOfUsers() {
+        service.getRoomsOfUser("wlgh52725#gmail.com").forEach(room -> log.info(room));
+    }
+
+    @Test
     public void testGetRoomListById() {
         service.getRoomListById("wlgh52725@gmail.com").forEach(room -> log.info(room));
     }

@@ -25,8 +25,6 @@ public class NoticeHandler extends TextWebSocketHandler {
         
         // 현재 세션 사용자가 로그인한 상태이고, users에 있지 않으면 users에 저장
 
-        log.info("session principal = " + session.getPrincipal());
-
         if(session.getPrincipal() != null && users.get(session.getPrincipal()) == null) {
             log.info(session.getPrincipal().getName() + "님이 연결되었습니다.");
 
@@ -84,10 +82,8 @@ public class NoticeHandler extends TextWebSocketHandler {
     // 연결 해제시
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-
-        log.info("session principal = " + session.getPrincipal().getName());
         
-        if(users.get(session.getPrincipal().getName()) != null) {
+        if(session.getPrincipal() != null && users.get(session.getPrincipal().getName()) != null) {
             String senderId = session.getPrincipal().getName();
 
             if(senderId != null) {

@@ -7,23 +7,25 @@ import org.springframework.web.socket.WebSocketSession;
 
 import javax.xml.soap.Text;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 @Log4j
 public class ChatRoomVO {
     private String id;
-    private Set<WebSocketSession> sessions = new HashSet<>();
+    private Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
     public void handleMessage(WebSocketSession session, ChatMessageVO chatMessage) throws Exception{
 
         // 입장 메시지
         if(chatMessage.getType() == MessageType.ENTER) {
-            sessions.add(session);
+            sessions.put(chatMessage.getSenderId(), session);
             log.info(chatMessage.getSenderId() + "님이 입장하셨습니다.");
 
         }else if(chatMessage.getType() == MessageType.LEAVE) {
-            sessions.remove(session);
+            sessions.remove(chatMessage.getSenderId(), session);
             log.info(chatMessage.getSenderId() + "님이 퇴장하셨습니다.");
         }else {
             // [송신자, 수신자, 내용, 보낸시간]
@@ -37,7 +39,7 @@ public class ChatRoomVO {
     }
 
     public void send(TextMessage msg) throws Exception{
-        for(WebSocketSession target : sessions) {
+        for(WebSocketSession target : sessions.values()) {
             target.sendMessage(msg);
         }
     }

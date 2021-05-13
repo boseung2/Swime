@@ -18,4 +18,5 @@ public class ChatMessageVO {
     private Date sendDate;
     private Date readDate;
     private MessageType type; // ENTER, LEAVE, CHAT
+    private String yourName;
 }

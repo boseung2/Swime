@@ -8,10 +8,21 @@
         select * from tchat_room
     </select>
 
-    <select id="getRoomListById" resultType="com.swime.domain.ChatAttendVO">
-        select *
-        from tchat_attend
-        where attend_id = #{userId}
+    <select id="getRoomsOfUser" resultType="com.swime.domain.ChatRoomVO">
+        select r.id
+        from tchat_attend a, tchat_room r
+        where a.attend_id= 'wlgh52725@gmail.com' and a.chat_room_id = r.id
+    </select>
+
+    <select id="getRoomListById" resultType="com.swime.domain.ChatMessageVO">
+        select tb.sn, tb.chat_room_id, tb.receiver_id, tb.sender_id, tb.contents, tb.status, tb.send_date, tb.read_date
+        from (
+                 select row_number() over(partition by m.chat_room_id order by m.send_date desc) as rn, m.*
+                 from tchat_msg m
+                 where m.sender_id = #{userId} or m.receiver_id = #{userId}
+                 order by send_date desc
+             ) tb
+        where rn = 1
     </select>
 
     <insert id="insertRoom">
@@ -24,14 +35,15 @@
         values(seq_tchat_attend.nextval, #{id}, #{userId})
     </insert>
 
-    <select id="getOldChatRoom" resultType="String">
-        select chat_room_id
-        from tchat_attend
-        where attend_id = #{you} and
-                chat_room_id = (
-                select chat_room_id
-                from tchat_attend
-                where attend_id = #{me}
+    <select id="getOldChatRoom" resultType="com.swime.domain.ChatAttendVO">
+        select *
+        from tchat_attend outer
+        where attend_id = #{me}
+          and outer.chat_room_id in
+            (
+            select chat_room_id
+            from tchat_attend
+            where attend_id =#{you}
             )
     </select>
 
