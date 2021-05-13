@@ -45,6 +45,12 @@ public class AdminBoardServiceImpl implements AdminBoardService{
         return mapper.adminBoardRemove(sn);
 
     }
+
+    @Override
+    public int adminBoardFromDeleteToActive(String sn) {
+        return mapper.adminBoardFromDeleteToActive(sn);
+    }
+
     //----------------------------------------------------------------
     //관리자 댓글
     @Override
@@ -55,7 +61,15 @@ public class AdminBoardServiceImpl implements AdminBoardService{
                 mapper.adminReplyGetListWithPagingBySn(cri));
     }
 
+    @Override
+    public int adminReplyRemove(String sn) {
+        return mapper.adminReplyRemove(sn);
+    }
 
+    @Override
+    public int adminReplyFromDeleteToActive(String sn) {
+        return mapper.adminReplyFromDeleteToActive(sn);
+    }
 
 
 }

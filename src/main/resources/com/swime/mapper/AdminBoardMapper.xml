@@ -104,6 +104,12 @@
         update tbrd set status = 'BOST02' where sn = #{sn}
     </update>
 
+    <update id="adminBoardFromDeleteToActive">
+        update tbrd set status = 'BOST01' where sn = #{sn}
+    </update>
+
+
+
 
     <!--****************************관리자 댓글 페이징*****************************-->
 
@@ -197,6 +203,14 @@
             </if>
         </trim>
     </sql>
+
+    <update id="adminReplyRemove">
+        update trpl set status = 'RPST02' where sn = #{sn}
+    </update>
+
+    <update id="adminReplyFromDeleteToActive">
+        update tbrd set status = 'BOST01' where sn = #{sn}
+    </update>
 
 
 </mapper>

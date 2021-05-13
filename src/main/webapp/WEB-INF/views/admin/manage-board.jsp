@@ -102,7 +102,7 @@
             <div style="display: flex; justify-content: space-between;">
 
                 <div>
-                    <button class="footer-button">수정</button>
+                    <button class="footer-button" id="update">수정</button>
                     <button class="footer-button2" id="remove">삭제</button>
                 </div>
                 <!--admin 게시판 페이징 처리-->
@@ -145,14 +145,24 @@
 
         //checkbox 전체선택
         $('#allCheck').on('click', function(){
-
             allCheck(this);
         })
 
+        // $('.boardCkBox').on('click', function(){
+        //     console.log("fasdfasdf");
+        //     if($('input[id="check"]:checked').length == 10){
+        //         $('#allCheck').prop('checked', true);
+        //     }else{
+        //         $('#allCheck').prop('checked', false);
+        //     }
+        // })
 
         $('#remove').on('click', function(){
             oneCheck();
+        })
 
+        $('#update').on('click', function (){
+            oneCheck();
         })
 
         //'input[id="check"]'
@@ -170,14 +180,13 @@
         }
 
         function oneCheck(){
+
             console.log("remove click!!");
 
             let dataArr = [];
             let checkList = $('.boardCkBox:checked');
 
-
             checkList.each(function(index){
-
                 let tr = $(this).parent().parent().eq(0);
                 //sn번호
                 let snResult = tr.children().eq(2).text();
@@ -190,9 +199,9 @@
                 }
                 //console.log(tr);
             });
+
             console.log(dataArr);
             console.log(dataArr.length);
-
 
 
             if(dataArr.length == 0){
@@ -201,17 +210,30 @@
 
             }else{
                 let deleteConfirm = confirm('삭제 하시겠습니까?');
+
+
                 if(deleteConfirm){
 
-                    adminBoardListService.adminDelete(dataArr, function(result) {
+                    // let statusText = $('tr td').eq(8).text();
+                    // if(statusText == '삭제'){
+                    //     alert("이미 삭제 되어있습니다.");
+                    // }
+
+                    //만약 status가 삭제이면 delete() 수정이면 수정함수가 들어가야한다.
+                    //내가 클릭한 상태의 삭제, 정상을 가져와야한다.
+
+                    adminBoardListService.adminDelete(dataArr, bbsOrReplyVar, function(result) {
                         console.log("-------callback-------");
                         console.log(result);
+                        showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
+
                     });
                 }
 
             }
 
-        }
+        } // end oneCheck()
+
 
 
         //input 검색창 search

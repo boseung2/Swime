@@ -43,16 +43,16 @@ let adminBoardListService = (function(){
 
     }// end adminBoardList
 
-    function adminDelete(dataArr, callback, error){
+    function adminDelete(dataArr, bbs, callback, error){
         //traditional : 배열 보낼 때 [] 보내지는데 없애준다.
-        console.log("js/");
+        console.log("js/"+bbs);
         let test = JSON.stringify(dataArr);
         console.log(test);
 
         $.ajax({
             type : 'POST',
             //traditional : true,
-            url : '/admin/board/dataArr',
+            url : '/admin/board/dataArr/'+"?bbs="+bbs,
             data :  JSON.stringify(dataArr),
             contentType : "application/json; charset=utf-8",
             success : function(deleteResult, status, xhr){
