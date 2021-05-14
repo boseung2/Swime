@@ -161,9 +161,9 @@
             oneCheck();
         })
 
-        $('#update').on('click', function (){
-            oneCheck();
-        })
+        // $('#update').on('click', function (){
+        //     oneCheck();
+        // })
 
         //'input[id="check"]'
         function allCheck(obj){
@@ -182,22 +182,29 @@
         function oneCheck(){
 
             console.log("remove click!!");
-
+            let storeIndex = [];
             let dataArr = [];
+            let unCheck;
             let checkList = $('.boardCkBox:checked');
 
             checkList.each(function(index){
+
                 let tr = $(this).parent().parent().eq(0);
                 //sn번호
                 let snResult = tr.children().eq(2).text();
-                // let snResult = {
-                //     boardSnArr : tr.children().eq(2).text()
-                // }
+
+                unCheck = tr.children().eq(0).children().eq(0);
+
+                storeIndex.push(unCheck);
+
+                //storeIndex.push(snResult);
 
                 if(checkList.get(index)){
                     dataArr.push(snResult);
                 }
-                //console.log(tr);
+
+                console.log(storeIndex);
+
             });
 
             console.log(dataArr);
@@ -209,22 +216,31 @@
                 alert('삭제할 데이터가 없습니다.');
 
             }else{
+                //console.log("storeIndex : " + storeIndex);
                 let deleteConfirm = confirm('삭제 하시겠습니까?');
 
-
                 if(deleteConfirm){
-
                     // let statusText = $('tr td').eq(8).text();
                     // if(statusText == '삭제'){
                     //     alert("이미 삭제 되어있습니다.");
                     // }
-
                     //만약 status가 삭제이면 delete() 수정이면 수정함수가 들어가야한다.
                     //내가 클릭한 상태의 삭제, 정상을 가져와야한다.
 
                     adminBoardListService.adminDelete(dataArr, bbsOrReplyVar, function(result) {
                         console.log("-------callback-------");
                         console.log(result);
+
+                        if(result !== 'success'){
+                            alert("삭제처리가 실패했습니다.");
+                        }
+                        //삭제확인을 누르면 checked true -> false 체크박스 해제시킨다.
+                        for(let i = 0; i < storeIndex.length; i++){
+                            console.log(storeIndex[i]);
+                            storeIndex[i].eq(0).prop('checked', false);
+
+                        }
+
                         showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
 
                     });
