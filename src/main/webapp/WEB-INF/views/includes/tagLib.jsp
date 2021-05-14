@@ -30,6 +30,7 @@
 
 <!-- fontawsome icon -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/07bd6433b2.js" crossorigin="anonymous"></script>
 
 <%--modal--%>
 <%--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>--%>
