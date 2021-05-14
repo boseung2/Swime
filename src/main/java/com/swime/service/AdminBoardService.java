@@ -7,13 +7,19 @@ import org.apache.ibatis.annotations.Param;
 public interface AdminBoardService {
 
     //------------------------관리자 게시판----------------------------
-
-    //List<BoardVO> adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
     AdminBoardPageDTO adminGetListWithPagingBySn(AdminBoardCriteria cri);
-    //AdminBoardPageDTO adminGetListWithPagingBySn(@Param("cri") BoardCriteria cri);
 
+    int adminBoardRemove(String sn);
+
+    int adminBoardFromDeleteToActive(String sn);
+
+//    int adminBoardUpdate(BoardVO board);
 
     //---------------------------관리자 댓글---------------------------
     ReplyPageDTO adminReplyGetListWithPagingBySn(AdminReplyCriteria cri);
+
+    int adminReplyRemove(String sn);
+
+    int adminReplyFromDeleteToActive(String sn);
 
 }

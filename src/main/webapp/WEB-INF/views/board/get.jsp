@@ -597,9 +597,12 @@
             console.log("RemoveClicked");
 
             let sn = $(this).data("sn")
+            let isDelete = confirm('댓글을 삭제하시겠습니까?');
+
             console.log("replySn : " + sn);
             console.log("replyUserId : " + userId)
-            if(confirm('댓글을 삭제하시겠습니까?')){
+
+            if(isDelete){
 
                 replyService.remove(sn, snValue, userId, function(result){
                     console.log(result);
