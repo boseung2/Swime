@@ -241,6 +241,7 @@
 
                         }
 
+
                         showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
 
                     });
