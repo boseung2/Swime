@@ -18,4 +18,6 @@ public interface ChatRoomMapper {
     public void insertAttendant(@Param("id") String id, @Param("userId") String userId);
 
     public ChatAttendVO getOldChatRoom(@Param("me") String me, @Param("you") String you);
+
+    public ChatAttendVO getYourId(@Param("chatRoomId") String chatRoomId, @Param("userId") String userId);
 }

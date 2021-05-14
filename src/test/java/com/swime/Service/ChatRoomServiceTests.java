@@ -42,12 +42,18 @@ public class ChatRoomServiceTests {
     public void testRegisterRoom() {
 
         ChatMessageVO msg = new ChatMessageVO();
+        msg.setChatRoomId("exuuid6");
         msg.setSenderId("wlgh52725@gmail.com");
         msg.setReceiverId("fff@naver.com");
         msg.setContents("반가워요");
         msg.setStatus("MSST02");
 
-        service.registerRoom("exuuid6", msg);
+        try {
+            service.registerRoom(msg);
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
         service.getRoomList().forEach(room -> log.info(room));
         service.getRoomListById("wlgh52725@gmail.com").forEach(room -> log.info(room));
@@ -55,4 +61,11 @@ public class ChatRoomServiceTests {
 
     }
 
+    @Test
+    public void testGetYourId() {
+        log.info(
+                service.getYourId("f976e775-4669-4588-abd6-1167aaba17ca", "wlgh52725@gmail.com").getAttendId()
+        );
+
+    }
 }

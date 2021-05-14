@@ -47,4 +47,9 @@
             )
     </select>
 
+    <select id="getYourId" resultType="com.swime.domain.ChatAttendVO">
+        select * from tchat_attend
+        where chat_room_id = #{chatRoomId} and attend_id != #{userId}
+    </select>
+
 </mapper>

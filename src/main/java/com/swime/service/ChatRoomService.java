@@ -1,6 +1,7 @@
 package com.swime.service;
 
 import com.swime.domain.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,9 +16,12 @@ public interface ChatRoomService {
     public List<ChatMessageVO> getRoomListById(String userId);
 
     // 채팅방 생성 - 채팅방 생성할때 들어오는 메시지도, 유저도 함께 저장
-    public void registerRoom(String id, ChatMessageVO msg);
+    public void registerRoom(ChatMessageVO msg);
 
     // 특정유저와 내가 이전에 만든 채팅방이 있는지 확인 (있으면 채팅방 id를 반환)
     public ChatAttendVO getOldChatRoom(String me, String you);
+
+    // 상대방의 id를 반환
+    public ChatAttendVO getYourId(String chatRoomId, String userId);
 
 }

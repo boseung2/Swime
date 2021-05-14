@@ -17,7 +17,7 @@
         </header>
         <ul>
             <c:forEach var="room" items="${rooms}">
-                <li>
+                <li><a style="display: block" href="/chat/room/${room.chatRoomId}">
                     <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
                     <div>
 
@@ -28,6 +28,7 @@
                             ${room.contents}
                         </h3>
                     </div>
+                </a>
                 </li>
             </c:forEach>
 
@@ -45,10 +46,15 @@
 
         </ul>
         <footer style="margin-top: 0px;">
-            <textarea placeholder="Type your message"></textarea>
+            <form id="registerForm" action="/chat/register" method="post">
+                <textarea name="contents" placeholder="Type your message"></textarea>
+                <input type="hidden" name="receiverId" value="${member.id}">
+                <input type="hidden" name="senderId" value="${pinfo.username}">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+            </form>
             <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_picture.png" alt="" style="visibility: hidden">
             <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_file.png" alt="" style="visibility: hidden">
-            <a href="#" style="margin-left: 490px;">Send</a>
+            <a href="" id="sendBtn" style="margin-left: 490px;">Send</a>
         </footer>
     </main>
 </div>
@@ -84,6 +90,33 @@
             let data = e.data;
 
             // 채팅방 리스트를 다시 불러온다.
+        }
+
+    })
+
+</script>
+
+<script>
+
+    $('#sendBtn').on("click", function(e) {
+        e.preventDefault();
+
+        // 유효성 검사
+        if ($('textarea[name="contents"]')[0].value === "") { // 비어있으면 send 못함
+            return;
+        }
+
+        let flag = false;
+        let contents = $('textarea[name="contents"]')[0].value;
+        for(let i = 0; i < contents.length; i++) {
+            if(contents[i] !== " ") {
+                flag = true;
+                break;
+            }
+        }
+
+        if(flag) {
+            $('#registerForm').submit();
         }
 
     })

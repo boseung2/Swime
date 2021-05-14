@@ -61,17 +61,16 @@ import java.util.List;
 
     @Transactional
     @Override
-    public void registerRoom(String id, ChatMessageVO msg) {
+    public void registerRoom(ChatMessageVO msg){
 
         // 채팅방 생성
-        mapper.insertRoom(id);
+        mapper.insertRoom(msg.getChatRoomId());
 
         // 해당 id를 가진 채팅방에 송신자와 수신자를 등록
-        mapper.insertAttendant(id, msg.getSenderId());
-        mapper.insertAttendant(id, msg.getReceiverId());
+        mapper.insertAttendant(msg.getChatRoomId(), msg.getSenderId());
+        mapper.insertAttendant(msg.getChatRoomId(), msg.getReceiverId());
 
         // 채팅 메시지를 등록
-        msg.setChatRoomId(id);
         msgMapper.insertMsg(msg);
 
     }
@@ -79,5 +78,10 @@ import java.util.List;
     @Override
     public ChatAttendVO getOldChatRoom(String me, String you) {
         return mapper.getOldChatRoom(me, you);
+    }
+
+    @Override
+    public ChatAttendVO getYourId(String chatRoomId, String userId) {
+        return mapper.getYourId(chatRoomId, userId);
     }
 }

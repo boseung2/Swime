@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swime.domain.ChatMessageVO;
 import com.swime.domain.ChatRoomVO;
 import com.swime.domain.MessageType;
+import com.swime.service.ChatMessageService;
 import com.swime.service.ChatRoomService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -24,6 +25,9 @@ public class ChatHandler extends TextWebSocketHandler {
 
     @Setter(onMethod_ = {@Autowired})
     ChatRoomService chatRoomService;
+
+    @Setter(onMethod_ = {@Autowired})
+    ChatMessageService chatMessageService;
 
     // 현재 존재하는 채팅방
     static Map<String, ChatRoomVO> rooms = new ConcurrentHashMap<>();
@@ -53,8 +57,8 @@ public class ChatHandler extends TextWebSocketHandler {
             users.put(session.getPrincipal().getName(), session);
         }
 
-        log.info("채팅 rooms = " + rooms);
-        log.info("채팅 users = " + users);
+        log.info("연결 직후 채팅 rooms = " + rooms);
+        log.info("연결 직후 채팅 users = " + users);
     }
 
     // 클라이언트가 Data 전송시
@@ -63,8 +67,6 @@ public class ChatHandler extends TextWebSocketHandler {
 
         // 메시지 출력
         String msg = message.getPayload();
-        log.info("ChatHandler session = " + session + ", message = " + msg);
-
         ChatMessageVO chatMessage = new ObjectMapper().readValue(msg, ChatMessageVO.class);
         log.info("받은 메시지 = " + chatMessage);
 
@@ -84,8 +86,45 @@ public class ChatHandler extends TextWebSocketHandler {
 
                 log.info(roomId + "의 sessions = " + rooms.get(roomId).getSessions());
 
+                log.info("입장 직후 채팅 rooms = " + rooms);
+                log.info("입장 직후 채팅 users = " + users);
+
             } else if(MessageType.CHAT.equals(chatMessage.getType())) { // 메시지 타입이 CHAT인 경우
 
+                // 해당 채팅방
+                ChatRoomVO room = rooms.get(chatMessage.getChatRoomId());
+                // 해당 채팅방의 세션맵
+                Map<String, WebSocketSession> userSession = room.getSessions();
+
+                // 1. 상대방 session이 해당 room에 존재하면 chatMessage의 status : 읽음 / 존재하지 않으면 안읽음
+                if(userSession.containsKey(chatMessage.getReceiverId())) {
+                    chatMessage.setStatus("MSST01"); // 읽음
+                }else {
+                    chatMessage.setStatus("MSST02"); // 안읽음
+                }
+
+                // 2. 해당 메시지를 db에 저장
+                chatMessageService.registerMsg(chatMessage);
+
+                // 3. 해당 채팅방의 세션에 메시지 전달
+                for(WebSocketSession target : userSession.values()) {
+
+                    // 채팅방id, 보낸사람, 내용
+                    TextMessage tmpMsg = new TextMessage(chatMessage.getChatRoomId() + ","
+                            + chatMessage.getSenderId() + "," + chatMessage.getContents());
+
+                    log.info("채팅 수신자에게 보낼 메시지 = " + tmpMsg.toString());
+
+                    target.sendMessage(tmpMsg);
+
+                }
+
+                // 4. 해당 채팅방에 세션은 없지만 다른 곳에서 채팅중인 경우
+                if(!userSession.containsKey(chatMessage.getReceiverId()) &&
+                        users.containsKey(chatMessage.getReceiverId())) {
+
+                    users.get(chatMessage.getReceiverId()).sendMessage(new TextMessage("reload chatList"));
+                }
 
             }
         }
@@ -114,18 +153,26 @@ public class ChatHandler extends TextWebSocketHandler {
 
             for(int i = 0; i < roomsOfUser.size(); i++) {
 
-                String roomId = roomsOfUser.get(i).getId();
+                // 해당 채팅방이 rooms에 등록되어있으면
+                if(rooms.containsKey(roomsOfUser.get(i).getId())) {
 
-                // 해당 사용자가 속한 채팅방의 세션에 퇴장하는 유저가 있으면 삭제해주기
-                Map<String, WebSocketSession> userSessions = rooms.get(roomId).getSessions();
+                    String roomId = roomsOfUser.get(i).getId();
 
-                if (userSessions.containsKey(userId)) {
-                    userSessions.remove(userId);
+                    // 해당 사용자가 속한 채팅방의 세션에 퇴장하는 유저가 있으면 삭제해주기
+                    Map<String, WebSocketSession> userSessions = rooms.get(roomId).getSessions();
 
-                    log.info(roomId + "에서 " + userId + "의 세션이 삭제되었습니다.");
+                    if (userSessions.containsKey(userId)) {
+                        userSessions.remove(userId);
+
+                        log.info(roomId + "에서 " + userId + "의 세션이 삭제되었습니다.");
+                    }
                 }
+
             }
         }
+
+        log.info("연결 종료 직후 채팅 rooms = " + rooms);
+        log.info("연결 종료 직후 채팅 users = " + users);
 
     }
 
