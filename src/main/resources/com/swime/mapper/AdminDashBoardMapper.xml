@@ -68,6 +68,10 @@
         select To_date(nvl(${year}, 1900)||'/'||nvl(${month}, 01)||'/'||nvl(${day}, 01) ,'yyyy/mm/dd') from dual
     </select>
 
+    <select id="test2" resultType="Date">
+        select current_date from dual
+    </select>
+
     <select id="countUserRegisterByParam" resultType="int">
         <![CDATA[
         select count(*)

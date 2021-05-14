@@ -12,21 +12,25 @@
     <div class="container">
         <c:if test="${!empty MemberVo}">
             <!-- Heading Row -->
-            <div class="row align-items-center my-5">
-                <div class="col-lg-7">
-                    <div>
-                        <img id="imgPlace" class="img-fluid rounded mb-4 mb-lg-0" alt="" >
+<%--            <div class="row align-items-center my-5">--%>
+<%--                <div class="col-lg-7">--%>
+
+            <div class="userContainer">
+
+
+                    <div class="userbar">
+                        <div class="userbarunder">
+
+                        <img id="imgPlace" class="img-fluid mb-4 mb-lg-0" alt="" style="margin-right: 3rem" >
                             <%--                    <img id="imgPlace" class="img-fluid rounded mb-4 mb-lg-0" src="/display?fileName=${MemberVo.picture}" alt="">--%>
                             <%--                    <img id="imgPlace" class="img-fluid rounded mb-4 mb-lg-0" src="${!empty MemberVo.picture ? '/display?fileName=' += MemberVo.picture : '사진없음'}" alt="">--%>
+                    <div id="namePlace">${MemberVo.name}</div>
+                        </div>
                     </div>
-                    <div>${MemberVo.name}</div>
-                </div>
+<%--                </div>--%>
                 <!-- /.col-lg-8 -->
 
-            </div>
-            <!-- /.row -->
-
-            <!-- nav -->
+<%--            </div>--%>
             <div class="topnav">
                 <a id="groupWithPaging" class="active">모임</a>
                     <%--            <a id="group" >모임</a>--%>
@@ -35,6 +39,10 @@
                 <a id="reply" >작성한 댓글</a>
                 <a id="profile" >프로필</a>
             </div>
+            </div>
+            <!-- /.row -->
+
+            <!-- nav -->
             <!-- /nav -->
 
             <div id="content">

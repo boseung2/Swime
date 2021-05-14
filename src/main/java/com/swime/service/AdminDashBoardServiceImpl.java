@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -102,5 +103,10 @@ public class AdminDashBoardServiceImpl implements AdminDashBoardService{
     @Override
     public List<DashBoardLocaleVO> getDashBoardLocale() {
         return mapper.getDashBoardLocale();
+    }
+
+    @Override
+    public Date test2() {
+        return mapper.test2();
     }
 }

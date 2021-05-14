@@ -23,6 +23,7 @@ public interface AdminDashBoardMapper {
     int countUserRegisterByParam(@Param("year") int year, @Param("month") int month, @Param("day") int day);
 
     Date test(@Param("year") int year, @Param("month") int month, @Param("day") int day);
+    Date test2();
 
     int getVisitCount();
 

@@ -1,5 +1,6 @@
 package com.swime.config;
 
+import com.swime.util.CheckOS;
 import com.swime.util.CustomCorsFilter;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
@@ -28,10 +29,14 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     //첨부파일
     @Override
     public void customizeRegistration(ServletRegistration.Dynamic registration) {
+        CheckOS checkOS = CheckOS.getInstance();
+
+        final String uploadFolder = checkOS.getImgFilePath();
+
         registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 
         MultipartConfigElement multipartConfig = new MultipartConfigElement
-                ("C://upload//temp", 20971520,
+                (uploadFolder + "temp", 20971520,
                         41943040, 20971520);
         registration.setMultipartConfig(multipartConfig);
     }
