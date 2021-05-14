@@ -38,4 +38,16 @@ public class NoticeMapperTests {
         assert (mapper.insert(notice) == 1);
     }
 
+    @Test
+    public void testGetList() {
+        mapper.getList("wlgh52725@gmail.com").forEach(notice -> log.info(notice));
+        mapper.getList("wlgh52725@gmail.com").forEach(notice -> {assert ("wlgh52725@gmail.com".equals(notice.getReceiver()));});
+    }
+
+
+    @Test
+    public void testUpdate() {
+        assert (mapper.update(16L) == 1);
+    }
+
 }
