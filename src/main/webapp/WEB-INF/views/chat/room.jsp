@@ -220,7 +220,8 @@
         e.preventDefault();
 
         // 유효성 검사
-        if ($('#contents')[0].value === "") { // 비어있으면 send 못함
+        if ($('#contents')[0].value === "" || $('#contents')[0].value.length >= 1000) { // 비어있으면 send 못함
+            alert('빈문자열이거나 1000자 이상은 보낼 수 없습니다.');
             return;
         }
 
