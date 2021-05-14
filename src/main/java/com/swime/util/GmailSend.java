@@ -19,6 +19,8 @@ public class GmailSend {
     private Session session;
 
     public GmailSend(){
+        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
+
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", 465);
         prop.put("mail.smtp.auth", "true");

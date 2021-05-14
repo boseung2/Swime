@@ -18,6 +18,7 @@
 <style>
     .content {
         min-height: calc(100vh - 26vh);
+        width: 100%;
     }
 
     footer {
@@ -27,14 +28,55 @@
     .uploadResult > img {
         height: 70px;
     }
+
+
 </style>
 
 <link href="/resources/css/user.css" rel="stylesheet">
+<link href="/resources/css/shootingStar2.css" rel="stylesheet">
+<link href="/resources/css/floatingStar2.css" rel="stylesheet">
 <body>
 
 <div class="full">
 <%--    <img src="../../../resources/img/background.jpg">--%>
-<div class="content">
+<%--    <div class="night-canvas">--%>
+<%--        <div class="night">--%>
+<%--            <div class="shooting_star"></div>--%>
+<%--            <div class="shooting_star"></div>--%>
+<%--            <div class="shooting_star"></div>--%>
+<%--            <div class="shooting_star"></div>--%>
+<%--            <div class="shooting_star"></div>--%>
+<%--            <div class="shooting_star"></div>--%>
+<%--            <div class="shooting_star"></div>--%>
+<%--            <div class="shooting_star"></div>--%>
+<%--            <div class="shooting_star"></div>--%>
+
+<%--            <div class="floating-star"></div>--%>
+<%--        </div>--%>
+<%--    </div>--%>
+
+    <div class="night-canvas">
+        <div class="floating-canvas">
+            <div class="floating_star"></div>
+            <div class="floating_star"></div>
+            <div class="floating_star"></div>
+            <div class="floating_star"></div>
+            <div class="floating_star"></div>
+            <div class="floating_star"></div>
+            <div class="floating_star"></div>
+<%--            <div class="floating_star"></div>--%>
+<%--            <div class="floating_star"></div>--%>
+<%--            <div class="floating_star"></div>--%>
+        </div>
+        <div class="shooting-canvas">
+            <div class="shooting_star"></div>
+            <div class="shooting_star"></div>
+            <div class="shooting_star"></div>
+        </div>
+    </div>
+
+<div class="content" style="z-index: 20;">
+
     <div id="regdiv">
         <div id="errorMsgDiv">
 
