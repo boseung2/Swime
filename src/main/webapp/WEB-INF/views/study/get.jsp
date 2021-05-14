@@ -417,12 +417,23 @@
                 // str += "";
 
             } else if(result === "not attend"){
-                if (parseInt("${study.attendants}") >= parseInt("${study.capacity}")) {
 
-                    str += "<a class='btn btn-dark'>모집마감</a>";
-                }else {
-                    str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
-                }
+                // 참여인원과 모집인원을 다시 불러오기
+                studyService.get(${study.sn}, function(result){
+
+                    attendants = result.attendants;
+                    capacity = result.capacity;
+
+                    if (attendants >= capacity) {
+
+                        str += "<a class='btn btn-dark'>모집마감</a>";
+                    }else {
+                        str += "<a id='attend' class='btn btn-primary' href=''>참석하기</a>";
+                    }
+
+                    $('#attendButton').html(str);
+                    return;
+                })
 
             } else if(result === "attend"){
                 str += "<a id='cancel' class='btn btn-danger' href=''>탈퇴하기</a>";
@@ -598,6 +609,18 @@
             }
 
             if(result === 'success') {
+
+                // 스터디장에게 참석했다는 알림을 db에 저장하고 실시간 알림 전송
+                noticeService.register(
+                    {sender : "${pinfo.username}", receiver : "${study.representation}",
+                        kind : "스터디", url : "http://localhost/study/get?sn=${study.sn}", content : "스터디 ${study.name}에 새로운 승인 대기멤버가 있습니다."}, function(notice) {
+                        if(notice === 'success') {
+
+                            console.log('알림 등록 완료 완료되었습니다.');
+                        }
+                    })
+
+
                 alert('설문을 등록하였습니다. 스터디장이 승인하면 스터디에 참석됩니다.');
 
                 // attend 버튼 reload
