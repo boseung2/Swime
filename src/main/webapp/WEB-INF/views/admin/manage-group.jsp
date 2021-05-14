@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-<%@include file="../includes/tagLib.jsp" %>
 
 <div class="container-fluid">
     <!-- <h2 class="mt-4">모임관리</h2> -->
@@ -23,19 +22,19 @@
                     </select>
                 </div>
                 <div style="display: flex; margin-left: auto;">
-                    <select>
+                    <select class="bbsOrReply">
                         <option value="">--전체--</option>
                         <option value="unactivated">폐쇄</option>
                         <option value="activated">활동</option>
                     </select>
-                    <select>
+                    <select class="bbsOrReply">
                         <option value="">--전체--</option>
                         <option value="groupname">모임명</option>
                         <option value="grouphost">모임장명</option>
                     </select>
 
                     <div class="search-bar">
-                        <input type="text" placeholder="Search.." >
+                        <input class="inputButton" type="text" placeholder="Search.." maxlength="20" >
                         <button class="search-button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>

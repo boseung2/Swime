@@ -2,6 +2,7 @@ package com.swime.mapper;
 
 import com.swime.domain.DashBoardLangVO;
 import com.swime.domain.DashBoardLocaleVO;
+import com.swime.domain.DashBoardModalDataVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -59,5 +60,35 @@ public class AdminDashBoardTests {
 
         Assert.assertNotNull(list);
         list.forEach(log::info);
+    }
+
+    @Test
+    public void getTodayUserRegister(){
+        List<DashBoardModalDataVO> list = mapper.todayUserRegister();
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+
+    }
+
+    @Test
+    public void getTodayGroupRegister(){
+        List<DashBoardModalDataVO> list = mapper.todayGroupRegister();
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+
+    }
+
+    @Test
+    public void getTodayStudyRegister(){
+        List<DashBoardModalDataVO> list = mapper.todayStudyRegister();
+        Assert.assertNotNull(list);
+        list.forEach(log::info);
+
+    }
+
+    @Test
+    public void testDate2(){
+        mapper.test2();
+        log.info(mapper.test2());
     }
 }

@@ -47,7 +47,6 @@ body {
 
 .logo img {
     width : 100px;
-    height : 30px
 }
 
 .header a:hover {
@@ -129,7 +128,7 @@ body {
 .pagination {
     isplay: flex;
     justify-content: center;
-    margin-bottom: 60px;
+    /*margin-bottom: 60px;*/
 }
 
 /* Pagination links */

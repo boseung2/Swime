@@ -15,7 +15,7 @@
 <link href="../../../resources/css/adminPage.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+
 
 
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
@@ -41,7 +41,7 @@
         #myModal{
             position:absolute;
             width:100%;
-            height:100%;
+            height:150%;
             background: rgba(0,0,0,0.8);
             top:0;
             left:0;
@@ -51,23 +51,11 @@
     </style>
 </head>
 <body class="sb-nav-fixed">
-    <div class="modal" style="display:none;" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-modal="true" style="padding-right: 17px; display: block;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">내용.</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
-                </div>
-            </div>
-        </div>
-    </div>
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 
+    <%--modal--%>
+    <div id='modalPlace'></div>
 
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 
     <a class="navbar-brand" href="/">
         <img src="../../../resources/img/logo.png" class="swime-logo">
@@ -137,7 +125,6 @@
         <%@include file="./footer.jsp" %>
     </div>
 </div>
-
 
 
 </body>

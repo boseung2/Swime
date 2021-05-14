@@ -2,6 +2,8 @@ package com.swime.service;
 
 import com.swime.domain.DashBoardLangVO;
 import com.swime.domain.DashBoardLocaleVO;
+import com.swime.domain.DashBoardModalDataDTO;
+import com.swime.domain.DashBoardModalDataVO;
 import com.swime.mapper.AdminDashBoardMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -9,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
 @Log4j
 @Service
-//@AllArgsConstructor
 public class AdminDashBoardServiceImpl implements AdminDashBoardService{
 
     @Setter(onMethod_ = @Autowired)
@@ -27,13 +29,37 @@ public class AdminDashBoardServiceImpl implements AdminDashBoardService{
     }
 
     @Override
+    public DashBoardModalDataDTO todayUserRegister() {
+        DashBoardModalDataDTO dto = new DashBoardModalDataDTO();
+        dto.setList(mapper.todayUserRegister());
+        dto.setCount(mapper.countTodayUserRegister());
+        return dto;
+    }
+
+    @Override
     public int countTodayGroupRegister() {
         return mapper.countTodayGroupRegister();
     }
 
     @Override
+    public DashBoardModalDataDTO todayGroupRegister() {
+        DashBoardModalDataDTO dto = new DashBoardModalDataDTO();
+        dto.setList(mapper.todayGroupRegister());
+        dto.setCount(mapper.countTodayGroupRegister());
+        return dto;
+    }
+
+    @Override
     public int countTodayStudyRegister() {
         return mapper.countTodayStudyRegister();
+    }
+
+    @Override
+    public DashBoardModalDataDTO todayStudyRegister() {
+        DashBoardModalDataDTO dto = new DashBoardModalDataDTO();
+        dto.setList(mapper.todayStudyRegister());
+        dto.setCount(mapper.countTodayStudyRegister());
+        return dto;
     }
 
     @Override
@@ -77,5 +103,10 @@ public class AdminDashBoardServiceImpl implements AdminDashBoardService{
     @Override
     public List<DashBoardLocaleVO> getDashBoardLocale() {
         return mapper.getDashBoardLocale();
+    }
+
+    @Override
+    public Date test2() {
+        return mapper.test2();
     }
 }

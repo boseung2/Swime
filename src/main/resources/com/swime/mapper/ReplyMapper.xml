@@ -144,8 +144,8 @@
                 r.user_id = u.id
             order by
                 sn asc
-        )
-        where rownum #{cri.pageNum} * #{cri.amount})
+            )
+            where rownum <= #{cri.pageNum} * #{cri.amount}
         )
         where rn > (#{cri.pageNum} -1) * #{cri.amount}
 

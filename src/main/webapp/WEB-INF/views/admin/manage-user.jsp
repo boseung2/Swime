@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-<%@include file="../includes/tagLib.jsp" %>
 
 <div class="container-fluid">
     <!-- <h2 class="mt-4">회원관리</h2> -->
@@ -23,13 +22,13 @@
                     </select>
                 </div>
                 <div style="display: flex; margin-left: auto;">
-                    <select>
+                    <select class="bbsOrReply">
                         <option value="">--상태--</option>
                         <option value="normal">정상</option>
                         <option value="quit">탈퇴</option>
                     </select>
                     <div class="search-bar">
-                        <input type="text" placeholder="Search.." >
+                        <input class="inputButton" type="text" placeholder="Search.." maxlength="20">
                         <button class="search-button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>

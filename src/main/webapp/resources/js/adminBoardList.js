@@ -1,23 +1,38 @@
-console.log("adminBoardList Module");
-
 let adminBoardListService = (function(){
 
-    function adminBoardList(page, amount, callback, error){
+    function adminBoardList(page, amount, bbs, sort, active,
+                            keyword, searchResult, callback, error){
         //let page = param.page || 1;
         //let amount2 = amount || 10;
 
         console.log("adminBoardListCall........")
-        console.log(page);
         console.log("js/page : " + page);
         console.log("js/amount : " + amount);
+        console.log("js/bbs : " + bbs);
+        console.log("js/sort : " + sort);
+        console.log("js/active : " + active);
+        console.log("js/keyword : " + keyword);
+        console.log("js/searchResult :" + searchResult);
         // + "/?amount="+amount2
-        $.getJSON("/admin/manageBoard/" + page + "/?amount="+amount,
+        $.getJSON("/admin/manageBoard/" + page + "?amount="+amount
+            + "&bbs=" + bbs + "&sort=" + sort + "&active=" + active
+            + "&keyword=" + keyword + "&searchResult=" + searchResult,
             function(data){
-                // console.log(data);
-                // console.dir(data);
+                console.log(data);
+                console.dir(data);
                 if(callback) {
-                    callback(data.boardCnt, data.list);
-
+                    if(data.boardCompare === 'isBoard'){
+                        callback(data.board.boardCnt,
+                            data.board.list,
+                            data.boardCompare);
+                    }else{
+                        callback(data.reply.replyCnt,
+                            data.reply.list,
+                            data.replyCompare);
+                    }
+                    //console.log(data.reply.replyCnt);
+                    // console.log(data.reply.list);
+                    // console.log(data.compare);
                 }
             })
             .fail(function(xhr, status, err){
@@ -27,6 +42,32 @@ let adminBoardListService = (function(){
             });
 
     }// end adminBoardList
+
+    function adminDelete(dataArr, bbs, callback, error){
+        //traditional : 배열 보낼 때 [] 보내지는데 없애준다.
+        console.log("js/"+bbs);
+        let test = JSON.stringify(dataArr);
+        console.log(test);
+
+        $.ajax({
+            type : 'POST',
+            //traditional : true,
+            url : '/admin/board/dataArr/'+"?bbs="+bbs,
+            data :  JSON.stringify(dataArr),
+            contentType : "application/json; charset=utf-8",
+            success : function(deleteResult, status, xhr){
+                if(callback){
+                    callback(deleteResult);
+                }
+            },
+            error : function(xhr, status, er){
+                if (error){
+                    error(er)
+                }
+            }
+        });
+
+    }// end adminDelete
 
     function boardDisplayTime(timeValue) {
 
@@ -48,6 +89,10 @@ let adminBoardListService = (function(){
 
     return {
         adminBoardList:adminBoardList,
-        boardDisplayTime:boardDisplayTime
+        boardDisplayTime:boardDisplayTime,
+        adminDelete:adminDelete
     }
 })();
+
+
+
