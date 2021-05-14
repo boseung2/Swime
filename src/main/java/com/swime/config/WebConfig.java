@@ -31,7 +31,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     public void customizeRegistration(ServletRegistration.Dynamic registration) {
         CheckOS checkOS = CheckOS.getInstance();
 
-        final String uploadFolder = checkOS.getImgFilePath();
+        final String uploadFolder = checkOS.withoutDeleteFilePath();
 
         registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 
