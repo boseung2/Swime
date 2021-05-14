@@ -30,14 +30,25 @@ public class CheckOS {
 
     public String getImgFilePath(){
         String filePath = "";
-        if(isWindows()){
+        if(isWindows())
             filePath = "c:/upload/";
-        }
 
         if(!isWindows())
             filePath = (this.getClass().getResource("").getPath()) + "../../../../../resources/upload/";
 
 //        System.out.println(filePath);
+
+        return filePath;
+    }
+
+    public String withoutDeleteFilePath(){
+        String filePath = "";
+        if(isWindows())
+            filePath = "c:/upload/";
+        else if(isMac())
+            filePath = (this.getClass().getResource("").getPath()) + "../../../../../resources/upload/";
+        else if(isLinux())
+            filePath = (this.getClass().getResource("").getPath()) + "../../../../../../staticFiles/upload/";
 
         return filePath;
     }

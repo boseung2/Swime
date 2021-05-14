@@ -23,9 +23,7 @@
 <script src="../../../resources/js/adminPageDemo/datatables-demo.js"></script>
 <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-
-
-
+<script src="../../../resources/js/adminDashBoard/chartGlobalSettings.js"></script>
 
 
 <!DOCTYPE html>
@@ -60,7 +58,7 @@
     <a class="navbar-brand" href="/">
         <img src="../../../resources/img/logo.png" class="swime-logo">
     </a>
-    <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+<%--    <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>--%>
 
     <!-- Navbar Search-->
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
