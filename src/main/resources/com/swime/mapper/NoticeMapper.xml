@@ -9,4 +9,17 @@
         values(seq_tnotice.nextval, #{sender}, #{receiver}, #{kind}, #{url}, 'MSST01', #{content}, current_date)
     </insert>
 
+    <select id="getList" resultType="com.swime.domain.NoticeVO">
+        select sn, sender, receiver, kind, url, content, send_date, status
+        from tnotice
+        where receiver = #{userId} and status = 'MSST01'
+        order by send_date desc
+    </select>
+
+    <insert id="update">
+        update tnotice
+        set status ='MSST02'
+        where sn = #{sn}
+    </insert>
+
 </mapper>

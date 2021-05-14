@@ -1,15 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@include file="../../includes/tagLib.jsp" %>
+<link href="/resources/css/minicard.css" rel="stylesheet">
 
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal.username" var="userId"/>
 </sec:authorize>
 <script type="text/javascript" src="../../../../resources/js/validation.js"></script>
 
-<div class="container">
-    <h2>프로필 수정</h2>
-    <hr/>
+<div class="subContainer">
+    <div class="h3cover" >
+        <%--    <h3 class="h3title">생성한 스터디</h3>--%>
+        <h4 class="h3title">프로필</h4>
+    </div>
+    <div class="subBody">
     <div id="errorMsgDiv"></div>
 <%--    action="/user/modify" method="post"--%>
     <form role="form" id="userInfoForm">
@@ -57,6 +61,7 @@
         <input type="hidden" name="email" value="${MemberVo.id}">
 <%--        <sec:csrfInput/>--%>
     </form>
+</div>
 </div>
 
 

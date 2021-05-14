@@ -102,8 +102,8 @@
             <div style="display: flex; justify-content: space-between;">
 
                 <div>
-                    <button class="footer-button">수정</button>
-                    <button class="footer-button2">삭제</button>
+                    <button class="footer-button" id="update">수정</button>
+                    <button class="footer-button2" id="remove">삭제</button>
                 </div>
                 <!--admin 게시판 페이징 처리-->
                 <div class="adminPageFooter panel-footer">
@@ -139,24 +139,31 @@
         let keyword = "EN"; // email / id
         let searchResult = ""; //검색 input창
 
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+        });
+
         //checkbox 전체선택
         $('#allCheck').on('click', function(){
-
             allCheck(this);
         })
 
-        //checkbox 1개 선택 $('td input[id="check"]')
-        //'input[id="check"]'
-        // $('td input[id="check"]').each(function (){
+        // $('.boardCkBox').on('click', function(){
+        //     console.log("fasdfasdf");
+        //     if($('input[id="check"]:checked').length == 10){
+        //         $('#allCheck').prop('checked', true);
+        //     }else{
+        //         $('#allCheck').prop('checked', false);
+        //     }
         // })
-        $('td input[id="check"]').each(function (){
-            $(this).on('click', function(){
-                console.log("dfs");
-            })
 
+        $('#remove').on('click', function(){
+            oneCheck();
         })
 
-
+        // $('#update').on('click', function (){
+        //     oneCheck();
+        // })
 
         //'input[id="check"]'
         function allCheck(obj){
@@ -165,6 +172,7 @@
 
             if(isAllChecked) {
                 $('input[id="check"]').prop('checked', true);
+                //oneCheck();
             }else{
                 $('input[id="check"]').prop('checked', false);
             }
@@ -172,9 +180,77 @@
         }
 
         function oneCheck(){
-            this.checked = true;
-            console.log("잉 클릭이 안되네..");
-        }
+
+            console.log("remove click!!");
+            let storeIndex = [];
+            let dataArr = [];
+            let unCheck;
+            let checkList = $('.boardCkBox:checked');
+
+            checkList.each(function(index){
+
+                let tr = $(this).parent().parent().eq(0);
+                //sn번호
+                let snResult = tr.children().eq(2).text();
+
+                unCheck = tr.children().eq(0).children().eq(0);
+
+                storeIndex.push(unCheck);
+
+                //storeIndex.push(snResult);
+
+                if(checkList.get(index)){
+                    dataArr.push(snResult);
+                }
+
+                console.log(storeIndex);
+
+            });
+
+            console.log(dataArr);
+            console.log(dataArr.length);
+
+
+            if(dataArr.length == 0){
+
+                alert('삭제할 데이터가 없습니다.');
+
+            }else{
+                //console.log("storeIndex : " + storeIndex);
+                let deleteConfirm = confirm('삭제 하시겠습니까?');
+
+                if(deleteConfirm){
+                    // let statusText = $('tr td').eq(8).text();
+                    // if(statusText == '삭제'){
+                    //     alert("이미 삭제 되어있습니다.");
+                    // }
+                    //만약 status가 삭제이면 delete() 수정이면 수정함수가 들어가야한다.
+                    //내가 클릭한 상태의 삭제, 정상을 가져와야한다.
+
+                    adminBoardListService.adminDelete(dataArr, bbsOrReplyVar, function(result) {
+                        console.log("-------callback-------");
+                        console.log(result);
+
+                        if(result !== 'success'){
+                            alert("삭제처리가 실패했습니다.");
+                        }
+                        //삭제확인을 누르면 checked true -> false 체크박스 해제시킨다.
+                        for(let i = 0; i < storeIndex.length; i++){
+                            console.log(storeIndex[i]);
+                            storeIndex[i].eq(0).prop('checked', false);
+
+                        }
+
+
+                        showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
+
+                    });
+                }
+
+            }
+
+        } // end oneCheck()
+
 
 
         //input 검색창 search
@@ -373,7 +449,7 @@
                                 let resultNum = (i + 1) + (amount * (page - 1));
 
                                 str += "<tr class='boardList'>";
-                                str += "<td><input type='checkbox' id='check' name='check'></td>";
+                                str += "<td  data-sn='"+list[i].sn+"'><input type='checkbox' id='check' name='check' class='boardCkBox'></td>";
                                 str += "<td>"+resultNum+"</td>";
                                 str += "<td data-sn='12'>" + list[i].sn + "</td>";
                                 str += "<td>" + list[i].userId + "</td>";
@@ -391,6 +467,7 @@
                                 str += "</tr>";
 
                             }//end for
+
 
                         }//end listPrint
                         boardUl.html(str);

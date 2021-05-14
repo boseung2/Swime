@@ -11,4 +11,8 @@ public interface NoticeService {
     // 알림 등록
     public void register(NoticeVO notice);
 
+    public List<NoticeVO> getList(String userId);
+
+    public void modify(long sn);
+
 }

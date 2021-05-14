@@ -46,4 +46,25 @@ public class noticeServiceTests {
         assert ("success".equals(result));
     }
 
+    @Test
+    public void testGetList() {
+        service.getList("wlgh52725@gmail.com").forEach(notice -> log.info(notice));
+        service.getList("wlgh52725@gmail.com").forEach(notice -> {assert ("wlgh52725@gmail.com".equals(notice.getReceiver()));});
+    }
+
+    @Test
+    public void testModify() {
+
+        String result = "";
+
+        try {
+            service.modify(18L);
+            result = "success";
+
+        }catch (Exception e) {
+            result = "fail";
+        }
+        assert ("success".equals(result));
+    }
+
 }

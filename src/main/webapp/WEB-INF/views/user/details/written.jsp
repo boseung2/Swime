@@ -4,11 +4,14 @@
 
 <link href="/resources/css/minicard.css" rel="stylesheet">
 
-<h1>글</h1>
 
-<div class="container">
-    <!-- Content Row -->
-    <h2>작성글</h2>
+<div class="subContainer">
+    <div class="h3cover" >
+        <%--    <h3 class="h3title">생성한 스터디</h3>--%>
+        <h4 class="h3title">작성한 글</h4>
+    </div>
+    <div class="subBody">
+        <!-- Content Row -->
 
     <div class="row" id="write"></div>
     <div id="pagiwrite"></div>
@@ -26,6 +29,8 @@
 
 
 </div>
+</div>
+
 
 <script>
 
@@ -109,7 +114,9 @@
         console.log(userId);
 
         let str = "" +
-            "<div class='col-md-4 mb-5'>" +
+            // "<div class='col-md-4 mb-5'>" +
+            "<div class='mb-2'>" +
+
             "    <div class='card h-100'>" +
             "        <div class='card-body' data-sn='" + sn + "' data-grpSn='" + grpSn + "' data-userId='" + userId + "'>" +
             "            <div class='card-body-top' style='display:flex;'>" +
@@ -118,16 +125,17 @@
             "                </div>" +
             "                <div>" +
             "                    <div>" +
-            "                        <h2 class='card-title' style='font-size: 25px; margin-bottom: 0px;'>" +
+            // "                        <h2 class='card-title' style='font-size: 25px; margin-bottom: 0px;'>" +
+            "                        <h5 class='card-title' style='font-size: 16px; margin-bottom: 0px;'>" +
             "                            " + (title.length > 8 ? title.slice(0,9) : title) +
-            "                        </h2>" +
-            "                        <div class='card-content'>" +
-            "                               " + (content.length > 60 ? content.slice(0,59) : content) +
-            "                        </div>" +
+            "                        </h5>" +
+            // "                        <div class='card-content'>" +
+            // "                               " + (content.length > 60 ? content.slice(0,59) : content) +
+            // "                        </div>" +
             "                    </div>" +
             "                </div>" +
             "            </div>" +
-            "            <div class='card-body-bottom' style='flex-direction: column;height: 70px;'>" +
+            // "            <div class='card-body-bottom' style='flex-direction: column;height: 70px;'>" +
             "            </div>" +
             "        </div>" +
             "    </div>" +

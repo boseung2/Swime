@@ -61,7 +61,13 @@
                 <input type="checkbox" id="check" name="remember-me">
                 <label for="check">자동로그인</label>
                 </div>
+            </div>
+            <div class="registerid">
+
                 <a href="/user/register">아직 회원이 아니신가요?</a>
+            </div>
+            <div class="forgetpw">
+                <a href="/">비밀번호를 까드셨나요?</a>
             </div>
 
             <sec:csrfInput/>

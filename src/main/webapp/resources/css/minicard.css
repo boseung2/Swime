@@ -16,8 +16,53 @@
 }
 .card-body-top {
     display: flex;
+    font-size: 20px;
+    align-items: center;
 }
 
 .card-body {
     cursor : pointer;
+    padding: 0.25rem;
+}
+.subContainer{
+    width: 100%;
+    border: #f1f1f1 solid 2px;
+    border-radius: 10px;
+    /*padding: 1rem;*/
+    color: grey;
+    margin-bottom: 3rem;
+}
+/*.subContainerBoard{*/
+
+/*    width: 100%;*/
+/*    border: #f1f1f1 solid 2px;*/
+/*    border-radius: 10px;*/
+/*    !*padding: 1rem;*!*/
+/*    color: grey;*/
+/*    margin-bottom: 3rem;*/
+/*}*/
+.subBody{
+
+    padding: 1.5rem;
+}
+.h3title{
+    font-weight: 200;
+    color: grey
+}
+
+.h3cover{
+    /*background: #1461bf61;*/
+  background: #8db7eb61;
+  /*  background: #f1f1f1;*/
+    width: 100%;
+    height: 100%;
+    padding: 1rem 0 0.5rem 1rem;
+
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    /*font-weight: 200;*/
+}
+#write{
+    display: block;
+    box-sizing: unset;
 }

@@ -24,4 +24,14 @@ public class NoticeServiceImpl implements NoticeService{
     public void register(NoticeVO notice) {
         mapper.insert(notice);
     }
+
+    @Override
+    public List<NoticeVO> getList(String userId) {
+        return mapper.getList(userId);
+    }
+
+    @Override
+    public void modify(long sn) {
+        mapper.update(sn);
+    }
 }

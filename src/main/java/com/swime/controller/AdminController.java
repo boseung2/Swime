@@ -10,11 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,9 +86,49 @@ public class AdminController {
 
         }
 
-//        return new ResponseEntity<>(boardService
-//                .adminGetListWithPagingBySn(cri), HttpStatus.OK);
     }
+
+    //@DeleteMapping(value = "board/{list}")
+    @PostMapping(value = "/board/dataArr")
+    public ResponseEntity<String> adminBoardRemove(@RequestBody String[] list,
+                                                   @RequestParam(value = "bbs") String bbs) {
+
+        log.info("list : " + list);
+        log.info("delete bbs : " + bbs);
+        int result = 0;
+        for (int i = 0; i < list.length; i++) {
+            log.info(list[i]);
+            if(bbs.equals("reply")){
+                result = adminBoardService.adminReplyRemove(list[i]);
+            }else{
+                result = adminBoardService.adminBoardRemove(list[i]);
+            }
+        }
+        return result == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+//    @PostMapping(value = "/board/toActive")
+//    public ResponseEntity<String> adminBoardToActive(@RequestBody String[] list,
+//                                                   @RequestParam(value = "bbs") String bbs) {
+//
+//        log.info("list : " + list);
+//        log.info("delete bbs : " + bbs);
+//        int result = 0;
+//        for (int i = 0; i < list.length; i++) {
+//            log.info(list[i]);
+//            if(bbs.equals("reply")){
+//                result = adminBoardService.adminReplyFromDeleteToActive(list[i]);
+//            }else{
+//                result = adminBoardService.adminBoardFromDeleteToActive(list[i]);
+//            }
+//        }
+//        return result == 1
+//                ? new ResponseEntity<>("success", HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+
     //end 관리자 게시판
 
     @GetMapping("/manage-group")
