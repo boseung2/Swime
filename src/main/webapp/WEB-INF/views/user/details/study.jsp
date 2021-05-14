@@ -16,21 +16,19 @@
     <!-- Content Row -->
     <div class="subContainer">
         <div class="h3cover" >
-<%--    <h3 class="h3title">생성한 스터디</h3>--%>
             <h4 class="h3title">생성한 스터디</h4>
         </div>
         <div class="subBody">
-
-    <div class="row" id="make"></div>
-    <div id="makepagi"></div>
-
-    <input type="hidden" name="pageNum" id="pageNum1" value="1">
-    <input type="hidden" name="amount" id="amount1" value="6">
+            <div class="row" id="make"></div>
+            <div id="makepagi"></div>
+            <input type="hidden" name="pageNum" id="pageNum1" value="1">
+            <input type="hidden" name="amount" id="amount1" value="6">
         </div>
     </div>
+
     <div class="subContainer">
         <div class="h3cover">
-    <h4 class="h3title">예정된 스터디</h4>
+            <h4 class="h3title">예정된 스터디</h4>
         </div>
         <div class="subBody">
 
