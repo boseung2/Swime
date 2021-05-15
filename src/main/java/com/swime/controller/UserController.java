@@ -33,7 +33,7 @@ import java.util.*;
 @RequestMapping("/user")
 @Log4j
 @AllArgsConstructor
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class UserController {
 
     MemberService service;

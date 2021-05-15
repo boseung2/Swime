@@ -48,7 +48,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
 
-        CustomCorsFilter customCorsFilter = new CustomCorsFilter();
+//        CustomCorsFilter customCorsFilter = new CustomCorsFilter();
 
         return new Filter[]{characterEncodingFilter};
     }

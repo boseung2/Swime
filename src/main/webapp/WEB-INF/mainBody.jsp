@@ -8,7 +8,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <link href="../webapp/resources/assets">
-
 <div class="main-container">
     <main class="main-wrapper">
         <section>
@@ -65,8 +64,8 @@
                 <img src="/resources/assets/Main03.png" alt="메인 이미지">
             </div>
 <%--</div>--%>
-</section>
-</main>
+        </section>
+    </main>
 </div>
 
 <!-- 인기있는 모임 -->
