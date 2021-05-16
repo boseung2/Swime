@@ -5,20 +5,25 @@
 
 <%@include file="./WEB-INF/views/includes/header.jsp" %>
 
-<style>
-    body{
-        overflow: hidden;
-    }
-    .header{
-        height: 7vh;
-    }
-    .test{
-        height: 93vh;
-    }
-</style>
-<div class="test">
-    <%@include file="./WEB-INF/mainBody.jsp" %>
+<%--<style>--%>
+<%--    body{--%>
+<%--        overflow: hidden;--%>
+<%--    }--%>
+<%--    .header{--%>
+<%--        height: 7vh;--%>
+<%--    }--%>
+<%--    .test{--%>
+<%--        height: 93vh;--%>
+<%--    }--%>
+<%--</style>--%>
+<%--<div class="test">--%>
+<%--    <%@include file="./WEB-INF/mainBody.jsp" %>--%>
 
 
-    <%@include file="./WEB-INF/views/includes/footer.jsp" %>
-</div>
+<%--    <%@include file="./WEB-INF/views/includes/footer.jsp" %>--%>
+<%--</div>--%>
+
+<%@include file="./WEB-INF/mainBody.jsp" %>
+
+
+<%@include file="./WEB-INF/views/includes/footer.jsp" %>

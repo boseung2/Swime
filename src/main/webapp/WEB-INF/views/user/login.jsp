@@ -7,8 +7,7 @@
 
 <c:set var="error" value="${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'] != null ? '유효하지 않은 접근입니다<br>아이디와 비밀번호를 확인하세요' : null}"/>
 <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"></c:remove>
-
-
+<c:set var="gitLogin" value="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://${pageContext.request.serverName}/user/login/github&scope=repo,user"/>
 
 
 <sec:authorize access="isAuthenticated()">
@@ -78,9 +77,8 @@
 <div class="content" style="z-index: 20;">
 
     <div id="regdiv">
-        <div id="errorMsgDiv">
+        <div id="errorMsgDiv"></div>
 
-        </div>
         <form id="regForm" action="/user/login" method="post">
             <h1 class="subtitle">Login</h1>
 
@@ -122,10 +120,10 @@
         <%--        <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login"></button>--%>
 
         <div class="buttonForm" >
-
-            <a class="loginButton2" href="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://localhost/user/login/github&scope=repo,user"
+            <a class="loginButton2" href="${gitLogin}"
             ><i class="fab fa-github" style="margin-right: 10px"></i> <span class="git">GitHub 아이디로 로그인</span></a>
         </div>
+
     </div>
 </div>
 
