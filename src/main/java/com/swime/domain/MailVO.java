@@ -70,7 +70,7 @@ public class MailVO {
                 "                                            <tr><td>\n" +
                 "                                                <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n" +
                 "                                                    <tbody><tr>\n" +
-                "                                                        <a href=\"" + getServerName + "/user/auth?id=" + receiver + "&key=" + key + "\" style=\"text-decoration: none;\"><div style=\"border : solid 1px; width : 150px; height : 30px; margin : 50px auto; padding-top : 8px;\n" +
+                "                                                        <a href=\"" + "http://" + getServerName + "/user/auth?id=" + receiver + "&key=" + key + "\" style=\"text-decoration: none;\"><div style=\"border : solid 1px; width : 150px; height : 30px; margin : 50px auto; padding-top : 8px;\n" +
                 "                                                        border-radius : 0.3em; color : white; background-color : rgb(100, 194, 231); text-align: center; vertical-align : center; cursor : pointer;\">인증하기</div></a>\n" +
                 "                                                    </tbody></table>\n" +
                 "                                            </td></tr>\n" +

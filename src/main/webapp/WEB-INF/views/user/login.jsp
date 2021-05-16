@@ -107,7 +107,7 @@
                 <a href="/user/register">아직 회원이 아니신가요?</a>
             </div>
             <div class="forgetpw">
-                <a href="/">비밀번호를 까드셨나요?</a>
+                <a href="/user/forgotPassword">비밀번호를 잊으셨나요?</a>
             </div>
 
             <sec:csrfInput/>

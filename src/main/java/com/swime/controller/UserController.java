@@ -135,6 +135,11 @@ public class UserController {
     @GetMapping("/registerSuccess")
     public void regSuccess(MemberVO vo){}
 
+    @GetMapping("/forgotPassword")
+    public void forgotPassword(){
+        return;
+    }
+
     @GetMapping("/modify")
     public void modify(){
     }
@@ -292,11 +297,6 @@ public class UserController {
     @GetMapping("/details/profile")
     public void profile(Model model, String id){
         model.addAttribute("MemberVo", service.get(id));
-    }
-
-    @GetMapping("chat")
-    public void chat(){
-
     }
 
 }
