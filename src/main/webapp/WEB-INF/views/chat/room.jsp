@@ -92,6 +92,8 @@
             $('#chat').scrollTop($('#chat')[0].scrollHeight);
         }
 
+        enterKey();
+
     })
 </script>
 
@@ -249,5 +251,31 @@
         }
 
     })
+
+    function enterKey() {
+        $("#contents").focus(function () {
+            enterActive();
+        });
+        $("#contents").focusout(function () {
+            enterActiveOff();
+        });
+
+        function enterActive() {
+
+            $("#contents").on("keyup", function (key) {
+                key.preventDefault();
+                let msg = $("#contents")[0];
+                if(key.keyCode === 13 && !key.shiftKey) {
+                    let lastEnter = msg.value.lastIndexOf('\n');
+                    msg.value = msg.value.substring(0, lastEnter).replaceAll('\n', '<br>');
+                    $("#sendBtn").click();
+                }
+            });
+        }
+
+        function enterActiveOff() {
+            $("#contents").off("keyup");
+        }
+    }
 
 </script>

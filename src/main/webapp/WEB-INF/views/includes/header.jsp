@@ -262,7 +262,7 @@
         let noti = $("#notice")[0];
         let drop = $(".dropdown");
         drop.offset({
-            top: noti.offsetTop + 30,
+            top: $("#notice").offsetTop + 30,
         });
     })
 
