@@ -7,7 +7,7 @@
 
 <c:set var="error" value="${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'] != null ? '유효하지 않은 접근입니다<br>아이디와 비밀번호를 확인하세요' : null}"/>
 <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"></c:remove>
-<c:set var="gitLogin" value="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://${pageContext.request.serverName}/user/login/github&scope=repo,user"/>
+<c:set var="gitLogin" value="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://${pageContext.request.serverName}/user/login/github&scope=user"/>
 
 
 <sec:authorize access="isAuthenticated()">
