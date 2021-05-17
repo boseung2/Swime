@@ -48,6 +48,7 @@ let noticeService = (function(){
     }
 
     function modify(param, callback, error){
+
         $.ajax({
             type:'post',
             url : '/notice/modify/',

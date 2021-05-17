@@ -42,6 +42,7 @@ public class NoticeController {
     @PostMapping(value="/modify", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> modify(@RequestBody NoticeVO notice) {
         service.modify(notice.getSn());
+        log.info("notice sn = " + notice.getSn());
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 

@@ -175,6 +175,15 @@
         if("${pinfo.username}" !== "") {
             getNoticeButton();
         }
+
+        // post, ajax 시큐리티 적용
+        let csrfHeaderName = "${_csrf.headerName}";
+        let csrfTokenValue = "${_csrf.token}";
+
+        // ajax spring security header
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+        });
     })
 
     // 안읽은 알림이 있으면 활성화된 알림버튼을 띄운다.
@@ -237,7 +246,7 @@
     })
 
     // 알림 리스트가 눌리면
-    $('#myDropdown').on("click", "li", function(){
+    $('#myDropdown').on("click", "li", function(e){
 
         if($(this).attr("class") === undefined) {
             return;
@@ -251,6 +260,10 @@
                 console.log('해당 알림을 읽음처리했음!');
             }
         })
+
+        // 알림버튼 다시 불러오기
+        getNoticeButton();
+
     })
 
     $(document).ready(function (){
