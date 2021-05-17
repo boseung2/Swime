@@ -200,7 +200,7 @@ input::placeholder {
 .language-list ul{
     margin-top: 30px;
     display: flex;
-    flex-direction: column;
+    /*flex-direction: column;*/
 }
 
 .language-list ul li {

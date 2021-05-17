@@ -157,7 +157,8 @@
                 data : {
                     id : email.value,
                     password : password.value,
-                    name : nameInput.value
+                    name : nameInput.value,
+                    regPath : 'REPA01'
                 },
                 beforeSend : function(xhr) {
                     xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");

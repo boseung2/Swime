@@ -37,14 +37,8 @@ public class IndexDataController {
         list.forEach(group -> {
             group.setSigungu(CodeTable.valueOf(group.getSigungu()).getValue());
         });
-        test();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    public ResponseEntity test(){
-        mapper.timeTest();
-        mapper.setSessionTime();
-        mapper.timeTest();
-        return new ResponseEntity(HttpStatus.OK);
-    }
+
 }
