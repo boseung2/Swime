@@ -21,4 +21,19 @@ public class TestController {
         log.info(service.test2());
         log.info("test ing....");
     }
+
+    @GetMapping("/test2")
+    public void test2() {
+        log.info("test ing....");
+    }
+
+    @GetMapping("/test3")
+    public void test3() {
+        log.info("test ing....");
+    }
+
+    @GetMapping("/test4")
+    public void test4() {
+        log.info("test ing....");
+    }
 }

@@ -8,7 +8,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <link href="../webapp/resources/assets">
-
 <div class="main-container">
     <main class="main-wrapper">
         <section>
@@ -65,8 +64,8 @@
                 <img src="/resources/assets/Main03.png" alt="메인 이미지">
             </div>
 <%--</div>--%>
-</section>
-</main>
+        </section>
+    </main>
 </div>
 
 <!-- 인기있는 모임 -->
@@ -82,50 +81,56 @@
     <div style="display: flex; justify-content: space-evenly">
 
         <a onclick="slider.prev()" class="button-box"><i class="fas fa-chevron-left"></i></a>
-    <div class="card-wrap" id="slider" >
-        <a href="#">
-            <div class="cardCon">
-                <div class="card-img1"></div>
-                <div class="card-content">
-                    <span>서울 강남</span>
-                    <h3>자바의 정석</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>
-                </div>
-            </div>
-        </a>
-        <a href="#">
-            <div class="cardCon">
-                <div class="card-img1"></div>
-                <div class="card-content">
-                    <span>서울 강남</span>
-                    <h3>자바의 정석</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>
-                </div>
-            </div>
-        </a>
-        <a href="#">
-            <div class="cardCon">
-                <div class="card-img1"></div>
-                <div class="card-content">
-                    <span>서울 종로</span>
-                    <h3>파이썬의 고수</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>
-                </div>
-            </div>
-        </a>
-        <a href="#">
-            <div class="cardCon">
-                <div class="card-img1"></div>
-                <div class="card-content">
-                    <span>서울 시청</span>
-                    <h3>JAVA DESIGN PATTERNS</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>
-                </div>
-            </div>
-        </a>
-    </div>
+        <div class="card-wrap" id="slider">
+
+<%--            <div>--%>
+<%--                <div class="cardCon">--%>
+<%--                    <div class="card-img1"></div>--%>
+<%--                    <div class="card-content">--%>
+<%--                        <span>서울 강남</span>--%>
+<%--                        <h3>자바의 정석</h3>--%>
+<%--                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+
+<%--            <a href="#">--%>
+<%--                <div class="cardCon">--%>
+<%--                    <div class="card-img1"></div>--%>
+<%--                    <div class="card-content">--%>
+<%--                        <span>서울 강남</span>--%>
+<%--                        <h3>자바의 정석</h3>--%>
+<%--                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </a>--%>
+
+<%--            <a href="#">--%>
+<%--                <div class="cardCon">--%>
+<%--                    <div class="card-img1"></div>--%>
+<%--                    <div class="card-content">--%>
+<%--                        <span>서울 종로</span>--%>
+<%--                        <h3>파이썬의 고수</h3>--%>
+<%--                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </a>--%>
+
+<%--            <a href="#">--%>
+<%--                <div class="cardCon">--%>
+<%--                    <div class="card-img1"></div>--%>
+<%--                    <div class="card-content">--%>
+<%--                        <span>서울 시청</span>--%>
+<%--                        <h3>JAVA DESIGN PATTERNS</h3>--%>
+<%--                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </a>--%>
+
+        </div>
+
         <a onclick="slider.next(this)" class="button-box"><i class="fas fa-chevron-right"></i></a>
-<%--        <a id="nextBtn" class="button-box"><i class="fas fa-chevron-right"></i></a>--%>
+
     </div>
 </div>
 <%--<script>--%>
@@ -343,8 +348,64 @@
         }
     }
 
-    var slider = new Slider('slider', 3, 3, 1, 20);
+    var slider = undefined;
     var slidertwo = new Slider('slider2',3,3,1,20);
     // slider.auto();
 
+</script>
+
+
+<script>
+    requestAjax($("#slider"));
+
+    function requestAjax(place) {
+        $.ajax({
+            url : "/getPopularGroupList",
+            dataType: "json",
+            data : {
+                pageNum : 1,
+                amount : 6
+            }
+        })
+            .done(function (result) {
+                let a = resultConvertHtml(result);
+                $(place).html(a);
+                slider = new Slider('slider', 3, 3, 1, 20);
+                cardOnclick();
+            })
+            .fail(function () {
+                console.log("error");
+            })
+    }
+    
+    function resultConvertHtml(result) {
+        console.log(result);
+        let str = "";
+
+        for (let i = 0; i < result.length; i++) {
+            let description = result[i].description;
+            let name = result[i].name;
+            let sn = result[i].sn;
+
+
+            str += "" +
+                "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+                "                <div class=\"cardCon\">\n" +
+                "                    <div class=\"card-img1\" style='height: 50%;'></div>\n" +
+                "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
+                "                        <span>서울 강남</span>\n" +
+                "                        <h3>" + name + "</h3>\n" +
+                "                        <p>" + description + "</p>\n" +
+                "                    </div>\n" +
+                "                </div>\n" +
+                "            </div>";
+        }
+        return str;
+    }
+
+    function cardOnclick() {
+        $(".index-card").on("click", function (obj) {
+            location.href = '/group/get?sn=' + this.dataset.sn;
+        })
+    }
 </script>

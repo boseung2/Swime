@@ -2,6 +2,7 @@ package com.swime.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -13,8 +14,14 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 @EnableWebMvc
 @ComponentScan(basePackages= {"com.swime.controller", "com.swime.exception"})
+@Import({ SecurityConfig.class })
 @EnableGlobalMethodSecurity(prePostEnabled = false, securedEnabled = false)
 public class ServletConfig implements WebMvcConfigurer {
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
@@ -35,6 +42,16 @@ public class ServletConfig implements WebMvcConfigurer {
         StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
         return resolver;
     }
+
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOrigins("*")
+//                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+//                .allowedHeaders("*")
+//                .allowCredentials(true)
+//                .maxAge(3600);
+//    }
 
 
 }

@@ -35,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Setter(onMethod_ = @Autowired)
     private DataSource dataSource;
 
+
     @Override
     public void configure(HttpSecurity http) throws Exception{
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
@@ -43,8 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class);
 
         http
+            .cors()
+        .and()
             .authorizeRequests()
-                .antMatchers("/css/**","/img/**","/js/**", "/vendor/**","/adminPageDemo/*").permitAll()
+                .antMatchers("/css/**","/img/**","/js/**", "/vendor/**","/adminPageDemo/*", "/assets/**").permitAll()
                 .antMatchers("/group","/include","/user", "/study").permitAll()
                 .antMatchers("/group/register").access("isAuthenticated()")
                 .antMatchers("/study/register").access("isAuthenticated()")
@@ -70,9 +73,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //                    .disable()
-        .and()
-            .cors()
-                .configurationSource(corsConfigurationSource())
 //        .and()
 //            .oauth2Login()
 //                .authorizationEndpoint()

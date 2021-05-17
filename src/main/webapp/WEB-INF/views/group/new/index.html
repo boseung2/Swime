@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스위미: 모임 찾기</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css" integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../resources/css/newGroupList.css">
+  <link rel="icon" href="./assets/favicon.png"/>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+  <header class="header-block">
+    <h1>
+      <a href="">
+        <img src="./assets/SwimeLogo-w.png" alt="Swime" class="logo">
+      </a>
+    </h1>
+    <nav>
+      <h1 style="display: none;">Menu</h1>
+        <ul class="header-menu">
+          <li>
+            <a href="" class="active">모임 찾기</a>
+          </li>
+          <li>
+            <a href="">모임 만들기</a>
+          </li>
+        </ul>
+    </nav>
+    <div class="flex-flow"></div>
+    <ul class="header-login">
+      <li>
+        <a href="">로그인</a>
+      </li>
+      <li>
+        <a href="" class="point">회원가입</a>
+      </li>
+    </ul>
+  </header>
+  <div class="spacer"></div>
+<!-- 슬라이드 메뉴바 -->
+  <div class="header" id="navbar">
+    <h1>
+      <a href="">
+        <img src="assets/SwimeLogo.png" alt="Swime" class="logo">
+      </a>
+    </h1>
+    <nav>
+      <h1 style="display: none;">Menu</h1>
+        <ul class="header-menu">
+          <li>
+            <a href="" class="s-active">모임 찾기</a>
+          </li>
+          <li>
+            <a href="">모임 만들기</a>
+          </li>
+        </ul>
+    </nav>
+    <div class="flex-flow"></div>
+    <ul class="header-login">
+      <li>
+        <a href="">로그인</a>
+      </li>
+      <li>
+        <a href="" class="point">회원가입</a>
+      </li>
+    </ul>
+  </div>
+  <div class="spacer"></div>
+
+
+
+  <div class="main-background">
+    <h1>모임 찾기</h1>
+    <p>언어와 지역을 선택하시면 맞춤 모임을 찾아 드립니다.</p>
+  </div>
+
+  <div class="container">
+    <div class="filter-container">
+      <div class="filter-wrap">
+        <h2>Filter</h2>
+        <div class="filter-box">
+        <div class="select-wrap">
+          <form action="#" method="GET">
+            <label for="category">카테고리</label>
+          <select name="lg-category" id="category">
+            <option value="">전체</option>
+          </select>
+          <label for="local">지역</label>
+          <select name="lg-local" id="local">
+            <option value="">전체</option>
+          </select>
+<!--          <label for="search">모임명</label>-->
+          <label>모임명</label>
+          <input type="text" placeholder="검색하세요"/>
+          </form>
+          </div>
+        </div>        
+      </div>
+    </div>
+  
+    <article>
+      <h1><span>#</span>개의 모임</h1>
+      <div class="flex-flow"></div>
+      <select name="order" id="order">
+        <option value="">평점순</option>
+        <option value="">조회순</option>
+      </select>
+    </article>
+  
+    <div class="card-container">
+      <div class="card-box">
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">서울 강남</span>
+            <h2>자바의 정석</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">서울 종로</span>
+            <h2>PYTHON</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">인천 부평</span>
+            <h2>REACT</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box">
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">부천 상동</span>
+            <h2>JAVA</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">서울 강남</span>
+            <h2>PYTHON</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">서울 종각</span>
+            <h2>REACT</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="card-box">
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">서울 광화문</span>
+            <h2>JAVA</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">서울 낙성대</span>
+            <h2>PYTHON</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">경기 성남</span>
+            <h2>REACT</h2>
+            <p>Lorem ipsum dolor sit amet consectetur, Ducimus, repudiandae temporibus omnis illum maxime quod deserunt eligendi dolor</p>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <div class="value">4<sup>m</sup></div>
+              <div class="type">read</div>
+            </div>
+            <div class="stat border">
+              <div class="value">5123</div>
+              <div class="type">views</div>
+            </div>
+            <div class="stat">
+              <div class="value">32</div>
+              <div class="type">comments</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+
+ 
+    <!-- 풋터 -->
+    <footer>
+      <div class="footer-container">
+       <div class="footer-left">
+        <div class="footer-logo">
+          <img src="assets/SwimeLogo-w.png" alt="#">      
+        </div>
+        <div>
+        <img src="/assets/고래-w.png" style="width: 100px;"></div>
+        <div class="footer-contect">
+          <span><a href="#"><i class="fab fa-youtube"></i></a></span>
+          <span><a href="#"><i class="fab fa-facebook"></i></a></span>
+          <span><a href="#"><i class="fab fa-instagram"></i></a></span>
+          <span><a href="#"><i class="fab fa-github-square"></i></a></span>
+        </div>
+       </div>
+       <div class="footer-right">
+         <div class="footer-project">
+           <h2>PROJECT TEAM</h2>
+           <ul>
+             <li>신성권</li>
+             <li>이민재</li>
+             <li>정보승</li>
+             <li>임지호</li>
+             <li>정형진</li>
+           </ul>
+         </div>
+         <div class="footer-customer">
+           <h2><a href="#">CUSTOMER CENTER</a></h2>
+            <h3>스위미 고객센터</h3>
+            <p>평일 10:00-21:00 <br>
+              주말 10:00-20:00</p>
+         </div>
+       </div>
+      </div>
+    </footer>
+  
+
+<script>
+  window.onscroll = function() {scrollFunction()};
+  function scrollFunction() {
+    if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250)
+    {
+      document.getElementById("navbar").style.top = "0";
+    } else {
+      document.getElementById("navbar").style.top = "-100px"
+    }
+    }
+</script>
+</body>
+</html>

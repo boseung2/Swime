@@ -218,4 +218,9 @@ public class GroupController {
 
      */
 
+    @GetMapping(value = "/new/index")
+    public void newList() {
+
+    }
+
 }

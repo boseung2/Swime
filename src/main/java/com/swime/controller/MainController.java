@@ -14,7 +14,6 @@ public class MainController {
 
     @GetMapping("/mainBody")
     public void body(){
-
     }
 
 }

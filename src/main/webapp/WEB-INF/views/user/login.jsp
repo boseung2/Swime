@@ -7,8 +7,7 @@
 
 <c:set var="error" value="${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'] != null ? '유효하지 않은 접근입니다<br>아이디와 비밀번호를 확인하세요' : null}"/>
 <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"></c:remove>
-
-
+<c:set var="gitLogin" value="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://${pageContext.request.serverName}/user/login/github&scope=user"/>
 
 
 <sec:authorize access="isAuthenticated()">
@@ -31,10 +30,13 @@
 
 
 </style>
-
 <link href="/resources/css/user.css" rel="stylesheet">
 <link href="/resources/css/shootingStar2.css" rel="stylesheet">
 <link href="/resources/css/floatingStar2.css" rel="stylesheet">
+
+<!-- font icon -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/07bd6433b2.js"></script>
 <body>
 
 <div class="full">
@@ -78,9 +80,8 @@
 <div class="content" style="z-index: 20;">
 
     <div id="regdiv">
-        <div id="errorMsgDiv">
+        <div id="errorMsgDiv"></div>
 
-        </div>
         <form id="regForm" action="/user/login" method="post">
             <h1 class="subtitle">Login</h1>
 
@@ -109,7 +110,7 @@
                 <a href="/user/register">아직 회원이 아니신가요?</a>
             </div>
             <div class="forgetpw">
-                <a href="/">비밀번호를 까드셨나요?</a>
+                <a href="/user/forgotPassword">비밀번호를 잊으셨나요?</a>
             </div>
 
             <sec:csrfInput/>
@@ -122,10 +123,13 @@
         <%--        <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login"></button>--%>
 
         <div class="buttonForm" >
-
-            <a class="loginButton2" href="https://github.com/login/oauth/authorize?client_id=190944c4173bf58cc6e5&redirect_uri=http://localhost/user/login/github&scope=repo,user"
-            ><i class="fab fa-github" style="margin-right: 10px"></i> <span class="git">GitHub 아이디로 로그인</span></a>
+            <a class="loginButton2" href="${gitLogin}"
+            >
+                <i class="fab fa-google" style="margin-right: 10px"></i>
+<%--                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png">--%>
+                <span class="git">GitHub 아이디로 로그인</span></a>
         </div>
+
     </div>
 </div>
 
@@ -177,5 +181,5 @@
 
 </script>
 
-<link href="/resources/css/UserFooterPos.css" rel="stylesheet">
+<%--<link href="/resources/css/UserFooterPos.css" rel="stylesheet">--%>
 <%--<%@include file="../includes/footer.jsp" %>--%>
