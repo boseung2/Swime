@@ -2,6 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%@include file="../includes/header.jsp" %>
 
@@ -24,8 +25,23 @@
                         <h2>${room.yourName}</h2>
 
                         <h3>
-                            <span>${room.contents}</span>
+                            <c:if test="${fn:length(room.contents) >= 10}">
+                                ${fn:substring(room.contents, 0, 10)}...
+                            </c:if>
+                            <c:if test="${fn:length(room.contents) < 10}">
+                                ${room.contents}
+                            </c:if>
                         </h3>
+                    </div>
+                    <div style="float:right">
+                        <h3 style="float:right;margin-right: 10px;"><fmt:formatDate value="${room.sendDate}" pattern="yy/MM/dd HH:ss"/></h3>
+                        <br>
+
+                        <c:if test="${room.unreadMsg > 0}">
+                            <h3 style="float:right;margin-right: 10px;background-color: red; padding: 3px 6px; border-radius: 50%; color: white">
+                                    ${room.unreadMsg}
+                            </h3>
+                        </c:if>
                     </div>
                 </a>
                 </li>
@@ -199,8 +215,33 @@
                 str += '<div>';
                 str += '<h2>' + result[i].yourName + '</h2>';
                 str += '<h3>';
-                str += '<span>' + result[i].contents +'</span>';
+
+                if(result[i].contents.length >= 10) {
+                    str += result[i].contents.substring(0, 10) + '...';
+                }else {
+                    str += result[i].contents;
+                }
                 str += '</h3>';
+                str += '</div>';
+                str += '<div style="float:right">';
+
+                let date = new Date(result[i].sendDate);
+                let year = (date.getFullYear() + '');
+                let month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+                let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+                let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+                let min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+
+                str += '<h3 style="float:right;margin-right: 10px;">';
+                str += year + '/' + month + '/' + day + ' ' + hours + ':' + min;
+                str += '</h3>';
+                str += '<br>';
+
+                if(result[i].unreadMsg > 0) {
+                    str += '<h3 style="float:right;margin-right: 10px;background-color: red; padding: 3px 6px; border-radius: 50%; color: white">';
+                    str += result[i].unreadMsg;
+                    str += '</h3>';
+                }
                 str += '</div>';
                 str += '</a>';
                 str += '</li>';

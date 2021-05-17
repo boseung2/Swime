@@ -13,4 +13,8 @@ public interface ChatMessageService {
     // 해당 채팅방의 채팅 메시지 불러오기
     public List<ChatMessageVO> getMsg(String chatRoomId);
 
+    public List<ChatMessageVO> getUnreadMsg(String senderId, String receiverId);
+
+    public void readMsg(long sn);
+
 }

@@ -24,9 +24,24 @@
                         <h2>${room.yourName}</h2>
 
                         <h3>
-                            <span class="status orange"></span>
-                            ${room.contents}
+                            <c:if test="${fn:length(room.contents) >= 10}">
+                                ${fn:substring(room.contents, 0, 10)}...
+                            </c:if>
+                            <c:if test="${fn:length(room.contents) < 10}">
+                                ${room.contents}
+                            </c:if>
                         </h3>
+                    </div>
+                    <div style="float:right">
+                        <h3 style="float:right;margin-right: 10px;"><fmt:formatDate value="${room.sendDate}" pattern="yy/MM/dd HH:ss"/></h3>
+                        <br>
+
+                        <c:if test="${room.unreadMsg > 0}">
+                            <h3 style="float:right;margin-right: 10px;background-color: red; padding: 3px 6px; border-radius: 50%; color: white">
+                                    ${room.unreadMsg}
+                            </h3>
+                        </c:if>
+
                     </div>
                 </a>
                 </li>

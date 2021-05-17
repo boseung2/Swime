@@ -47,10 +47,23 @@ public class ChatController {
         if(principal != null) {
             List<ChatMessageVO> roomList = chatRoomService.getRoomListById(principal.getName());
 
+            for(int i = 0; i < roomList.size(); i++) {
+
+                String senderId = "";
+
+                if(!principal.getName().equals(roomList.get(i).getSenderId())) {
+                    senderId = roomList.get(i).getSenderId();
+                }else {
+                    senderId = roomList.get(i).getReceiverId();
+                }
+
+                // 안읽은 메시지를 저장한다.
+                roomList.get(i).setUnreadMsg(chatMessageService.getUnreadMsg(senderId, principal.getName()).size());
+            }
+
             model.addAttribute("rooms", roomList);
         }
 
-        // 리스트를에 채팅방 id를 걸어놔서 클릭하면 chat/{id}로 이동
     }
 
     @GetMapping(value = "/ajaxList", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -59,7 +72,25 @@ public class ChatController {
         log.info("ajaxList 받은 userId = " + userId);
 
         // 회원이 속한 채팅방 리스트를 최근에 메시지를 주고받았던 순으로 뿌려준다.
-        return new ResponseEntity<>(chatRoomService.getRoomListById(userId), HttpStatus.OK);
+
+        List<ChatMessageVO> roomList = chatRoomService.getRoomListById(userId);
+
+        for(int i = 0; i < roomList.size(); i++) {
+
+            String senderId = "";
+
+            if(!userId.equals(roomList.get(i).getSenderId())) {
+                senderId = roomList.get(i).getSenderId();
+            }else {
+                senderId = roomList.get(i).getReceiverId();
+            }
+
+            // 안읽은 메시지를 저장한다.
+            roomList.get(i).setUnreadMsg(chatMessageService.getUnreadMsg(senderId, userId).size());
+        }
+
+
+        return new ResponseEntity<>(roomList, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -74,17 +105,26 @@ public class ChatController {
             // 이전에 나눈 채팅이 있는지 확인
             ChatAttendVO oldChatRoom = chatRoomService.getOldChatRoom(principal.getName(), userId);
 
-            log.info("principal.getName() = " + principal.getName());
-            log.info("userId = " + userId);
-            log.info("이전에 나눈 채팅방 = " + oldChatRoom);
-
             if(oldChatRoom != null) { // 이전 채팅이 있으면 그 채팅방으로 이동
                 return "redirect:/chat/room/" + oldChatRoom.getChatRoomId();
             }
 
             // 현재 로그인중인 유저의 채팅방 리스트를 불러오기
-            log.info("현재 접속중인 유저 = " + principal.getName());
-            List<ChatMessageVO> roomList = chatRoomService.getRoomListById(principal.getName());
+            List<ChatMessageVO> roomList = chatRoomService.getRoomListById(userId);
+
+            for(int i = 0; i < roomList.size(); i++) {
+
+                String senderId = "";
+
+                if(!userId.equals(roomList.get(i).getSenderId())) {
+                    senderId = roomList.get(i).getSenderId();
+                }else {
+                    senderId = roomList.get(i).getReceiverId();
+                }
+
+                // 안읽은 메시지를 저장한다.
+                roomList.get(i).setUnreadMsg(chatMessageService.getUnreadMsg(senderId, userId).size());
+            }
 
             model.addAttribute("rooms", roomList);
         }
@@ -100,6 +140,7 @@ public class ChatController {
         log.info("register senderId = " + senderId);
         log.info("register receiverId = " + receiverId);
 
+        // 사용자가 처음으로 메시지를 보낼때 채팅방을 생성해주고 메시지를 저장한다.
         ChatMessageVO chat = new ChatMessageVO();
         String chatRoomId = UUID.randomUUID().toString();
         chat.setChatRoomId(chatRoomId);
@@ -118,17 +159,43 @@ public class ChatController {
     @GetMapping("/room/{id}")
     public String room(@PathVariable String id, Principal principal, Model model) {
 
+        // 상대방의 id
+        ChatAttendVO you = chatRoomService.getYourId(id, principal.getName());
+        String yourId = you.getAttendId();
+
+        // 해당 채팅방의 안읽은 메시지를 가져오기
+        List<ChatMessageVO> unreadMsg = chatMessageService.getUnreadMsg(yourId, principal.getName());
+
+        // 모두 읽음처리
+        for(int i = 0; i < unreadMsg.size(); i++) {
+            chatMessageService.readMsg(unreadMsg.get(i).getSn());
+        }
+
         model.addAttribute("chatRoomId", id);
 
         // 상대방의 정보를 보내주기
-        String yourId = chatRoomService.getYourId(id, principal.getName()).getAttendId();
         model.addAttribute("you", memberService.get(yourId));
 
         // 내 정보도 보내주기
         model.addAttribute("me", memberService.get(principal.getName()));
 
         // 해당 유저의 채팅방 리스트를 보내주기
-        model.addAttribute("rooms", chatRoomService.getRoomListById(principal.getName()));
+        List<ChatMessageVO> roomList = chatRoomService.getRoomListById(principal.getName());
+
+        for(int i = 0; i < roomList.size(); i++) {
+
+            String senderId = "";
+
+            if(!principal.getName().equals(roomList.get(i).getSenderId())) {
+                senderId = roomList.get(i).getSenderId();
+            }else {
+                senderId = roomList.get(i).getReceiverId();
+            }
+
+            // 안읽은 메시지를 저장한다.
+            roomList.get(i).setUnreadMsg(chatMessageService.getUnreadMsg(senderId, principal.getName()).size());
+        }
+        model.addAttribute("rooms", roomList);
 
         // 해당 채팅방의 메시지를 보내주기
         model.addAttribute("messages", chatMessageService.getMsg(id));

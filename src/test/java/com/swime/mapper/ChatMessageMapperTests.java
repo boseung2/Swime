@@ -37,4 +37,13 @@ public class ChatMessageMapperTests {
         mapper.getMsg("exuuidb").forEach(message -> log.info(message));
     }
 
+    @Test
+    public void testGetUnreadMsg() {
+        mapper.getUnreadMsg("test1@naver.com", "wlgh52725@gmail.com").forEach(msg -> log.info(msg));
+    }
+
+    @Test
+    public void testReadMsg() {
+        assert (mapper.readMsg(62) == 1);
+    }
 }

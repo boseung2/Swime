@@ -25,4 +25,14 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public List<ChatMessageVO> getMsg(String chatRoomId) {
         return mapper.getMsg(chatRoomId);
     }
+
+    @Override
+    public List<ChatMessageVO> getUnreadMsg(String senderId, String receiverId) {
+        return mapper.getUnreadMsg(senderId, receiverId);
+    }
+
+    @Override
+    public void readMsg(long sn) {
+        mapper.readMsg(sn);
+    }
 }

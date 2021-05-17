@@ -1,11 +1,8 @@
 package com.swime.domain;
 
 import lombok.Data;
-import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 public class ChatMessageVO {
@@ -19,4 +16,5 @@ public class ChatMessageVO {
     private Date readDate;
     private MessageType type; // ENTER, LEAVE, CHAT
     private String yourName;
+    private int unreadMsg;
 }

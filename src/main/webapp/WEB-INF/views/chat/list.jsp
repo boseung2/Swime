@@ -2,6 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%@include file="../includes/header.jsp" %>
 
@@ -18,18 +19,32 @@
         <ul>
 
             <c:forEach var="room" items="${rooms}">
-                <li><a style="display: block" href="/chat/room/${room.chatRoomId}">
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
-                    <div>
+                <li>
+                    <a style="display: block" href="/chat/room/${room.chatRoomId}">
+                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
+                        <div>
+                            <h2>${room.yourName}</h2>
 
-                        <h2>${room.yourName}</h2>
+                            <h3>
+                                <c:if test="${fn:length(room.contents) >= 10}">
+                                    ${fn:substring(room.contents, 0, 10)}...
+                                </c:if>
+                                <c:if test="${fn:length(room.contents) < 10}">
+                                    ${room.contents}
+                                </c:if>
+                            </h3>
+                        </div>
+                        <div style="float:right">
+                            <h3 style="float:right;margin-right: 10px;"><fmt:formatDate value="${room.sendDate}" pattern="yy/MM/dd HH:ss"/></h3>
+                            <br>
 
-                        <h3>
-                            <span>${room.contents}</span>
-<%--                            <span class="status orange"></span>--%>
-<%--                                ${room.contents}--%>
-                        </h3>
-                    </div>
+                            <c:if test="${room.unreadMsg > 0}">
+                                <h3 style="float:right;margin-right: 10px;background-color: red; padding: 3px 6px; border-radius: 50%; color: white">
+                                        ${room.unreadMsg}
+                                </h3>
+                            </c:if>
+
+                        </div>
                     </a>
                 </li>
             </c:forEach>
