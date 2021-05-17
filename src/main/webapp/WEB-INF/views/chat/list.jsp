@@ -22,6 +22,7 @@
                 <li>
                     <a style="display: block" href="/chat/room/${room.chatRoomId}">
                         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
+<%--                        <img src="${room.yourPicture}" alt="">--%>
                         <div>
                             <h2>${room.yourName}</h2>
 

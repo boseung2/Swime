@@ -15,6 +15,7 @@ public class ChatMessageVO {
     private Date sendDate;
     private Date readDate;
     private MessageType type; // ENTER, LEAVE, CHAT
-    private String yourName;
-    private int unreadMsg;
+    private String yourName; // 상대방 이름 from tuser
+    private String yourPicture; // 상대방 사진 from tuser
+    private int unreadMsg; // 안읽은 메시지 개수
 }
