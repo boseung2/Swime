@@ -80,14 +80,23 @@ public class ChatHandler extends TextWebSocketHandler {
 
                 // 채팅방 id
                 String roomId = chatMessage.getChatRoomId();
+
+                // 해당 방에 다른 세션이 있으면 다른 세션에게 메시지 리로드하라고 알림
+                Map<String, WebSocketSession> userSessions = rooms.get(roomId).getSessions();
+
+                for(WebSocketSession target : userSessions.values()) {
+                    target.sendMessage(new TextMessage("reload chatMsg"));
+                }
                 
                 // rooms의 해당 채팅방의 session에 userId를 추가
                 rooms.get(roomId).getSessions().put(userId, session);
 
-                log.info(roomId + "의 sessions = " + rooms.get(roomId).getSessions());
-
-                log.info("입장 직후 채팅 rooms = " + rooms);
+                log.info("입장 직후 rooms = " + rooms);
+                log.info("입장 직후 해당방의 세션 = " + rooms.get(roomId).getSessions());
                 log.info("입장 직후 채팅 users = " + users);
+
+
+
 
             } else if(MessageType.CHAT.equals(chatMessage.getType())) { // 메시지 타입이 CHAT인 경우
 
@@ -109,9 +118,9 @@ public class ChatHandler extends TextWebSocketHandler {
                 // 3. 해당 채팅방의 세션에 메시지 전달
                 for(WebSocketSession target : userSession.values()) {
 
-                    // 채팅방id, 보낸사람, 내용
+                    // 채팅방id, 보낸사람, 내용, 상태
                     TextMessage tmpMsg = new TextMessage(chatMessage.getChatRoomId() + ","
-                            + chatMessage.getSenderId() + "," + chatMessage.getContents());
+                            + chatMessage.getSenderId() + "," + chatMessage.getContents() + "," + chatMessage.getStatus());
 
                     log.info("채팅 수신자에게 보낼 메시지 = " + tmpMsg.toString());
 

@@ -202,4 +202,10 @@ public class ChatController {
 
         return "/chat/room";
     }
+
+    @GetMapping(value = "/getMsg", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<ChatMessageVO>> getMsg(String chatRoomId) {
+
+        return new ResponseEntity<>(chatMessageService.getMsg(chatRoomId), HttpStatus.OK);
+    }
 }

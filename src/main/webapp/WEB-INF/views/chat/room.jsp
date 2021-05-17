@@ -63,7 +63,7 @@
                         <div class="entete">
                             <span class="status green"></span>
                             <h2>${you.name}</h2>
-                            <h3>${message.sendDate}</h3>
+                            <h3><fmt:formatDate value="${message.sendDate}" pattern="yy/MM/dd HH:ss"/></h3>
                         </div>
                         <div class="triangle"></div>
                         <div class="message">
@@ -75,11 +75,14 @@
                 <c:if test="${me.id == message.senderId}">
                     <li class="me">
                         <div class="entete">
-                            <h3>${message.sendDate}</h3>
+                            <h3><fmt:formatDate value="${message.sendDate}" pattern="yy/MM/dd HH:ss"/></h3>
                             <h2>나 = ${me.name}</h2>
                             <span class="status blue"></span>
                         </div>
                         <div class="triangle" style="margin-left: 530px;"></div>
+                        <c:if test="${message.status == 'MSST02'}">
+                            <h3>안읽음</h3>
+                        </c:if>
                         <div class="message">
                                 ${message.contents}
                         </div>
@@ -144,24 +147,45 @@
                 return;
             }
 
+            if(data === "reload chatMsg") {
+                // 채팅 메시지 리로드
+                reloadChatMsg();
+
+                return;
+            }
+
+            // 채팅방 밑에 추가
             let arr = data.split(",");
             let chatRoomId = arr[0];
             let senderId = arr[1];
             let contents = arr[2];
+            let status = arr[3];
             let sendDate = new Date();
 
             if(chatRoomId === "${chatRoomId}") {
                 let msg = '';
 
+                let year = (sendDate.getFullYear() + '');
+                let month = (sendDate.getMonth() + 1) < 10 ? '0' + (sendDate.getMonth() + 1) : sendDate.getMonth() + 1;
+                let day = sendDate.getDate() < 10 ? '0' + sendDate.getDate() : sendDate.getDate();
+                let hours = sendDate.getHours() < 10 ? '0' + sendDate.getHours() : sendDate.getHours();
+                let min = sendDate.getMinutes() < 10 ? '0' + sendDate.getMinutes() : sendDate.getMinutes();
+
                 if("${pinfo.username}" === senderId) {
                     msg += '<li class="me">';
                     msg += '<div class="entete">';
-                    msg += '<h3>' + sendDate + '</h3>';
-                    msg += '<h2>나 =' + "${me.name}" + '</h2>';
+                    msg += '<h3>';
+                    msg += year.substring(2, 4) + '/' + month + '/' + day + ' ' + hours + ':' + min;
+                    msg += '</h3> ';
+                    msg += '<h2> 나 =' + "${me.name}" + '</h2>';
                     msg += '<span class="status blue"></span>';
                     msg += '</div>';
                     msg += '<div class="triangle" style="margin-left: 530px;"></div>';
-                    msg += '<div class="message">';
+
+                    if(status === 'MSST02') {
+                        msg += '<h3>안읽음 </h3>';
+                    }
+                    msg += ' <div class="message">';
                     msg += contents;
                     msg += '</div>';
                     msg += '</li>';
@@ -171,7 +195,9 @@
                     msg += '<div class="entete">';
                     msg += '<span class="status green"></span>';
                     msg += '<h2>' + "${you.name}" + '</h2>';
-                    msg += '<h3>' + sendDate + '</h3>';
+                    msg += '<h3>';
+                    msg += year.substring(2, 4) + '/' + month + '/' + day + ' ' + hours + ':' + min;
+                    msg += ' </h3>';
                     msg += '</div>';
                     msg += '<div class="triangle"></div>';
                     msg += '<div class="message">';
@@ -233,7 +259,7 @@
                 let min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
 
                 str += '<h3 style="float:right;margin-right: 10px;">';
-                str += year + '/' + month + '/' + day + ' ' + hours + ':' + min;
+                str += year.substring(2, 4) + '/' + month + '/' + day + ' ' + hours + ':' + min;
                 str += '</h3>';
                 str += '<br>';
 
@@ -251,6 +277,68 @@
             $('#chatList').html(str);
 
         })
+    }
+
+    function reloadChatMsg() {
+        chatService.getMsg("${id}", function(result){
+
+            if(result == null || result.length == 0) return;
+
+            let msg = '';
+
+            for(let i = 0; i < result.length; i++) {
+
+                let date = new Date(result[i].sendDate);
+                let year = (date.getFullYear() + '');
+                let month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+                let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+                let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+                let min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+
+                if(result[i].senderId === "${pinfo.username}") {
+                    msg += '<li class="me">';
+                    msg += '<div class="entete">';
+                    msg += '<h3>';
+                    msg += year.substring(2, 4) + '/' + month + '/' + day + ' ' + hours + ':' + min;
+                    msg += '</h3> ';
+                    msg += '<h2> 나 =' + "${me.name}" + '</h2>';
+                    msg += '<span class="status blue"></span>';
+                    msg += '</div>';
+                    msg += '<div class="triangle" style="margin-left: 530px;"></div>';
+
+                    if(result[i].status === 'MSST02') {
+                        msg += '<h3>안읽음 </h3>';
+                    }
+                    msg += ' <div class="message">';
+                    msg += result[i].contents;
+                    msg += '</div>';
+                    msg += '</li>';
+
+                }else {
+                    msg += '<li class="you">';
+                    msg += '<div class="entete">';
+                    msg += '<span class="status green"></span>';
+                    msg += '<h2>' + "${you.name}" + '</h2>';
+                    msg += '<h3>';
+                    msg += year.substring(2, 4) + '/' + month + '/' + day + ' ' + hours + ':' + min;
+                    msg += ' </h3>';
+                    msg += '</div>';
+                    msg += '<div class="triangle"></div>';
+                    msg += '<div class="message">';
+                    msg += result[i].contents;
+                    msg += '</div>';
+                    msg += '</li>';
+                }
+            }
+
+            $('#chat').html(msg);
+
+            // 스크롤바 맨밑으로 내리기
+            if($('#chat').scroll != null) {
+                $('#chat').scrollTop($('#chat')[0].scrollHeight);
+            }
+        })
+
     }
 </script>
 

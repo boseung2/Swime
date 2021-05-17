@@ -15,7 +15,20 @@ let chatService = (function(){
         })
     }
 
+    function getMsg(chatRoomId, callback, error) {
+        $.get("/chat/getMsg?chatRoomId=" + chatRoomId, function (result) {
+            if (callback) {
+                callback(result);
+            }
+        }).fail(function (xhr, status, err) {
+            if (error) {
+                error();
+            }
+        })
+    }
+
     return {
-        getList : getList
+        getList : getList,
+        getMsg : getMsg
     };
 })();
