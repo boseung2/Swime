@@ -354,6 +354,7 @@
 
 </script>
 
+
 <script>
     requestAjax($("#slider"));
 

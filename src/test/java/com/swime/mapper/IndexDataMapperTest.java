@@ -1,7 +1,6 @@
 package com.swime.mapper;
 
 import com.swime.domain.GroupVO;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -13,25 +12,31 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {com.swime.config.RootConfig.class, com.swime.config.SecurityConfig.class})
 @Log4j
 public class IndexDataMapperTest {
 
     @Setter(onMethod_ = @Autowired)
-    IndexDataMapper indexDataMapper;
+    IndexDataMapper mapper;
 
     @Test
     public void getMapper(){
-        Assert.assertTrue(indexDataMapper != null);
+        Assert.assertTrue(mapper != null);
     }
 
     @Test
     public void test1(){
-        List<GroupVO> list = indexDataMapper.test(1,6);
+        List<GroupVO> list = mapper.popularGroupList(1,6);
         Assert.assertTrue(list != null);
 
         list.forEach(log::info);
+    }
+
+    @Test
+    public void test2(){
+        mapper.timeTest();
+        mapper.setSessionTime();
+        mapper.timeTest();
     }
 }

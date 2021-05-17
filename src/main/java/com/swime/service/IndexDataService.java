@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IndexDataService {
 
-    List<GroupVO> popularGroupList();
+    List<GroupVO> popularGroupList(GroupCriteria cri);
 
     List<GroupVO> popularStudyList();
 

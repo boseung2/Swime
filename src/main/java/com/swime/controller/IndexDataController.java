@@ -3,6 +3,7 @@ package com.swime.controller;
 import com.swime.domain.CodeTable;
 import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
+import com.swime.mapper.IndexDataMapper;
 import com.swime.service.IndexDataService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -21,7 +22,10 @@ import java.util.List;
 @Log4j
 @AllArgsConstructor
 public class IndexDataController {
+
     IndexDataService service;
+    IndexDataMapper mapper;
+
 
     @GetMapping(value = "/getPopularGroupList",
             produces = {
@@ -29,10 +33,18 @@ public class IndexDataController {
                     MediaType.APPLICATION_JSON_VALUE
             })
     public ResponseEntity<List<GroupVO>> getPopularGroupList(GroupCriteria cri){
-        List<GroupVO> list = service.test(cri);
+        List<GroupVO> list = service.popularGroupList(cri);
         list.forEach(group -> {
             group.setSigungu(CodeTable.valueOf(group.getSigungu()).getValue());
         });
+        test();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    public ResponseEntity test(){
+        mapper.timeTest();
+        mapper.setSessionTime();
+        mapper.timeTest();
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

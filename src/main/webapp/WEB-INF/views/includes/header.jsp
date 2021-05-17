@@ -39,7 +39,7 @@
     <!-- jquery -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <!-- fontawsome icon -->
+    <!-- font icon -->
 <%--    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>--%>
     <script src="/resources/js/a076d05399.js"></script>
 

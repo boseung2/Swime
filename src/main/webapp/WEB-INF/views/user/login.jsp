@@ -30,10 +30,13 @@
 
 
 </style>
-
 <link href="/resources/css/user.css" rel="stylesheet">
 <link href="/resources/css/shootingStar2.css" rel="stylesheet">
 <link href="/resources/css/floatingStar2.css" rel="stylesheet">
+
+<!-- font icon -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/07bd6433b2.js"></script>
 <body>
 
 <div class="full">
@@ -121,7 +124,10 @@
 
         <div class="buttonForm" >
             <a class="loginButton2" href="${gitLogin}"
-            ><i class="fab fa-github" style="margin-right: 10px"></i> <span class="git">GitHub 아이디로 로그인</span></a>
+            >
+                <i class="fab fa-google" style="margin-right: 10px"></i>
+<%--                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png">--%>
+                <span class="git">GitHub 아이디로 로그인</span></a>
         </div>
 
     </div>
@@ -175,5 +181,5 @@
 
 </script>
 
-<link href="/resources/css/UserFooterPos.css" rel="stylesheet">
+<%--<link href="/resources/css/UserFooterPos.css" rel="stylesheet">--%>
 <%--<%@include file="../includes/footer.jsp" %>--%>

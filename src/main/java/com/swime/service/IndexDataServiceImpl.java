@@ -18,8 +18,8 @@ public class IndexDataServiceImpl implements IndexDataService {
     IndexDataMapper mapper;
 
     @Override
-    public List<GroupVO> popularGroupList() {
-        return null;
+    public List<GroupVO> popularGroupList(GroupCriteria cri) {
+        return mapper.popularGroupList(cri.getPageNum(), cri.getAmount());
     }
 
     @Override
@@ -29,6 +29,6 @@ public class IndexDataServiceImpl implements IndexDataService {
 
     @Override
     public List<GroupVO> test(GroupCriteria cri) {
-        return mapper.test(cri.getPageNum(), cri.getAmount());
+        return null;
     }
 }

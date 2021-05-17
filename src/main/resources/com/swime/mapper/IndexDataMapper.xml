@@ -3,11 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swime.mapper.IndexDataMapper">
-    <select id="popularGroupList"></select>
-    <select id="popularStudyList"></select>
+<!--    <select id="popularGroupList"></select>-->
 
-
-    <select id="test" resultType="com.swime.domain.GroupVO">
+    <select id="popularGroupList" resultType="com.swime.domain.GroupVO">
         <![CDATA[
         select sn, category, name, user_id, user_name, picture, description, attend_count, rating,
                rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
@@ -28,4 +26,18 @@
         where rn > (#{pageNum} - 1) * #{amount}
         ]]>
     </select>
+
+    <select id="popularStudyList"></select>
+
+    <select id="timeTest" resultType="Date">
+        select current_date from dual
+    </select>
+
+    <select id="setSessionTime">
+        alter session set TIME_ZONE = '+09:00'
+--         select to_char(current_date,'hh24:mi:ss') from dual;
+--         alter session set NLS_DATE_FORMAT='YYYY/MM/DD HH24:MI:SS'
+    </select>
+
+
 </mapper>
