@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/board/get.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/board" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/board/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/board" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/chat/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/chat" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/group/get.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/group" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/includes/header.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/includes" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/study/get.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/study" />

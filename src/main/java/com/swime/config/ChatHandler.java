@@ -95,9 +95,6 @@ public class ChatHandler extends TextWebSocketHandler {
                 log.info("입장 직후 해당방의 세션 = " + rooms.get(roomId).getSessions());
                 log.info("입장 직후 채팅 users = " + users);
 
-
-
-
             } else if(MessageType.CHAT.equals(chatMessage.getType())) { // 메시지 타입이 CHAT인 경우
 
                 // 해당 채팅방

@@ -52,8 +52,7 @@
         <header>
             <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
             <div>
-                <h2>${you.name}</h2>
-                <h3>already 1902 messages</h3>
+                <h2 style="margin-top: 15px;">${you.name}</h2>
             </div>
         </header>
         <ul id="chat" style="border-top-width: 0px;">
