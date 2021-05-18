@@ -1,5 +1,7 @@
 package com.swime.Service;
 
+import com.swime.domain.AdminUserCriteria;
+import com.swime.domain.MemberDTO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.MemberMapper;
@@ -126,6 +128,13 @@ public class MemberServiceTests {
     public void getHistList(){
         List<MemberHistoryVO> list = service.getHistList("qwer7044@naver.com");
         list.forEach(log::info);
+    }
+
+    @Test
+    public void getAlluser(){
+        MemberDTO dto = service.selectAllMember(new AdminUserCriteria());
+        log.info(dto.getCount());
+        dto.getList().forEach(log::info);
     }
 
 }

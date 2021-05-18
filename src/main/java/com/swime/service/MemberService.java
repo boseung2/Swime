@@ -1,6 +1,8 @@
 package com.swime.service;
 
 
+import com.swime.domain.AdminUserCriteria;
+import com.swime.domain.MemberDTO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import org.apache.ibatis.annotations.Param;
@@ -9,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface MemberService {
+
+    MemberDTO selectAllMember(AdminUserCriteria cri);
 
     MemberVO get(String id);
 

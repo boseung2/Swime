@@ -33,19 +33,19 @@ public class ProfileServiceTests {
         Assert.assertNotNull(service);
     }
 
-    @Test
-    public void getOwnerList(){
-        List<GroupVO> list = service.getOwnerGroupList(id);
-        Assert.assertNotNull(list);
-        list.forEach(log::info);
-    }
-
-    @Test
-    public void readTest(){
-        GroupVO groupVO = service.read(678L, id);
-        Assert.assertNotNull(groupVO);
-        log.info(groupVO);
-    }
+//    @Test
+//    public void getOwnerList(){
+//        List<GroupVO> list = service.getOwnerGroupList(id);
+//        Assert.assertNotNull(list);
+//        list.forEach(log::info);
+//    }
+//
+//    @Test
+//    public void readTest(){
+//        GroupVO groupVO = service.read(678L, id);
+//        Assert.assertNotNull(groupVO);
+//        log.info(groupVO);
+//    }
 
 
 }

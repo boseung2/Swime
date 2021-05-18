@@ -32,8 +32,8 @@
 
 <%--            </div>--%>
             <div class="topnav">
-                <a id="groupWithPaging" class="active">모임</a>
-                    <%--            <a id="group" >모임</a>--%>
+                <a id="group" class="active">모임</a>
+<%--                <a id="groupWithPaging">모임 x</a>--%>
                 <a id="study" >스터디</a>
                 <a id="written" >작성한 글</a>
                 <a id="reply" >작성한 댓글</a>
@@ -71,7 +71,7 @@
             profileImg.src = "${MemberVo.picture}" === 'myPicture.jpeg' || "${MemberVo.picture}" === ''
                 ? defaultImg : userImg;
 
-            contentAjax($("#groupWithPaging")[0]);
+            contentAjax($("#group")[0]);
         }
 
     });

@@ -17,10 +17,10 @@
             <div>
                 <img src="/resources/assets/고래-w.png" style="width: 100px;"></div>
             <div class="footer-contect">
-                <span><a href="#"><i class="fab fa-youtube"></i></a></span>
-                <span><a href="#"><i class="fab fa-facebook"></i></a></span>
-                <span><a href="#"><i class="fab fa-instagram"></i></a></span>
-                <span><a href="#"><i class="fab fa-github-square"></i></a></span>
+<%--                <span><a href="#"><i class="fab fa-youtube"></i></a></span>--%>
+<%--                <span><a href="#"><i class="fab fa-facebook"></i></a></span>--%>
+<%--                <span><a href="#"><i class="fab fa-instagram"></i></a></span>--%>
+                <span><a href="https://github.com/boseung2/Swime"><i class="fab fa-github-square"></i></a></span>
             </div>
         </div>
         <div class="footer-right">
