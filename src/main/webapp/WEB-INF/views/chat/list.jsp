@@ -16,7 +16,7 @@
         <header>
             <input type="text" placeholder="search">
         </header>
-        <ul>
+        <ul id="chatList">
 
             <c:forEach var="room" items="${rooms}">
                 <li>
@@ -58,6 +58,8 @@
 
 <%@include file="../includes/footer.jsp" %>
 
+<script type="text/javascript" src="/resources/js/chat.js"></script>
+
 <script>
 
     $(document).ready(function() {
@@ -86,9 +88,72 @@
         function onMessage(e) {
             let data = e.data;
 
-            // 채팅방 리스트를 다시 불러온다.
+            console.log(data);
+
+            if(data === "reload chatList") {
+
+                //채팅방 리로드
+                reloadChatList();
+            }
         }
 
     })
 
+</script>
+
+<script>
+    function reloadChatList() {
+        chatService.getList("${pinfo.username}", function(result) {
+
+            console.log(result);
+
+            if(result == null || result.length === 0) {
+                return;
+            }
+
+            let str = "";
+
+            for(let i = 0; i < result.length; i++) {
+                str += '<li><a style="display: block" href="/chat/room/' + result[i].chatRoomId+ '">';
+                str += '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">';
+                str += '<div>';
+                str += '<h2>' + result[i].yourName + '</h2>';
+                str += '<h3>';
+
+                if(result[i].contents.length >= 10) {
+                    str += result[i].contents.substring(0, 10) + '...';
+                }else {
+                    str += result[i].contents;
+                }
+                str += '</h3>';
+                str += '</div>';
+                str += '<div style="float:right">';
+
+                let date = new Date(result[i].sendDate);
+                let year = (date.getFullYear() + '');
+                let month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+                let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+                let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+                let min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+
+                str += '<h3 style="float:right;margin-right: 10px;">';
+                str += year.substring(2, 4) + '/' + month + '/' + day + ' ' + hours + ':' + min;
+                str += '</h3>';
+                str += '<br>';
+
+                if(result[i].unreadMsg > 0) {
+                    str += '<h3 style="float:right;margin-right: 10px;background-color: red; padding: 3px 6px; border-radius: 50%; color: white">';
+                    str += result[i].unreadMsg;
+                    str += '</h3>';
+                }
+                str += '</div>';
+                str += '</a>';
+                str += '</li>';
+
+            }
+
+            $('#chatList').html(str);
+
+        })
+    }
 </script>

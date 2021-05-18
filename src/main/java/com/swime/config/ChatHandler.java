@@ -84,8 +84,10 @@ public class ChatHandler extends TextWebSocketHandler {
                 // 해당 방에 다른 세션이 있으면 다른 세션에게 메시지 리로드하라고 알림
                 Map<String, WebSocketSession> userSessions = rooms.get(roomId).getSessions();
 
-                for(WebSocketSession target : userSessions.values()) {
-                    target.sendMessage(new TextMessage("reload chatMsg"));
+                if(!userSessions.isEmpty()) {
+                    for(WebSocketSession target : userSessions.values()) {
+                        target.sendMessage(new TextMessage("reload chatMsg"));
+                    }
                 }
                 
                 // rooms의 해당 채팅방의 session에 userId를 추가
