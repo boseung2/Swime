@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-
+<link rel="stylesheet" href="../../../resources/css/adminPage.css">
 <div class="container-fluid">
     <!-- <h2 class="mt-4">게시물관리</h2> -->
     <ol class="breadcrumb mb-4">
@@ -17,14 +17,14 @@
                 <div>
 <%--                    <span>전체선택</span>--%>
                     <select class="boardCntList" id="boardCntList" name="boardCntList">
-                        <option value="10">--개수--</option>
+                        <option value="10">--개수(10/25/50)--</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                     </select>
 
                     <select class="bbsOrReply" id="bbsOrReply" name="bbsOrReply">
-                        <option value="board">--전체--</option>
+                        <option value="board">--게시물/댓글--</option>
                         <option value="board">게시물</option>
                         <option value="reply">댓글</option>
                     </select>
@@ -39,11 +39,13 @@
                     </select>
 
 
-                    <div class="search-bar">
+                    <div class="search-bar boardSearch">
                         <input type="text" id="search" name="search" placeholder="Search.." >
-                        <button class="search-button"><i class="fas fa-search"></i></button>
+                        <button class="search-button" id="searchIcon"><i class="fas fa-search"></i></button>
                     </div>
+
                 </div>
+
             </div> <!--option search-->
 
 
@@ -55,7 +57,7 @@
                             <input type="checkbox" id="allCheck" name="allChk">
                         </th>
                         <th>번호</th>
-                        <th>번호(sn)</th>
+                        <th>고유번호(sn)</th>
                         <th>email</th>
                         <th>이름</th>
                         <th id="change">제목</th>
@@ -80,7 +82,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <%--게시판 리스트--%>
+                    <%--게시판/댓글 리스트--%>
                     <tr class="boardList">
 <%--                        <td data-sn='12'></td>--%>
 <%--                        <td></td>--%>
@@ -89,10 +91,6 @@
 <%--                        <td></td>--%>
 <%--                        <td></td>--%>
 <%--                        <td></td>--%>
-
-                    </tr>
-
-                    <tr class="replyList">
 
                     </tr>
 
