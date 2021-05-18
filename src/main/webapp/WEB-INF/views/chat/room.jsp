@@ -34,7 +34,15 @@
     </aside>
     <main>
         <header>
-            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
+            <c:if test="${you.picture != null && you.picture != 'myPicture.jpeg'}">
+                <c:set var="src" value="${fn:replace(('/display?fileName=' += you.picture), 's_', '')}"/>
+                <c:set var="style" value="style='width: 54px; height: 54px; border-radius: 27px; border: 4px solid #6a6a76;'"/>
+            </c:if>
+            <c:if test="${you.picture == null || you.picture == 'myPicture.jpeg'}">
+                <c:set var="src" value="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg"/>
+            </c:if>
+
+            <img src="${src}" ${style} alt="">
             <div>
                 <h2>${you.name}</h2>
                 <h3>already 1902 messages</h3>

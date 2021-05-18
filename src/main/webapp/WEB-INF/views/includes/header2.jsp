@@ -7,8 +7,6 @@
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="pinfo"/>
 </sec:authorize>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,79 +47,105 @@
     <link href="/resources/css/scrollbar.css" rel="stylesheet">
 
     <style>
-        @media (min-width: 768px) {
-            .container {
-                width: 750px;
-            }
-        }
+        /*@media (min-width: 768px) {*/
+        /*    .container {*/
+        /*        width: 750px;*/
+        /*    }*/
+        /*}*/
 
-        @media (min-width: 992px) {
-            .container {
-                width: 1000px;
-            }
-        }
+        /*@media (min-width: 992px) {*/
+        /*    .container {*/
+        /*        width: 1000px;*/
+        /*    }*/
+        /*}*/
 
-        /*<!-- 알림 드롭다운-->*/
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+        /*!*<!-- 알림 드롭다운-->*!*/
+        /*.dropdown {*/
+        /*    position: relative;*/
+        /*    display: inline-block;*/
+        /*}*/
 
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f1f1f1;
-            min-width: 160px;
-            overflow: auto;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
+        /*.dropdown-content {*/
+        /*    display: none;*/
+        /*    position: absolute;*/
+        /*    background-color: #f1f1f1;*/
+        /*    min-width: 160px;*/
+        /*    overflow: auto;*/
+        /*    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
+        /*    z-index: 1;*/
+        /*}*/
 
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            width: 330px;
-        }
+        /*.dropdown-content a {*/
+        /*    color: black;*/
+        /*    padding: 12px 16px;*/
+        /*    text-decoration: none;*/
+        /*    display: block;*/
+        /*    width: 330px;*/
+        /*}*/
 
-        .dropdown a:hover {background-color: #ddd;}
+        /*.dropdown a:hover {background-color: #ddd;}*/
 
-        .show {display: block;}
+        /*.show {display: block;}*/
     </style>
 
 </head>
 
 <body>
 <!-- header -->
-<div class="header">
-    <a href="/" class="logo"><img src="../../../resources/img/logo.png"></a>
-    <a href="/group/list">모임찾기</a>
-    <a href="/group/register">모임만들기</a>
-    <a href="/group/new/index">뉴 모임찾기(미적용)</a>
+<header class="header-block">
+    <h1>
+        <a href="">
+            <img src="assets/SwimeLogo.png" alt="Swime" class="logo">
+        </a>
+    </h1>
+    <nav>
+        <h1 style="display: none;">Menu</h1>
+        <ul class="header-menu">
+            <li>
+                <a href="">모임 찾기</a>
+            </li>
+            <li>
+                <a href="">모임 만들기</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="flex-flow"></div>
+    <ul class="header-login-after">
+        <li>
+            <button type="button" class="button-icon" id="alert">
+                <i class="far fa-bell"></i>
+            </button>
+            <div class="red"></div>
+        </li>
+        <li>
+            <button type="button" id="mypage">
+                <p><span>신성권</span> 고객님 &nbsp&nbsp<i class="fas fa-chevron-down"></i></p>
+            </button>
+        </li>
+    </ul>
+</header>
+<div class="spacer"></div>
 
-    <div class="header-right">
-        <sec:authorize access="isAuthenticated()">
-            <a href="/serviceCenter/list">고객센터</a>
-            <div class="dropdown" style="position: absolute;">
-                <ul id="myDropdown" class="dropdown-content">
-                    <li>알림이 없습니다.</li>
-                </ul>
-            </div>
-            <a><img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;"></a>
-        </sec:authorize>
-        <sec:authorize access="isAnonymous()">
-            <a href="/user/register">회원가입</a>
-            <a class="active" href="/user/login">로그인</a>
-        </sec:authorize>
-        <sec:authorize access="isAuthenticated()">
-            <a href="/user/infoDetail?id=<sec:authentication property='principal.username'/>"><sec:authentication property="principal.memberVO.name"/> 님 안녕하세요</a>
-            <sec:authorize access="hasAuthority('ADMIN')">
-                <a href="/admin/adminIndex">어드민 페이지</a>
-            </sec:authorize>
-            <a href="#" onclick="document.getElementById('logout').submit();">로그아웃</a>
-        </sec:authorize>
+<div class="modal">
+    <div class="modal-alert">
+        <h3>알림</h3>
+        <p>받은 알림이 없습니다</p>
+    </div>
+    <div class="modal-mypage">
+        <h3>안녕하세요, <span>신성권</span>님</h3>
+        <span>
+        <a href="#">
+          마이페이지
+        </a>
+      </span>
+        <br>
+        <br>
+        <span>
+        <a href="#">
+           로그아웃
+        </a>
+      </span>
     </div>
 </div>
 
@@ -282,4 +306,27 @@
         }).done(function (result) {
         });
     }
+</script>
+
+<script>
+    $("#alert").click(function(){
+        $(".modal-alert").stop().fadeToggle(500);
+        return false;
+    });
+
+    $(document).click(function(e){
+        if(e.target.className ==".modal-alert"){return false}
+        $(".modal-alert").stop().fadeOut(500);
+    });
+
+    $("#mypage").click(function(){
+        $(".modal-mypage").stop().fadeToggle(500);
+        return false;
+    });
+
+    $(document).click(function(e){
+        if(e.target.className ==".modal-mypage"){return false}
+        $(".modal-mypage").stop().fadeOut(500);
+    });
+
 </script>
