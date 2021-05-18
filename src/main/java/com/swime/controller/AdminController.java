@@ -2,6 +2,7 @@ package com.swime.controller;
 
 import com.swime.domain.*;
 import com.swime.service.AdminBoardService;
+import com.swime.service.AdminGroupService;
 import com.swime.service.BoardService;
 import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,7 @@ public class AdminController {
     //private BoardService boardService;
     //private ReplyService replyService;
     private AdminBoardService adminBoardService;
+    private AdminGroupService adminGroupService;
 
 
     @GetMapping("/adminIndex")
@@ -128,12 +131,22 @@ public class AdminController {
 //                ? new ResponseEntity<>("success", HttpStatus.OK)
 //                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 //    }
+// ---------------------------------end 관리자 게시판--------------------------------------
 
-    //end 관리자 게시판
 
-    @GetMapping("/manage-group")
-    public void group(){
+    @GetMapping(value ="/manageGroup/{page}",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<AdminGroupPageDTO> groupGetList(@PathVariable("page") int page){
+
+        AdminGroupCriteria cri = new AdminGroupCriteria(page, 10);
+
+        log.info("groupCri : " + cri);
+
+        return new ResponseEntity<>(adminGroupService.adminGetGroupListWithPagingBySn(cri), HttpStatus.OK);
+
     }
+
+
 
     @GetMapping("/manage-study")
     public void study(){

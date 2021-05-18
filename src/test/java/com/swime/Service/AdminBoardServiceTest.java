@@ -2,8 +2,10 @@ package com.swime.Service;
 
 
 import com.swime.domain.AdminBoardPageDTO;
+import com.swime.domain.AdminGroupCriteria;
 import com.swime.domain.BoardCriteria;
 import com.swime.domain.BoardVO;
+import com.swime.service.AdminGroupService;
 import com.swime.service.BoardService;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -23,6 +25,15 @@ public class AdminBoardServiceTest {
     @Setter(onMethod_ = {@Autowired})
     private BoardService service;
 
+    @Setter(onMethod_ = {@Autowired})
+    private AdminGroupService adminGroupService;
+
+    @Test
+    public void testAdminGroupGetListWithPaging(){
+        adminGroupService.adminGetGroupListWithPagingBySn(
+                new AdminGroupCriteria(1,10)
+        );
+    }
 //    @Test
 //    public void testAdminGetListWithPagingBySn(){
 //        service.adminGetListWithPagingBySn(new BoardCriteria(3,10))

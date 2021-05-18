@@ -1,9 +1,7 @@
 package com.swime.mapper;
 
 
-import com.swime.domain.AdminBoardCriteria;
-import com.swime.domain.BoardCriteria;
-import com.swime.domain.BoardVO;
+import com.swime.domain.*;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Test;
@@ -22,6 +20,9 @@ public class AdminBoardMapperTests {
     @Setter(onMethod_ = @Autowired)
     private AdminBoardMapper mapper;
 
+    @Setter(onMethod_ = @Autowired)
+    private AdminGroupMapper groupMapper;
+
 //    @Test
 //    public void testAdminGetListWithPagingBySn(){
 //        BoardCriteria cri = new BoardCriteria();
@@ -37,10 +38,26 @@ public class AdminBoardMapperTests {
 //
 //        list.forEach(board-> log.info(board));
 //    }
+
+    @Test
+    public void testAdminGetCountBySn(){
+        AdminGroupCriteria cri = new AdminGroupCriteria();
+
+        log.info(groupMapper.adminGetCountBySn(cri));
+    }
+
+    @Test
+    public void teatAdminGetGroupListWithPaging(){
+        AdminGroupCriteria cri = new AdminGroupCriteria();
+        List<GroupVO> list = groupMapper.adminGetGroupListWithPagingBySn(cri);
+        list.forEach(groupMapper -> log.info(groupMapper));
+    }
+
+
     @Test
     public void testAdminGEtCountBySn(){
         AdminBoardCriteria cri = new AdminBoardCriteria();
-        cri.setActive("D");
+        //cri.setActive("D");
         log.info(mapper.adminGetCountBySn(cri));
     }
 
