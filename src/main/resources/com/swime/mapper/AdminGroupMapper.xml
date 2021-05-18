@@ -36,6 +36,13 @@
 
     </select>
 
+    <update id="adminGroupRemove">
+        update tgrp
+        set status = 'GRST03',
+        upd_date = current_date
+        where sn = #{sn}
+    </update>
+
 
 
 </mapper>

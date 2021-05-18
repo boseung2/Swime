@@ -101,7 +101,10 @@
     </sql>
 
     <update id="adminBoardRemove">
-        update tbrd set status = 'BOST02' where sn = #{sn}
+        update tbrd
+        set status = 'BOST02'
+        --,sys_reg_db_id = 'swime'
+        where sn = #{sn}
     </update>
 
     <update id="adminBoardFromDeleteToActive">

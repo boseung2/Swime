@@ -24,4 +24,10 @@ public class AdminGroupServiceImpl implements AdminGroupService{
                 mapper.adminGetGroupListWithPagingBySn(cri)
         );
     }
+
+    @Override
+    public int adminGroupRemove(Long sn) {
+
+        return mapper.adminGroupRemove(sn);
+    }
 }

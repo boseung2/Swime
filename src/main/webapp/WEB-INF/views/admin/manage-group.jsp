@@ -44,7 +44,7 @@
                     <thead>
                     <tr class="groupHeader">
                         <th>
-                            <input type="checkbox" id="allCheck" name="allCheck" class="groupCkBox">
+                            <input type="checkbox" id="allCheck" name="allCheck">
                         </th>
                         <th>번호</th>
                         <th>고유번호(sn)</th>
@@ -83,7 +83,7 @@
 
                 <div>
                     <button class="footer-button">수정</button>
-                    <button class="footer-button2">삭제</button>
+                    <button id="groupRemove" class="footer-button2">삭제</button>
                 </div>
 
                 <!--admin 그룹 페이징 처리-->
@@ -105,16 +105,31 @@
 
     $(document).ready(function(){
 
-        $('groupCkBox').on('click')
-
         let groupUl = $('tbody');
         let amount = 10;
+
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+        });
+
+        //전체체크박스
+        $('#allCheck').on('click', function (){
+
+            let checked = $(this).is(":checked");
+
+            if(checked){
+                $('.groupCkBox').prop('checked', true);
+            }else{
+                $('.groupCkBox').prop('checked', false);
+            }
+
+        });
 
         showGroupList(1, amount);
 
         function showGroupList(page, amount){
 
-            console.log("gorupPage : " + page +", groupAmount: " + amount);
+            console.log("groupPage : " + page +", groupAmount: " + amount);
 
             adminGroupListService.adminGroupList(page,amount, function(groupCnt, list){
 
@@ -159,7 +174,7 @@
                         let resultNum = (i+1) + (amount * (page -1));
 
                         str += "<tr class='groupList'>";
-                        str += "<td><input type='checkbox' id='checkbox' name='checkbox' class='groupCkBox'></td>"
+                        str += "<td data-sn='"+list[i].sn+"'><input type='checkbox' id='checkbox' name='checkbox' class='groupCkBox'></td>"
                         str += "<td>"+resultNum+"</td>";
                         str += "<td>" + list[i].sn + "</td>";
                         str += "<td>" + list[i].name + "</td>";
@@ -178,9 +193,74 @@
                     groupUl.html(str);
 
                     showGroupPage(groupCnt);
+
+                    $('#groupRemove').on('click', function(){
+                        checkedBox();
+                    })
+
+                    function checkedBox(){
+                        console.log("removeChecked");
+
+                        let dataArr = [];
+                        let checkList = $('.groupCkBox:checked');
+
+                        checkList.each(function(index){
+
+                            // 모임의 sn(고유번호)를 가져와서 배열에 담는다.
+                            let sn = $(this).parent().attr('data-sn');
+                            dataArr.push(sn);
+
+                            console.dir(checkList);
+                            console.log("sn : " + sn);
+                            console.log(dataArr);
+
+                        }); //end checkList.each
+
+                        //체크박스가 클릭 되었다면(데이터가 있으면)
+                        if(dataArr.length !== 0){
+
+                            let deleteConfirm = confirm('삭제하시겠습니까?');
+                            //확인 버튼을 누르면
+                            if(deleteConfirm){
+
+                                adminGroupListService.adminDelete(dataArr, function(result){
+                                    console.log('--------callback--------')
+                                    console.log(result);
+
+                                })
+
+                            }
+                        }else{
+                            alert('삭제할 데이터가 없습니다.');
+                        }
+
+                    } // end checkedBox
+
+                    //개별 체크박스 전체 체크 중 1개가 체크 해제되면 전체 체크박스 해제
+                    $('.groupCkBox').on('click',function (){
+
+                        console.log("checkClicked");
+
+                        let isChecked = true;
+
+                        $('.groupCkBox').each(function(){
+                            //true and 체크 되어있으면
+                            isChecked = isChecked && $(this).is(":checked");
+                        })
+
+                        $('#allCheck').prop('checked', isChecked);
+
+                    });
+
+
                 });
 
         }//end showList
+
+
+
+
+
         let GroupPageNum = 1;
         let groupPageFooter = $('.groupPageFooter');
         <!--게시글 페이지-->

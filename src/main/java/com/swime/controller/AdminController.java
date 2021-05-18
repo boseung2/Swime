@@ -111,7 +111,7 @@ public class AdminController {
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+//    나중에 쓸 예정이니까 삭제x
 //    @PostMapping(value = "/board/toActive")
 //    public ResponseEntity<String> adminBoardToActive(@RequestBody String[] list,
 //                                                   @RequestParam(value = "bbs") String bbs) {
@@ -158,7 +158,24 @@ public class AdminController {
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
 
-    } // end 관리자 모임
+    }
+    @PostMapping(value = "/group/dataArr")
+    public ResponseEntity<String> adminGroupRemove(@RequestBody Long[] list) {
+
+        log.info("list : " + list);
+        int result = 0;
+
+        for (int i = 0; i < list.length; i++) {
+
+            log.info(list[i]);
+
+            result = adminGroupService.adminGroupRemove(list[i]);
+        }
+        return result == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    // end 관리자 모임
 
 
 

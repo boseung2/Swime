@@ -25,6 +25,33 @@ let adminGroupListService = (function(){
             });
     } // end groupList
 
+    function adminDelete(dataArr, callback, error){
+
+        let jsonString = JSON.stringify(dataArr);
+        console.log("js/"+jsonString);
+        console.log(dataArr);
+
+        $.ajax({
+            type : 'POST',
+            //traditional : true,
+            url : '/admin/group/dataArr',
+            data :  JSON.stringify(dataArr),
+            contentType : "application/json; charset=utf-8",
+            success : function(deleteResult, status, xhr){
+                if(callback){
+                    callback(deleteResult);
+                }
+            },
+            error : function(xhr, status, er){
+                if (error){
+                    error(er)
+                }
+            }
+        });
+
+    }// end adminDelete
+
+
     function groupDisplayTime(timeValue) {
 
         let date = new Date(timeValue);
@@ -45,7 +72,7 @@ let adminGroupListService = (function(){
 
     return {
         adminGroupList:adminGroupList,
-        groupDisplayTime:groupDisplayTime
-
+        groupDisplayTime:groupDisplayTime,
+        adminDelete:adminDelete
     }
 })();

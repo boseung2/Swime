@@ -186,7 +186,7 @@
             let checkList = $('.boardCkBox:checked');
 
             checkList.each(function(index){
-
+                console.log("clicked");
                 let tr = $(this).parent().parent().eq(0);
                 //sn번호
                 let snResult = tr.children().eq(2).text();
@@ -194,7 +194,7 @@
                 unCheck = tr.children().eq(0).children().eq(0);
 
                 storeIndex.push(unCheck);
-
+                console.log(unCheck);
                 //storeIndex.push(snResult);
 
                 if(checkList.get(index)){
@@ -215,7 +215,7 @@
 
             }else{
                 //console.log("storeIndex : " + storeIndex);
-                let deleteConfirm = confirm('삭제 하시겠습니까?');
+                let deleteConfirm = confirm('삭제하시겠습니까?');
 
                 if(deleteConfirm){
                     // let statusText = $('tr td').eq(8).text();
@@ -239,7 +239,6 @@
 
                         }
 
-
                         showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
 
                     });
@@ -248,8 +247,6 @@
             }
 
         } // end oneCheck()
-
-
 
         //input 검색창 search
         $('#search').keyup(function (){

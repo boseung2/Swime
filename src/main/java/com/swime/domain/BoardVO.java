@@ -23,6 +23,8 @@ public class BoardVO {
     private Date regDate;
     private Date updDate;
 
+    private String sysRegDbId;
+
     //private String type;
 
     //게시글 등록 시 첨부까지 처리할 수 있게 BoardAtchVO추가
