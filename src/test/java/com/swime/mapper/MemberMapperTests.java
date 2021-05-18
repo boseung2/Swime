@@ -1,5 +1,6 @@
 package com.swime.mapper;
 
+import com.swime.domain.AdminUserCriteria;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberHistoryVOTests;
 import com.swime.domain.MemberVO;
@@ -162,5 +163,17 @@ public class MemberMapperTests {
         MemberVO memberVO = mapper.readWithAuth("aaa123@naver.com");
 //        MemberVO memberVO = mapper.readWithAuth("asd123@naver.com");
         log.info(memberVO);
+    }
+
+    @Test
+    public void realAllUser(){
+        List<MemberVO> list = mapper.selectAllMember(new AdminUserCriteria());
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void realAllUserCount(){
+        int count = mapper.allMemberCount();
+        log.info(count);
     }
 }
