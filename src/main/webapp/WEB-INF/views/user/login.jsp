@@ -28,11 +28,22 @@
         height: 70px;
     }
 
+    #myModal{
+        position:absolute;
+        width:100%;
+        height:100%;
+        background: rgba(0,0,0,0.8);
+        top:0;
+        left:0;
+        display:none;
+        z-index: 2000;
+    }
 
 </style>
 <link href="/resources/css/user.css" rel="stylesheet">
 <link href="/resources/css/shootingStar2.css" rel="stylesheet">
 <link href="/resources/css/floatingStar2.css" rel="stylesheet">
+<link href="../../../resources/css/adminPage.css" rel="stylesheet" />
 
 <!-- font icon -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -78,8 +89,9 @@
     </div>
 
 <div class="content" style="z-index: 20;">
+    <div id="modalPlace"></div>
 
-    <div id="regdiv">
+    <div class="regdiv">
         <div id="errorMsgDiv"></div>
 
         <form id="regForm" action="/user/login" method="post">
@@ -123,11 +135,16 @@
         <%--        <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login"></button>--%>
 
         <div class="buttonForm" >
-            <a class="loginButton2" href="${gitLogin}"
-            >
+            <a class="loginButton2" href="${gitLogin}">
                 <i class="fab fa-google" style="margin-right: 10px"></i>
 <%--                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png">--%>
                 <span class="git">GitHub 아이디로 로그인</span></a>
+        </div>
+
+        <div class="buttonForm" style="margin-bottom: 0px;">
+            <div id="sampleLoginBtn" class="loginButton2" style="background-color: rgb(247 73 73)" onMouseOver="this.style.backgroundColor='rgb(255 151 151)'"
+               onMouseOut="this.style.backgroundColor='rgb(247 73 73)'">
+                <span class="git">샘플 아이디로 로그인</span></div>
         </div>
 
     </div>
@@ -141,6 +158,10 @@
 
 
 <script>
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+    });
+
     alreadyLogin();
 
 
@@ -165,6 +186,8 @@
             $(errorBox).html('<div id="errorMsg" class="w-100 btn btn-lg btn-danger">error</div>');
             errorMsg = $("#errorMsg")[0];
         }
+
+        sampleLogin();
     });
 
     function alreadyLogin() {
@@ -176,8 +199,57 @@
 
         }
     }
+    // modalSetting(title, body, footer, footerFunc)
+    function sampleLogin(){
+        let {modalSetting, show} = modal($("#modalPlace"));
+
+        let idList = [
+            {id : 'test1@naver.com', password : 1234, auth : 'ADMIN'},
+            {id : 'test2@naver.com', password : 1234, auth : 'MEMBER'},
+            // {id : 'sdasdasdsa@naver.com', password : 1234}
+        ];
 
 
+        let idListStr = "";
+
+        for (let i = 0; i < idList.length; i++) {
+            idListStr += "" +
+                "<div>" +
+                "   <span>" +
+                "" + idList[i].id + (idList[i].auth !== undefined ? "(권한:" + idList[i].auth + ")" : '')+
+                "   </span>" +
+                "   <span>" +
+                "       <div data-index=" + i + " class='btn btn-primary sampleIdSelectBtn'>로그인</div>" +
+                "   </span>" +
+                "</div>";
+        }
+
+
+        modalSetting("샘플 아이디입니다", idListStr, "alert");
+
+        $("#sampleLoginBtn").on("click",function () {
+            show();
+        });
+
+        $(".sampleIdSelectBtn").on("click", function () {
+            console.log("login");
+            login(idList[this.dataset.index]);
+        });
+    }
+
+    function login(obj){
+        $.ajax({
+            url: '/user/login',
+            type: 'POST',
+            data: {
+                id : obj.id,
+                password : obj.password
+            },
+            success: function(result) {
+                $(location).attr('href', '/');
+            }
+        });
+    }
 
 </script>
 

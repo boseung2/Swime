@@ -213,7 +213,6 @@
 
         let DOM = {
             container: function (id) {
-                console.log(sliderItemWidth);
                 let dom = document.querySelector('#' + id);
                 dom.className = 's-container';
                 dom.style.position = 'relative';
@@ -221,7 +220,6 @@
                 return dom;
             },
             slider: function (container) {
-                console.log(sliderItemWidth);
 
                 totalCount = container.children.length;
 
@@ -253,7 +251,6 @@
 
         // 화면 사이즈 수정시 발생하는 이벤트
         function resize() {
-            console.log(sliderItemWidth + "1");
 
             left = 0;
             document.querySelector('#' + id + ' .slider').style.left = left + 'px';
@@ -276,13 +273,11 @@
                 }
 
             }
-            console.log(sliderItemWidth + "2");
 
         }
 
         // 디스플레이 갯수 설정 함수
         function setDisplayCount(count) {
-            console.log(sliderItemWidth === 0);
 
             display = count;
 
@@ -290,18 +285,12 @@
             // containerWidth = container.offsetWidth + spacing;
             containerWidth = (containerWidth === 0 ? 960 : container.offsetWidth + spacing);
             sliderItemWidth = containerWidth / display;
-            console.log("offset" + container.offsetWidth);
-            console.log("spacing" + spacing);
-
-            console.log(containerWidth)
-            console.log(display)
 
             document.querySelector('#' + id + ' .slider').style.width = totalCount * sliderItemWidth + spacing * totalCount + 'px';
             let items = document.querySelector('#' + id + ' .slider').children;
             for (let i = 0; i < items.length; i++) {
                 items[i].style.width = (sliderItemWidth - spacing) + 'px';
             }
-            console.log(sliderItemWidth === 0);
 
         }
 
@@ -354,7 +343,7 @@
     };
 
     let slider = undefined;
-    let slidertwo = new Slider('slider2',3,3,1,20);
+    // let slidertwo = new Slider('slider2',3,3,1,20);
     // slider.auto();
 
 </script>
