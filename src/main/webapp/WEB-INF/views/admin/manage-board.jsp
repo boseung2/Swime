@@ -119,9 +119,9 @@
 
 <script type="text/javascript">
 
+    //'document'
 
-
-    $('document').ready(function(){
+    $(document).ready(function(){
 
         let boardUl = $('tbody'); //게시판 출력
 

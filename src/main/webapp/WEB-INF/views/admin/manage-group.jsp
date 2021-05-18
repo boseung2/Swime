@@ -42,39 +42,41 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width='100%' cellspacing="0">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>email</th>
-                        <th>이름</th>
-                        <th>가입일</th>
-                        <th>수정일</th>
-                        <th>상태</th>
+                    <tr class="groupHeader">
+                        <th>
+                            <input type="checkbox" id="allCheck" name="allCheck" class="groupCkBox">
+                        </th>
+                        <th>번호</th>
+                        <th>고유번호(sn)</th>
+                        <th>모임 이름</th>
+                        <th>모임장 이메일</th>
+                        <th>모임장 이름</th>
+                        <th>모임 설명</th>
+                        <th>참석인원</th>
+                        <th>별점</th>
+                        <th>시</th>
+                        <th>군/구</th>
+                        <th>모임생성일</th>
+                        <th>모임상태</th>
                     </tr>
                     </thead>
-                    <tr>
-                        <td>1</td>
-                        <td>ssk900620@gmail.com</td>
-                        <td>신성권</td>
-                        <td>2009/01/01</td>
-                        <td>2010/03/12</td>
-                        <td>정상</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>ssk900620@gmail.com</td>
-                        <td>신상권</td>
-                        <td>2020/07/12</td>
-                        <td>2020/07/12</td>
-                        <td>비정상</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>ssk900620@gmail.com</td>
-                        <td>김성권</td>
-                        <td>1990/06/20</td>
-                        <td>1998/05/11</td>
-                        <td>정상</td>
-                    </tr>
+
+                    <tr class="groupList"></tr>
+<%--                    <tr>--%>
+<%--                        <td>1</td>--%>
+<%--                        <td>보노보노방</td>--%>
+<%--                        <td>toywar94@naver.com</td>--%>
+<%--                        <td>이민재</td>--%>
+<%--                        <td>보노보노 사랑하는 모임</td>--%>
+<%--                        <td>1000명</td>--%>
+<%--                        <td>4.5</td>--%>
+<%--                        <td>경기도</td>--%>
+<%--                        <td>고양시</td>--%>
+<%--                        <td>2009/01/01</td>--%>
+<%--                        <td>정상</td>--%>
+<%--                    </tr>--%>
+
+
                 </table>
             </div>
             <div style="display: flex; justify-content: space-between;">
@@ -83,16 +85,169 @@
                     <button class="footer-button">수정</button>
                     <button class="footer-button2">삭제</button>
                 </div>
-                <div>
-                    <button class="page-number"><</button>
-                    <button class="page-number">1</button>
-                    <button class="page-number">2</button>
-                    <button class="page-number">3</button>
-                    <button class="page-number">></button>
+
+                <!--admin 그룹 페이징 처리-->
+                <div class="groupPageFooter panel-footer">
 
                 </div>
+
+
             </div>
 
-        </div>
-    </div>
-</div>
+        </div><!--end card body-->
+    </div><!--end card md-->
+</div><!--end container-->
+
+<!--GroupList Modile-->
+<script type="text/javascript" src="/resources/js/adminGroupList.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('groupCkBox').on('click')
+
+        let groupUl = $('tbody');
+        let amount = 10;
+
+        showGroupList(1, amount);
+
+        function showGroupList(page, amount){
+
+            console.log("gorupPage : " + page +", groupAmount: " + amount);
+
+            adminGroupListService.adminGroupList(page,amount, function(groupCnt, list){
+
+                    console.log("groupCnt :" + groupCnt);
+                    console.log("list :" + list);
+                    console.log(list);
+
+                    if(page == -1){
+                        GroupPageNum = Math.ceil(groupCnt/10.0);
+                        showGroupList(GroupPageNum);
+                        // GroupPageNum = 1;
+                        // showGroupList(GroupPageNum);
+                        return;
+                    }
+                    let str="";
+
+                    if(list == null || list.length == 0){
+                        //groupUl.html("");
+                        return;
+                    }
+
+                    //게시판 리스트 뽑는 곳
+                    for(let i = 0, len = list.length || 0; i < len; i++){
+
+                        let sido = list[i].sido;
+                        let gungu = list[i].sigungu;
+                        let status = list[i].status;
+
+                        //상태코드 -> 텍스트
+                        switch (status){
+                            case 'GRST01':
+                                status = '정상';
+                                break;
+                            case 'GRST02':
+                                status = '정지';
+                                break;
+                            case 'GRST03':
+                                status = '삭제';
+                                break;
+                        }
+
+                        let resultNum = (i+1) + (amount * (page -1));
+
+                        str += "<tr class='groupList'>";
+                        str += "<td><input type='checkbox' id='checkbox' name='checkbox' class='groupCkBox'></td>"
+                        str += "<td>"+resultNum+"</td>";
+                        str += "<td>" + list[i].sn + "</td>";
+                        str += "<td>" + list[i].name + "</td>";
+                        str += "<td>"+list[i].userId+"</td>";
+                        str += "<td>" + list[i].userName + "</td>";
+                        str += "<td>" + list[i].description + "</td>";
+                        str += "<td>" + list[i].attendCount + "명"+"</td>";
+                        str += "<td>" + list[i].rating + "점" +"</td>";
+                        str += "<td>" + list[i].sido + "</td>";
+                        str += "<td>" + list[i].sigungu + "</td>";
+                        str += "<td>" + adminGroupListService.groupDisplayTime(list[i].regDate) + "</td>";
+                        str += "<td>" + status + "</td>";
+                        str += "</tr>";
+
+                    }
+                    groupUl.html(str);
+
+                    showGroupPage(groupCnt);
+                });
+
+        }//end showList
+        let GroupPageNum = 1;
+        let groupPageFooter = $('.groupPageFooter');
+        <!--게시글 페이지-->
+        function showGroupPage(groupCnt) {
+
+            console.log('groupCnt' + groupCnt + "개");
+
+            let endNum = Math.ceil(GroupPageNum / 10.0) * 10;
+            let startNum = endNum - 9;
+
+            let prev = startNum != 1;
+            let next = false;
+
+            if (endNum * 10 >= groupCnt) {
+                endNum = Math.ceil(groupCnt / 10.0);
+            }
+
+            if (endNum * 10 < groupCnt) {
+                next = true;
+            }
+
+            console.log("groupCount = " + groupCnt);
+            console.log("startNum = " + startNum);
+            console.log("endNum = " + endNum);
+
+
+            let str = "<ul class ='pagination'>";
+
+            if (prev) {
+                str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
+            }
+
+            for (let i = startNum; i <= endNum; i++) {
+                let active = GroupPageNum == i ? "active" : "";
+
+                str += "<li id='board-item' class = 'page-item " + active + " '><a id='board-link' class='page-link' href='" + i + "'>" + i + "</a></li>";
+            }
+
+            if (next) {
+                str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (endNum + 1) + "'>Next</a></li>";
+            }
+
+            str += "</ul></div>";
+
+            groupPageFooter.html(str);
+
+        }
+
+        groupPageFooter.on("click", "li[id='board-item'] a[id='board-link']", function (e) {
+
+            e.preventDefault();
+
+            console.log("board page click");
+
+            let targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            GroupPageNum = targetPageNum;
+
+            showGroupList(GroupPageNum,amount);
+
+        });
+
+
+
+    })
+</script>
+
+

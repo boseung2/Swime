@@ -29,9 +29,9 @@
                         order by
                             g.sn
                     )
-                where rownum <= 100
+                where rownum <= #{pageNum} * #{amount}
             )
-        where rn > 0
+        where rn > (#{pageNum} - 1) * #{amount}
         ]]>
 
     </select>

@@ -131,20 +131,34 @@ public class AdminController {
 //                ? new ResponseEntity<>("success", HttpStatus.OK)
 //                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 //    }
-// ---------------------------------end 관리자 게시판--------------------------------------
+// end 관리자 게시판
 
+    //관리자 모임
+    @GetMapping("/manage-group")
+    public void group(){
+
+    }
 
     @GetMapping(value ="/manageGroup/{page}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AdminGroupPageDTO> groupGetList(@PathVariable("page") int page){
+    public ResponseEntity<AdminGroupPageDTO> groupGetList(@PathVariable("page") int page,
+                                                          @RequestParam(value = "amount") int amount){
 
-        AdminGroupCriteria cri = new AdminGroupCriteria(page, 10);
+        AdminGroupCriteria cri = new AdminGroupCriteria(page, amount);
+        AdminGroupPageDTO dto = adminGroupService.adminGetGroupListWithPagingBySn(cri);
+
+        dto.getList().forEach(GroupVO->{
+            GroupVO.setSido(CodeTable.valueOf(GroupVO.getSido()).getValue());
+            GroupVO.setSigungu(CodeTable.valueOf(GroupVO.getSigungu()).getValue());
+        });
+
+        log.info("groupPage : " + page + "groupAmount : " + amount);
 
         log.info("groupCri : " + cri);
 
-        return new ResponseEntity<>(adminGroupService.adminGetGroupListWithPagingBySn(cri), HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
 
-    }
+    } // end 관리자 모임
 
 
 
