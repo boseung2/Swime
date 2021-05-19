@@ -130,6 +130,19 @@ modal-backdrop {
 
 }
 
+.loginBtn {
+    padding-top: 1.2rem!important;
+    padding-bottom: 1.2rem!important;
+}
+.loginBtn > button {
+    background-color: cornflowerblue;
+    border-color: cornflowerblue;
+}
+.loginBtn > button:hover,
+.loginBtn > button:focus{
+    background-color: #4dcfe0;
+    border-color: #4dcfe0;
+}
 
 
 

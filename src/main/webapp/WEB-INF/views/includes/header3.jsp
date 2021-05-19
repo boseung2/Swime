@@ -38,8 +38,8 @@
 
                 <!-- 비로그인 -->
                 <sec:authorize access="isAnonymous()">
-                    <li><a href="/user/register">회원가입</a></li>
-                    <li><a href="/user/login">로그인</a></li>
+                    <li><a href="/user/register" class="RegisterBtn">회원가입</a></li>
+                    <li><a href="/user/login" class="loginBtn"><button class="btn btn-primary btn-lg">로그인</button></a></li>
                 </sec:authorize>
 
                 <!-- 로그인 -->
@@ -161,11 +161,40 @@
         });
     }
 
+    console.log("/????");
+    // gameStart();
+    function gameStart() {
+        setInterval(function() {
+            mouseTracking();
+        }, 1000);
+    }
+
+    function mouseTracking(){
+        if ( document.addEventListener ) {
+            document.addEventListener("mousemove",resultFun,false);
+        } else if ( document.attachEvent ) {
+            document.attachEvent("onmousemove",resultFun);
+        } else {
+            document.onmousemove = resultFun;
+        }
+
+        function resultFun(x) {
+            let xY = x.clientX + " * " + x.clientY;
+            let positionLeft = x.clientX;
+            let positionTop = x.clientY;
+
+            console.log(positionLeft);
+            console.log(positionTop);
+        }
+
+
+    }
 
     $(document).on("scroll", function () {
         let navbar = $(".navbar");
         // nav 위에 붙이기
-        if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) {
+        let scrollvalue = 250;
+        if (document.body.scrollTop > scrollvalue || document.documentElement.scrollTop > scrollvalue) {
             navbar.css("top", "0px");
             navbar.css("background-color", "white");
         }
