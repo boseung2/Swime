@@ -51,6 +51,7 @@
                 <table class="table table-bordered" width='100%' cellspacing="0">
                     <thead>
                     <tr>
+                        <th><input type="checkbox"></th>
                         <th>#</th>
                         <th>sn</th>
                         <th>모임번호</th>
@@ -111,6 +112,7 @@
 
             for(let i = 0; i < list.length; i++) {
                 str += '<tr>';
+                str += '<td><input type="checkbox"></td>';
                 str += '<td>' + list[i].rn + '</td>';
                 str += '<td>' + list[i].sn + '</td>';
                 str += '<td>' + list[i].grpSn + '</td>';

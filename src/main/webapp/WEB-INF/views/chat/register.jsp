@@ -62,16 +62,13 @@
 
         </ul>
         <footer style="margin-top: 0px;">
-            <form id="registerForm" action="/chat/register" method="post">
-                <textarea name="contents" placeholder="Type your message"></textarea>
-                <input type="hidden" name="receiverId" value="${member.id}">
-                <input type="hidden" name="senderId" value="${pinfo.username}">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-            </form>
+            <textarea name="contents" placeholder="Type your message"></textarea>
             <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_picture.png" alt="" style="visibility: hidden">
             <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_file.png" alt="" style="visibility: hidden">
             <a href="" id="sendBtn" style="margin-left: 490px;">Send</a>
         </footer>
+
+        <form id="toChatRoom" action="" method="get"></form>
     </main>
 </div>
 
@@ -130,6 +127,7 @@
 
         let flag = false;
         let contents = $('textarea[name="contents"]')[0].value;
+
         for(let i = 0; i < contents.length; i++) {
             if(contents[i] !== " ") {
                 flag = true;
@@ -138,7 +136,16 @@
         }
 
         if(flag) {
-            $('#registerForm').submit();
+
+            //ajax - register
+            chatService.registerRoom({senderId : "${pinfo.username}", receiverId : "${member.id}", contents : contents}, function(result) {
+
+                // 해당 채팅방으로 이동
+                $('#toChatRoom').attr("action", "/chat/room/" + result);
+                $('#toChatRoom').submit();
+
+            })
+
         }
 
     })

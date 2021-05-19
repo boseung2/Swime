@@ -134,26 +134,27 @@ public class ChatController {
         return "/chat/register";
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping(value = "/register")
-    public String registerChatRoom (String contents, String senderId, String receiverId) {
 
-        log.info("register contents = " + contents);
-        log.info("register senderId = " + senderId);
-        log.info("register receiverId = " + receiverId);
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> registerChatRoom (@RequestBody ChatMessageVO msg) {
+
+        log.info("register contents = " + msg.getContents());
+        log.info("register senderId = " + msg.getSenderId());
+        log.info("register receiverId = " + msg.getReceiverId());
 
         // 사용자가 처음으로 메시지를 보낼때 채팅방을 생성해주고 메시지를 저장한다.
         ChatMessageVO chat = new ChatMessageVO();
         String chatRoomId = UUID.randomUUID().toString();
         chat.setChatRoomId(chatRoomId);
-        chat.setContents(contents);
-        chat.setSenderId(senderId);
-        chat.setReceiverId(receiverId);
+        chat.setContents(msg.getContents());
+        chat.setSenderId(msg.getSenderId());
+        chat.setReceiverId(msg.getReceiverId());
         chat.setStatus("MSST02");
 
         chatRoomService.registerRoom(chat);
 
-        return "redirect:/chat/room/" + chatRoomId;
+        return new ResponseEntity<>(chatRoomId, HttpStatus.OK);
     }
 
 
