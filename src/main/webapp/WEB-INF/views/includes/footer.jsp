@@ -37,7 +37,7 @@
             </div>
             <div class="footer-customer">
                 <h2><a href="#">CUSTOMER CENTER</a></h2>
-                <h5>스위미 고객센터</h5>
+                <h3>스위미 고객센터</h3>
                 <p>평일 10:00-21:00 <br>
                     주말 10:00-20:00</p>
             </div>
@@ -49,11 +49,11 @@
 <script src="/resources/vendor/jquery/jquery.min.js"></script>
 <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<%--<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--%>
 
-<!-- Bootstrap core JavaScript -->
-<script src="/resources/vendor/jquery/jquery.min.js"></script>
-<script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<%--<!-- Bootstrap core JavaScript -->--%>
+<%--<script src="/resources/vendor/jquery/jquery.min.js"></script>--%>
+<%--<script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>--%>
 
 
 </body>

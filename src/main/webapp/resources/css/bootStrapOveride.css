@@ -1,0 +1,149 @@
+
+/* nav Custom*/
+
+/*전체*/
+.navbar {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.6rem;
+    color: rgba(68, 68, 68, 0.767);
+    background: rgba(255, 255, 255, 0);
+
+    top: 0px;
+    position: sticky;
+    width: 100%;
+    transition: 0.1s;
+}
+
+/*로고*/
+.navbar-brand > img {
+    height : 2.6rem;
+}
+/*로고 + 메뉴버튼*/
+.navbar-header {
+    height: 7rem;
+}
+/*로고부분*/
+.navbar-header > .navbar-brand {
+    height: 7rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    margin-right: 1rem;
+    /*padding: ;*/
+}
+
+/*메뉴버튼*/
+.navbar-header > button{
+    margin-top: 1.8rem;
+    margin-bottom: 1.8rem;
+}
+
+.navbar-right > li > a {
+    cursor: pointer;
+}
+
+/*세부 메뉴버튼*/
+.navbar-nav > li > a {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    /*padding: 2.5rem 2.5rem;*/
+}
+@media screen and (max-width: 767px) {
+    .navbar-nav > li > a {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        /*padding: 2.5rem 2.5rem;*/
+    }
+}
+
+.dropdown-menu {
+    visibility: hidden;
+}
+
+@media screen and (max-width: 767px) {
+    .dropdown-menu {
+        visibility: visible;
+    }
+}
+
+
+
+
+
+/*알림 채팅*/
+.navIcon {
+    display: block;
+}
+.navText {
+    display: none;
+}
+@media screen and (max-width: 767px) {
+    .navIcon {
+        display: none;
+    }
+    .navText {
+        display: block;
+    }
+}
+
+/*프로필 모달*/
+
+#navModal {
+    /*font-size: 1rem;*/
+    /*color: rgb(230 55 55 / 77%);*/
+}
+
+#navModal > .modal-dialog {
+    width: 20rem;
+    /*height: 60rem;*/
+    margin-top: 7rem;
+    margin-right: 1.5rem;
+    margin-left: auto;
+    /*box-shadow: 2px 2px 2px 2px rgb(0 0 0 / 8%)*/
+}
+@media screen and (max-width: 767px) {
+    #navModal {
+        display: none!important;
+    }
+}
+#navModal > .modal-dialog > .modal-content {
+    height: 100%;
+}
+.modal-content > .modal-body > .list-group > .list-group-item > a {
+    font-size: 1.6rem;
+    color: rgba(68, 68, 68, 0.767);
+}
+
+.profileImageSquare {
+    border: 1px solid #ddd;
+}
+
+#navModal2 > .modal-dialog {
+    width: 20rem;
+    /*height: 60rem;*/
+    margin-top: 7rem;
+    margin-right: 1.5rem;
+    margin-left: auto;
+    /*box-shadow: 2px 2px 2px 2px rgb(0 0 0 / 8%)*/
+}
+
+modal-backdrop {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* etc */
+.custom-mb0 {
+    margin-bottom: 0px;
+}
+.custom-mb1 {
+    margin-bottom: 1rem;
+}

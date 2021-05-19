@@ -5,7 +5,13 @@
   Time: 오후 3:30
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+
+<%--<%@include file="../includes/header.jsp" %>--%>
+
+<%@include file="../includes/header3.jsp" %>
+<div style="height: 300px;width: 300px;background-color: #4d90fe"></div>
 
 request.getRemoteAddr() =<%= request.getRemoteAddr() %> <br>
 request.getContentLength() =<%= request.getContentLength() %> <br>
@@ -20,3 +26,4 @@ request.getContextPath() =<%= request.getContextPath() %> <br>
 request.getServletPath() =<%= request.getServletPath() %> <br>
 request.getServerName() =<%= request.getServerName() %> <br>
 request.getServerPort() =<%= request.getServerPort() %> <br>
+<div style="height: 2000px;"></div>

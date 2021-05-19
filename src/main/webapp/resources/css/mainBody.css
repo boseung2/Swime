@@ -58,11 +58,6 @@ li {
 
 }
 
-.logo {
-    width: 115px;
-    margin-left: 20px;
-    margin-right: 35px;
-}
 
 .flex-flow {
     flex-grow: 1;
@@ -256,14 +251,14 @@ article {
 }
 
 article h1.mainContainerTitle {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     margin-top: 50px;
     color:rgb(54, 54, 54)
 }
 
 article h2 {
     margin-top: 60px;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 200;
     color: rgba(68, 68, 68, 0.767)
 }
@@ -372,6 +367,10 @@ footer {
     margin-bottom: 30px;
 }
 
+.footer-customer h3 {
+    font-size: 2.0rem;
+}
+
 .footer-customer h2:hover {
     color: white;
 }
@@ -389,7 +388,7 @@ footer {
 }
 
 .footer-customer p {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: bold;
     margin-top: 30px;
     color: white;
