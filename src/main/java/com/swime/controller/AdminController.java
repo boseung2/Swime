@@ -2,10 +2,13 @@ package com.swime.controller;
 
 import com.swime.domain.*;
 import com.swime.service.AdminBoardService;
+import com.swime.service.AdminStudyService;
 import com.swime.service.BoardService;
 import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,9 @@ public class AdminController {
     //private BoardService boardService;
     //private ReplyService replyService;
     private AdminBoardService adminBoardService;
+
+    @Setter(onMethod_ = {@Autowired})
+    private AdminStudyService adminStudyService;
 
 
     @GetMapping("/adminIndex")
@@ -135,8 +141,23 @@ public class AdminController {
     public void group(){
     }
 
-    @GetMapping("/manage-study")
+    @GetMapping(value = "/manage-study")
     public void study(){
+
+    }
+
+    @GetMapping(value = "/manage-study/totalList/{pageNum}/{amount}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<AdminStudyPageDTO> getTotalList(@PathVariable("pageNum") int pageNum, @PathVariable("amount") int amount){
+
+        log.info("manage-study pageNum= " + pageNum);
+        log.info("manage-study amount= " + amount);
+
+        // 리스트 가져오기
+        AdminStudyCriteria cri = new AdminStudyCriteria(pageNum, amount);
+        AdminStudyPageDTO adminStudyPageDTO = adminStudyService.getTotalStudyList(cri);
+
+        return new ResponseEntity<>(adminStudyPageDTO, HttpStatus.OK);
+
     }
 
     @GetMapping("/manage-user")
