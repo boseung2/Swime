@@ -104,6 +104,11 @@ public class ChatController {
             // 채팅을 보내고자하는 멤버의 정보를 페이지로 보내준다.
             model.addAttribute("member", memberService.get(userId));
 
+            // 해당 멤버가 없으면 에러페이지로 이동
+            if(memberService.get(userId) == null) {
+                throw new RuntimeException();
+            }
+
             // 이전에 나눈 채팅이 있는지 확인
             ChatAttendVO oldChatRoom = chatRoomService.getOldChatRoom(principal.getName(), userId);
 
@@ -112,7 +117,7 @@ public class ChatController {
             }
 
             // 현재 로그인중인 유저의 채팅방 리스트를 불러오기
-            List<ChatMessageVO> roomList = chatRoomService.getRoomListById(userId);
+            List<ChatMessageVO> roomList = chatRoomService.getRoomListById(principal.getName());
 
             for(int i = 0; i < roomList.size(); i++) {
 

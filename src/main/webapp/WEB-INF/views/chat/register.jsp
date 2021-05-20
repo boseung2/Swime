@@ -17,11 +17,19 @@
         </header>
         <ul id="chatList">
             <c:forEach var="room" items="${rooms}">
-                <li><a style="display: block" href="/chat/room/${room.chatRoomId}">
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
-<%--                    <img src="${room.yourPicture}" alt="">--%>
-                    <div>
+                <li>
+                    <a style="display: block" href="/chat/room/${room.chatRoomId}">
 
+                    <c:if test="${room.yourPicture != null && room.yourPicture != 'myPicture.jpeg'}">
+                        <c:set var="src" value="${fn:replace(('/display?fileName=' += room.yourPicture), 's_', '')}"/>
+                        <c:set var="style" value="style='width: 54px; height: 54px; border-radius: 27px; border: 4px solid #6a6a76;'"/>
+                    </c:if>
+                    <c:if test="${room.yourPicture == null || room.yourPicture == 'myPicture.jpeg'}">
+                        <c:set var="src" value="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg"/>
+                    </c:if>
+                    <img src="${src}" ${style} alt="">
+
+                    <div>
                         <h2>${room.yourName}</h2>
 
                         <h3>
@@ -122,59 +130,4 @@
 
     })
 
-</script>
-
-<script>
-    function reloadChatList() {
-        chatService.getList("${pinfo.username}", function(result) {
-
-            if(result == null || result.length === 0) {
-                return;
-            }
-
-            let str = "";
-
-            for(let i = 0; i < result.length; i++) {
-                str += '<li><a style="display: block" href="/chat/room/' + result[i].chatRoomId+ '">';
-                str += '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">';
-                str += '<div>';
-                str += '<h2>' + result[i].yourName + '</h2>';
-                str += '<h3>';
-
-                if(result[i].contents.length >= 10) {
-                    str += result[i].contents.substring(0, 10) + '...';
-                }else {
-                    str += result[i].contents;
-                }
-                str += '</h3>';
-                str += '</div>';
-                str += '<div style="float:right">';
-
-                let date = new Date(result[i].sendDate);
-                let year = (date.getFullYear() + '');
-                let month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
-                let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
-                let hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
-                let min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-
-                str += '<h3 style="float:right;margin-right: 10px;">';
-                str += year.substring(2, 4) + '/' + month + '/' + day + ' ' + hours + ':' + min;
-                str += '</h3>';
-                str += '<br>';
-
-                if(result[i].unreadMsg > 0) {
-                    str += '<h3 style="float:right;margin-right: 10px;background-color: red; padding: 3px 6px; border-radius: 50%; color: white">';
-                    str += result[i].unreadMsg;
-                    str += '</h3>';
-                }
-                str += '</div>';
-                str += '</a>';
-                str += '</li>';
-
-            }
-
-            $('#chatList').html(str);
-
-        })
-    }
 </script>

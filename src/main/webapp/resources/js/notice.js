@@ -21,7 +21,7 @@ let noticeService = (function(){
                 console.log("notice register = " + result);
 
                 // 실시간 알림 전송
-                socket.send(param.receiver + "," + param.kind + "," + param.url + "," + param.content);
+                noticeSocket.send(param.receiver + "," + param.kind + "," + param.url + "," + param.content);
 
                 callback(result);
             }
