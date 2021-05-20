@@ -1,10 +1,8 @@
 package com.swime.controller;
 
-import com.swime.domain.CodeTable;
-import com.swime.domain.DashBoardLangVO;
-import com.swime.domain.DashBoardLocaleVO;
-import com.swime.domain.DashBoardModalDataDTO;
+import com.swime.domain.*;
 import com.swime.service.AdminDashBoardService;
+import com.swime.service.MemberService;
 import com.swime.util.CookieUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -26,6 +24,7 @@ import java.util.List;
 public class AdminDataController {
 
     AdminDashBoardService service;
+    MemberService memberService;
     CookieUtils cookieUtils;
 
     @GetMapping(value = "/countUser",
@@ -137,6 +136,15 @@ public class AdminDataController {
             })
     public ResponseEntity<DashBoardModalDataDTO> todayStudyRegister(){
         return new ResponseEntity<>(service.todayStudyRegister(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/readAllMember",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<MemberDTO> readAllMember(AdminUserCriteria cri){
+        return new ResponseEntity<>(memberService.selectAllMember(cri), HttpStatus.OK);
     }
 
 }

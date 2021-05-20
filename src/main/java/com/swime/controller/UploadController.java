@@ -44,7 +44,7 @@ public class UploadController {
 //    @Setter(onMethod_ = @Autowired)
     CheckOS checkOS = CheckOS.getInstance();
 
-    final String uploadFolder = checkOS.getImgFilePath();
+    final String uploadFolder = checkOS.withoutDeleteFilePath();
 
     @GetMapping("/uploadForm")
     public void uploadForm() {

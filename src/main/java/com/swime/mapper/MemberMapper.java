@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 
+import com.swime.domain.AdminUserCriteria;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import org.apache.ibatis.annotations.Param;
@@ -8,6 +9,10 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface MemberMapper {
+
+
+    List<MemberVO> selectAllMember(AdminUserCriteria cri);
+    int allMemberCount();
 
     //가입처리
     MemberVO read(String id);

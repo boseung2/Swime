@@ -51,8 +51,15 @@
     </aside>
     <main>
         <header>
-            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">
-<%--            <img src="${you.picture}" alt="">--%>
+            <c:if test="${you.picture != null && you.picture != 'myPicture.jpeg'}">
+                <c:set var="src" value="${fn:replace(('/display?fileName=' += you.picture), 's_', '')}"/>
+                <c:set var="style" value="style='width: 54px; height: 54px; border-radius: 27px; border: 4px solid #6a6a76;'"/>
+            </c:if>
+            <c:if test="${you.picture == null || you.picture == 'myPicture.jpeg'}">
+                <c:set var="src" value="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg"/>
+            </c:if>
+
+            <img src="${src}" ${style} alt="">
             <div>
                 <h2 style="margin-top: 15px;">${you.name}</h2>
             </div>
@@ -111,6 +118,8 @@
         if($('#chat').scroll != null) {
             $('#chat').scrollTop($('#chat')[0].scrollHeight);
         }
+
+        enterKey();
 
     })
 </script>
@@ -379,5 +388,31 @@
         }
 
     })
+
+    function enterKey() {
+        $("#contents").focus(function () {
+            enterActive();
+        });
+        $("#contents").focusout(function () {
+            enterActiveOff();
+        });
+
+        function enterActive() {
+
+            $("#contents").on("keyup", function (key) {
+                key.preventDefault();
+                let msg = $("#contents")[0];
+                if(key.keyCode === 13 && !key.shiftKey) {
+                    let lastEnter = msg.value.lastIndexOf('\n');
+                    msg.value = msg.value.substring(0, lastEnter).replaceAll('\n', '<br>');
+                    $("#sendBtn").click();
+                }
+            });
+        }
+
+        function enterActiveOff() {
+            $("#contents").off("keyup");
+        }
+    }
 
 </script>

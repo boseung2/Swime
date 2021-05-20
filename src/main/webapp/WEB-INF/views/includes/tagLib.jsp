@@ -29,22 +29,24 @@
 <link href="/resources/css/filter.css" rel="stylesheet">
 
 <!-- fontawsome icon -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<%--<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>--%>
+<%--<script src="https://use.fontawesome.com/07bd6433b2.js" crossorigin="anonymous"></script>--%>
+<script src="/resources/js/a076d05399.js"></script>
 
 <%--modal--%>
 <%--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>--%>
 <%--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"/>--%>
-<script src="../../../resources/js/modalMaker.js"></script>
+<script src="../../../../resources/js/modalMaker.js"></script>
 
 
 <%-- chart Js --%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 
 <%-- chart setting--%>
-<script src="../../../resources/js/adminDashBoard/chartGlobalSettings.js"></script>
-<script src="../../../resources/js/adminDashBoard/lineChart.js"></script>
-<script src="../../../resources/js/adminDashBoard/barChart.js"></script>
-<script src="../../../resources/js/adminDashBoard/pieChart.js"></script>
+
+<script src="../../../../resources/js/adminDashBoard/lineChart.js"></script>
+<script src="../../../../resources/js/adminDashBoard/barChart.js"></script>
+<script src="../../../../resources/js/adminDashBoard/pieChart.js"></script>
 
 <%-- chart color--%>
 <script src="https://d3js.org/d3-color.v1.min.js"></script>

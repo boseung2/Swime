@@ -2,7 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ page session="false" import="java.util.*"%>
 
-<%@include file="includes/header.jsp" %>
+<%@include file="../includes/header.jsp" %>
 
 <h1>실행중에 에러가 발생했습니다.</h1>
 <h4>${exception.getMessage()}</h4>
@@ -12,4 +12,4 @@
     </c:forEach>
 </ul>
 
-<%@include file="includes/footer.jsp" %>
+<%@include file="../includes/footer.jsp" %>

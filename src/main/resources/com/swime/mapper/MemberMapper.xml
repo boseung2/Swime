@@ -121,5 +121,46 @@
             status = 'USST01'
         where id = #{id}
     </update>
+
+    <select id="selectAllMember" resultMap="memberMap">
+        <![CDATA[
+        select *
+        from(
+                select ROWNUM rn,
+                       id,
+                       password,
+                       name,
+                       picture,
+                       birth,
+                       reg_path,
+                       last_loginDate,
+                       email_auth,
+                       status,
+                       reg_date,
+                       auth
+                from(
+                        select u.id as id,
+                               u.password as password,
+                               u.name as name,
+                               u.picture as picture,
+                               u.birth as birth,
+                               u.reg_path as reg_path,
+                               u.last_login_date as last_loginDate,
+                               u.email_auth as email_auth,
+                               u.status as status,
+                               u.reg_date as reg_date,
+                               a.auth as auth
+                        from TUSER u LEFT OUTER JOIN TUSER_ROLE a on u.id = a.id
+                    )
+                where rownum <= #{pageNum} * #{amount}
+            )
+        where rn > (#{pageNum} - 1) * #{amount}
+        ]]>
+    </select>
+
+    <select id="allMemberCount" resultType="int">
+        select count(*)
+        from TUSER u LEFT OUTER JOIN TUSER_ROLE a on u.id = a.id
+    </select>
     
 </mapper>

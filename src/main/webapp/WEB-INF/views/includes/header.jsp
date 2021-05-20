@@ -7,6 +7,8 @@
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="pinfo"/>
 </sec:authorize>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,8 +41,12 @@
     <!-- jquery -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <!-- fontawsome icon -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- font icon -->
+<%--    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>--%>
+    <script src="/resources/js/a076d05399.js"></script>
+
+    <!-- scrollbar -->
+    <link href="/resources/css/scrollbar.css" rel="stylesheet">
 
     <style>
         @media (min-width: 768px) {
@@ -93,6 +99,7 @@
     <a href="/" class="logo"><img src="../../../resources/img/logo.png"></a>
     <a href="/group/list">모임찾기</a>
     <a href="/group/register">모임만들기</a>
+    <a href="/group/new/index">뉴 모임찾기(미적용)</a>
 
     <div class="header-right">
         <sec:authorize access="isAuthenticated()">
@@ -129,7 +136,7 @@
 <%--toast 알림--%>
 <%--<div id="msgStack"></div>--%>
 
-<form id="logout" action="/user/logout" method="post">
+<form id="logout" action="/user/logout" method="post" hidden>
     <%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
     <sec:csrfInput/>
 </form>
@@ -270,7 +277,7 @@
         let noti = $("#notice")[0];
         let drop = $(".dropdown");
         drop.offset({
-            top: noti.offsetTop + 30,
+            top: $("#notice").offsetTop + 30,
         });
     })
 
