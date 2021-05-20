@@ -3,10 +3,6 @@
 
 <%@include file="newTagLib.jsp"%>
 
-<!-- bootstrap overide -->
-<link rel="stylesheet" href="../../../resources/css/bootStrapOveride.css">
-
-
 <nav class="navbar navbar-default">
     <div class="container-fluid">
 
@@ -68,7 +64,7 @@
 
                     <li class="nav-item dropdown" id="profile">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            ${username} 님 안녕하세요  <span><i class="fas fa-chevron-down"></i></span>
+                            ${memberVO.name} 님 안녕하세요  <span><i class="fas fa-chevron-down"></i></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="userInfoBtn">사용자 정보</a></li>
@@ -90,7 +86,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="list-group custom-mb0">
-                    <img src="http://www.swime.kro.kr/resources/assets/Main03.png" class="img-rounded img-responsive center-block profileImageSquare custom-mb1" alt="">
+                    <img src="${getPicture}" class="img-rounded img-responsive center-block profileImageSquare custom-mb1" alt="">
                     <a class="list-group-item userInfoBtn">사용자 정보</a>
                     <a class="list-group-item list-group-item-danger logoutBtn"><span class=""></span> 로그아웃</a>
                 </div>
@@ -126,7 +122,7 @@
     });
 
     $(".userInfoBtn").on("click", function () {
-        $(location).attr('href', '/user/infoDetail?id=' + "${pinfoId}");
+        $(location).attr('href', '/user/infoDetail?id=' + "${memberVO.id}");
     });
 
     $(".logoutBtn").on("click", function () {
@@ -161,34 +157,6 @@
         });
     }
 
-    console.log("/????");
-    // gameStart();
-    function gameStart() {
-        setInterval(function() {
-            mouseTracking();
-        }, 1000);
-    }
-
-    function mouseTracking(){
-        if ( document.addEventListener ) {
-            document.addEventListener("mousemove",resultFun,false);
-        } else if ( document.attachEvent ) {
-            document.attachEvent("onmousemove",resultFun);
-        } else {
-            document.onmousemove = resultFun;
-        }
-
-        function resultFun(x) {
-            let xY = x.clientX + " * " + x.clientY;
-            let positionLeft = x.clientX;
-            let positionTop = x.clientY;
-
-            console.log(positionLeft);
-            console.log(positionTop);
-        }
-
-
-    }
 
     $(document).on("scroll", function () {
         let navbar = $(".navbar");
@@ -266,14 +234,14 @@
 <script>
     $(document).ready(function() {
         // 로그인된 상태이면 알림버튼 띄우기
-        if("${pinfo.username}" !== "") {
+        if("${memberVO.id}" !== "") {
             getNoticeButton();
         }
     })
 
     // 안읽은 알림이 있으면 활성화된 알림버튼을 띄운다.
     function getNoticeButton() {
-        noticeService.getList("${pinfo.username}", function(data) {
+        noticeService.getList("${memberVO.id}", function(data) {
 
             if(data.length > 0) {
                 $('#notice')[0].src = "../../../resources/img/exist_notice.png";
@@ -288,7 +256,7 @@
     $('#notice').on("click", function() {
 
         // 안읽은 알림을 가져와서 드롭다운 리스트에 띄워준다.
-        noticeService.getList("${pinfo.username}", function(data) {
+        noticeService.getList("${memberVO.id}", function(data) {
 
             console.log(data);
 

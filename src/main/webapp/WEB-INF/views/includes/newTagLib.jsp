@@ -14,9 +14,10 @@
 
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="pinfo"/>
-    <c:set var="pinfoId" value="${pinfo.username}"/>
-    <sec:authentication property="principal.memberVO.name" var="pinfoUsername"/>
-    <c:set var="username" value="${pinfoUsername}"/>
+
+    <sec:authentication property="principal.memberVO" var="pinfoMemberVO"/>
+    <c:set var="memberVO" value="${pinfoMemberVO}"/>
+    <c:set var="getPicture" value="/display?fileName=${fn:replace(memberVO.picture, 's_' , '')}"/>
 </sec:authorize>
 
 <!doctype html>
@@ -38,6 +39,10 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+    <!-- Bootstrap core JS -->
+<%--    <script src="../../../resources/vendor/bootstrap/js/bootstrap.bundle.js"></script>--%>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.bundle.js"></script>
+
     <!-- scrollbar Custom -->
     <link rel="stylesheet" href="../../../resources/css/scrollbar.css">
 
@@ -49,6 +54,9 @@
 
     <!-- sockJS -->
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+
+    <!-- bootstrap overide -->
+    <link rel="stylesheet" href="../../../resources/css/bootStrapOveride.css">
 
 </head>
 <body>

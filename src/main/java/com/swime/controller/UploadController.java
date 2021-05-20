@@ -86,7 +86,7 @@ public class UploadController {
 
         // make folder ------------
         File uploadPath = new File(uploadFolder, uploadFolderPath);
-        File tempUploadPath = new File(uploadFolder, uploadFolderPath);
+        File tempUploadPath = new File(uploadFolder, uploadFolderPath + "/temp");
 
         if(uploadPath.exists() == false) {
             uploadPath.mkdirs();

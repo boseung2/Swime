@@ -41,6 +41,9 @@
     <!-- jquery -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+    <!-- Bootstrap core JS -->
+    <script src="../../../resources/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+
     <!-- font icon -->
 <%--    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>--%>
     <script src="/resources/js/a076d05399.js"></script>
