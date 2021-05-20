@@ -226,8 +226,8 @@
                     if ("GRRO03" === result[i].grpRole) str += '<span> 일반회원</span>';
 
 
-                    // 해당사용자가 아니면 채팅버튼 띄우기
-                    if(result[i].userId !== "${pinfo.username}") {
+                    // 로그인되어있으며, 해당사용자가 아니면 채팅버튼 띄우기
+                    if("${pinfo.username}" !== "" && result[i].userId !== "${pinfo.username}") {
                         str += '<div style="float:right">';
                         str += '<a href="http://localhost/chat/register?userId=' + result[i].userId + '">';
                         str += '<img src="../../../resources/img/chat.png">';
