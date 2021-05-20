@@ -28,7 +28,7 @@
 
 <h4>게시판
     <sec:authorize access="isAuthenticated()">
-        <c:if test="${pinfo.username ne group.userId}">
+        <c:if test="${pinfo.username ne group.userId or pinfo.username eq group.userId}">
             <button id="boardBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
             style="float: right; margin-bottom: 5px">글쓰기</button>
         </c:if>

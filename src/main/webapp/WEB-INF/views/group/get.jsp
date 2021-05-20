@@ -124,10 +124,11 @@
                 <h4>
                     <sec:authorize access="isAuthenticated()">
 
-                        <c:if test="${pinfo.username ne group.userId}">
+                        <c:if test="${pinfo.username ne group.userId or pinfo.username eq group.userId}">
                             <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'
                                class='btn btn-primary' id="studyBtn">스터디 만들기</a>
                         </c:if>
+
                     </sec:authorize>
                 </h4>
             </div>
