@@ -143,9 +143,6 @@ public class BoardController {
     public void get(@RequestParam("sn") Long sn, long grpSn, String userId,
                     Model model, @ModelAttribute("cri") BoardCriteria cri) {
 
-
-
-
         GroupAttendVO groupAttend = new GroupAttendVO();
         groupAttend.setGrpSn(grpSn);
         groupAttend.setUserId(userId);

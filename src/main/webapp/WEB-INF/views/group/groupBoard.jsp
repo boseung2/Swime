@@ -7,22 +7,31 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<!--regBtn-->
+<%--<h4>게시판--%>
+<%--    <c:set var="done" value="false"/>--%>
+<%--    <!--글을 쓰려면 로그인 되어있고모임에 가입해야-->--%>
+<%--    <sec:authorize access="isAuthenticated()">--%>
+<%--    <c:forEach var = "attendant" items="${attendList}">--%>
+<%--        <c:if test="${not done}">--%>
+<%--            <c:if test="${attendant.userId == pinfo.username}">--%>
+<%--                <button id="boardBtn" type="button" class="btn btn-xs pull-right btn btn-primary"--%>
+<%--                        style="float: right; margin-bottom: 5px">--%>
+<%--                    글쓰기--%>
+<%--                </button>--%>
+<%--            <c:set var="done" value="true"/>--%>
+<%--            </c:if>--%>
+<%--        </c:if>--%>
+<%--    </c:forEach>--%>
+<%--    </sec:authorize>--%>
+<%--</h4>--%>
 
 <h4>게시판
-    <c:set var="done" value="false"/>
-    <!--글을 쓰려면 로그인 되어있고모임에 가입해야-->
     <sec:authorize access="isAuthenticated()">
-    <c:forEach var = "attendant" items="${attendList}">
-        <c:if test="${not done}">
-            <c:if test="${attendant.userId == pinfo.username}">
-                <button id="regBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
-                        style="float: right; margin-bottom: 5px">
-                    글쓰기
-                </button>
-            <c:set var="done" value="true"/>
-            </c:if>
+        <c:if test="${pinfo.username ne group.userId}">
+            <button id="boardBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
+            style="float: right; margin-bottom: 5px">글쓰기</button>
         </c:if>
-    </c:forEach>
     </sec:authorize>
 </h4>
 
@@ -62,8 +71,6 @@
 
         let grpSnValue = "${group.sn}";
         let boardUL = $(".board-body");
-
-
 
         showBoardList(1);
 
@@ -222,10 +229,11 @@
         let userId = '${pinfo.username}';
         console.log("userId>>>>"+userId);
 
-        $("#regBtn").on("click", function(){
 
+        $("#boardBtn").on("click", function(){
             self.location = "/board/register?userId="+userId+"&grpSn=${group.sn}";
         });
+
 
         let boardResult = '<c:out value="${boardResult}"/>';
 

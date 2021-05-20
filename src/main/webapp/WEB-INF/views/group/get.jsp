@@ -103,20 +103,35 @@
 
 
         <!-- 스터디 만들기 버튼-->
-        <hr class="centerHr" id="study">
-        <div>
-            <h4>
-            <c:set var="done" value="false"/>
+<%--        <hr class="centerHr" id="study">--%>
+<%--        <div>--%>
+<%--            <h4>--%>
+<%--            <c:set var="done" value="false"/>--%>
 
-            <c:forEach var = "attendant" items="${attendList}">
-                <c:if test="${not done}">
-                    <c:if test="${attendant.userId == pinfo.username}">
-                        <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a>
-                    </c:if>
-                </c:if>
-            </c:forEach>
-            </h4>
-        </div>
+<%--            <c:forEach var = "attendant" items="${attendList}">--%>
+<%--                <c:if test="${not done}">--%>
+<%--                    <c:if test="${attendant.userId == pinfo.username}">--%>
+<%--                        <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'--%>
+<%--                           class='btn btn-primary' id="studyBtn">스터디 만들기</a>--%>
+<%--                    </c:if>--%>
+<%--                </c:if>--%>
+<%--            </c:forEach>--%>
+<%--            </h4>--%>
+<%--        </div>--%>
+
+            <hr class="centerHr" id="study">
+            <div>
+                <h4>
+                    <sec:authorize access="isAuthenticated()">
+
+                        <c:if test="${pinfo.username ne group.userId}">
+                            <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'
+                               class='btn btn-primary' id="studyBtn">스터디 만들기</a>
+                        </c:if>
+                    </sec:authorize>
+                </h4>
+            </div>
+
 
 
         <!-- 예정된 스터디 리스트 -->
@@ -143,12 +158,27 @@
         <%@include file="groupBoard.jsp"%>
         </div>
 
+
+
         <!-- 후기 -->
         <hr class="centerHr" id="groupRating">
         <div>
             <h4>후기<sec:authorize access="isAuthenticated()">
                 <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
             </sec:authorize></h4>
+<%--            <h4>후기--%>
+<%--                <sec:authorize access="isAuthenticated()">--%>
+<%--                    <c:set var="done" value="false"/>--%>
+
+<%--                    <c:forEach var = "attendant" items="${attendList}">--%>
+<%--                        <c:if test="${not done}">--%>
+<%--                             <c:if test="${pinfo.username eq group.userId}">--%>
+<%--                                <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>--%>
+<%--                            </c:if>--%>
+<%--                        </c:if>--%>
+<%--                    </c:forEach>--%>
+<%--                </sec:authorize>--%>
+<%--            </h4>--%>
 
             <div class="group-rating">
                 <ul class="rating">
@@ -1020,16 +1050,33 @@
         // 버튼상태 관리
         let attendBtn = $('#attendBtn');
         let withdrawBtn = $('#withdrawBtn');
+        //스터디 글쓰기 버튼
+        let studyBtn = $('#studyBtn');
+        //게시판 글쓰기 버튼
+        let boardBnt = $('#boardBtn');
+        //후기 작성 버튼
+        let addRatingBtn = $('#addRatingBtn');
 
         attendBtn.show();
         withdrawBtn.hide();
+        // studyBtn.hide();
+        // boardBnt.hide();
         groupAttendService.get(attend, function(result) {
+            console.log(result.status);
             if(result.status === 'GRUS01') {
                 attendBtn.hide();
                 withdrawBtn.show();
+                studyBtn.show();
+                boardBnt.show();
+                addRatingBtn.show();
+
             } else {
                 attendBtn.show();
                 withdrawBtn.hide();
+                studyBtn.hide();
+                boardBnt.hide();
+                addRatingBtn.hide();
+
             }
         })
 
@@ -1068,6 +1115,9 @@
                 alert("모임에 참여했습니다.");
                 attendBtn.hide();
                 withdrawBtn.show();
+                studyBtn.show();
+                boardBnt.show();
+                addRatingBtn.show();
                 showList();
             })
         })
@@ -1077,6 +1127,9 @@
                 alert("정상적으로 모임에서 탈퇴되었습니다.");
                 attendBtn.show();
                 withdrawBtn.hide();
+                studyBtn.hide();
+                boardBnt.hide();
+                addRatingBtn.hide();
                 showList();
             })
         })
