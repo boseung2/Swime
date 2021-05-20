@@ -8,13 +8,13 @@ public class MailVO {
     String Text = "";
     String receiver = "";
 
-    public MailVO(String receiver, String subject, String text){
+    public MailVO(String receiver, String subject, String text, String a){
         this.receiver = receiver;
         this.subject = subject;
         this.Text = text;
     }
 
-    public MailVO(String receiver, String key){
+    public MailVO(String receiver, String key, String getServerName){
         this(receiver,"SWIME 인증메일",
                 "        <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#f4f4f4\">\n" +
                 "            <tbody>\n" +
@@ -26,7 +26,7 @@ public class MailVO {
                 "                    <table align=\"center\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"760\" style=\"margin:0 auto\">\n" +
                 "                        <tbody>\n" +
                 "                            <tr>\n" +
-                "                                <td colspan=\"3\"><img src=\"http://localhost/resources/img/logo.png\" style=\"width : 100px;\"></td>\n" +
+                "                                <td colspan=\"3\"><img src=\"" + getServerName + "/resources/img/logo.png\" style=\"width : 100px;\"></td>\n" +
                 "                            </tr>\n" +
                 "                            <tr>\n" +
                 "                                <td colspan=\"3\" height=\"14\"></td>\n" +
@@ -70,7 +70,7 @@ public class MailVO {
                 "                                            <tr><td>\n" +
                 "                                                <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n" +
                 "                                                    <tbody><tr>\n" +
-                "                                                        <a href=\"http://localhost/user/auth?id=" + receiver + "&key=" + key + "\" style=\"text-decoration: none;\"><div style=\"border : solid 1px; width : 150px; height : 30px; margin : 50px auto; padding-top : 8px;\n" +
+                "                                                        <a href=\"" + "http://" + getServerName + "/user/auth?id=" + receiver + "&key=" + key + "\" style=\"text-decoration: none;\"><div style=\"border : solid 1px; width : 150px; height : 30px; margin : 50px auto; padding-top : 8px;\n" +
                 "                                                        border-radius : 0.3em; color : white; background-color : rgb(100, 194, 231); text-align: center; vertical-align : center; cursor : pointer;\">인증하기</div></a>\n" +
                 "                                                    </tbody></table>\n" +
                 "                                            </td></tr>\n" +
@@ -90,7 +90,7 @@ public class MailVO {
                 "                    <td width=\"100%\" height=\"80\"></td>\n" +
                 "                </tr>\n" +
                 "            </tbody>\n" +
-                "        </table>\n");
+                "        </table>\n", "");
     }
 
 

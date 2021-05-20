@@ -13,14 +13,22 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(noticeHandler(), "/notice")
-        .addInterceptors(new HttpSessionHandshakeInterceptor())
-        .setAllowedOrigins("*")
-        .withSockJS();
+            .addInterceptors(new HttpSessionHandshakeInterceptor())
+            .setAllowedOrigins("*")
+            .withSockJS();
+
+        registry.addHandler(chatHandler(), "/chat")
+            .addInterceptors(new HttpSessionHandshakeInterceptor())
+            .setAllowedOrigins("*")
+            .withSockJS();
     }
 
     @Bean
     public WebSocketHandler noticeHandler() {
         return new NoticeHandler();
     }
+
+    @Bean
+    public WebSocketHandler chatHandler() {return new ChatHandler();}
 
 }

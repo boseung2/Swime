@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.ChatMessageMapper">
+
+    <insert id="insertMsg">
+        insert into tchat_msg (sn, chat_room_id, sender_id, receiver_id, contents, status, send_date)
+        values (seq_tchat_msg.nextval, #{chatRoomId}, #{senderId}, #{receiverId}, #{contents}, #{status}, current_date)
+    </insert>
+
+    <select id="getMsg" resultType="com.swime.domain.ChatMessageVO">
+        select * from tchat_msg
+        where chat_room_id = #{chatRoomId}
+        order by send_date
+    </select>
+
+</mapper>

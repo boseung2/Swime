@@ -34,7 +34,41 @@ let noticeService = (function(){
         })
     }
 
+    function getList(userId, callback, error) {
+        $.getJSON("/notice/list/" + userId + ".json",
+            function(data) {
+                if(callback) {
+                    callback(data);
+                }
+            }).fail(function(xhr, status, err) {
+            if(error) {
+                error();
+            }
+        })
+    }
+
+    function modify(param, callback, error){
+        $.ajax({
+            type:'post',
+            url : '/notice/modify/',
+            data : JSON.stringify(param),
+            contentType : "application/json; charset = utf-8",
+            success : function(result, status, xhr) {
+                if (callback) {
+                    callback(result);
+                }
+            },
+            error : function(xhr, status, er) {
+                if(error) {
+                    error(er);
+                }
+            }
+        })
+    }
+
     return {
-        register : register
+        register : register,
+        getList : getList,
+        modify : modify
     };
 })();

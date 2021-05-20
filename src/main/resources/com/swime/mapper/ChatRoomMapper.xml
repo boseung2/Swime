@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.ChatRoomMapper">
+
+    <select id="getRoomList" resultType="com.swime.domain.ChatRoomVO">
+        select * from tchat_room
+    </select>
+
+    <select id="getRoomsOfUser" resultType="com.swime.domain.ChatRoomVO">
+        select r.id
+        from tchat_attend a, tchat_room r
+        where a.attend_id= 'wlgh52725@gmail.com' and a.chat_room_id = r.id
+    </select>
+
+    <select id="getRoomListById" resultType="com.swime.domain.ChatMessageVO">
+        select tb.sn, tb.chat_room_id, tb.receiver_id, tb.sender_id, tb.contents, tb.status, tb.send_date, tb.read_date
+        from (
+                 select row_number() over(partition by m.chat_room_id order by m.send_date desc) as rn, m.*
+                 from tchat_msg m
+                 where m.sender_id = #{userId} or m.receiver_id = #{userId}
+                 order by send_date desc
+             ) tb
+        where rn = 1
+    </select>
+
+    <insert id="insertRoom">
+        insert into tchat_room (sn, id)
+        values (seq_tchat_room.nextval, #{id})
+    </insert>
+
+    <insert id="insertAttendant">
+        insert into tchat_attend (sn, chat_room_id, attend_id)
+        values(seq_tchat_attend.nextval, #{id}, #{userId})
+    </insert>
+
+    <select id="getOldChatRoom" resultType="com.swime.domain.ChatAttendVO">
+        select *
+        from tchat_attend outer
+        where attend_id = #{me}
+          and outer.chat_room_id in
+            (
+            select chat_room_id
+            from tchat_attend
+            where attend_id =#{you}
+            )
+    </select>
+
+    <select id="getYourId" resultType="com.swime.domain.ChatAttendVO">
+        select * from tchat_attend
+        where chat_room_id = #{chatRoomId} and attend_id != #{userId}
+    </select>
+
+</mapper>

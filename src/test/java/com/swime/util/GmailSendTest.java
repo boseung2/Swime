@@ -20,10 +20,11 @@ public class GmailSendTest {
 
     @Test
     public void test(){
-//        MailVO vo = new MailVO();
-//        vo.setReceiver("tht1234551@gmail.com");
-//        vo.setSubject("테스트중");
-//        vo.setText("http://localhost/user/auth");
-//        Assert.assertTrue(gmailSend.sendAuthMail(vo));
+        MailVO vo = new MailVO("tht1234551@gmail.com","테스트중", "");
+        try {
+            gmailSend.sendAuthMail(vo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

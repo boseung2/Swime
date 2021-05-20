@@ -1,5 +1,7 @@
 package com.swime.service;
 
+import com.swime.domain.AdminUserCriteria;
+import com.swime.domain.MemberDTO;
 import com.swime.domain.MemberHistoryVO;
 import com.swime.domain.MemberVO;
 import com.swime.mapper.MemberMapper;
@@ -24,6 +26,14 @@ public class MemberServiceImpl implements MemberService{
     @Setter(onMethod_ = @Autowired)
     private PasswordEncoder passwordEncoder;
 
+
+    @Override
+    public MemberDTO selectAllMember(AdminUserCriteria cri) {
+        MemberDTO dto = new MemberDTO();
+        dto.setList(mapper.selectAllMember(cri));
+        dto.setCount(mapper.allMemberCount());
+        return dto;
+    }
 
     @Override
     public MemberVO get(String id) {

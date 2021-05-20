@@ -1,5 +1,7 @@
 package com.swime.util;
 
+import org.springframework.context.annotation.ComponentScan;
+
 import java.io.IOException;
 
 
@@ -19,9 +21,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 
-
 public class CustomCorsFilter implements Filter {
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -31,8 +33,10 @@ public class CustomCorsFilter implements Filter {
         chain.doFilter(req, res);
     }
 
+    @Override
     public void init(FilterConfig filterConfig) {}
 
+    @Override
     public void destroy() {}
 
 }

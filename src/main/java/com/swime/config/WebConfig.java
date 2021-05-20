@@ -31,7 +31,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     public void customizeRegistration(ServletRegistration.Dynamic registration) {
         CheckOS checkOS = CheckOS.getInstance();
 
-        final String uploadFolder = checkOS.getImgFilePath();
+        final String uploadFolder = checkOS.withoutDeleteFilePath();
 
         registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 
@@ -48,7 +48,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
 
-        CustomCorsFilter customCorsFilter = new CustomCorsFilter();
+//        CustomCorsFilter customCorsFilter = new CustomCorsFilter();
 
         return new Filter[]{characterEncodingFilter};
     }

@@ -85,7 +85,7 @@
 <script type="text/javascript" src="/resources/js/studyAttend.js"></script>
 <script type="text/javascript" src="/resources/js/studyAnswer.js"></script>
 <script type="text/javascript" src="/resources/js/study.js"></script>
-<script type="text/javascript" src="/resources/js/notice.js"></script>
+<%--<script type="text/javascript" src="/resources/js/notice.js"></script>--%>
 
 <!-- tab 처리 -->
 <script>
@@ -430,24 +430,33 @@
                     studyAttendService.attend({stdSn : ${stdSn}, userId : userId}, function(attend) {
                         if(attend === 'success') {
 
-                            // 참석했다는 알림을 db에 저장하고 실시간 알림 전송
-                            noticeService.register(
-                                {sender : "${pinfo.username}", receiver : userId,
-                                    kind : "스터디", url : "http://localhost/study/get?sn=${stdSn}", content : "스터디 ${stdSn}에 참석되셨습니다."}, function(notice) {
-                                    if(notice === 'success') {
+                            // 스터디 이름을 가져온다.
+                            studyService.get(${stdSn}, function(result){
 
-                                        alert('참석 승인 처리가 완료되었습니다.');
+                                if(result != null) {
 
-                                        // 스터디 참여인원과 모집인원 불러오기
-                                        getCapacity();
+                                    // 참석했다는 알림을 db에 저장하고 실시간 알림 전송
+                                    noticeService.register(
+                                        {sender : "${pinfo.username}", receiver : userId,
+                                            kind : "스터디", url : "http://localhost/study/get?sn=${stdSn}", content : "스터디 " + result.name + "에 참석되셨습니다."}, function(notice) {
+                                            if(notice === 'success') {
 
-                                        // 참여 멤버 reload
-                                        getAttendList();
+                                                alert('참석 승인 처리가 완료되었습니다.');
 
-                                        // 대기 멤버 reload
-                                        getWaitingList();
-                                    }
-                                })
+                                                // 스터디 참여인원과 모집인원 불러오기
+                                                getCapacity();
+
+                                                // 참여 멤버 reload
+                                                getAttendList();
+
+                                                // 대기 멤버 reload
+                                                getWaitingList();
+                                            }
+                                        })
+
+                                }
+
+                            })
 
                         }else {
                             alert('참석 승인 처리를 실패했습니다.');
