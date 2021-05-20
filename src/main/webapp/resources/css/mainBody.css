@@ -100,7 +100,8 @@ li {
 /* main */
 
 .container {
-    width: 1000px;
+    width: 100%;
+    max-width: 1000px;
 }
 
 .main-container {

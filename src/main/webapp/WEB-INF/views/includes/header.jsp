@@ -1,158 +1,214 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
-<sec:authorize access="isAuthenticated()">
-    <sec:authentication property="principal" var="pinfo"/>
-</sec:authorize>
+
+<%@include file="newTagLib.jsp"%>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="navbar-header">
+            <!-- 토글버튼 -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- 사이트 로고 -->
+            <a class="navbar-brand" href="/">
+                <img src="../../../resources/img/logo.png" alt="Swime" class="logo">
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <!-- 왼쪽 메뉴 -->
+            <ul class="nav navbar-nav">
+                <li><a href="/group/list">모임 찾기</a></li>
+                <li><a href="/group/register">모임 만들기</a></li>
+                <li><a href="/group/new/index">뉴모임 찾기</a></li>
+            </ul>
 
 
-<!DOCTYPE html>
-<html lang="en">
+            <!-- 오른쪽 메뉴 -->
+            <ul class="nav navbar-nav navbar-right">
 
-<head>
+                <!-- 비로그인 -->
+                <sec:authorize access="isAnonymous()">
+                    <li><a href="/user/register" class="RegisterBtn">회원가입</a></li>
+                    <li><a href="/user/login" class="loginBtn"><button class="btn <%--btn-primary--%> btn-lg">로그인</button></a></li>
+                </sec:authorize>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+                <!-- 로그인 -->
+                <sec:authorize access="isAuthenticated()">
+                    <li>
+                        <a href="/chat/list">
+                            <span class="navIcon"><i class="far fa-comment-alt"></i></span>
+                            <span class="navText">채팅</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="notice" aria-expanded="false">
+                            <span class="navIcon"><i class="far fa-bell"></i></span>
+                            <span class="navText">알림</span>
+                        </a>
+                    </li>
 
+                    <sec:authorize access="hasAuthority('ADMIN')">
+                        <li>
+                            <a href="/admin/adminIndex">
+                                <span class="navIcon"><i class="fas fa-cog"></i></span>
+                                <span class="navText">어드민</span>
+                            </a>
+                        </li>
+                    </sec:authorize>
 
-    <title>SWIME</title>
+                    <li class="nav-item dropdown" id="profile">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ${memberVO.name} 님 안녕하세요  <span><i class="fas fa-chevron-down"></i></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="userInfoBtn">사용자 정보</a></li>
+                            <li><a class="logoutBtn"><span class=""></span> 로그아웃</a></li>
+                        </ul>
+                    </li>
+                </sec:authorize>
 
+            </ul>
+        </div>
+    </div>
+</nav>
 
-    <!-- Bootstrap core CSS -->
-    <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- Modal -->
+<div class="modal " id="navModal" role="dialog">
+    <div class="modal-dialog">
 
-    <!-- Custom styles for this template -->
-    <link href="/resources/css/small-business.css" rel="stylesheet">
-
-    <!-- nav -->
-    <link href="/resources/css/nav.css" rel="stylesheet">
-
-    <!-- avatar -->
-    <link href="/resources/css/avatar.css" rel="stylesheet">
-
-    <!-- filter -->
-    <link href="/resources/css/filter.css" rel="stylesheet">
-
-    <!-- jquery -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <!-- Bootstrap core JS -->
-    <script src="../../../resources/vendor/bootstrap/js/bootstrap.bundle.js"></script>
-
-    <!-- font icon -->
-<%--    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>--%>
-    <script src="/resources/js/a076d05399.js"></script>
-
-    <!-- scrollbar -->
-    <link href="/resources/css/scrollbar.css" rel="stylesheet">
-
-    <style>
-        @media (min-width: 768px) {
-            .container {
-                width: 750px;
-            }
-        }
-
-        @media (min-width: 992px) {
-            .container {
-                width: 1000px;
-            }
-        }
-
-        /*<!-- 알림 드롭다운-->*/
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f1f1f1;
-            min-width: 160px;
-            overflow: auto;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            width: 330px;
-        }
-
-        .dropdown a:hover {background-color: #ddd;}
-
-        .show {display: block;}
-    </style>
-
-</head>
-
-<body>
-<!-- header -->
-<div class="header">
-    <a href="/" class="logo"><img src="../../../resources/img/logo.png"></a>
-    <a href="/group/list">모임찾기</a>
-    <a href="/group/register">모임만들기</a>
-    <a href="/group/new/index">뉴 모임찾기(미적용)</a>
-
-    <div class="header-right">
-        <sec:authorize access="isAuthenticated()">
-            <a href="/serviceCenter/list">고객센터</a>
-            <div class="dropdown" style="position: absolute;">
-                <ul id="myDropdown" class="dropdown-content">
-                    <li>알림이 없습니다.</li>
-                </ul>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="list-group custom-mb0">
+                    <img src="${getPicture}" class="img-rounded img-responsive center-block profileImageSquare custom-mb1" alt="">
+                    <a class="list-group-item userInfoBtn">사용자 정보</a>
+                    <a class="list-group-item list-group-item-danger logoutBtn"><span class=""></span> 로그아웃</a>
+                </div>
             </div>
-            <a><img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;"></a>
-        </sec:authorize>
-        <sec:authorize access="isAnonymous()">
-            <a href="/user/register">회원가입</a>
-            <a class="active" href="/user/login">로그인</a>
-        </sec:authorize>
-        <sec:authorize access="isAuthenticated()">
-            <a href="/user/infoDetail?id=<sec:authentication property='principal.username'/>"><sec:authentication property="principal.memberVO.name"/> 님 안녕하세요</a>
-            <sec:authorize access="hasAuthority('ADMIN')">
-                <a href="/admin/adminIndex">어드민 페이지</a>
-            </sec:authorize>
-            <a href="#" onclick="document.getElementById('logout').submit();">로그아웃</a>
-        </sec:authorize>
+        </div>
+
     </div>
 </div>
 
-<sec:authorize access="isAuthenticated()">
-<%--    <div class="dropdown">--%>
-<%--        <ul id="myDropdown" class="dropdown-content">--%>
-<%--            <li>알림이 없습니다.</li>--%>
-<%--        </ul>--%>
-<%--    </div>--%>
-</sec:authorize>
+<!-- Modal -->
+<div class="modal " id="navModal2" role="dialog">
+    <div class="modal-dialog">
 
-<%--toast 알림--%>
-<%--<div id="msgStack"></div>--%>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="list-group custom-mb0">
+                    <ul id="myDropdown" class="dropdown-content">
+                        <li>알림이 없습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-<form id="logout" action="/user/logout" method="post" hidden>
-    <%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
-    <sec:csrfInput/>
-</form>
+    </div>
+</div>
 
-<hr style="
-    margin-top: 0px;
-    margin-bottom: 0px;">
+
+<script>
+
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+    });
+
+    $(".userInfoBtn").on("click", function () {
+        $(location).attr('href', '/user/infoDetail?id=' + "${memberVO.id}");
+    });
+
+    $(".logoutBtn").on("click", function () {
+        $.ajax({
+            url: "/user/logout",
+            method : 'Post'
+        }).done(function () {
+            $(location).attr('href', '/');
+        }).fail(function () {
+            alert("오류가 발생했습니다");
+        });
+    });
+
+    function transparencyNav(condition) {
+        let IsTransparency = condition === undefined ? false : condition === true;
+        let logo = $(".navbar-brand > img");
+
+        if(IsTransparency)
+            logo.css("filter", "brightness(100) invert(0)");
+
+        $(document).on("scroll", function () {
+            // nav 위에 붙이기
+            if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) {
+                if(IsTransparency)
+                    logo.css("filter", "");
+            }
+            // nav 없애기
+            else {
+                if(IsTransparency)
+                    logo.css("filter", "brightness(100) invert(0)");
+            }
+        });
+    }
+
+
+
+    function stickyNav(){
+        $(document).on("scroll", function () {
+            let navbar = $(".navbar");
+            // nav 위에 붙이기
+            let scrollvalue = 250;
+            if (document.body.scrollTop > scrollvalue || document.documentElement.scrollTop > scrollvalue) {
+                navbar.css("top", "0px");
+                navbar.css("background-color", "white");
+            }
+            // nav 없애기
+            else {
+                navbar.css("top", "-72px");
+                navbar.css("background-color", "rgba(255, 255, 255, 0)");
+            }
+        });
+    }
+
+
+
+    $(document).ready(function(){
+        $("#profile").click(function(){
+            $("#navModal").modal();
+            $('.modal-backdrop').css('display', 'none');
+        });
+
+
+
+        $(document).click(function(e){ //문서 body를 클릭했을때
+            if(!(e.target.className ==="far fa-bell" || e.target.id === 'notice' )) $("#notice").parent().removeClass('open');
+
+        });
+
+        $("#notice").click(function(){
+            $(this).parent().addClass('open');
+            $("#navModal2").modal();
+            $('.modal-backdrop').css('display', 'none');
+        });
+
+
+
+
+    });
+
+
+</script>
 
 <!-- 알림 -->
-<!-- sockJS -->
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
-<script type="text/javascript", src="/resources/js/notice.js"></script>
+
+<script type="text/javascript" src="/resources/js/notice.js"></script>
 
 <!-- 웹소켓-->
 <script type="text/javascript">
@@ -182,14 +238,14 @@
 <script>
     $(document).ready(function() {
         // 로그인된 상태이면 알림버튼 띄우기
-        if("${pinfo.username}" !== "") {
+        if("${memberVO.id}" !== "") {
             getNoticeButton();
         }
     })
 
     // 안읽은 알림이 있으면 활성화된 알림버튼을 띄운다.
     function getNoticeButton() {
-        noticeService.getList("${pinfo.username}", function(data) {
+        noticeService.getList("${memberVO.id}", function(data) {
 
             if(data.length > 0) {
                 $('#notice')[0].src = "../../../resources/img/exist_notice.png";
@@ -204,7 +260,7 @@
     $('#notice').on("click", function() {
 
         // 안읽은 알림을 가져와서 드롭다운 리스트에 띄워준다.
-        noticeService.getList("${pinfo.username}", function(data) {
+        noticeService.getList("${memberVO.id}", function(data) {
 
             console.log(data);
 
@@ -275,14 +331,4 @@
 
 </script>
 
-<%-- countVisitor --%>
-<script>
-    visitorCountRequest();
 
-    function visitorCountRequest() {
-        $.ajax({
-            url : "/adminData/countVisitor",
-        }).done(function (result) {
-        });
-    }
-</script>

@@ -14,11 +14,12 @@
 <!-- 상단 이미지 -->
 
 <!-- Page Content -->
-    <div class="container">
-        <!-- 검색필터 -->
-        <div class="filter">
-            <h4 class="category">Filter</h4><br>
-            <form id="searchForm" class="form" action="/group/list" method="get">
+<div class="container">
+
+    <!-- 검색필터 -->
+    <div class="filter">
+        <h4 class="category">Filter</h4><br>
+        <form id="searchForm" class="form" action="/group/list" method="get">
             <div class="form__group">
                 <label class="select" for="category">카테고리</label>
                 <select id="category" name="category" data-dropdown1>
@@ -127,10 +128,10 @@
     <!-- Content Row -->
     <div class="row">
         <c:forEach items="${list}" var="group">
-            <div class="col-md-4 mb-5">
+            <div class="col-md-4 mb-5 card-mb48">
                 <div class="card h-100">
                     <div class="card-body move" style=" cursor: pointer;" href="<c:out value="${group.sn}"/>">
-                        <h2 class="card-title"><span style="font-size:22px; font-weight:bold;"><c:out value="${group.category}"/></span></h2>
+                        <h2 class="card-title custom-mt0"><span style="font-size:22px; font-weight:bold;"><c:out value="${group.category}"/></span></h2>
                         <hr>
                         <p class="card-text" id="card-text-sigungu"><c:out value="${group.sido}"/> <c:out value="${group.sigungu}"/>
                             &nbsp;|&nbsp;<i class="fas fa-users"></i> <c:out value="${group.attendCount}"/>명</p>
@@ -142,7 +143,7 @@
                         </div>
 
                         <div class="uploadResult">
-                            <img class="img-fluid rounded mb-4 mb-lg-0" src="${!empty group.picture ? '/display?fileName=' += group.picture :'../resources/img/default_img.jpg'}" alt="">
+                            <img class="img-fluid img-responsive center-block rounded mb-4 mb-lg-0" src="${!empty group.picture ? '/display?fileName=' += group.picture :'../resources/img/default_img.jpg'}" alt="">
                         </div>
 
                         <div class="caption">
