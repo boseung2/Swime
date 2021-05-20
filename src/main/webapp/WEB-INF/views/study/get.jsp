@@ -211,6 +211,8 @@
 
             if(result.length > 0) {
 
+                console.log(result);
+
                 let str  = '';
 
                 for(let i = 0 ; i < result.length; i++) {
@@ -222,6 +224,17 @@
                     if ("GRRO01" === result[i].grpRole) str += '<span> 모임장</span>';
                     if ("GRRO02" === result[i].grpRole) str += '<span> 운영진</span>';
                     if ("GRRO03" === result[i].grpRole) str += '<span> 일반회원</span>';
+
+
+                    // 해당사용자가 아니면 채팅버튼 띄우기
+                    if(result[i].userId !== "${pinfo.username}") {
+                        str += '<div style="float:right">';
+                        str += '<a href="http://localhost/chat/register?userId=' + result[i].userId + '">';
+                        str += '<img src="../../../resources/img/chat.png">';
+                        str += '</a>';
+                        str += '</div>';
+                    }
+
                     str += '</li>';
 
                 }

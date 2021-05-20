@@ -99,7 +99,7 @@ public class ChatController {
     @GetMapping("/register")
     public String register(String userId, Principal principal, Model model) {
 
-        // 현재 로그인 중이면
+        // 현재 로그인 중이고, 채팅을 보내려는 사람이 자기자신이 아니면
         if(principal != null && !userId.equals(principal.getName())) {
             // 채팅을 보내고자하는 멤버의 정보를 페이지로 보내준다.
             model.addAttribute("member", memberService.get(userId));
