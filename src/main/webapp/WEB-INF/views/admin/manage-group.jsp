@@ -14,7 +14,7 @@
         <div class="card-body">
             <div class="option-search">
                 <div>
-                    <select class="lines">
+                    <select class="groupCntList">
                         <option value="">--줄--</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
@@ -22,12 +22,12 @@
                     </select>
                 </div>
                 <div style="display: flex; margin-left: auto;">
-                    <select class="bbsOrReply">
+                    <select class="">
                         <option value="">--전체--</option>
                         <option value="unactivated">폐쇄</option>
                         <option value="activated">활동</option>
                     </select>
-                    <select class="bbsOrReply">
+                    <select class="">
                         <option value="">--전체--</option>
                         <option value="groupname">모임명</option>
                         <option value="grouphost">모임장명</option>
@@ -154,8 +154,6 @@
                     //게시판 리스트 뽑는 곳
                     for(let i = 0, len = list.length || 0; i < len; i++){
 
-                        let sido = list[i].sido;
-                        let gungu = list[i].sigungu;
                         let status = list[i].status;
 
                         //상태코드 -> 텍스트
@@ -226,6 +224,12 @@
                                 adminGroupListService.adminDelete(dataArr, function(result){
                                     console.log('--------callback--------')
                                     console.log(result);
+
+                                    if(result != 'success'){
+                                        alert('실패했습니다.');
+                                    }
+                                    
+                                    showGroupList(page, amount);
 
                                 })
 

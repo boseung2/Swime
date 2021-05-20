@@ -28,7 +28,7 @@ let adminGroupListService = (function(){
     function adminDelete(dataArr, callback, error){
 
         let jsonString = JSON.stringify(dataArr);
-        console.log("js/"+jsonString);
+        console.log(jsonString);
         console.log(dataArr);
 
         $.ajax({
