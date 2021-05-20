@@ -46,4 +46,10 @@ public class ChatMessageMapperTests {
     public void testReadMsg() {
         assert (mapper.readMsg(62) == 1);
     }
+
+
+    @Test
+    public void testGetTotalUnreadMsg() {
+        log.info(mapper.getTotalUnreadMsg("wlgh52725@gmail.com").getUnreadMsg());
+    }
 }

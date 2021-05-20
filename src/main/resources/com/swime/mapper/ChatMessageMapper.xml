@@ -27,4 +27,10 @@
         set status = 'MSST01'
         where sn = #{sn}
     </update>
+
+    <select id="getTotalUnreadMsg" resultType="com.swime.domain.ChatMessageVO">
+        select count(*) as unread_msg
+        from tchat_msg
+        where receiver_id = #{userId} and status = 'MSST02'
+    </select>
 </mapper>

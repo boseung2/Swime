@@ -52,9 +52,22 @@ let chatService = (function(){
 
     }
 
+    function getTotalUnreadMsg(userId, callback, error) {
+        $.get("/chat/totalUnreadMsg?userId=" + userId, function (result) {
+            if (callback) {
+                callback(parseInt(result));
+            }
+        }).fail(function (xhr, status, err) {
+            if (error) {
+                error();
+            }
+        })
+    }
+
     return {
         getList : getList,
         getMsg : getMsg,
-        registerRoom : registerRoom
+        registerRoom : registerRoom,
+        getTotalUnreadMsg : getTotalUnreadMsg
     };
 })();

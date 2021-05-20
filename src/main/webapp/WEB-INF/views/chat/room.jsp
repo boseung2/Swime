@@ -110,7 +110,7 @@
 
 <%@include file="../includes/footer.jsp" %>
 
-<script type="text/javascript" src="/resources/js/chat.js"></script>
+<%--<script type="text/javascript" src="/resources/js/chat.js"></script>--%>
 <script>
 
     $(document).ready(function() {
@@ -126,27 +126,20 @@
 
 <!-- 웹소켓-->
 <script type="text/javascript">
-    // 전역변수 chatSocket
-    let chatSocket = null;
 
     $(document).ready(function() {
 
-        //웹소켓 연결
-        let sock = new SockJS('/chat');
-        chatSocket = sock;
-
         // 연결됐을 때
-        sock.onopen = onOpen;
-        // 데이터 전달받았을 때
-        sock.onmessage = onMessage;
+        chatSocket.onopen = onOpen;
 
         function onOpen() {
-            sock.send(JSON.stringify({chatRoomId : "${chatRoomId}", type: "ENTER", senderId : "${pinfo.username}"}));
-
+            chatSocket.send(JSON.stringify({chatRoomId : "${chatRoomId}", type: "ENTER", senderId : "${pinfo.username}"}));
         }
 
+        // 메시지 왔을때
+        chatSocket.onmessage = onRoomMessage;
 
-        function onMessage(e) {
+        function onRoomMessage(e) {
             let data = e.data;
 
             if(data === "reload chatList") {

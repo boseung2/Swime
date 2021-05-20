@@ -56,4 +56,9 @@ public class ChatMessageServiceTests {
 
         assert ("success".equals(result));
     }
+
+    @Test
+    public void testGetTotalUnreadMsg() {
+        log.info(service.getTotalUnreadMsg("wlgh52725@gmail.com").getUnreadMsg());
+    }
 }

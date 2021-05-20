@@ -211,4 +211,10 @@ public class ChatController {
 
         return new ResponseEntity<>(chatMessageService.getMsg(chatRoomId), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/totalUnreadMsg")
+    public ResponseEntity<String> getTotalUnreadMsg(String userId) {
+
+        return new ResponseEntity<>(String.valueOf(chatMessageService.getTotalUnreadMsg(userId).getUnreadMsg()), HttpStatus.OK);
+    }
 }

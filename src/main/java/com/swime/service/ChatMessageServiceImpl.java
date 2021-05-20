@@ -35,4 +35,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public void readMsg(long sn) {
         mapper.readMsg(sn);
     }
+
+    @Override
+    public ChatMessageVO getTotalUnreadMsg(String userId) {
+        return mapper.getTotalUnreadMsg(userId);
+    }
 }

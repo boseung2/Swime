@@ -74,7 +74,7 @@
 
 <%@include file="../includes/footer.jsp" %>
 
-<script type="text/javascript" src="/resources/js/chat.js"></script>
+<%--<script type="text/javascript" src="/resources/js/chat.js"></script>--%>
 
 <script>
 
@@ -85,34 +85,6 @@
         }
 
     })
-</script>
-
-<!-- 웹소켓-->
-<script type="text/javascript">
-    // 전역변수 chatSocket
-    let chatSocket = null;
-
-    $(document).ready(function() {
-
-        //웹소켓 연결
-        let sock = new SockJS('/chat');
-        chatSocket = sock;
-
-        // 데이터 전달받았을 때
-        sock.onmessage = onMessage;
-
-        function onMessage(e) {
-            let data = e.data;
-
-            if(data === "reload chatList") {
-
-                //채팅방 리로드
-                reloadChatList();
-            }
-        }
-
-    })
-
 </script>
 
 <script>

@@ -17,4 +17,6 @@ public interface ChatMessageService {
 
     public void readMsg(long sn);
 
+    // 해당 유저의 안읽은 메시지 전체 개수를 반환 (메인페이지용)
+    public ChatMessageVO getTotalUnreadMsg(String userId);
 }

@@ -89,6 +89,20 @@
         .dropdown a:hover {background-color: #ddd;}
 
         .show {display: block;}
+
+        .red {
+            z-index: 1;
+            float: right;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgb(243, 98, 98);
+            position: relative;
+            right: 10px;
+            top: 1px;
+            display: none;
+
+        }
     </style>
 
 </head>
@@ -110,6 +124,10 @@
                 </ul>
             </div>
             <a><img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;"></a>
+            <a href="/chat/list">
+                <img id="chatBtn" src="../../../resources/img/chat.png" style="width:18px; height: 18px;">
+                <div class="red"></div>
+            </a>
         </sec:authorize>
         <sec:authorize access="isAnonymous()">
             <a href="/user/register">회원가입</a>
@@ -150,37 +168,72 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
 <script type="text/javascript", src="/resources/js/notice.js"></script>
+<script type="text/javascript", src="/resources/js/chat.js"></script>
 
 <!-- 웹소켓-->
 <script type="text/javascript">
     // 전역변수 socket
-    let socket = null;
+    let noticeSocket = null;
+    let chatSocket = null;
 
     $(document).ready(function() {
 
-        //웹소켓 연결
+        //알림 웹소켓 연결
         let sock = new SockJS('/notice');
-        socket = sock;
+        noticeSocket = sock;
 
         // 데이터 전달받았을 때
-        sock.onmessage = onMessage;
+        sock.onmessage = onNoticeMessage;
 
-        function onMessage(e) {
+        function onNoticeMessage(e) {
             let data = e.data;
 
             // notice 이미지를 바꿔준다.
             $('#notice')[0].src = "../../../resources/img/exist_notice.png";
         }
 
+        // 채팅 웹소켓 연결
+        let sock2 = new SockJS('/chat');
+        chatSocket = sock2;
+
+        sock2.onmessage = onChatMessage;
+
+        console.log("context = " + getContextPath(document.location.href));
+
+        function onChatMessage(e) {
+            let data = e.data;
+
+            if(data === "reload chatList") {
+
+                // url의 context가 chat이면
+                if(getContextPath(document.location.href) === '/chat') {
+
+                    //채팅방 리로드
+                    reloadChatList();
+                }else {
+
+                    // 아니면 chatBtn 다시 불러오기
+                    getChatButton();
+                }
+            }
+        }
+
     })
+
+    // context path 가져오는 함수
+    function getContextPath() {
+        let hostIndex = location.href.indexOf( location.host ) + location.host.length;
+        return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
+    }
 
 </script>
 
 <script>
     $(document).ready(function() {
-        // 로그인된 상태이면 알림버튼 띄우기
+        // 로그인된 상태이면 알림버튼, 채팅버튼 띄우기
         if("${pinfo.username}" !== "") {
             getNoticeButton();
+            getChatButton();
         }
 
         // post, ajax 시큐리티 적용
@@ -272,6 +325,19 @@
         getNoticeButton();
 
     })
+
+    // 채팅버튼 불러오기
+    function getChatButton() {
+        chatService.getTotalUnreadMsg("${pinfo.username}", function(result){
+
+            if(result > 0) {
+                $('.red').css('display', 'inline');
+            }else {
+                $('.red').css('display', 'none');
+            }
+        })
+
+    }
 
     $(document).ready(function (){
         let noti = $("#notice")[0];
