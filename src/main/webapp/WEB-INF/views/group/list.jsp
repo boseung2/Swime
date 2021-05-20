@@ -128,7 +128,7 @@
     <!-- Content Row -->
     <div class="row">
         <c:forEach items="${list}" var="group">
-            <div class="col-md-4 mb-5 card-mb48">
+            <div class="col-sm-4 sm-5 card-mb48">
                 <div class="card h-100">
                     <div class="card-body move" style=" cursor: pointer;" href="<c:out value="${group.sn}"/>">
                         <h2 class="card-title custom-mt0"><span style="font-size:22px; font-weight:bold;"><c:out value="${group.category}"/></span></h2>

@@ -85,8 +85,10 @@ body {
 }
 
 .row {
-    margin: 0px;
-    width: 100%;
+    /*margin-right: -15px;*/
+    /*margin-left: -15px;*/
+    /*margin: 0px;*/
+    width: calc(100% + 30px);
 }
 
 
@@ -110,6 +112,14 @@ body {
     flex: 1 1 auto;
     min-height: 1px;
     padding: 2rem;
+}
+
+.rounded {
+    border-radius: .25rem!important;
+}
+
+.row > div > div > div > div.uploadResult > img {
+    height: 18rem;
 }
 
 .head-image {
