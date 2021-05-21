@@ -85,6 +85,15 @@
         </ul>
 
         <ul class="navbar-nav ml-auto nav-flex-icons">
+            <sec:authorize access="isAnonymous()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/register">회원가입</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/login">로그인</a>
+                </li>
+            </sec:authorize>
+            <sec:authorize access="isAuthenticated()">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="chat" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">1
@@ -108,11 +117,11 @@
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
-
+            </sec:authorize>
         </ul>
 
-
-        <%--  프로필      --%>
+        <%--  프로필  --%>
+        <sec:authorize access="isAuthenticated()">
         <ul class="navbar-nav nav-flex-icons">
             <li class="nav-item avatar dropdown" style="margin-right: 1rem;margin-left: 1rem;">
                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
@@ -127,6 +136,8 @@
                 </div>
             </li>
         </ul>
+        </sec:authorize>
+
     </div>
 </nav>
 <!--/.Navbar -->
