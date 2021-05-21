@@ -106,9 +106,9 @@ public class AdminController {
             log.info(list[i]);
             if(bbs.equals("reply")){
                 //reuslt =
-                adminBoardService.adminReplyRemove(list[i]);
+                result = adminBoardService.adminReplyRemove(list[i]);
             }else{
-                adminBoardService.adminBoardRemove(list[i]);
+                result = adminBoardService.adminBoardRemove(list[i]);
             }
         }
         return result == 1
@@ -130,9 +130,9 @@ public class AdminController {
             log.info(list[i]);
 
             if(bbs.equals("reply")){
-                adminBoardService.adminReplyFromDeleteToActive(list[i]);
+                result = adminBoardService.adminReplyFromDeleteToActive(list[i]);
             }else{
-                adminBoardService.adminBoardFromDeleteToActive(list[i]);
+                result = adminBoardService.adminBoardFromDeleteToActive(list[i]);
             }
         }
         return result == 1

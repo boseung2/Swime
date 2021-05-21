@@ -215,13 +215,94 @@
             if(deleteOrUpdateBtn === '삭제'){
                 console.log('deleteBtnClicked');
 
-                adminBoardDelete(deleteOrUpdateBtn, dataArr);
-
+                adminBoardDelete(deleteOrUpdateBtn);
             }else if(deleteOrUpdateBtn === '수정'){
                 console.log('updateBtnClicked');
 
-                adminBoardUpdate(deleteOrUpdateBtn, dataArr);
+                adminBoardUpdate(deleteOrUpdateBtn);
             }
+
+
+            function adminBoardDelete(deleteOrUpdateBtn){
+                console.log('callDelete');
+
+                let existResult = existArr(deleteOrUpdateBtn);
+                console.log("existResult :"+existResult);
+
+                if(!existResult){
+                    return;
+                }
+
+                let deleteConfirm = confirm('삭제하시겠습니까?');
+
+                if(deleteConfirm){
+
+                    adminBoardListService.adminBoardDelete(dataArr, bbsOrReplyVar, function(result) {
+                        console.log("-------callback-------");
+                        console.log("deleteResult : "+result);
+
+                        successOrFail(result);
+
+                    }); // end adminDelete
+
+                } //end if(deleteConfirm)
+
+            }// admindelete
+
+            function adminBoardUpdate(){
+                console.log('callUpdate');
+
+                let existResult = existArr(deleteOrUpdateBtn);
+
+                if(!existResult){
+                    return
+                }
+
+                let updateConfirm = confirm('수정하시겠습니까?');
+
+                if(updateConfirm){
+
+                    adminBoardListService.adminBoardUpdate(dataArr, bbsOrReplyVar, function(result) {
+                        console.log("-------callback-------");
+                        console.log("updateResult : " + result);
+
+                        successOrFail(result);
+
+                    }); // end adminUpdate
+
+                } //end if(deleteConfirm)
+            } // end adminupdate
+
+            // 배열에 값이 있는지 판단한다.
+            // 없으면 false 리턴해서 실행을 종료시킨다.
+            function existArr(deleteOrUpdateBtn){
+                console.log("existArrCall : "+deleteOrUpdateBtn);
+
+                if(dataArr.length === 0 || dataArr === null){
+                    if(deleteOrUpdateBtn === '삭제'){
+                        alert('삭제할 데이터가 없습니다.');
+                        return false;
+                    }
+                    if(deleteOrUpdateBtn === '수정'){
+                        alert('수정할 데이터가 없습니다.');
+                        return false;
+                    }
+                }
+                return true;
+            } // end existArr
+
+
+            function successOrFail(result){
+
+                if(result === 'deletesuccess'){
+                    alert('삭제되었습니다.');
+                }else if(result === 'updatesuccess'){
+                    alert('수정되었습니다');
+                }else{
+                    alert('삭제/수정이 실패되었습니다.');
+                }
+
+            } // end successOrFail
 
             //삭제,수정 확인을 누르면 checked true -> false 체크박스 해제시킨다.
             for(let i = 0; i < storeIndex.length; i++){
@@ -230,96 +311,10 @@
                 $('#allCheck').prop('checked', false);
 
             }
-            console.log("Showboardlist");
 
             showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
 
         } // end oneCheck()
-
-
-
-        function adminBoardDelete(deleteOrUpdateBtn, dataArr){
-            console.log('callDelete');
-
-            let existResult = existArr(deleteOrUpdateBtn, dataArr);
-            console.log("existResult :"+existResult);
-
-            if(!existResult){
-                return;
-            }
-
-            let deleteConfirm = confirm('삭제하시겠습니까?');
-
-            if(deleteConfirm){
-
-                adminBoardListService.adminBoardDelete(dataArr, bbsOrReplyVar, function(result) {
-                    console.log("-------callback-------");
-                    console.log("deleteResult : "+result);
-
-                    successOrFail(result);
-
-                }); // end adminDelete
-
-            } //end if(deleteConfirm)
-
-        }// admindelete
-
-        function adminBoardUpdate(deleteOrUpdateBtn, dataArr){
-            console.log('callUpdate');
-
-            let existResult = existArr(deleteOrUpdateBtn, dataArr);
-
-            if(!existResult){
-                return
-            }
-
-            let updateConfirm = confirm('수정하시겠습니까?');
-
-            if(updateConfirm){
-
-                adminBoardListService.adminBoardUpdate(dataArr, bbsOrReplyVar, function(result) {
-                    console.log("-------callback-------");
-                    console.log("updateResult : " + result);
-
-                    successOrFail(result);
-
-                }); // end adminUpdate
-
-            } //end if(deleteConfirm)
-        } // end adminupdate
-
-        // 배열에 값이 있는지 판단한다.
-        // 없으면 false 리턴해서 실행을 종료시킨다.
-        function existArr(deleteOrUpdateBtn, dataArr){
-            console.log("existArrCall : "+deleteOrUpdateBtn);
-
-            if(dataArr.length === 0 || dataArr === null){
-                if(deleteOrUpdateBtn === '삭제'){
-                    alert('삭제할 데이터가 없습니다.');
-                    return false;
-                }
-                if(deleteOrUpdateBtn === '수정'){
-                    alert('수정할 데이터가 없습니다.');
-                    return false;
-                }
-            }
-            return true;
-        } // end existArr
-
-
-        function successOrFail(result){
-
-            if(result === 'deletesuccess'){
-                alert('삭제되었습니다.');
-            }else if(result === 'updatesuccess'){
-                alert('수정되었습니다');
-            }else{
-                alert('삭제/수정이 실패되었습니다.');
-            }
-
-        } // end successOrFail
-
-
 
         //input 검색창 search
         $('#search').keyup(function (){
@@ -417,7 +412,6 @@
         });
 
 
-
         showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult); //defalut값 1,10, 게시판
 
         function showBoardList(page, boardCntSort, bbsOrReplyVar, sort, active, keyword, searchResult){
@@ -437,18 +431,18 @@
 
                         console.log("-----------callback data-------------");
                         console.log("cnt"+cnt);
-                        console.log(list);
+                        console.log("list"+list);
                         console.log("compare"+compare);
                         console.log("sort : "+sort);
                         console.log("active : "+active);
 
                         //board or reply
-                        //if (compare === 'isBoard') {
-                            listPrint(compare);
-
-                        // } else {
+                        // if (compare === 'isBoard') {
                         //     listPrint(compare);
-                        // }
+                        //
+                        // } else {
+                            listPrint(compare);
+                        //}
 
                         function listPrint(compare){
 
@@ -474,20 +468,20 @@
 
 
                             //리스트 출력
-                            console.log("for loop start")
                             for (let i = 0, len = list.length || 0; i < len; i++) {
+                                //let status = "";
                                 let dat = "";
-
-                                console.log(i);
-                                console.log(list[i]);
-
                                 let statusVar = list[i].status;
 
-                                console.log(statusVar);
                                 // board or reply
-                                let status = statusToText(statusVar);
-                                console.log(status);
+                                // if(compare === 'isBoard'){
+                                //     statusToText(statusVar);
+                                // }else{
+                                //     statusToText(statusVar);
+                                // }
 
+                                //status 코드 -> 한글
+                                let status = statusToText(statusVar);
 
                                 //페이지 번호 amount = 10 25 50
                                 // i+1+(amount*(page-1))
@@ -514,9 +508,34 @@
 
                             }//end for
 
+                            function statusToText(statusVar){
+                                //console.log("statusVar :"+statusVar);
+                                let status = "";
+                                switch (statusVar) {
+                                    case "BOST01":
+                                        status = "정상";
+                                        break;
+                                    case "BOST02":
+                                        status = "삭제";
+                                        break;
+                                    case "BOST03":
+                                        status = "신고";
+                                        break;
+                                    case "RPST01":
+                                        status = "정상";
+                                        break;
+                                    case "RPST02":
+                                        status = "삭제";
+                                        break;
+                                    case "RPST03":
+                                        status = "신고";
+                                        break;
+                                }
+                                return status;
+                            }
+
 
                         }//end listPrint
-
                         boardUl.html(str);
 
                         console.log("board or reply Cnt" + cnt);
@@ -539,35 +558,6 @@
                     }); // end adminBoardList
 
             }// end list call
-
-            //status 코드 -> 한글
-            function statusToText(statusVar){
-                //console.log("statusVar :"+statusVar);
-                let status ="";
-                switch (statusVar) {
-                    case "BOST01":
-                        status = "정상";
-                        break;
-                    case "BOST02":
-                        status = "삭제";
-                        break;
-                    case "BOST03":
-                        status = "신고";
-                        break;
-                    case "RPST01":
-                        status = "정상";
-                        break;
-                    case "RPST02":
-                        status = "삭제";
-                        break;
-                    case "RPST03":
-                        status = "신고";
-                        break;
-                }
-                return status;
-            }
-
-
 
                 let adminBoardPageNum = 1;
                 let adminBoardPageFooter = $('.adminPageFooter');
