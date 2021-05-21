@@ -71,7 +71,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
     <!-- bootstrap override -->
-<%--    <link rel="stylesheet" href="/resources/css/bootStrapOverride.css">--%>
+    <link rel="stylesheet" href="/resources/css/bootStrapOverride.css">
 
     <!-- Custom styles for this template -->
     <link href="/resources/css/small-business.css" rel="stylesheet">

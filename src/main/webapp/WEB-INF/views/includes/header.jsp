@@ -15,34 +15,7 @@
         }
     }
 
-    /*<!-- 알림 드롭다운-->*/
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
 
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f1f1f1;
-        min-width: 160px;
-        overflow: auto;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-    }
-
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-        width: 330px;
-    }
-
-    .dropdown a:hover {background-color: #ddd;}
-
-    .show {display: block;}
 </style>
 
 
@@ -62,13 +35,16 @@
         color: rgba(68, 68, 68, 0.767);
         background: rgb(255, 255, 255);
 
-        top: 0px;
+        top: 0;
         position: sticky;
         width: 100%;
         transition: 0.1s;
         z-index: 100;
     }
-    .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
+    .navbar-dark .navbar-nav .nav-link:focus,
+    .navbar-dark .navbar-nav .nav-link:hover,
+    .navbar-dark .navbar-nav .nav-link.active,
+    .navbar-dark .navbar-nav .show>.nav-link{
         font-family: 'Noto Sans KR', sans-serif;
         color: hsla(0, 0%, 0%, 0.8);
     }
@@ -77,12 +53,14 @@
         font-family: 'Noto Sans KR', sans-serif;
         color: hsla(0, 0%, 22%, 0.8);
     }
+
+
 </style>
 
 
 <!--Navbar -->
 <nav class="mb-1 navbar navbar-expand-lg navbar-dark secondary-color lighten-1">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/">
         <img src="../../../resources/img/logo.png" alt="Swime" class="logo">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555"
@@ -262,14 +240,3 @@
 
 </script>
 
-<%-- countVisitor --%>
-<script>
-    visitorCountRequest();
-
-    function visitorCountRequest() {
-        $.ajax({
-            url : "/adminData/countVisitor",
-        }).done(function (result) {
-        });
-    }
-</script>
