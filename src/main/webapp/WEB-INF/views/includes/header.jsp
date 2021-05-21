@@ -1,99 +1,51 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
-<sec:authorize access="isAuthenticated()">
-    <sec:authentication property="principal" var="pinfo"/>
-</sec:authorize>
+<%@include file="./tagLib.jsp" %>
 
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-
-    <title>SWIME</title>
-
-
-    <!-- Bootstrap core CSS -->
-    <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="/resources/css/small-business.css" rel="stylesheet">
-
-    <!-- nav -->
-    <link href="/resources/css/nav.css" rel="stylesheet">
-
-    <!-- avatar -->
-    <link href="/resources/css/avatar.css" rel="stylesheet">
-
-    <!-- filter -->
-    <link href="/resources/css/filter.css" rel="stylesheet">
-
-    <!-- jquery -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <!-- font icon -->
-<%--    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>--%>
-    <script src="/resources/js/a076d05399.js"></script>
-
-    <!-- scrollbar -->
-    <link href="/resources/css/scrollbar.css" rel="stylesheet">
-
-    <style>
-        @media (min-width: 768px) {
-            .container {
-                width: 750px;
-            }
+<style>
+    @media (min-width: 768px) {
+        .container {
+            width: 750px;
         }
+    }
 
-        @media (min-width: 992px) {
-            .container {
-                width: 1000px;
-            }
+    @media (min-width: 992px) {
+        .container {
+            width: 1000px;
         }
+    }
 
-        /*<!-- 알림 드롭다운-->*/
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+    /*<!-- 알림 드롭다운-->*/
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
 
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f1f1f1;
-            min-width: 160px;
-            overflow: auto;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
 
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            width: 330px;
-        }
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        width: 330px;
+    }
 
-        .dropdown a:hover {background-color: #ddd;}
+    .dropdown a:hover {background-color: #ddd;}
 
-        .show {display: block;}
-    </style>
+    .show {display: block;}
+</style>
 
-</head>
 
-<body>
 <!-- header -->
 <div class="header">
     <a href="/" class="logo"><img src="../../../resources/img/logo.png"></a>
