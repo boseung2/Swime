@@ -46,62 +46,100 @@
 </style>
 
 
-<!-- header -->
-<div class="header">
-    <a href="/" class="logo"><img src="../../../resources/img/logo.png"></a>
-    <a href="/group/list">모임찾기</a>
-    <a href="/group/register">모임만들기</a>
-    <a href="/group/new/index">뉴 모임찾기(미적용)</a>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+<!-- Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+<!-- MDB -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.css"/>
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.js"></script>
 
-    <div class="header-right">
-        <sec:authorize access="isAuthenticated()">
-            <a href="/serviceCenter/list">고객센터</a>
-            <div class="dropdown" style="position: absolute;">
-                <ul id="myDropdown" class="dropdown-content">
-                    <li>알림이 없습니다.</li>
-                </ul>
-            </div>
-            <a><img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;"></a>
-        </sec:authorize>
-        <sec:authorize access="isAnonymous()">
-            <a href="/user/register">회원가입</a>
-            <a class="active" href="/user/login">로그인</a>
-        </sec:authorize>
-        <sec:authorize access="isAuthenticated()">
-            <a href="/user/infoDetail?id=<sec:authentication property='principal.username'/>"><sec:authentication property="principal.memberVO.name"/> 님 안녕하세요</a>
-            <sec:authorize access="hasAuthority('ADMIN')">
-                <a href="/admin/adminIndex">어드민 페이지</a>
-            </sec:authorize>
-            <a href="#" onclick="document.getElementById('logout').submit();">로그아웃</a>
-        </sec:authorize>
+<style>
+    .navbar {
+        font-family: 'Noto Sans KR', sans-serif;
+        /*font-size: 1.6rem;*/
+        color: rgba(68, 68, 68, 0.767);
+        background: rgb(255, 255, 255);
+
+        top: 0px;
+        position: sticky;
+        width: 100%;
+        transition: 0.1s;
+        z-index: 100;
+    }
+    .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
+        font-family: 'Noto Sans KR', sans-serif;
+        color: hsla(0, 0%, 0%, 0.8);
+    }
+
+    .navbar-dark .navbar-nav .nav-link {
+        font-family: 'Noto Sans KR', sans-serif;
+        color: hsla(0, 0%, 22%, 0.8);
+    }
+</style>
+
+
+<!--Navbar -->
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark secondary-color lighten-1">
+    <a class="navbar-brand" href="#">
+        <img src="../../../resources/img/logo.png" alt="Swime" class="logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555"
+            aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent-555">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/group/list">모임 찾기
+
+                    <%--                    <span class="sr-only">(current)</span>--%>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/group/register">모임 만들기</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/group/new/index">뉴모임 찾기</a>
+            </li>
+
+        </ul>
+
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="chat" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">1
+                    <i class="fas fa-envelope" id="chatIconI"></i>
+                </a>
+                <div class="dropdown-menu dropdown-secondary" aria-labelledby="chat">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+        </ul>
+
+        <%--  프로필      --%>
+        <ul class="navbar-nav nav-flex-icons">
+            <li class="nav-item avatar dropdown" style="margin-right: 1rem;margin-left: 1rem;">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false" style="padding: 0;">
+                    <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" class="rounded-circle z-depth-0"
+                         alt="avatar image" style="height: 3rem;">
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
+                     aria-labelledby="navbarDropdownMenuLink-55">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+        </ul>
     </div>
-</div>
+</nav>
+<!--/.Navbar -->
 
-<sec:authorize access="isAuthenticated()">
-<%--    <div class="dropdown">--%>
-<%--        <ul id="myDropdown" class="dropdown-content">--%>
-<%--            <li>알림이 없습니다.</li>--%>
-<%--        </ul>--%>
-<%--    </div>--%>
-</sec:authorize>
-
-<%--toast 알림--%>
-<%--<div id="msgStack"></div>--%>
-
-<form id="logout" action="/user/logout" method="post" hidden>
-    <%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
-    <sec:csrfInput/>
-</form>
-
-<hr style="
-    margin-top: 0px;
-    margin-bottom: 0px;">
-
-<!-- 알림 -->
-<!-- sockJS -->
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-
-<script type="text/javascript", src="/resources/js/notice.js"></script>
 
 <!-- 웹소켓-->
 <script type="text/javascript">
