@@ -1,19 +1,38 @@
 package com.swime.etc;
 
+import lombok.Data;
 import lombok.extern.log4j.Log4j;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class test1{
     public static void main(String[] args) {
-//        new Exercise4_15();
-//        new number();
-        String path = System.getProperty("user.dir");
-        System.out.println(System.getProperty("user.dir").replace('\\','/')+"/src/main/resources/wallet/");
-        System.out.println(path);
+        Rect[] rect = new Rect[3];
+        Scanner scanner = new Scanner(System.in);
+
+        for (int i = 0; i < rect.length; i++) {
+            rect[i] = new Rect(scanner.nextInt());
+        }
+
+        for (int i = 0; i < rect.length; i++) {
+            System.out.println(rect[i]);
+        }
+
+    }
+}
+
+@Data
+class Rect {
+    int width, height;
+
+    public Rect(int... args){
+        if(args == null && args.length != 2) return;
+        this.width = args[0];
+        this.height = args[1];
     }
 }
 

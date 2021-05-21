@@ -168,25 +168,28 @@
     <!-- /.row -->
 
     <!-- pagination -->
-    <div class="pagination">
-        <c:if test="${pageMaker.prev}">
-            <li class="paginate_button previous">
-            <a href="${pageMaker.startPage - 1}">&laquo;</a>
-            </li>
-        </c:if>
+    <div>
+        <div class="pagination">
+            <c:if test="${pageMaker.prev}">
+                <li class="paginate_button previous">
+                    <a href="${pageMaker.startPage - 1}">&laquo;</a>
+                </li>
+            </c:if>
 
-        <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-            <li class="paginate_button">
-                <a href="${num}" class="${pageMaker.cri.pageNum == num ? "active" : ""}">${num}</a>
-            </li>
-        </c:forEach>
+            <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                <li class="paginate_button">
+                    <a href="${num}" class="${pageMaker.cri.pageNum == num ? "active" : ""}">${num}</a>
+                </li>
+            </c:forEach>
 
-        <c:if test="${pageMaker.next}">
-            <li class="paginate_button next">
-            <a href="${pageMaker.endPage + 1}">&raquo;</a>
-            </li>
-        </c:if>
+            <c:if test="${pageMaker.next}">
+                <li class="paginate_button next">
+                    <a href="${pageMaker.endPage + 1}">&raquo;</a>
+                </li>
+            </c:if>
+        </div>
     </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
