@@ -155,13 +155,14 @@
         //     }
         // })
 
+        //adminBoardRemove
         $('#remove').on('click', function(){
-            oneCheck();
+            oneCheck(this);
         })
 
-        // $('#update').on('click', function (){
-        //     oneCheck();
-        // })
+        $('#update').on('click', function (){
+            oneCheck(this);
+        })
 
         //'input[id="check"]'
         function allCheck(obj){
@@ -177,18 +178,29 @@
 
         }
 
-        function oneCheck(){
+        function oneCheck(obj){
 
-            console.log("remove click!!");
+            console.log(obj.innerHTML);
+
             let storeIndex = [];
             let dataArr = [];
             let unCheck;
             let checkList = $('.boardCkBox:checked');
 
+            let deleteOrUpdateBtn = obj.innerHTML;
+
+            //삭제or업데이트 버튼 구별
+            if(deleteOrUpdateBtn === '삭제'){
+                console.log('deleteBtnClicked');
+            }else{
+                console.log('updateBtnClicked');
+            }
+
             checkList.each(function(index){
                 console.log("clicked");
+                //게시판 행을 가져온다
                 let tr = $(this).parent().parent().eq(0);
-                //sn번호
+                //게시판 고유번호를 가져온다
                 let snResult = tr.children().eq(2).text();
 
                 unCheck = tr.children().eq(0).children().eq(0);
@@ -207,6 +219,7 @@
 
             console.log(dataArr);
             console.log(dataArr.length);
+
 
 
             if(dataArr.length == 0){
@@ -241,10 +254,10 @@
 
                         showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
 
-                    });
-                }
+                    }); // end adminDelete
+                } //end if(deleteConfirm)
 
-            }
+            } // end else
 
         } // end oneCheck()
 
@@ -256,7 +269,7 @@
 
         })
 
-        //email / id - E : email, N : name
+        // email : E / id : N / email, id : EN
         $('#searchKeyword').on('change', function(){
             $(this).each(function(){
                 if ($(this).val() == 'E'){
@@ -449,7 +462,7 @@
                                 str += "<td data-sn='12'>" + list[i].sn + "</td>";
                                 str += "<td>" + list[i].userId + "</td>";
                                 str += "<td>" + list[i].name + "</td>";
-
+                                // 게시글 제목 / 댓글 내용이 20글가 넘으면 ...표시
                                 if(compare === 'isBoard'){
                                     str += "<td>" + list[i].title.substring(0, 20) + dat + "</td>";
                                 }else{
@@ -468,7 +481,21 @@
                         boardUl.html(str);
 
                         console.log("board or reply Cnt" + cnt);
+
                         showAdminBoardPage(cnt);
+
+                        // 전체 체크 상태에서 체크박스를 1개 해제하면 전체가 해제되고
+                        // 체크 박스가 다 체크되면 전체 체크 박스가 체크된다.
+                        // $('.boardCkBox').on('click', function(){
+                        //
+                        //     let isChecked = true;
+                        //
+                        //     $('.boardCkBox').each(function(){
+                        //         isChecked = isChecked && $(this).is(':checked');
+                        //     })
+                        //     $('#allCheck').prop('checked', isChecked)
+                        // })
+
 
                     }); // end adminBoardList
 
@@ -514,8 +541,6 @@
                     // if (endNum * 10 >= cnt) {
                     //     endNum = Math.ceil(cnt / 10.0);
                     // }
-
-
 
                     console.log("boardCount = " + cnt);
                     console.log("startNum = " + startNum);

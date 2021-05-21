@@ -119,16 +119,16 @@
 <%--            </h4>--%>
 <%--        </div>--%>
 
+            <%--by_민재_21/05/20 : 모임 가입/탈퇴 시 새로고침을 하지 않아도 글쓰기 버튼이 생성/제거
+            1062줄 모임 가입 메서드에 show() / hide() 메서드 추가해서 구현함.--%>
             <hr class="centerHr" id="study">
             <div>
                 <h4>
                     <sec:authorize access="isAuthenticated()">
-
                         <c:if test="${pinfo.username ne group.userId or pinfo.username eq group.userId}">
                             <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'
                                class='btn btn-primary' id="studyBtn">스터디 만들기</a>
                         </c:if>
-
                     </sec:authorize>
                 </h4>
             </div>

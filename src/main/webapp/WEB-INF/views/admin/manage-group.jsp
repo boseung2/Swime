@@ -192,7 +192,9 @@
 
                     showGroupPage(groupCnt);
 
+                    //삭제버튼
                     $('#groupRemove').on('click', function(){
+                        //체크된 박스 삭제
                         checkedBox();
                     })
 
@@ -220,7 +222,6 @@
                             let deleteConfirm = confirm('삭제하시겠습니까?');
                             //확인 버튼을 누르면
                             if(deleteConfirm){
-
                                 adminGroupListService.adminDelete(dataArr, function(result){
                                     console.log('--------callback--------')
                                     console.log(result);
@@ -228,11 +229,8 @@
                                     if(result != 'success'){
                                         alert('실패했습니다.');
                                     }
-                                    
                                     showGroupList(page, amount);
-
                                 })
-
                             }
                         }else{
                             alert('삭제할 데이터가 없습니다.');
@@ -260,9 +258,6 @@
                 });
 
         }//end showList
-
-
-
 
 
         let GroupPageNum = 1;

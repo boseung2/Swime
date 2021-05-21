@@ -58,6 +58,7 @@ public class BoardController {
 //
 //    }
 
+
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
@@ -96,7 +97,7 @@ public class BoardController {
         //모임 역할은 1.모임장 2.운영진 3.일반회원이 있다.
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
 
-        log.info("groupAttend 가져왔나용?!!!!!!!!!"+groupAttendVO);
+        log.info("groupAttend : "+groupAttendVO);
 
         model.addAttribute("group", groupAttendVO);
 
@@ -186,7 +187,7 @@ public class BoardController {
         //(x)
         model.addAttribute("reply", replyService.get(sn));
 
-        log.info("groupAttend 가져왔나용?!!!!!!!!!"+groupAttendVO);
+        log.info("groupAttend  : "+groupAttendVO);
         log.info("replyServiceGet : "+replyService.get(sn));
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
     }
