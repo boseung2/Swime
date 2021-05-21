@@ -41,31 +41,75 @@
         transition: 0.1s;
         z-index: 100;
     }
-    .navbar-dark .navbar-nav .nav-link:focus,
-    .navbar-dark .navbar-nav .nav-link:hover,
-    .navbar-dark .navbar-nav .nav-link.active,
-    .navbar-dark .navbar-nav .show>.nav-link{
-        font-family: 'Noto Sans KR', sans-serif;
-        color: hsla(0, 0%, 0%, 0.8);
+    /*.navbar-dark .navbar-nav .nav-link:focus,*/
+    /*.navbar-dark .navbar-nav .nav-link:hover,*/
+    /*.navbar-dark .navbar-nav .nav-link.active,*/
+    /*.navbar-dark .navbar-nav .show>.nav-link{*/
+    /*    font-family: 'Noto Sans KR', sans-serif;*/
+    /*    color: hsla(0, 0%, 0%, 0.8);*/
+    /*}*/
+
+    /*.navbar-dark .navbar-nav .nav-link {*/
+    /*    font-family: 'Noto Sans KR', sans-serif;*/
+    /*    color: hsla(0, 0%, 22%, 0.8);*/
+    /*}*/
+
+
+
+    .navbar-toggler {
+        margin-top: 1.8rem;
+        margin-bottom: 1.8rem;
+
+        position: relative;
+        float: right;
+        padding: 9px 10px;
+        /*margin-right: 15px;*/
+        margin-top: 8px;
+        margin-bottom: 8px;
+        background-color: transparent;
+        background-image: none;
+        border: 1px solid #00000021!important;
+        border-radius: 4px;
     }
 
-    .navbar-dark .navbar-nav .nav-link {
-        font-family: 'Noto Sans KR', sans-serif;
-        color: hsla(0, 0%, 22%, 0.8);
+    .navbar-toggler:hover {
+        background-color: rgba(0 0 0 / 10%);
     }
 
 
+    .navbar-toggler .icon-bar {
+        background-color: #888;
+        display: block;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+    }
+
+    .navbar-toggler .icon-bar+ .icon-bar {
+        margin-top: 4px;
+    }
+
+    .navbar-toggler .icon-bar {
+        display: block;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+    }
 </style>
 
 
 <!--Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-dark secondary-color lighten-1">
+<nav class="mb-1 navbar navbar-expand-lg navbar-light white lighten-1">
+<%--<nav class="navbar fixed-top navbar-expand-md navbar-light white double-nav scrolling-navbar top-nav-collapse">--%>
     <a class="navbar-brand" href="/">
         <img src="../../../resources/img/logo.png" alt="Swime" class="logo">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555"
             aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
+<%--        <span class="icon-bar"></span>--%>
+<%--        <span class="icon-bar"></span>--%>
+<%--        <span class="icon-bar"></span>--%>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent-555">
         <ul class="navbar-nav mr-auto">
@@ -126,8 +170,10 @@
             <li class="nav-item avatar dropdown" style="margin-right: 1rem;margin-left: 1rem;">
                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false" style="padding: 0;">
-                    <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" class="rounded-circle z-depth-0"
-                         alt="avatar image" style="height: 3rem;">
+<%--                    <img src="${getPicture}" class="rounded-circle z-depth-0"--%>
+<%--                         alt="avatar image" style="height: 3rem; width: 3rem;">--%>
+                    <img src="http://www.swime.kro.kr/display?fileName=2021%2F05%2F20%2F7bfea343-310c-4f5d-9fe9-5d65c578dd83_%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png" class="rounded-circle z-depth-0"
+                         alt="avatar image" style="height: 3rem; width: 3rem;">
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
                      aria-labelledby="navbarDropdownMenuLink-55">

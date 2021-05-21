@@ -66,6 +66,7 @@
 
     <!-- font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css" integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
     <!-- sockJS -->
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
@@ -113,4 +114,5 @@
 </head>
 <body>
 
-
+<%--여기 디자인 이쁨--%>
+<%--https://mdbootstrap.com/docs/b4/jquery/modals/basic/--%>
