@@ -88,6 +88,12 @@
     <%-- noticeSevice --%>
     <script src="/resources/js/notice.js"></script>
 
+    <script>
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+        });
+    </script>
+
 
     <style>
         @media (min-width: 768px) {
