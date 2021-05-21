@@ -85,6 +85,9 @@
     <%-- countVisitor --%>
     <script src="/resources/js/visitCounter.js"></script>
 
+    <%-- noticeSevice --%>
+    <script src="/resources/js/notice.js"></script>
+
 
     <style>
         @media (min-width: 768px) {

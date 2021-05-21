@@ -131,8 +131,8 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
                      aria-labelledby="navbarDropdownMenuLink-55">
-                    <a class="dropdown-item" href="#">나의 정보</a>
-                    <a class="dropdown-item" href="#">로그아웃</a>
+                    <a class="dropdown-item userInfoBtn" href="#">나의 정보</a>
+                    <a class="dropdown-item logoutBtn" href="#">로그아웃</a>
                 </div>
             </li>
         </ul>
@@ -262,5 +262,22 @@
 
 
 
+</script>
+
+<script>
+    $(".userInfoBtn").on("click", function () {
+        $(location).attr('href', '/user/infoDetail?id=' + "${memberVO.id}");
+    });
+
+    $(".logoutBtn").on("click", function () {
+        $.ajax({
+            url: "/user/logout",
+            method : 'POST'
+        }).done(function () {
+            $(location).attr('href', '/');
+        }).fail(function () {
+            alert("오류가 발생했습니다");
+        });
+    });
 </script>
 
