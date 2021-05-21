@@ -98,39 +98,47 @@ public class AdminController {
 
         log.info("list : " + list);
         log.info("delete bbs : " + bbs);
+
         int result = 0;
+
         for (int i = 0; i < list.length; i++) {
+            log.info("list[i]--------");
             log.info(list[i]);
             if(bbs.equals("reply")){
-                result = adminBoardService.adminReplyRemove(list[i]);
+                //reuslt =
+                adminBoardService.adminReplyRemove(list[i]);
             }else{
-                result = adminBoardService.adminBoardRemove(list[i]);
+                adminBoardService.adminBoardRemove(list[i]);
             }
         }
         return result == 1
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-//    나중에 쓸 예정이니까 삭제x
-//    @PostMapping(value = "/board/toActive")
-//    public ResponseEntity<String> adminBoardToActive(@RequestBody String[] list,
-//                                                   @RequestParam(value = "bbs") String bbs) {
-//
-//        log.info("list : " + list);
-//        log.info("delete bbs : " + bbs);
-//        int result = 0;
-//        for (int i = 0; i < list.length; i++) {
-//            log.info(list[i]);
-//            if(bbs.equals("reply")){
-//                result = adminBoardService.adminReplyFromDeleteToActive(list[i]);
-//            }else{
-//                result = adminBoardService.adminBoardFromDeleteToActive(list[i]);
-//            }
-//        }
-//        return result == 1
-//                ? new ResponseEntity<>("success", HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+//  게시판 삭제상태 -> 정상상태로 수정
+    @PostMapping(value = "/board/toActive")
+    public ResponseEntity<String> adminBoardToActive(@RequestBody String[] list,
+                                                   @RequestParam(value = "bbs") String bbs) {
+
+        log.info("list : " + list);
+        log.info("update bbs : " + bbs);
+
+        int result = 0;
+
+        for (int i = 0; i < list.length; i++) {
+
+            log.info(list[i]);
+
+            if(bbs.equals("reply")){
+                adminBoardService.adminReplyFromDeleteToActive(list[i]);
+            }else{
+                adminBoardService.adminBoardFromDeleteToActive(list[i]);
+            }
+        }
+        return result == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 // end 관리자 게시판
 
     //관리자 모임
