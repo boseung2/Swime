@@ -58,11 +58,11 @@ li {
 
 }
 
-.logo {
-    width: 115px;
-    margin-left: 20px;
-    margin-right: 35px;
-}
+/*.logo {*/
+/*    width: 115px;*/
+/*    margin-left: 20px;*/
+/*    margin-right: 35px;*/
+/*}*/
 
 .flex-flow {
     flex-grow: 1;

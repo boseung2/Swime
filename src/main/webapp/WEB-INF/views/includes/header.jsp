@@ -88,7 +88,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="chat" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">1
-                    <i class="fas fa-envelope" id="chatIconI"></i>
+                    <i class="fas fa-bell"></i>
                 </a>
                 <div class="dropdown-menu dropdown-secondary" aria-labelledby="chat">
                     <a class="dropdown-item" href="#">Action</a>
@@ -96,7 +96,21 @@
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="notice" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">1
+                    <i class="fas fa-envelope" id="noticeIconI"></i>
+                </a>
+                <div class="dropdown-menu dropdown-secondary" aria-labelledby="chat">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+
         </ul>
+
 
         <%--  프로필      --%>
         <ul class="navbar-nav nav-flex-icons">
@@ -108,9 +122,8 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
                      aria-labelledby="navbarDropdownMenuLink-55">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="#">나의 정보</a>
+                    <a class="dropdown-item" href="#">로그아웃</a>
                 </div>
             </li>
         </ul>
