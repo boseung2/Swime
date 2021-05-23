@@ -19,14 +19,16 @@
 </style>
 
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
-<!-- Google Fonts -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
-<!-- MDB -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.css"/>
-<!-- MDB -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.js"></script>
+
+
+<%--<!-- Font Awesome -->--%>
+<%--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>--%>
+<%--<!-- Google Fonts -->--%>
+<%--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>--%>
+<%--<!-- MDB -->--%>
+<%--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.css"/>--%>
+<%--<!-- MDB -->--%>
+<%--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.js"></script>--%>
 
 <style>
     .navbar {
@@ -56,50 +58,52 @@
 
 
 
-    .navbar-toggler {
-        margin-top: 1.8rem;
-        margin-bottom: 1.8rem;
+    /*.navbar-toggler {*/
+    /*    margin-top: 1.8rem;*/
+    /*    margin-bottom: 1.8rem;*/
 
-        position: relative;
-        float: right;
-        padding: 9px 10px;
-        /*margin-right: 15px;*/
-        margin-top: 8px;
-        margin-bottom: 8px;
-        background-color: transparent;
-        background-image: none;
-        border: 1px solid #00000021!important;
-        border-radius: 4px;
-    }
+    /*    position: relative;*/
+    /*    float: right;*/
+    /*    padding: 9px 10px;*/
+    /*    !*margin-right: 15px;*!*/
+    /*    margin-top: 8px;*/
+    /*    margin-bottom: 8px;*/
+    /*    background-color: transparent;*/
+    /*    background-image: none;*/
+    /*    border: 1px solid #00000021!important;*/
+    /*    border-radius: 4px;*/
+    /*}*/
 
-    .navbar-toggler:hover {
-        background-color: rgba(0 0 0 / 10%);
-    }
+    /*.navbar-toggler:hover {*/
+    /*    background-color: rgba(0 0 0 / 10%);*/
+    /*}*/
 
 
-    .navbar-toggler .icon-bar {
-        background-color: #888;
-        display: block;
-        width: 22px;
-        height: 2px;
-        border-radius: 1px;
-    }
+    /*.navbar-toggler .icon-bar {*/
+    /*    background-color: #888;*/
+    /*    display: block;*/
+    /*    width: 22px;*/
+    /*    height: 2px;*/
+    /*    border-radius: 1px;*/
+    /*}*/
 
-    .navbar-toggler .icon-bar+ .icon-bar {
-        margin-top: 4px;
-    }
+    /*.navbar-toggler .icon-bar+ .icon-bar {*/
+    /*    margin-top: 4px;*/
+    /*}*/
 
-    .navbar-toggler .icon-bar {
-        display: block;
-        width: 22px;
-        height: 2px;
-        border-radius: 1px;
-    }
+    /*.navbar-toggler .icon-bar {*/
+    /*    display: block;*/
+    /*    width: 22px;*/
+    /*    height: 2px;*/
+    /*    border-radius: 1px;*/
+    /*}*/
 </style>
 
 
 <!--Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-light white lighten-1">
+<nav class="mb-1 navbar navbar-expand-lg navbar-light white ">
+<%--<nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color">--%>
+
 <%--<nav class="navbar fixed-top navbar-expand-md navbar-light white double-nav scrolling-navbar top-nav-collapse">--%>
     <a class="navbar-brand" href="/">
         <img src="../../../resources/img/logo.png" alt="Swime" class="logo">
@@ -111,7 +115,7 @@
 <%--        <span class="icon-bar"></span>--%>
 <%--        <span class="icon-bar"></span>--%>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent-555">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent-555" style="margin-right: 10px;">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="/group/list">모임 찾기
@@ -166,12 +170,11 @@
 
         <%--  프로필  --%>
         <sec:authorize access="isAuthenticated()">
-        <ul class="navbar-nav nav-flex-icons">
-            <li class="nav-item avatar dropdown" style="margin-right: 1rem;margin-left: 1rem;">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false" style="padding: 0;">
-<%--                    <img src="${getPicture}" class="rounded-circle z-depth-0"--%>
-<%--                         alt="avatar image" style="height: 3rem; width: 3rem;">--%>
+        <ul class="nav-item avatar dropdown">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0;">
+                        <%--                    <img src="${getPicture}" class="rounded-circle z-depth-0"--%>
+                        <%--                         alt="avatar image" style="height: 3rem; width: 3rem;">--%>
                     <img src="http://www.swime.kro.kr/display?fileName=2021%2F05%2F20%2F7bfea343-310c-4f5d-9fe9-5d65c578dd83_%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png" class="rounded-circle z-depth-0"
                          alt="avatar image" style="height: 3rem; width: 3rem;">
                 </a>
@@ -181,6 +184,9 @@
                     <a class="dropdown-item logoutBtn" href="#">로그아웃</a>
                 </div>
             </li>
+
+
+
         </ul>
         </sec:authorize>
 

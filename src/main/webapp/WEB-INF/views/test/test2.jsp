@@ -9,13 +9,18 @@
          pageEncoding="UTF-8"%>
 
 <%@include file="../includes/header.jsp" %>
-<script src='../../../resources/js/a076d05399.js' crossorigin='anonymous'></script>
-<link rel="stylesheet" href="../../../resources/css/mdbootstrap.css"/>
+
+<%--<script src='../../../resources/js/a076d05399.js' crossorigin='anonymous'></script>--%>
+<%--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">--%>
+<%--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">--%>
+<%--<link rel="stylesheet" href="../../../resources/css/mdbootstrap.css"/>--%>
+
+
 
 <a class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#sideModalTRSuccessDemo" data-backdrop="true">Top
     Right</a>
 
-<div class="modal fade right" id="sideModalTRSuccessDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="display: none;" data-gtm-vis-first-on-screen-2340190_1302="13349" data-gtm-vis-total-visible-time-2340190_1302="100" data-gtm-vis-has-fired-2340190_1302="1" aria-hidden="true">
+<div class="modal fade " id="sideModalTRSuccessDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="display: none;" data-gtm-vis-first-on-screen-2340190_1302="13349" data-gtm-vis-total-visible-time-2340190_1302="100" data-gtm-vis-has-fired-2340190_1302="1" aria-hidden="true">
     <div class="modal-dialog modal-side modal-top-right modal-notify modal-success" role="document">
         <!--Content-->
         <div class="modal-content">
