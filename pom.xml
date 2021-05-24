@@ -104,12 +104,12 @@
       <version>2.3.0</version>
     </dependency>
 
-    <!-- spring websocket -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-websocket</artifactId>
-      <version>${org.springframework-version}</version>
-    </dependency>
+<!--    &lt;!&ndash; spring websocket &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>org.springframework</groupId>-->
+<!--      <artifactId>spring-websocket</artifactId>-->
+<!--      <version>${org.springframework-version}</version>-->
+<!--    </dependency>-->
 
 
     <!-- security -->
@@ -135,16 +135,16 @@
     </dependency>
 
     <!--  social login  -->
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-oauth2-client</artifactId>
-      <version>5.0.6.RELEASE</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-oauth2-jose</artifactId>
-      <version>5.0.6.RELEASE</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.security</groupId>-->
+<!--      <artifactId>spring-security-oauth2-client</artifactId>-->
+<!--      <version>5.0.6.RELEASE</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.security</groupId>-->
+<!--      <artifactId>spring-security-oauth2-jose</artifactId>-->
+<!--      <version>5.0.6.RELEASE</version>-->
+<!--    </dependency>-->
 
     <!-- Mail https://mvnrepository.com/artifact/javax.mail/mail -->
     <dependency>
