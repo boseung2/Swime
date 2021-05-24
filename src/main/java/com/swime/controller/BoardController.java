@@ -38,27 +38,6 @@ public class BoardController {
     private GroupAttendService groupAttendService;
 
 
-//    @GetMapping("/list")
-//    public void list(Model model) {
-//
-//        log.info("list");
-//
-//        model.addAttribute("list", service.getList());
-//    }
-
-//    @GetMapping("/list")
-//    public void list(BoardCriteria cri, Model model){
-//        log.info("list: " + cri);
-//
-//        model.addAttribute("list", service.getListWithPaging(cri));
-//        //model.addAttribute("pageMaker", new BoardDTO(cri,123));
-//        int total = service.getTotal(cri);
-//        log.info("total: " + total);
-//        model.addAttribute("pageMaker", new BoardPageDTO(cri, total));
-//
-//    }
-
-
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
@@ -72,12 +51,6 @@ public class BoardController {
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
-
-//    @GetMapping("/register")
-//    public void register(){
-//
-//    }
 
     //게시판 페이지
     @PreAuthorize("isAuthenticated()")
@@ -105,17 +78,6 @@ public class BoardController {
     }
 
 
-//    @PostMapping("/register")
-//    public String register(BoardVO board, RedirectAttributes rttr) {
-//
-//        log.info("register...." + board);
-//
-//        service.register(board);
-//
-//        rttr.addFlashAttribute("result", board.getSn());
-//
-//        return "redirect:/board/list";
-//    }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/register")
@@ -326,20 +288,6 @@ public class BoardController {
 
        }
 
-       //좋아요가 존재하면 삭제한다.
-//       if(boardLikeService.read(getBoardLike) != null){
-//
-//           return boardLikeService.remove(boardLike.getBrdSn(), boardLike.getUserId()) == 1
-//                   //좋아요 개수를 보낸다.
-//                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
-//                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//       }else{
-//           //좋아요가 존재하지 않으면 등록한다.
-//           return boardLikeService.register(boardLike) == 1
-//                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
-//                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//       }
-
     }
 
     @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -382,61 +330,3 @@ public class BoardController {
 
 }
 
-
-
-
-
-
-
-//    @PostMapping(value = "/new")
-//    public ResponseEntity<String> create(@RequestBody BoardVO vo) {
-//
-//        ResponseEntity<String> entity = null;
-//        log.info("BoardVO: " + vo);
-//
-//        try {
-//            int insertCount = service.register(vo);
-//            log.info("Board INSERT COUNT: " + insertCount);
-//            new ResponseEntity<>("success", HttpStatus.OK);
-//
-//        }catch(Exception e){
-//            e.printStackTrace();
-//            entity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-//
-//        }
-//        return entity;
-//
-////        return insertCount == 1
-////                ? new ResponseEntity<>("success", HttpStatus.OK)
-////                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//
-//    @GetMapping(value = "/list")
-//    public ResponseEntity<List<BoardVO>> getList(@RequestBody BoardCriteria cri) {
-//        return new ResponseEntity<>(service.getListWithPaging(cri), HttpStatus.OK);
-//    }
-//
-//
-//    @GetMapping(value = "/{sn}")
-//    public ResponseEntity<BoardVO> get(
-//            @PathVariable("sn") Long sn) {
-//        return new ResponseEntity<>(service.get(sn), HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
-//            value = "/{sn}")
-//    public ResponseEntity<String> modify(
-//            @RequestBody BoardVO vo,
-//            @PathVariable("sn") Long sn) {
-//
-//        vo.setSn(sn);
-//
-//        log.info("sn: " + sn);
-//        log.info("modify: " + vo);
-//
-//        return service.modify(vo)
-//                ? new ResponseEntity<>("success", HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
-//}

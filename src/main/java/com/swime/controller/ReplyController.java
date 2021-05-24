@@ -77,7 +77,6 @@ public class ReplyController {
         return new ResponseEntity<>(service.getList(cri, brdSn), HttpStatus.OK);
     }
 
-
     //댓글 수정 Long
     @PreAuthorize("principal.username == #vo.userId")
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
@@ -92,8 +91,5 @@ public class ReplyController {
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
-
 
 }

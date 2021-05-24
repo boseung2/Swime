@@ -26,8 +26,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class AdminController {
 
-    //private BoardService boardService;
-    //private ReplyService replyService;
+    
     private AdminBoardService adminBoardService;
     private AdminGroupService adminGroupService;
 
@@ -66,7 +65,11 @@ public class AdminController {
 
         Map<String,Object> map = new HashMap<>();
 
-
+        /*
+        * 관리자에서 게시판, 댓글을 요청하는데 구별할 수 있어야함.
+        * 게시판 : board, 댓글 : reply
+        * 게시판이면 boardList를 뿌려주고 프론트에서 구별할 수 있게 map에 key로 boardCompare을 담아서 넘김.
+        * */
         if(bbs.equals("board")){
             AdminBoardCriteria boardCri = new AdminBoardCriteria(page, amount, type, active, keyword, search);
             log.info("adminBoardCri : "+ boardCri);
@@ -76,7 +79,7 @@ public class AdminController {
             map.put("boardCompare", "isBoard");
 
             return new ResponseEntity<>(map,HttpStatus.OK);
-
+        //댓글
         }else{
             AdminReplyCriteria replyCri = new AdminReplyCriteria(page, amount, type, active, keyword, search);
             ReplyPageDTO replyList = adminBoardService.adminReplyGetListWithPagingBySn(replyCri);
