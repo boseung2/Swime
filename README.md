@@ -1,3 +1,5 @@
+<img src="documents/img/logo1.png" width="30rem"/>
+
 <a href = "http://www.swime.kro.kr/">Swime 사이트</a> 
 
 Swime은 Study With Me의 약어로 코딩 모임을 만들고 참여할 수 있는 사이트 입니다.
@@ -52,13 +54,14 @@ Swime은 Study With Me의 약어로 코딩 모임을 만들고 참여할 수 있
 
 
 ### ERD
-<a href="https://www.erdcloud.com/d/NS5kC5psb35zgBd7e">ERD를 자세히 보고 싶으시면 이곳을 눌러주세요</a>
+<a href="https://www.erdcloud.com/d/YoBsmj7Ygy2ZgBNRs">ERD를 자세히 보고 싶으시면 이곳을 눌러주세요</a>
 * <img src="/documents/img/ERD.png"/>
 
 Swime 프로젝트 DB는 코드 테이블을 포함한 29개의 테이블로 이루어져 있습니다.
 
 ### 개발 환경
 * Apache Tomcat 8.5.61
+* Visual Studio Code  
 * Oracle 19C
 * IntelliJ IDEA
 
