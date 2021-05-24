@@ -1,4 +1,4 @@
-<img src="documents/img/logo1.png" width="30rem"/>
+<img src="documents/img/logo1.png" width="400px"/>
 
 <a href = "http://www.swime.kro.kr/">Swime 사이트</a> 
 
