@@ -103,7 +103,6 @@
     <update id="adminBoardRemove">
         update tbrd
         set status = 'BOST02'
-        --,sys_reg_db_id = 'swime'
         where sn = #{sn}
     </update>
 
@@ -212,7 +211,7 @@
     </update>
 
     <update id="adminReplyFromDeleteToActive">
-        update tbrd set status = 'BOST01' where sn = #{sn}
+        update trpl set status = 'RPST01' where sn = #{sn}
     </update>
 
 

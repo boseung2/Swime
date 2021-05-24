@@ -125,6 +125,59 @@
 
         });
 
+        //remove
+        //삭제버튼
+        $('#groupRemove').on('click', function(){
+            //체크된 박스 삭제
+            let page = $("li#board-item.page-item.active")[0].innerText
+
+            checkedBox(page, amount);
+        });
+
+        function checkedBox(page, amount){
+            console.log("removeChecked");
+
+            let dataArr = [];
+            let checkList = $('.groupCkBox:checked');
+
+            checkList.each(function(index){
+
+                // 모임의 sn(고유번호)를 가져와서 배열에 담는다.
+                let sn = $(this).parent().attr('data-sn');
+                dataArr.push(sn);
+
+                console.log(checkList);
+                console.log("sn : " + sn);
+                console.log(dataArr);
+
+            }); //end checkList.each
+
+            //체크박스가 클릭 되었다면(데이터가 있으면)
+            if(dataArr.length !== 0){
+
+                let deleteConfirm = confirm('삭제하시겠습니까?');
+                //확인 버튼을 누르면
+                if(deleteConfirm){
+                    adminGroupListService.adminDelete(dataArr, function(result){
+                        console.log('--------callback--------')
+                        console.log(result);
+
+                        if(result !== 'success'){
+                            alert('실패했습니다.');
+                        }else{
+                            alert('삭제되었습니다.');
+                            showGroupList(page, amount);
+                        }
+
+
+                    })
+                }
+            }else{
+                alert('삭제할 데이터가 없습니다.');
+            }
+
+        } // end checkedBox
+
         showGroupList(1, amount);
 
         function showGroupList(page, amount){
@@ -192,53 +245,9 @@
 
                     showGroupPage(groupCnt);
 
-                    $('#groupRemove').on('click', function(){
-                        checkedBox();
-                    })
 
-                    function checkedBox(){
-                        console.log("removeChecked");
 
-                        let dataArr = [];
-                        let checkList = $('.groupCkBox:checked');
 
-                        checkList.each(function(index){
-
-                            // 모임의 sn(고유번호)를 가져와서 배열에 담는다.
-                            let sn = $(this).parent().attr('data-sn');
-                            dataArr.push(sn);
-
-                            console.dir(checkList);
-                            console.log("sn : " + sn);
-                            console.log(dataArr);
-
-                        }); //end checkList.each
-
-                        //체크박스가 클릭 되었다면(데이터가 있으면)
-                        if(dataArr.length !== 0){
-
-                            let deleteConfirm = confirm('삭제하시겠습니까?');
-                            //확인 버튼을 누르면
-                            if(deleteConfirm){
-
-                                adminGroupListService.adminDelete(dataArr, function(result){
-                                    console.log('--------callback--------')
-                                    console.log(result);
-
-                                    if(result != 'success'){
-                                        alert('실패했습니다.');
-                                    }
-                                    
-                                    showGroupList(page, amount);
-
-                                })
-
-                            }
-                        }else{
-                            alert('삭제할 데이터가 없습니다.');
-                        }
-
-                    } // end checkedBox
 
                     //개별 체크박스 전체 체크 중 1개가 체크 해제되면 전체 체크박스 해제
                     $('.groupCkBox').on('click',function (){
@@ -260,9 +269,6 @@
                 });
 
         }//end showList
-
-
-
 
 
         let GroupPageNum = 1;
