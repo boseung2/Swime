@@ -26,6 +26,9 @@ public interface StudyListService {
     // 해당 모임의 해당 유저가 참가한 스터디를 모두 가져오기
     public List<StudyVO> getStudiesOfGroup(long grpSn, String userId);
 
+    // 해당 유저가 참여한 스터디중 후기를 안쓴 스터디를 가져오기
+    public List<StudyVO> getNoRatingStudies(long grpSn, String userId);
+
     // 참석
     public int registerAttendant(StudyParamVO param);
 

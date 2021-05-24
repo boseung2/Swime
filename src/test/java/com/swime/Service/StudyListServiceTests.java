@@ -86,6 +86,12 @@ public class StudyListServiceTests {
     }
 
     @Test
+    public void testGetNoRatingStudies() {
+        service.getStudiesOfGroup(1240, "wlgh52725@gmail.com").forEach(study -> log.info(study));
+
+    }
+
+    @Test
     public void testRegisterAttendant() {
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(561L);
