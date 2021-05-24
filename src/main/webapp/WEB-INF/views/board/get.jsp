@@ -720,6 +720,7 @@
             });
         } // end showlist
 
+
         // 하트 초기화
         getBoardLike();
 
