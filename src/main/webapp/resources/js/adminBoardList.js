@@ -43,7 +43,7 @@ let adminBoardListService = (function(){
 
     }// end adminBoardList
 
-    function adminDelete(dataArr, bbs, callback, error){
+    function adminBoardDelete(dataArr, bbs, callback, error){
         //traditional : 배열 보낼 때 [] 보내지는데 없애준다.
         console.log("js/"+bbs);
         let test = JSON.stringify(dataArr);
@@ -56,8 +56,9 @@ let adminBoardListService = (function(){
             data :  JSON.stringify(dataArr),
             contentType : "application/json; charset=utf-8",
             success : function(deleteResult, status, xhr){
+                let result = 'delete'+deleteResult;
                 if(callback){
-                    callback(deleteResult);
+                    callback(result);
                 }
             },
             error : function(xhr, status, er){
@@ -68,6 +69,30 @@ let adminBoardListService = (function(){
         });
 
     }// end adminDelete
+
+    function adminBoardUpdate(dataArr, bbs, callback, error){
+
+        console.log("js/updateDataArr : "+dataArr);
+        console.log("js/updateBbs : "+bbs);
+
+        $.ajax({
+            type : 'POST',
+            url : '/admin/board/toActive/'+'?bbs='+bbs,
+            data : JSON.stringify(dataArr),
+            contentType: "application/json; charset=utf-8",
+            success : function(result, status, xhr){
+                let updateResult = 'update'+result;
+                if(callback){
+                    callback(updateResult);
+                }
+            },
+            erorr : function(xhr, status, er){
+                if (error){
+                    error(er)
+                }
+            }
+        });
+    }
 
     function boardDisplayTime(timeValue) {
 
@@ -90,7 +115,8 @@ let adminBoardListService = (function(){
     return {
         adminBoardList:adminBoardList,
         boardDisplayTime:boardDisplayTime,
-        adminDelete:adminDelete
+        adminBoardDelete:adminBoardDelete,
+        adminBoardUpdate:adminBoardUpdate
     }
 })();
 

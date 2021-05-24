@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.AdminGroupMapper">
+
+    <select id="adminGetCountBySn" resultType="int">
+        select count(*)
+        from tgrp
+        where sn > 0
+    </select>
+
+    <select id="adminGetGroupListWithPagingBySn" resultType="com.swime.domain.GroupVO">
+        <![CDATA[
+        select sn, category, name, user_id, user_name, picture, description, attend_count, rating,
+               rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
+        from(
+                select rownum rn, sn, category, name, user_id, user_name, picture, description, attend_count, rating,
+                       rating_count, sido, sigungu, status, reg_date, reg_user_id, upd_date, upd_user_id
+                from(
+                        select
+                            /*+INDEX_DESC(g tgrp_pk) */ g.sn, g.category, g.name, g.user_id, u.name user_name,
+                            g.picture, g.description, g.attend_count, g.rating, g.rating_count, g.sido, g.sigungu, g.status,
+                            g.reg_date, g.reg_user_id, g.upd_date, g.upd_user_id
+                        from
+                            tgrp g, tuser u
+                        where
+                            g.user_id = u.id
+                        order by
+                            g.sn
+                    )
+                where rownum <= #{pageNum} * #{amount}
+            )
+        where rn > (#{pageNum} - 1) * #{amount}
+        ]]>
+
+    </select>
+
+    <update id="adminGroupRemove">
+        update tgrp
+        set status = 'GRST03',
+        upd_date = current_date
+        where sn = #{sn}
+    </update>
+
+
+
+</mapper>

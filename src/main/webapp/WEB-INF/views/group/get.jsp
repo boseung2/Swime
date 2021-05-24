@@ -3,6 +3,11 @@
 
 <%@include file="../includes/header.jsp" %>
 
+
+
+
+
+
 <!-- container -->
 <div class="container get-header">
     <!-- Heading Row -->
@@ -106,17 +111,38 @@
         <hr class="centerHr" id="study">
         <div>
             <h4>
-            <c:set var="done" value="false"/>
+<%--            <c:set var="done" value="false"/>--%>
 
-            <c:forEach var = "attendant" items="${attendList}">
-                <c:if test="${not done}">
-                    <c:if test="${attendant.userId == pinfo.username}">
-                        <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}' class='btn btn-primary'>스터디 만들기</a>
-                    </c:if>
-                </c:if>
-            </c:forEach>
+<%--            <c:forEach var = "attendant" items="${attendList}">--%>
+<%--                <c:if test="${not done}">--%>
+<%--                    <c:if test="${attendant.userId == pinfo.username}">--%>
+<%--                        <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'--%>
+<%--                           class='btn btn-primary' id="studyBtn">스터디 만들기</a>--%>
+<%--                        <c:set var="done" value="true"/>--%>
+<%--                    </c:if>--%>
+<%--                </c:if>--%>
+<%--            </c:forEach>--%>
+                <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'
+                   class='btn btn-primary' id="studyBtn">스터디 만들기</a>
             </h4>
         </div>
+
+            <%-- pinfo.username ne group.userId  or pinfo.username eq group.userId--%>
+<%--            <hr class="centerHr" id="study">--%>
+<%--            <div>--%>
+<%--                <h4>--%>
+<%--                    <sec:authorize access="isAuthenticated()">--%>
+<%--                        <c:if test="${pinfo.username ne group.userId}">--%>
+<%--                            <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'--%>
+<%--                               class='btn btn-primary' id="studyBtn">스터디 만들기</a>--%>
+<%--                        </c:if>--%>
+<%--                    </sec:authorize>--%>
+<%--                    ${pinfo}</br>--%>
+<%--                    ${group.userId}</br>--%>
+
+<%--                </h4>--%>
+<%--            </div>--%>
+
 
 
         <!-- 예정된 스터디 리스트 -->
@@ -143,12 +169,27 @@
         <%@include file="groupBoard.jsp"%>
         </div>
 
+
+
         <!-- 후기 -->
         <hr class="centerHr" id="groupRating">
         <div>
             <h4>후기<sec:authorize access="isAuthenticated()">
                 <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>
             </sec:authorize></h4>
+<%--            <h4>후기--%>
+<%--                <sec:authorize access="isAuthenticated()">--%>
+<%--                    <c:set var="done" value="false"/>--%>
+
+<%--                    <c:forEach var = "attendant" items="${attendList}">--%>
+<%--                        <c:if test="${not done}">--%>
+<%--                             <c:if test="${pinfo.username eq group.userId}">--%>
+<%--                                <a class="btn btn-primary" id="addRatingBtn">후기 작성</a>--%>
+<%--                            </c:if>--%>
+<%--                        </c:if>--%>
+<%--                    </c:forEach>--%>
+<%--                </sec:authorize>--%>
+<%--            </h4>--%>
 
             <div class="group-rating">
                 <ul class="rating">
@@ -994,6 +1035,7 @@
 
 <!-- 모임 참여 -->
 <script>
+
     $(document).ready(function() {
 
         let grpSnValue = '<c:out value="${group.sn}"/>';
@@ -1020,20 +1062,36 @@
         // 버튼상태 관리
         let attendBtn = $('#attendBtn');
         let withdrawBtn = $('#withdrawBtn');
+        //스터디 글쓰기 버튼
+        let studyBtn = $('#studyBtn');
+        //게시판 글쓰기 버튼
+        let boardBnt = $('#boardBtn');
+        //후기 작성 버튼
+        let addRatingBtn = $('#addRatingBtn');
 
         attendBtn.show();
         withdrawBtn.hide();
+        // studyBtn.hide();
+        // boardBnt.hide();
         groupAttendService.get(attend, function(result) {
+            console.log(result.status);
             if(result.status === 'GRUS01') {
                 attendBtn.hide();
                 withdrawBtn.show();
+                studyBtn.show();
+                boardBnt.show();
+                addRatingBtn.show();
+
             } else {
                 attendBtn.show();
                 withdrawBtn.hide();
+                studyBtn.hide();
+                boardBnt.hide();
+                addRatingBtn.hide();
+
             }
         })
 
-        showList();
 
         // 모임 멤버 리스트
         function showList() {
@@ -1068,6 +1126,27 @@
             })
         }
 
+        showAndHide();
+        function showAndHide() {
+            isAttend().then(function (result) {
+                if(result){
+                    studyBtn.show();
+                    boardBnt.show();
+                    addRatingBtn.show();
+                    attendBtn.hide();
+                    withdrawBtn.show();
+                }else {
+                    studyBtn.hide();
+                    boardBnt.hide();
+                    addRatingBtn.hide();
+                    attendBtn.show();
+                    withdrawBtn.hide();
+                }
+
+                showList();
+            })
+        }
+
         attendBtn.on("click", function(e) {
             groupAttendService.get(attend, function(result) {
                 if(result.status === 'GRUS03') {
@@ -1078,24 +1157,41 @@
 
             groupAttendService.add(attend, function(result) {
                 alert("모임에 참여했습니다.");
-                attendBtn.hide();
-                withdrawBtn.show();
-                showList();
+                showAndHide();
+
+
             })
         })
 
         withdrawBtn.on("click", function(e) {
             groupAttendService.withdraw(attend, function(result) {
                 alert("정상적으로 모임에서 탈퇴되었습니다.");
-                attendBtn.show();
-                withdrawBtn.hide();
-                showList();
+                showAndHide();
             })
         })
-
+        isAttend();
+        function isAttend(){
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url : "/group/isAttend",
+                    data : {
+                        sn : ${group.sn},
+                        id : "${pinfo.username}"
+                    }
+                }).done(function (result) {
+                    resolve(result);
+                })
+            })
+        }
     })
 </script>
 
+<script>
+    $(document).ready(function (){
+
+    })
+
+</script>
 
 
 <%@include file="../includes/footer.jsp" %>

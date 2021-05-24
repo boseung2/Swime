@@ -2,19 +2,18 @@ package com.swime.controller;
 
 import com.swime.domain.*;
 import com.swime.service.AdminBoardService;
-import com.swime.service.AdminStudyService;
+import com.swime.service.AdminGroupService;
 import com.swime.service.BoardService;
 import com.swime.service.ReplyService;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +29,7 @@ public class AdminController {
     //private BoardService boardService;
     //private ReplyService replyService;
     private AdminBoardService adminBoardService;
-
-    @Setter(onMethod_ = {@Autowired})
-    private AdminStudyService adminStudyService;
+    private AdminGroupService adminGroupService;
 
 
     @GetMapping("/adminIndex")
@@ -101,10 +98,14 @@ public class AdminController {
 
         log.info("list : " + list);
         log.info("delete bbs : " + bbs);
+
         int result = 0;
+
         for (int i = 0; i < list.length; i++) {
+            log.info("list[i]--------");
             log.info(list[i]);
             if(bbs.equals("reply")){
+                //reuslt =
                 result = adminBoardService.adminReplyRemove(list[i]);
             }else{
                 result = adminBoardService.adminBoardRemove(list[i]);
@@ -114,50 +115,80 @@ public class AdminController {
                 ? new ResponseEntity<>("success", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+//  게시판 삭제상태 -> 정상상태로 수정
+    @PostMapping(value = "/board/toActive")
+    public ResponseEntity<String> adminBoardToActive(@RequestBody String[] list,
+                                                   @RequestParam(value = "bbs") String bbs) {
 
-//    @PostMapping(value = "/board/toActive")
-//    public ResponseEntity<String> adminBoardToActive(@RequestBody String[] list,
-//                                                   @RequestParam(value = "bbs") String bbs) {
-//
-//        log.info("list : " + list);
-//        log.info("delete bbs : " + bbs);
-//        int result = 0;
-//        for (int i = 0; i < list.length; i++) {
-//            log.info(list[i]);
-//            if(bbs.equals("reply")){
-//                result = adminBoardService.adminReplyFromDeleteToActive(list[i]);
-//            }else{
-//                result = adminBoardService.adminBoardFromDeleteToActive(list[i]);
-//            }
-//        }
-//        return result == 1
-//                ? new ResponseEntity<>("success", HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+        log.info("list : " + list);
+        log.info("update bbs : " + bbs);
 
-    //end 관리자 게시판
+        int result = 0;
 
+        for (int i = 0; i < list.length; i++) {
+
+            log.info(list[i]);
+
+            if(bbs.equals("reply")){
+                result = adminBoardService.adminReplyFromDeleteToActive(list[i]);
+            }else{
+                result = adminBoardService.adminBoardFromDeleteToActive(list[i]);
+            }
+        }
+        return result == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+// end 관리자 게시판
+
+    //관리자 모임
     @GetMapping("/manage-group")
     public void group(){
+
     }
 
-    @GetMapping(value = "/manage-study")
+    @GetMapping(value ="/manageGroup/{page}",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<AdminGroupPageDTO> groupGetList(@PathVariable("page") int page,
+                                                          @RequestParam(value = "amount") int amount){
+
+        AdminGroupCriteria cri = new AdminGroupCriteria(page, amount);
+        AdminGroupPageDTO dto = adminGroupService.adminGetGroupListWithPagingBySn(cri);
+
+        dto.getList().forEach(GroupVO->{
+            GroupVO.setSido(CodeTable.valueOf(GroupVO.getSido()).getValue());
+            GroupVO.setSigungu(CodeTable.valueOf(GroupVO.getSigungu()).getValue());
+        });
+
+        log.info("groupPage : " + page + "groupAmount : " + amount);
+
+        log.info("groupCri : " + cri);
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+
+    }
+    @PostMapping(value = "/group/dataArr")
+    public ResponseEntity<String> adminGroupRemove(@RequestBody Long[] list) {
+
+        log.info("list : " + list);
+        int result = 0;
+
+        for (int i = 0; i < list.length; i++) {
+
+            log.info(list[i]);
+
+            result = adminGroupService.adminGroupRemove(list[i]);
+        }
+        return result == 1
+                ? new ResponseEntity<>("success", HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    // end 관리자 모임
+
+
+
+    @GetMapping("/manage-study")
     public void study(){
-
-    }
-
-    @GetMapping(value = "/manage-study/totalList/{pageNum}/{amount}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AdminStudyPageDTO> getTotalList(@PathVariable("pageNum") int pageNum, @PathVariable("amount") int amount){
-
-        log.info("manage-study pageNum= " + pageNum);
-        log.info("manage-study amount= " + amount);
-
-        // 리스트 가져오기
-        AdminStudyCriteria cri = new AdminStudyCriteria(pageNum, amount);
-        AdminStudyPageDTO adminStudyPageDTO = adminStudyService.getTotalStudyList(cri);
-
-        return new ResponseEntity<>(adminStudyPageDTO, HttpStatus.OK);
-
     }
 
     @GetMapping("/manage-user")

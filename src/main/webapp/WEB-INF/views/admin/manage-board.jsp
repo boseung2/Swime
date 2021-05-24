@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-
+<link rel="stylesheet" href="../../../resources/css/adminPage.css">
 <div class="container-fluid">
     <!-- <h2 class="mt-4">게시물관리</h2> -->
     <ol class="breadcrumb mb-4">
@@ -17,14 +17,14 @@
                 <div>
 <%--                    <span>전체선택</span>--%>
                     <select class="boardCntList" id="boardCntList" name="boardCntList">
-                        <option value="10">--개수--</option>
+                        <option value="10">--개수(10/25/50)--</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                     </select>
 
                     <select class="bbsOrReply" id="bbsOrReply" name="bbsOrReply">
-                        <option value="board">--전체--</option>
+                        <option value="board">--게시물/댓글--</option>
                         <option value="board">게시물</option>
                         <option value="reply">댓글</option>
                     </select>
@@ -39,11 +39,13 @@
                     </select>
 
 
-                    <div class="search-bar">
+                    <div class="search-bar boardSearch">
                         <input type="text" id="search" name="search" placeholder="Search.." >
-                        <button class="search-button"><i class="fas fa-search"></i></button>
+                        <button class="search-button" id="searchIcon"><i class="fas fa-search"></i></button>
                     </div>
+
                 </div>
+
             </div> <!--option search-->
 
 
@@ -55,7 +57,7 @@
                             <input type="checkbox" id="allCheck" name="allChk">
                         </th>
                         <th>번호</th>
-                        <th>번호(sn)</th>
+                        <th>고유번호(sn)</th>
                         <th>email</th>
                         <th>이름</th>
                         <th id="change">제목</th>
@@ -80,7 +82,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <%--게시판 리스트--%>
+                    <%--게시판/댓글 리스트--%>
                     <tr class="boardList">
 <%--                        <td data-sn='12'></td>--%>
 <%--                        <td></td>--%>
@@ -89,10 +91,6 @@
 <%--                        <td></td>--%>
 <%--                        <td></td>--%>
 <%--                        <td></td>--%>
-
-                    </tr>
-
-                    <tr class="replyList">
 
                     </tr>
 
@@ -121,9 +119,9 @@
 
 <script type="text/javascript">
 
+    //'document'
 
-
-    $('document').ready(function(){
+    $(document).ready(function(){
 
         let boardUl = $('tbody'); //게시판 출력
 
@@ -157,13 +155,14 @@
         //     }
         // })
 
+        //adminBoardRemove
         $('#remove').on('click', function(){
-            oneCheck();
+            oneCheck(this);
         })
 
-        // $('#update').on('click', function (){
-        //     oneCheck();
-        // })
+        $('#update').on('click', function (){
+            oneCheck(this);
+        })
 
         //'input[id="check"]'
         function allCheck(obj){
@@ -179,79 +178,143 @@
 
         }
 
-        function oneCheck(){
+        function oneCheck(obj){
 
-            console.log("remove click!!");
+            console.log(obj.innerHTML);
+
             let storeIndex = [];
             let dataArr = [];
             let unCheck;
             let checkList = $('.boardCkBox:checked');
 
-            checkList.each(function(index){
+            //삭제인지 업데이트인지
+            let deleteOrUpdateBtn = obj.innerHTML;
 
+            checkList.each(function(index){
+                console.log("clicked");
+                //게시판 행을 가져온다
                 let tr = $(this).parent().parent().eq(0);
-                //sn번호
+                //게시판 고유번호를 가져온다
                 let snResult = tr.children().eq(2).text();
 
                 unCheck = tr.children().eq(0).children().eq(0);
 
                 storeIndex.push(unCheck);
-
+                console.log(unCheck);
                 //storeIndex.push(snResult);
 
                 if(checkList.get(index)){
                     dataArr.push(snResult);
                 }
-
                 console.log(storeIndex);
+                console.log(dataArr);
+                console.log(dataArr.length);
+            }); //end checkList.each()
 
-            });
+            //삭제or업데이트 버튼 구별
+            if(deleteOrUpdateBtn === '삭제'){
+                console.log('deleteBtnClicked');
 
-            console.log(dataArr);
-            console.log(dataArr.length);
+                adminBoardDelete(deleteOrUpdateBtn);
+            }else if(deleteOrUpdateBtn === '수정'){
+                console.log('updateBtnClicked');
+
+                adminBoardUpdate(deleteOrUpdateBtn);
+            }
 
 
-            if(dataArr.length == 0){
+            function adminBoardDelete(deleteOrUpdateBtn){
+                console.log('callDelete');
 
-                alert('삭제할 데이터가 없습니다.');
+                let existResult = existArr(deleteOrUpdateBtn);
+                console.log("existResult :"+existResult);
 
-            }else{
-                //console.log("storeIndex : " + storeIndex);
-                let deleteConfirm = confirm('삭제 하시겠습니까?');
+                if(!existResult){
+                    return;
+                }
+
+                let deleteConfirm = confirm('삭제하시겠습니까?');
 
                 if(deleteConfirm){
-                    // let statusText = $('tr td').eq(8).text();
-                    // if(statusText == '삭제'){
-                    //     alert("이미 삭제 되어있습니다.");
-                    // }
-                    //만약 status가 삭제이면 delete() 수정이면 수정함수가 들어가야한다.
-                    //내가 클릭한 상태의 삭제, 정상을 가져와야한다.
 
-                    adminBoardListService.adminDelete(dataArr, bbsOrReplyVar, function(result) {
+                    adminBoardListService.adminBoardDelete(dataArr, bbsOrReplyVar, function(result) {
                         console.log("-------callback-------");
-                        console.log(result);
+                        console.log("deleteResult : "+result);
 
-                        if(result !== 'success'){
-                            alert("삭제처리가 실패했습니다.");
-                        }
-                        //삭제확인을 누르면 checked true -> false 체크박스 해제시킨다.
-                        for(let i = 0; i < storeIndex.length; i++){
-                            console.log(storeIndex[i]);
-                            storeIndex[i].eq(0).prop('checked', false);
+                        successOrFail(result);
 
-                        }
+                    }); // end adminDelete
 
+                } //end if(deleteConfirm)
 
-                        showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
+            }// admindelete
 
-                    });
+            function adminBoardUpdate(){
+                console.log('callUpdate');
+
+                let existResult = existArr(deleteOrUpdateBtn);
+
+                if(!existResult){
+                    return
                 }
+
+                let updateConfirm = confirm('수정하시겠습니까?');
+
+                if(updateConfirm){
+
+                    adminBoardListService.adminBoardUpdate(dataArr, bbsOrReplyVar, function(result) {
+                        console.log("-------callback-------");
+                        console.log("updateResult : " + result);
+
+                        successOrFail(result);
+
+                    }); // end adminUpdate
+
+                } //end if(deleteConfirm)
+            } // end adminupdate
+
+            // 배열에 값이 있는지 판단한다.
+            // 없으면 false 리턴해서 실행을 종료시킨다.
+            function existArr(deleteOrUpdateBtn){
+                console.log("existArrCall : "+deleteOrUpdateBtn);
+
+                if(dataArr.length === 0 || dataArr === null){
+                    if(deleteOrUpdateBtn === '삭제'){
+                        alert('삭제할 데이터가 없습니다.');
+                        return false;
+                    }
+                    if(deleteOrUpdateBtn === '수정'){
+                        alert('수정할 데이터가 없습니다.');
+                        return false;
+                    }
+                }
+                return true;
+            } // end existArr
+
+
+            function successOrFail(result){
+
+                if(result === 'deletesuccess'){
+                    alert('삭제되었습니다.');
+                }else if(result === 'updatesuccess'){
+                    alert('수정되었습니다');
+                }else{
+                    alert('삭제/수정이 실패되었습니다.');
+                }
+
+            } // end successOrFail
+
+            //삭제,수정 확인을 누르면 checked true -> false 체크박스 해제시킨다.
+            for(let i = 0; i < storeIndex.length; i++){
+                console.log(storeIndex[i]);
+                storeIndex[i].eq(0).prop('checked', false);
+                $('#allCheck').prop('checked', false);
 
             }
 
+            showBoardList(page, amount, bbsOrReplyVar, sort, active, keyword, searchResult);
+
         } // end oneCheck()
-
-
 
         //input 검색창 search
         $('#search').keyup(function (){
@@ -261,7 +324,7 @@
 
         })
 
-        //email / id - E : email, N : name
+        // email : E / id : N / email, id : EN
         $('#searchKeyword').on('change', function(){
             $(this).each(function(){
                 if ($(this).val() == 'E'){
@@ -293,7 +356,7 @@
 
         }) // end act function
 
-        //정렬 select option
+        //작성일 정렬 select option
         $('#sort').on('change',function(){
 
             $('#sort').each(function(){
@@ -374,12 +437,12 @@
                         console.log("active : "+active);
 
                         //board or reply
-                        if (compare === 'isBoard') {
+                        // if (compare === 'isBoard') {
+                        //     listPrint(compare);
+                        //
+                        // } else {
                             listPrint(compare);
-
-                        } else {
-                            listPrint(compare);
-                        } // end else
+                        //}
 
                         function listPrint(compare){
 
@@ -406,42 +469,19 @@
 
                             //리스트 출력
                             for (let i = 0, len = list.length || 0; i < len; i++) {
-                                let status = "";
+                                //let status = "";
                                 let dat = "";
                                 let statusVar = list[i].status;
 
                                 // board or reply
-                                if(compare === 'isBoard'){
-                                    statusToText(statusVar);
-                                }else{
-                                    statusToText(statusVar);
-                                }
+                                // if(compare === 'isBoard'){
+                                //     statusToText(statusVar);
+                                // }else{
+                                //     statusToText(statusVar);
+                                // }
 
                                 //status 코드 -> 한글
-                                function statusToText(statusVar){
-                                    //console.log("statusVar :"+statusVar);
-                                    switch (statusVar) {
-                                        case "BOST01":
-                                            status = "정상";
-                                            break;
-                                        case "BOST02":
-                                            status = "삭제";
-                                            break;
-                                        case "BOST03":
-                                            status = "신고";
-                                            break;
-                                        case "RPST01":
-                                            status = "정상";
-                                            break;
-                                        case "RPST02":
-                                            status = "삭제";
-                                            break;
-                                        case "RPST03":
-                                            status = "신고";
-                                            break;
-                                    }
-
-                                }
+                                let status = statusToText(statusVar);
 
                                 //페이지 번호 amount = 10 25 50
                                 // i+1+(amount*(page-1))
@@ -454,7 +494,7 @@
                                 str += "<td data-sn='12'>" + list[i].sn + "</td>";
                                 str += "<td>" + list[i].userId + "</td>";
                                 str += "<td>" + list[i].name + "</td>";
-
+                                // 게시글 제목 / 댓글 내용이 20글가 넘으면 ...표시
                                 if(compare === 'isBoard'){
                                     str += "<td>" + list[i].title.substring(0, 20) + dat + "</td>";
                                 }else{
@@ -468,12 +508,52 @@
 
                             }//end for
 
+                            function statusToText(statusVar){
+                                //console.log("statusVar :"+statusVar);
+                                let status = "";
+                                switch (statusVar) {
+                                    case "BOST01":
+                                        status = "정상";
+                                        break;
+                                    case "BOST02":
+                                        status = "삭제";
+                                        break;
+                                    case "BOST03":
+                                        status = "신고";
+                                        break;
+                                    case "RPST01":
+                                        status = "정상";
+                                        break;
+                                    case "RPST02":
+                                        status = "삭제";
+                                        break;
+                                    case "RPST03":
+                                        status = "신고";
+                                        break;
+                                }
+                                return status;
+                            }
+
 
                         }//end listPrint
                         boardUl.html(str);
 
                         console.log("board or reply Cnt" + cnt);
+
                         showAdminBoardPage(cnt);
+
+                        // 전체 체크 상태에서 체크박스를 1개 해제하면 전체가 해제되고
+                        // 체크 박스가 다 체크되면 전체 체크 박스가 체크된다.
+                        $('.boardCkBox').on('click', function(){
+
+                            let isChecked = true;
+
+                            $('.boardCkBox').each(function(){
+                                isChecked = isChecked && $(this).is(':checked');
+                            })
+                            $('#allCheck').prop('checked', isChecked)
+                        })
+
 
                     }); // end adminBoardList
 
@@ -519,8 +599,6 @@
                     // if (endNum * 10 >= cnt) {
                     //     endNum = Math.ceil(cnt / 10.0);
                     // }
-
-
 
                     console.log("boardCount = " + cnt);
                     console.log("startNum = " + startNum);

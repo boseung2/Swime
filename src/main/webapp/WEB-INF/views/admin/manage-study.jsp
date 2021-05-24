@@ -81,6 +81,7 @@
                     <button class="page-number">1</button>
                     <button class="page-number">2</button>
                     <button class="page-number">3</button>
+                    <button class="page-number">10</button>
                     <button class="page-number">></button>
 
                 </div>

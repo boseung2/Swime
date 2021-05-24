@@ -101,7 +101,9 @@
     </sql>
 
     <update id="adminBoardRemove">
-        update tbrd set status = 'BOST02' where sn = #{sn}
+        update tbrd
+        set status = 'BOST02'
+        where sn = #{sn}
     </update>
 
     <update id="adminBoardFromDeleteToActive">
@@ -209,7 +211,7 @@
     </update>
 
     <update id="adminReplyFromDeleteToActive">
-        update tbrd set status = 'BOST01' where sn = #{sn}
+        update trpl set status = 'RPST01' where sn = #{sn}
     </update>
 
 

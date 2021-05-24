@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -68,6 +69,21 @@ public class GroupController {
     public void get(@RequestParam("sn") Long sn, @ModelAttribute("cri") GroupCriteria cri, Model model) {
         model.addAttribute("group", groupService.get(sn));
         model.addAttribute("attendList", groupAttendService.getList(sn));
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/isAttend", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> isAttend(Long sn, String id) {
+        Boolean isAttend = false;
+
+        Iterator it = groupAttendService.getList(sn).iterator();
+        while (it.hasNext()){
+            GroupAttendVO vo = (GroupAttendVO)it.next();
+            if(vo.getUserId().equals(id))
+                isAttend = true;
+        }
+
+        return new ResponseEntity<>(isAttend, HttpStatus.OK);
     }
 
     @PreAuthorize("principal.username == #group.userId")

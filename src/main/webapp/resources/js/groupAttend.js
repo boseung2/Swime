@@ -3,6 +3,7 @@ let groupAttendService = (function() {
 
     function add(attend, callback, error) {
         console.log("attend....");
+        console.log(attend);
 
         $.ajax({
             type : 'post',
@@ -10,6 +11,7 @@ let groupAttendService = (function() {
             data : JSON.stringify(attend),
             contentType : "application/json; chatset=utf-8",
             success : function(result, status, xhr) {
+
                 if(callback) {
                     callback(result);
                 }
@@ -60,6 +62,7 @@ let groupAttendService = (function() {
 
         $.getJSON("/groupAttend/" + grpSn + "/" + userId + ".json",
             function(data) {
+            console.log(data);
             if(callback) {
                 callback(data);
             }
