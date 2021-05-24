@@ -34,7 +34,7 @@ Swime은 Study With Me의 약어로 코딩 모임을 만들고 참여할 수 있
 
 
 ### ERD
-<a href="https://www.erdcloud.com/d/NS5kC5psb35zgBd7e"></a>
+<a href="https://www.erdcloud.com/d/NS5kC5psb35zgBd7e">ERD 사이트</a>
 <img src="/documents/img/ERD.png"/>
 
 ### 개발 환경
