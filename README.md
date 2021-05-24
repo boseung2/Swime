@@ -21,13 +21,13 @@
 ## 화면정의서
 
 [이곳](./documents/story-board)을 눌러주세요.
-<iframe src="https://ovenapp.io/view/33P2uSXvDv8hPJHNcNEadTDK6qjNSInh/"></iframe>
 
 
 ## 프로젝트 소개
 <a href = "http://www.swime.kro.kr/">Swime 사이트</a>
 
-Swime은 Study With Me의 약어로 코딩 모임을 만들고 참여할 수 있는 사이트 입니다.
+Swime은 Study With Me의 약어로 지역별, 언어별로 
+같이 코딩공부 할 사람을 모집할 수 있는 코딩 모임 사이트입니다.
 
 
 ### 사용언어
@@ -122,10 +122,11 @@ Swime 프로젝트 DB는 코드 테이블을 포함한 29개의 테이블로 이
 
 
 ### 팀원
-* <a href="https://github.com/boseung2">정보승</a>
-* <a href="https://github.com/jiho527">임지호</a>
-* <a href="https://github.com/tht1234551">정형진</a>
-* <a href="https://github.com/toywar94">이민재</a>
-* <a href="https://github.com/seonggwonshin">신성권</a>
-* <a href="#">정재웅</a>
+
+* 정보승(<a href="https://github.com/boseung2"/>https://github.com/boseung2)
+* 임지호(<a href="https://github.com/jiho527"/>https://github.com/jiho527)
+* 정형진(<a href="https://github.com/tht1234551"/>https://github.com/tht1234551)
+* 이민재(<a href="https://github.com/toywar94"/>https://github.com/toywar94)
+* 신성권(<a href="https://github.com/seonggwonshin"/>https://github.com/seonggwonshin)
+* 정재웅()
 
