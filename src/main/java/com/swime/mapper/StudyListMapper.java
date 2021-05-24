@@ -19,6 +19,8 @@ public interface StudyListMapper {
 
     public List<StudyVO> getStudiesOfGroup(@Param("grpSn")long grpSn, @Param("userId")String userId);
 
+    public List<StudyVO> getNoRatingStudies(@Param("grpSn")long grpSn, @Param("userId")String userId);
+
     // 등록 : 사용자 가입/검토
     public int insert(StudyParamVO param);
 

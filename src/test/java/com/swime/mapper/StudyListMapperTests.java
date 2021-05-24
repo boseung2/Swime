@@ -92,6 +92,12 @@ public class StudyListMapperTests {
     }
 
     @Test
+    public void testGetNoRatingStudies() {
+        mapper.getStudiesOfGroup(1240, "wlgh52725@gmail.com").forEach(study -> log.info(study));
+
+    }
+
+    @Test
     public void testGetAttendant() {
         StudyParamVO param = new StudyParamVO();
         param.setStdSn(307L);

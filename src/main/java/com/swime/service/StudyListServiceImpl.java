@@ -81,6 +81,11 @@ public class StudyListServiceImpl implements StudyListService{
         return listMapper.getStudiesOfGroup(grpSn, userId);
     }
 
+    @Override
+    public List<StudyVO> getNoRatingStudies(long grpSn, String userId) {
+        return listMapper.getNoRatingStudies(grpSn, userId);
+    }
+
     // 참석
     @Override
     public int registerAttendant(StudyParamVO param) {

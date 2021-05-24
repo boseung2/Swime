@@ -17,7 +17,21 @@ let studyService = (function(){
         })
     }
 
+    function getNoRatingStudies(param, callback, error) {
+
+        $.get("/study/getNoRatingStudies?grpSn=" + param.grpSn + "&userId=" + param.userId, function (result) {
+            if (callback) {
+                callback(result);
+            }
+        }).fail(function (xhr, status, err) {
+            if (error) {
+                error();
+            }
+        })
+    }
+
     return {
-        get : get
+        get : get,
+        getNoRatingStudies : getNoRatingStudies
     };
 })();
