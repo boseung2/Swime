@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swime.mapper.AdminStudyMapper">
+
+    <select id="getTotalStudyList" resultType="com.swime.domain.AdminStudyVO">
+    <![CDATA[
+        select * from
+            (
+                select rownum rn, sn, grp_sn, name, representation, representation_name, start_date, end_date, on_off, capacity, status, reg_date, upd_date
+                from (
+                         select s.sn, s.grp_sn, s.name, s.representation, u.name as representation_name, s.start_date, s.end_date, s.on_off, s.capacity, s.status, s.reg_date, s.upd_date
+                         from tstd s, tuser u
+                         where s.representation = u.id
+                         order by sn
+                     )
+                where rownum <= #{pageNum} * #{amount}
+            )where rn > (#{pageNum} - 1) * #{amount}
+    ]]>
+    </select>
+
+    <select id="getTotalCnt" resultType="com.swime.domain.AdminStudyPageDTO">
+        select count(*) as study_cnt
+        from tstd s, tuser u
+        where s.representation = u.id
+    </select>
+
+    <select id="getFutureStudyList" resultType="com.swime.domain.AdminStudyVO">
+    <![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, representation, representation_name, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from tstd s, tuser u
+                        where s.representation = u.id and s.status='STST01' and
+                                (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) <= 0
+                        order by start_date, sn asc
+                    )
+                where rownum <= #{pageNum} * #{amount}
+            )
+        where rn > (#{pageNum} - 1) * #{amount}
+    ]]>
+    </select>
+
+    <select id="getPastStudyList" resultType="com.swime.domain.AdminStudyVO">
+<![CDATA[
+        select *
+        from
+            (
+                select rownum rn, sn, grp_sn, representation, representation_name, name, start_date, end_date, start_time, end_time, repeat_cycle, repeat_day, information, on_off, on_url, place_id, expense, capacity, status, reg_date, upd_date
+                from
+                    (
+                        select s.sn, s.grp_sn, u.id as representation, u.name as representation_name, s.name, s.start_date, s.end_date, s.start_time, s.end_time, s.repeat_cycle, s.repeat_day, s.information, s.on_off, s.on_url, s.place_id, s.expense, s.capacity, s.status, s.reg_date, s.upd_date
+                        from tstd s, tuser u
+                        where s.representation = u.id and
+                                (select (current_date - (select start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) > 0
+                        order by sn asc
+                    )
+                where rownum <= #{pageNum} * #{amount}
+            )
+        where rn > (#{pageNum} - 1) * #{amount}
+        ]]>
+    </select>
+
+<!--    <select id="getAvailableStudy" resultType="com.swime.domain.AdminStudyVO">-->
+<!--    <![CDATA[-->
+<!--        select * from-->
+<!--            (-->
+<!--                select rownum rn, sn, grp_sn, name, representation, representation_name, start_date, end_date, on_off, capacity, status, reg_date, upd_date-->
+<!--                from (-->
+<!--                         select s.sn, s.grp_sn, s.name, s.representation, u.name as representation_name, s.start_date, s.end_date, s.on_off, s.capacity, s.status, s.reg_date, s.upd_date-->
+<!--                         from tstd s, tuser u-->
+<!--                         where s.representation = u.id and s.status='STST01'-->
+<!--                         order by sn-->
+<!--                     )-->
+<!--                where rownum <= #{cri.pageNum} * #{cri.amount}-->
+<!--            )where rn > (#{cri.pageNum} - 1) * #{cri.amount}-->
+<!--        ]]>-->
+<!--    </select>-->
+
+    <select id="getDeletedStudy" resultType="com.swime.domain.AdminStudyVO">
+<![CDATA[
+        select * from
+            (
+                select rownum rn, sn, grp_sn, name, representation, representation_name, start_date, end_date, on_off, capacity, status, reg_date, upd_date
+                from (
+                         select s.sn, s.grp_sn, s.name, s.representation, u.name as representation_name, s.start_date, s.end_date, s.on_off, s.capacity, s.status, s.reg_date, s.upd_date
+                         from tstd s, tuser u
+                         where s.representation = u.id and s.status='STST02'
+                         order by sn
+                     )
+                where rownum <= #{pageNum} * #{amount}
+            )where rn > (#{pageNum} - 1) * #{amount}
+        ]]>
+    </select>
+
+</mapper>

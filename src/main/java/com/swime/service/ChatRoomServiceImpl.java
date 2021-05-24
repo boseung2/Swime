@@ -44,15 +44,17 @@ import java.util.List;
 
         String you = "";
 
-        // userMapper를 이용해서 name을 담기
+        // userMapper를 이용해서 name, 사진을 담기
         for(int i = 0; i < roomList.size(); i++) {
             if(userId.equals(roomList.get(i).getSenderId())) {
 
                 you = roomList.get(i).getReceiverId();
                 roomList.get(i).setYourName(memberMapper.read(you).getName());
+                roomList.get(i).setYourPicture(memberMapper.read(you).getPicture());
             }else {
                 you = roomList.get(i).getSenderId();
                 roomList.get(i).setYourName(memberMapper.read(you).getName());
+                roomList.get(i).setYourPicture(memberMapper.read(you).getPicture());
             }
         }
 

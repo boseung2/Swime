@@ -38,4 +38,27 @@ public class ChatMessageServiceTests {
         service.getMsg("exuuidc").forEach(message -> log.info(message));
     }
 
+    @Test
+    public void testGetUnreadMsg() {
+        service.getUnreadMsg("test1@naver.com", "wlgh52725@gmail.com").forEach(msg -> log.info(msg));
+    }
+
+    @Test
+    public void testReadMsg() {
+        String result = "";
+
+        try {
+            service.readMsg(64);
+            result = "success";
+        }catch (Exception e) {
+            result = "fail";
+        }
+
+        assert ("success".equals(result));
+    }
+
+    @Test
+    public void testGetTotalUnreadMsg() {
+        log.info(service.getTotalUnreadMsg("wlgh52725@gmail.com").getUnreadMsg());
+    }
 }

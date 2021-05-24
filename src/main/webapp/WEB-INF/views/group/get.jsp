@@ -1093,6 +1093,7 @@
         })
 
 
+        // 모임 멤버 리스트
         function showList() {
             groupAttendService.getList({grpSn:grpSnValue}, function(list) {
                 let str = "";
@@ -1105,7 +1106,18 @@
                     str += "<li data-sn='"+list[i].sn+"'>";
                     str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
                     str += "<span><b>"+list[i].name+"</b></span>\t";
-                    str += "<span style='color:gray'>"+list[i].grpRole+"</span></div></div></li>";
+                    str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
+
+                    // 로그인되어있으며, 해당사용자가 아니면 채팅버튼 띄우기
+                    if("${pinfo.username}" !== "" && list[i].userId !== "${pinfo.username}") {
+                        str += '<div style="float:right">';
+                        str += '<a href="http://localhost/chat/register?userId=' + list[i].userId + '">';
+                        str += '<img src="../../../resources/img/chat.png">';
+                        str += '</a>';
+                        str += '</div>';
+                    }
+                    str += "</div></div></li>";
+
                 }
 
                 attendUL.html(str);
