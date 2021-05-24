@@ -16,36 +16,43 @@
     }
 </style>
 
-<a class="btn btn-primary" href="/study/get?pageNum=${cri.pageNum}&amount=${cri.amount}&sn=${stdSn}">스터디로 돌아가기</a>
-<h2 style="display: inline">스터디 멤버</h2>
-<h2 style="display: inline" id = "capacity"></h2>
+<div class="container">
+    <h4 style="margin-top: 20px;"><strong>스터디 멤버 관리</strong></h4>
 
 
-<!-- nav -->
-<div class="topnav tab" style="margin-bottom: 10px;">
-    <a href="#member" class="tablinks active navMember" onclick="openTab(event, 'member')">참여 멤버</a>
-    <a href="#waitingMember" class="tablinks navWaitingMember" onclick="openTab(event, 'waitingMember')">승인 대기 멤버</a>
-    <a href="#waitingMember" class="tablinks navBanMember" onclick="openTab(event, 'banMember')" id = "banMemberTab" hidden="true">영구강퇴 멤버</a>
+    <!-- nav -->
+    <div class="topnav tab" style="margin-bottom: 10px;">
+        <a href="#member" class="tablinks active navMember" onclick="openTab(event, 'member')">참여 멤버</a>
+        <a href="#waitingMember" class="tablinks navWaitingMember" onclick="openTab(event, 'waitingMember')">승인 대기 멤버</a>
+        <a href="#waitingMember" class="tablinks navBanMember" onclick="openTab(event, 'banMember')" id = "banMemberTab" hidden="true">영구강퇴 멤버</a>
+    </div>
+    <!-- /nav -->
+
+    <div id="member" class="tabcontent">
+        <ul id="attendList">
+
+        </ul>
+    </div>
+
+    <div id="waitingMember" class="tabcontent">
+        <ul id="waitingList">
+
+        </ul>
+    </div>
+
+    <div id="banMember" class="tabcontent">
+        <ul id="banList">
+
+        </ul>
+    </div>
+
+    <div style="float:right">
+        <a class="btn btn-primary" href="/study/get?pageNum=${cri.pageNum}&amount=${cri.amount}&sn=${stdSn}">돌아가기</a>
+    </div>
+
 </div>
-<!-- /nav -->
 
-<div id="member" class="tabcontent">
-    <ul id="attendList">
 
-    </ul>
-</div>
-
-<div id="waitingMember" class="tabcontent">
-    <ul id="waitingList">
-
-    </ul>
-</div>
-
-<div id="banMember" class="tabcontent">
-    <ul id="banList">
-
-    </ul>
-</div>
 
 <!-- 답변 모달창 -->
 <div class="answerModal modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="answerModalLabel" aria-hidden="true">
@@ -162,9 +169,9 @@
         studyService.get(${stdSn}, function(result){
             console.log(result.attendants + ' / ' + result.capacity);
 
-            let str = '(' + result.attendants + ' / ' + result.capacity + '명)';
+            let cnt = result.length;
+            $('.navMember')[0].innerText = "참여멤버 (" + result.attendants + "/" + result.capacity + "명)";
 
-            $('#capacity').html(str);
         })
     }
 
@@ -182,9 +189,6 @@
                 $('.navMember')[0].innerText = "참여멤버";
                 return;
             }
-
-            let cnt = result.length;
-            $('.navMember')[0].innerText = "참여멤버 (" + cnt + "명)";
 
             let str = "";
 

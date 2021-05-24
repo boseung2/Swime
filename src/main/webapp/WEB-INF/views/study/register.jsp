@@ -64,34 +64,42 @@
 </style>
 
 <div class="container">
-    <h2>스터디 만들기</h2>
+    <h3 style="margin-top: 30px;">스터디 만들기</h3>
     <hr/>
     <form role="form" id="registerForm" action="/study/register" method="post">
-        <div class="form-group">
+        <div class="form-group" hidden="true">
             <label for="grpSn">그룹번호</label>
             <input type="text" class="form-control" id="grpSn" name="grpSn" value="${grpSn}" readonly="readonly">
         </div>
-        <div class="form-group">
+        <div class="form-group" hidden="true">
             <label for="representation">작성자</label>
             <input type="text" class="form-control" id="representation" name="representation" value="${pinfo.username}" readonly="readonly">
         </div>
         <div class="form-group">
-            <label for="name">스터디명</label>
+            <label for="name"><strong>스터디명</strong></label>
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
-        <div class="form-group">
-            <label for="startDate">시작일자</label>
+        <div class="form-group" style="width: 33%; float:left">
+            <label for="startDate"><strong>시작일자</strong></label>
             <input type="date" class="form-control" id="startDate" name="startDate" required>
+        </div>
+        <div class="form-group" style="width: 33%; float:left;">
+            <label for="startTime"><strong>시작시간</strong></label>
+            <input type="time" class="form-control" id="startTime" name="startTime" required>
+        </div>
+        <div class="form-group" style="width: 33%; float:left;">
+            <label for="endTime"><strong>종료시간</strong></label>
+            <input type="time" class="form-control" id="endTime" name="endTime" required>
         </div>
         <div class="form-group">
             <input type="checkbox" id="repeat" onclick="repeatFunction()">정기 스터디
         </div>
-        <div class="form-group" id="formEndDate" hidden="true">
-            <label for="endDate">종료일자</label>
+        <div class="form-group" id="formEndDate" hidden="true" style="width: 33%; float: left">
+            <label for="endDate"><strong>종료일자</strong></label>
             <input type="date" class="form-control" id="endDate" name="endDate">
         </div>
-        <div class="form-group" id="formRepeatCycle" hidden="true">
-            <label for="repeatCycle">반복주기</label>
+        <div class="form-group" id="formRepeatCycle" hidden="true" style="width: 33%; float: left">
+            <label for="repeatCycle"><strong>반복주기</strong></label>
             <select class="form-control" id="repeatCycle" name="repeatCycle">
                 <option>(선택)</option>
                 <option value="STCY01" hidden="true">매주</option>
@@ -99,8 +107,8 @@
                 <option value="STCY03" hidden="true">매월</option>
             </select>
         </div>
-        <div class="form-group" id="formRepeatDay" hidden="true">
-            <label for="repeatDay">반복요일</label>
+        <div class="form-group" id="formRepeatDay" hidden="true" style="width: 33%; float: left">
+            <label for="repeatDay"><strong>반복요일</strong></label><br>
             <input type="hidden" class="form-control" id="repeatDay" name="repeatDay">
             <input type="checkbox" value="월" class="day">월
             <input type="checkbox" value="화" class="day">화
@@ -110,29 +118,21 @@
             <input type="checkbox" value="토" class="day">토
             <input type="checkbox" value="일" class="day">일
         </div>
-        <div class="form-group">
-            <label for="startTime">시작시간</label>
-            <input type="time" class="form-control" id="startTime" name="startTime" required>
-        </div>
-        <div class="form-group">
-            <label for="endTime">종료시간</label>
-            <input type="time" class="form-control" id="endTime" name="endTime" required>
-        </div>
-        <div class="form-group">
-            <label for="information">상세 정보</label>
+        <div class="form-group" style="clear: both">
+            <label for="information"><strong>상세 정보</strong></label>
             <textarea class="form-control" rows="5" id="information" name="information" required></textarea>
         </div>
         <input type="hidden" class="form-control" id="onOff" name="onOff" value="STOF02">
         <div class="form-group">
-            <input type="checkbox" id="onOffCheck" onclick="checkOn()">온라인스터디
+            <input type="checkbox" id="onOffCheck" onclick="checkOn()"> 온라인스터디
         </div>
         <div class="form-group" id="formUrl" hidden="true">
-            <label for="onUrl">온라인 스터디 링크 추가</label>
+            <label for="onUrl"><strong>온라인 스터디 링크 추가</strong></label>
             <input type="text" class="form-control" id="onUrl" name="onUrl" value="http://">
         </div>
 
-        <div class="form-group" id="formPlace">
-            <label for="placeId">스터디 장소 추가</label>
+        <div class="form-group" id="formPlace" style="margin-bottom: 0px">
+            <label for="placeId"><strong>스터디 장소 추가</strong></label>
 <%--            <input type="button" value="장소 검색" onclick="showMap()"/>--%>
             <input type="text" class="form-control" id="placeName" hidden="true" readonly/>
             <input type="text" class="form-control" id="placeId" name="placeId" hidden="true" required readonly/>
@@ -148,8 +148,8 @@
         </div>
         <div id="map"></div>
 
-        <div class="form-group">
-            <label for="expense">지참금</label>
+        <div class="form-group" style="margin-top: 16px;">
+            <label for="expense"><strong>지참금</strong></label>
             <select class="form-control" id="expenseSelect" name="expenseSelect">
                 <option>(선택)</option>
                 <option value="없음">없음</option>
@@ -159,7 +159,7 @@
             <input type="text" class="form-control" id="expense" name="expense" placeholder="원 단위로 숫자만 입력해주세요." hidden="true">
         </div>
         <div class="form-group">
-            <label for="capacity">모집 인원</label>
+            <label for="capacity"><strong>모집 인원</strong></label>
             <input type="text" class="form-control" id="capacity" name="capacity" required>
         </div>
 
@@ -168,15 +168,15 @@
             <input type="checkbox" id="surveyCheck"> 가입 질문 사용하기
         </div>
         <div class="form-group questionForm" hidden="true">
-            <label for="question1">질문 1.</label>
+            <label for="question1"><strong>질문 1.</strong></label>
             <input type="text" class="form-control" id="question1" name="question1">
         </div>
         <div class="form-group  questionForm" hidden="true">
-            <label for="question2">질문 2.</label>
+            <label for="question2"><strong>질문 2.</strong></label>
             <input type="text" class="form-control" id="question2" name="question2">
         </div>
         <div class="form-group  questionForm" hidden="true">
-            <label for="question3">질문 3.</label>
+            <label for="question3"><strong>질문 3.</strong></label>
             <input type="text" class="form-control" id="question3" name="question3">
             <br>
             <span style="color:gray; font-size: small">- 가입 질문은 3개까지 가능합니다.</span><br>
