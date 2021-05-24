@@ -35,9 +35,7 @@ Swime은 Study With Me의 약어로 코딩 모임을 만들고 참여할 수 있
 
 ###ERD
 
-* <img src="../Swime/documents/img/ERD.png"/>
-<img src="/documents/img/ERD.png" witdh="350px" height="300"/>
-
+<img src="/documents/img/ERD.png"/>
 
 ###개발 환경
 * Apache Tomcat 8.5.61
