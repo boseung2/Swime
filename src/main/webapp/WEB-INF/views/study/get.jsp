@@ -8,6 +8,17 @@
 
 <%@include file="../includes/header.jsp" %>
 
+<style>
+    #attendants a {
+        margin-left: 10px;
+        color : #007bff;
+    }
+
+    #onOff a {
+        color : #007bff;
+    }
+</style>
+
 <!-- container -->
 <div class="container">
     <c:set var="startDate" value="${study.startDate}"/>
@@ -19,10 +30,21 @@
     <div class="row align-items-center my-5" id="study-get-header">
         <div class="col-lg-7" style="padding-left: 5rem;">
 
-            <h1>${study.name}</h1><br>
+            <h2>${study.name}</h2><br>
 
-            <c:if test="${endDate != startDate}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</span></c:if>
-            <c:if test="${endDate == startDate}"><span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)}</span></c:if>
+            <fmt:parseDate value="${startDate}" var = "sd" pattern="yyyy-MM-dd"/>
+            <fmt:formatDate value="${sd}" pattern="E" var="startDay"/>
+
+            <c:if test="${endDate != startDate}">
+                <fmt:parseDate value="${endDate}" var = "ed" pattern="yyyy-MM-dd"/>
+                <fmt:formatDate value="${ed}" pattern="E" var="endDay"/>
+
+                <span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} (${startDay}) ~ ${fn:substring(endDate,0,10)} (${endDay})</span>
+            </c:if>
+
+            <c:if test="${endDate == startDate}">
+                <span><i class="fas fa-calendar-alt"></i> 날짜 : ${fn:substring(startDate,0,10)} (${startDay})</span>
+            </c:if>
             <br>
 
             <span><i class="fas fa-clock"></i> 시간 : ${fn:substring(startTime,0,5)} ~ ${fn:substring(endTime,0,5)}</span>
@@ -43,8 +65,8 @@
             <div id = "capacity">
             </div>
 
-            <c:if test="${study.onOff eq 'STOF01'}"><p><i class="fas fa-video"></i>온라인 스터디</p></c:if>
-            <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디</p></c:if>
+            <c:if test="${study.onOff eq 'STOF01'}"><p><i class="fas fa-video"></i> 온라인 스터디 </p></c:if>
+            <c:if test="${study.onOff eq 'STOF02'}"><p><i class="fas fa-map-marker-alt"></i> 오프라인 스터디 </p></c:if>
 
             <c:choose>
                 <c:when test="${study.expense == '없음' || study.expense =='추후공지'}"><p><i class="fas fa-won-sign"></i> 지참금 : ${study.expense}</p></c:when>
@@ -111,7 +133,7 @@
             <div id="onOff">
                 <c:if test="${study.onOff eq 'STOF01'}">
                     <h4>온라인 스터디 링크</h4>
-                    <p><a href="${study.onUrl}">바로가기</a></p>
+                    <a href="${study.onUrl}">바로가기</a>
                 </c:if>
 
                 <c:if test="${study.onOff eq 'STOF02'}">
@@ -258,8 +280,8 @@
             $('#capacity').html(str);
 
             // 참여멤버 제목 구성
-            let str2 = '<h4>참여멤버 (' + result.attendants + '명)';
-            str2 += '<a href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}"> 모두 보기</a></h4>';
+            let str2 = '<div><h4 style="display:inline;">참여멤버 (' + result.attendants + '명)</h4>';
+            str2 += '<a href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}"> 모두 보기</a></div>';
 
             $('#attendants').html(str2)
         })
