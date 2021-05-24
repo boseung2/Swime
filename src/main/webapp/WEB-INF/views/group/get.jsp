@@ -3,6 +3,11 @@
 
 <%@include file="../includes/header.jsp" %>
 
+
+
+
+
+
 <!-- container -->
 <div class="container get-header">
     <!-- Heading Row -->
@@ -103,9 +108,9 @@
 
 
         <!-- 스터디 만들기 버튼-->
-<%--        <hr class="centerHr" id="study">--%>
-<%--        <div>--%>
-<%--            <h4>--%>
+        <hr class="centerHr" id="study">
+        <div>
+            <h4>
 <%--            <c:set var="done" value="false"/>--%>
 
 <%--            <c:forEach var = "attendant" items="${attendList}">--%>
@@ -113,25 +118,30 @@
 <%--                    <c:if test="${attendant.userId == pinfo.username}">--%>
 <%--                        <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'--%>
 <%--                           class='btn btn-primary' id="studyBtn">스터디 만들기</a>--%>
+<%--                        <c:set var="done" value="true"/>--%>
 <%--                    </c:if>--%>
 <%--                </c:if>--%>
 <%--            </c:forEach>--%>
-<%--            </h4>--%>
-<%--        </div>--%>
+                <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'
+                   class='btn btn-primary' id="studyBtn">스터디 만들기</a>
+            </h4>
+        </div>
 
-            <%--by_민재_21/05/20 : 모임 가입/탈퇴 시 새로고침을 하지 않아도 글쓰기 버튼이 생성/제거
-            1062줄 모임 가입 메서드에 show() / hide() 메서드 추가해서 구현함.--%>
-            <hr class="centerHr" id="study">
-            <div>
-                <h4>
-                    <sec:authorize access="isAuthenticated()">
-                        <c:if test="${pinfo.username ne group.userId or pinfo.username eq group.userId}">
-                            <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'
-                               class='btn btn-primary' id="studyBtn">스터디 만들기</a>
-                        </c:if>
-                    </sec:authorize>
-                </h4>
-            </div>
+            <%-- pinfo.username ne group.userId  or pinfo.username eq group.userId--%>
+<%--            <hr class="centerHr" id="study">--%>
+<%--            <div>--%>
+<%--                <h4>--%>
+<%--                    <sec:authorize access="isAuthenticated()">--%>
+<%--                        <c:if test="${pinfo.username ne group.userId}">--%>
+<%--                            <a href='/study/register?pageNum=${cri.pageNum}&amount=${cri.amount}&grpSn=${group.sn}'--%>
+<%--                               class='btn btn-primary' id="studyBtn">스터디 만들기</a>--%>
+<%--                        </c:if>--%>
+<%--                    </sec:authorize>--%>
+<%--                    ${pinfo}</br>--%>
+<%--                    ${group.userId}</br>--%>
+
+<%--                </h4>--%>
+<%--            </div>--%>
 
 
 
@@ -1025,6 +1035,7 @@
 
 <!-- 모임 참여 -->
 <script>
+
     $(document).ready(function() {
 
         let grpSnValue = '<c:out value="${group.sn}"/>';
@@ -1081,7 +1092,6 @@
             }
         })
 
-        showList();
 
         function showList() {
             groupAttendService.getList({grpSn:grpSnValue}, function(list) {
@@ -1104,6 +1114,27 @@
             })
         }
 
+        showAndHide();
+        function showAndHide() {
+            isAttend().then(function (result) {
+                if(result){
+                    studyBtn.show();
+                    boardBnt.show();
+                    addRatingBtn.show();
+                    attendBtn.hide();
+                    withdrawBtn.show();
+                }else {
+                    studyBtn.hide();
+                    boardBnt.hide();
+                    addRatingBtn.hide();
+                    attendBtn.show();
+                    withdrawBtn.hide();
+                }
+
+                showList();
+            })
+        }
+
         attendBtn.on("click", function(e) {
             groupAttendService.get(attend, function(result) {
                 if(result.status === 'GRUS03') {
@@ -1114,30 +1145,41 @@
 
             groupAttendService.add(attend, function(result) {
                 alert("모임에 참여했습니다.");
-                attendBtn.hide();
-                withdrawBtn.show();
-                studyBtn.show();
-                boardBnt.show();
-                addRatingBtn.show();
-                showList();
+                showAndHide();
+
+
             })
         })
 
         withdrawBtn.on("click", function(e) {
             groupAttendService.withdraw(attend, function(result) {
                 alert("정상적으로 모임에서 탈퇴되었습니다.");
-                attendBtn.show();
-                withdrawBtn.hide();
-                studyBtn.hide();
-                boardBnt.hide();
-                addRatingBtn.hide();
-                showList();
+                showAndHide();
             })
         })
-
+        isAttend();
+        function isAttend(){
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url : "/group/isAttend",
+                    data : {
+                        sn : ${group.sn},
+                        id : "${pinfo.username}"
+                    }
+                }).done(function (result) {
+                    resolve(result);
+                })
+            })
+        }
     })
 </script>
 
+<script>
+    $(document).ready(function (){
+
+    })
+
+</script>
 
 
 <%@include file="../includes/footer.jsp" %>
