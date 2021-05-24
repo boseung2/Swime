@@ -86,7 +86,9 @@ public class ChatHandler extends TextWebSocketHandler {
 
                 if(!userSessions.isEmpty()) {
                     for(WebSocketSession target : userSessions.values()) {
-                        target.sendMessage(new TextMessage("reload chatMsg"));
+                        if(target.isOpen()) {
+                            target.sendMessage(new TextMessage("reload chatMsg"));
+                        }
                     }
                 }
                 
@@ -123,7 +125,9 @@ public class ChatHandler extends TextWebSocketHandler {
 
                     log.info("채팅 수신자에게 보낼 메시지 = " + tmpMsg.toString());
 
-                    target.sendMessage(tmpMsg);
+                    if(target.isOpen()) {
+                        target.sendMessage(tmpMsg);
+                    }
 
                 }
 
