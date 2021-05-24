@@ -11,12 +11,12 @@ Swime은 Study With Me의 약어로 코딩 모임을 만들고 참여할 수 있
 
 [이곳](./documents/story-board)을 눌러주세요.  
 
-##프로젝트 소개
+## 프로젝트 소개
 
-##프로젝트 기술 소개
+## 프로젝트 기술 소개
 
 
-###사용스택
+### 사용스택
 <!--https://simpleicons.org/?q=jquery 사용법 여기서 참고-->
 * <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=Java&logoColor=white"/></a>
 * <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=black"/></a>
@@ -33,17 +33,17 @@ Swime은 Study With Me의 약어로 코딩 모임을 만들고 참여할 수 있
 -->
 
 
-###ERD
+### ERD
 
 <img src="/documents/img/ERD.png"/>
 
-###개발 환경
+### 개발 환경
 * Apache Tomcat 8.5.61
 * Oracle 19C
 * IntelliJ IDEA
 ## 개발
 
-###팀원
+### 팀원
 * <a href="https://github.com/boseung2">정보승</a>
 * <a href="https://github.com/jiho527">임지호</a>
 * <a href="https://github.com/tht1234551">정형진</a>
