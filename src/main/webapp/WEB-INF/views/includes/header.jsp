@@ -125,8 +125,8 @@
         <sec:authorize access="isAuthenticated()">
 <%--            <a href="/serviceCenter/list">고객센터</a>--%>
 
-            <div class="dropdown" style="position: absolute;">
-                <ul id="myDropdown" class="dropdown-content dropdown-menu">
+            <div id="myDropdown" class="dropdown" style="position: absolute;">
+                <ul id="myDropdownList" class="dropdown-content dropdown-menu">
                     <li><a class="dropdown-item">알림이 없습니다.</a></li>
                 </ul>
             </div>
@@ -259,7 +259,9 @@
     }
 
     // 알림버튼 눌리면
-    $('#notice').on("click", function() {
+    $('#notice').on("click", function(event) {
+        event.stopPropagation();
+        $('#myDropdownList').toggle();
 
         // 안읽은 알림을 가져와서 드롭다운 리스트에 띄워준다.
         noticeService.getList("${pinfo.username}", function(data) {
@@ -298,14 +300,19 @@
                 str += '</li>';
             }
 
-            $('#myDropdown').html(str);
+            $('#myDropdownList').html(str);
         })
 
-        $("#myDropdown")[0].classList.toggle("show");
+        // $("#myDropdownList")[0].classList.toggle("show");
+
+        // 외부영역 클릭시 알림창 닫기
+        $(document).click(function(){
+            $('#myDropdownList').hide();
+        });
     })
 
     // 알림 리스트가 눌리면
-    $('#myDropdown').on("click", "li", function(e){
+    $('#myDropdownList').on("click", "li", function(e){
 
         if($(this).attr("class") === undefined) {
             return;
@@ -340,7 +347,7 @@
 
     $(document).ready(function (){
         // let noti = $("#notice")[0];
-        let drop = $(".dropdown");
+        let drop = $("#myDropdown");
         drop.offset({
             top: $("#notice")[0].offsetTop + 30,
         });
