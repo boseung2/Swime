@@ -4,6 +4,7 @@
 <%@include file="../includes/header.jsp" %>
 <c:set var="defaultImg" value="https://streamyard.com/resources/assets/images/docs/connect-a-facebook-group/connect-a-facebook-group.jpg"/>
 
+
 <!-- 상단 이미지 -->
 <div class="head-image">
 <div class="head-content" onclick="location.href='/group/list'">

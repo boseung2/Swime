@@ -313,7 +313,7 @@
                 "<span id='place-id' hidden='true'>" + place.place_id +"</span>" +
                 "<strong>주소: </strong><span>" + place.formatted_address + "</span><br>" +
                 "<strong>URL: </strong><a href='" + place.url + "'>구글맵 바로가기</a><br>" +
-                "<input type='button' onclick='placeSelected()' id='placeSelect' value='선택'></input>" +
+                "<div style='float:right'><input type='button' onclick='placeSelected()' id='placeSelect' value='선택'></input></div>" +
                 "</div>"
             )
 

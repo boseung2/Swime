@@ -17,7 +17,7 @@
 </style>
 
 <div class="container">
-    <h4 style="margin-top: 20px;"><strong>스터디 멤버 관리</strong></h4>
+    <h4 style="margin-top: 20px;"><strong>스터디 멤버</strong></h4>
 
 
     <!-- nav -->

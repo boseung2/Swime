@@ -30,7 +30,7 @@
                 <input type="hidden" name="order" value="<c:out value="${cri.order}"/>">
             </form>
             <span style="color:gray;font-size:20px;"><c:out value="${group.category}"/></span>
-            <h1 class="font-weight-light"><b><c:out value="${group.name}"/></b></h1>
+            <h3 class="font-weight-light"><b><c:out value="${group.name}"/></b></h3>
             <div class="ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></div>
             <div class="flex-container" style="display: flex;">
                 <c:forEach items="${group.tags}" var="tag">
