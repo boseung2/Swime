@@ -469,7 +469,7 @@
             console.log("prev = " + prev);
             console.log("next = " + next);
 
-            let str = "<ul class ='pagination'>";
+            let str = "<ul class ='pagination pagination-sm'>";
 
             if(prev) {
                 str += "<li id='study-item' class = 'page-item'><a id='study-link' class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
@@ -821,7 +821,7 @@
                 next = true;
             }
 
-            let str = '<ul class="pagination">';
+            let str = '<ul class="pagination pagination-sm">';
 
             if(prev) {
                 str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='"+(startNum - 1)+"'>Previous</a></li>"
