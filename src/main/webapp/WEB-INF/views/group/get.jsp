@@ -660,7 +660,7 @@
 
             modalRegisterBtn.show();
 
-            // 사용자가 참여하고, 현재 후기에 없는 스터디를 가져오기
+            // 사용자가 참여한 지난 스터디중에 현재 후기에 없는 스터디를 가져오기
             studyService.getNoRatingStudies({grpSn : ${group.sn}, userId : "${pinfo.username}"}, function(result){
 
                 // 옵션 모두 지우기
