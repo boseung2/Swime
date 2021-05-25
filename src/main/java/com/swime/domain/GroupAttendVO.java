@@ -10,6 +10,7 @@ public class GroupAttendVO {
     private long grpSn;
     private String userId;
     private String name;
+    private String picture;
     private String grpRole;
     private String status;
     private Date regDate;

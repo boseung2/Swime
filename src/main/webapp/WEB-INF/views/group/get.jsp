@@ -375,7 +375,7 @@
 
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
                     else str += "<p class='card-text'><i class='fas fa-users'></i> 참석인원 " + list[i].attendants + "명 / 모집인원 " +  list[i].capacity + "명</p>";
-                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    <%--str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";--%>
                     str += "</div>";
                     str += "<div class='card-footer'>";
 
@@ -424,7 +424,7 @@
 
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
                     else str += "<p class='card-text'><i class='fas fa-users'></i> 참석인원 " + list[i].attendants + "명 / 모집인원 " +  list[i].capacity + "명</p>";
-                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    <%--str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";--%>
                     str += "</div>";
                     str += "<div class='card-footer'>";
 
@@ -1146,8 +1146,17 @@
                 }
 
                 for(let i=0, len=list.length || 0; i<len; i++) {
+
                     str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+
+                    if(list[i].picture !== null && list[i].picture !== 'myPicture.jpeg') {
+                        str += '<div><div class="header"><img src="' + '/display/fileName=' + list[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                    }else {
+                        str += '<div><div class="header"><img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
+                    }
+
+                    // str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+
                     str += "<span><b>"+list[i].name+"</b></span>\t";
                     str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
 
@@ -1155,7 +1164,7 @@
                     if("${pinfo.username}" !== "" && list[i].userId !== "${pinfo.username}") {
                         str += '<div style="float:right">';
                         str += '<a href="http://localhost/chat/register?userId=' + list[i].userId + '">';
-                        str += '<img src="../../../resources/img/chat.png">';
+                        str += '<img src="../../../resources/img/chat.png" class="listChatBtn">';
                         str += '</a>';
                         str += '</div>';
                     }
