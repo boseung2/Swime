@@ -56,8 +56,6 @@ public class BoardController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
     public void register(@RequestParam("grpSn") long grpSn, String userId,Model model){
-        model.addAttribute("grpSn", grpSn);
-        model.addAttribute("userId", userId);
 
 
         //모임번호, 유저아이디로 groupAttend에 set해서 groupAttend에 저장하고
@@ -72,6 +70,8 @@ public class BoardController {
 
         log.info("groupAttend : "+groupAttendVO);
 
+        model.addAttribute("grpSn", grpSn);
+        model.addAttribute("userId", userId);
         model.addAttribute("group", groupAttendVO);
 
 
@@ -101,7 +101,7 @@ public class BoardController {
         //return "redirect:/board/get?sn="+board.getSn();
     }
 
-//
+    //게시판 조회
     @GetMapping("/get")
     public void get(@RequestParam("sn") Long sn, long grpSn, String userId,
                     Model model, @ModelAttribute("cri") BoardCriteria cri) {
@@ -111,22 +111,24 @@ public class BoardController {
         groupAttend.setUserId(userId);
 
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
-
-        //그룹을 가입한 리스트 출력 : 로그인 여부 / 모임가입 여부에 따라
-        //댓글 작성 할 수 있는지...
-        List<GroupAttendVO> groupList = groupAttendService.getList(grpSn);
-
-        model.addAttribute("groupAttendList", groupList);
         model.addAttribute("group", groupAttendVO);
-        model.addAttribute("board", service.get(sn));
-        //(x)
-        model.addAttribute("reply", replyService.get(sn));
 
+        //그룹을 가입한 리스트 출력 : 로그인 여부 / 모임가입 여부에 따라 댓글 작성 할 수 있는지
+        List<GroupAttendVO> groupList = groupAttendService.getList(grpSn);
+        model.addAttribute("groupAttendList", groupList);
+
+        BoardVO board = service.get(sn);
+        model.addAttribute("board", board);
+
+        //model.addAttribute("board", service.get(sn));
+        //(x)
+        //model.addAttribute("reply", replyService.get(sn));
+        log.info("/get");
         log.info("groupList>>>>>>>"+groupList);
         log.info("groupAttendVO : " + groupAttendVO);
-        log.info("/get");
         log.info("replyServiceGet : "+replyService.get(sn));
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
+        log.info("board : " + board);
+
 
     }
 
@@ -166,8 +168,7 @@ public class BoardController {
             if (service.modify(board)) {
                 rttr.addFlashAttribute("result", "success");
             }else{
-                //fail처리
-                //rttr.addFlashAttribute("result", "fail");
+                rttr.addFlashAttribute("result", "fail");
             }
         }catch (Exception e){
             e.getMessage();
@@ -325,6 +326,12 @@ public class BoardController {
                log.info("delete file error : " + e.getMessage());
            }//end catch
        });//end foreach
+
+    }
+
+    // 에러페이지
+    @GetMapping("/error")
+    public void error() {
 
     }
 

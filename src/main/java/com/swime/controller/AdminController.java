@@ -26,7 +26,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class AdminController {
 
-    
+
     private AdminBoardService adminBoardService;
     private AdminGroupService adminGroupService;
 

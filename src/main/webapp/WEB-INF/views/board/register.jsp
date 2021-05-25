@@ -5,6 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@include file="../includes/header.jsp" %>
+<link rel="stylesheet" href="../../../resources/css/boardRegister.css">
 
 <sec:authorize access="isAuthenticated()">
     <c:set value="${principal.username}" var="userId"/>
@@ -13,42 +14,42 @@
 </sec:authorize>
 
 <style>
-    #topFix{
-        width: 15px;
-        height: 15px;
-    }
-    .uploadResult {
-        width: 100%;
-        background-color: white;
-    }
+    /*#topFix{*/
+    /*    width: 15px;*/
+    /*    height: 15px;*/
+    /*}*/
+    /*.uploadResult {*/
+    /*    width: 100%;*/
+    /*    background-color: white;*/
+    /*}*/
 
-    .uploadResult ul{
-        display:flex;
-        flex-flow: row;
-        justify-content: center;
-        align-items: center;
-    }
+    /*.uploadResult ul{*/
+    /*    display:flex;*/
+    /*    flex-flow: row;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .uploadResult ul li {
-        list-style: none;
-        padding: 10px;
-        align-items: center;
-    }
+    /*.uploadResult ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .uploadResult ul li {
-        list-style: one;
-        padding: 10px;
-        align-content: center;
-        text-align: center;
-    }
+    /*.uploadResult ul li {*/
+    /*    list-style: one;*/
+    /*    padding: 10px;*/
+    /*    align-content: center;*/
+    /*    text-align: center;*/
+    /*}*/
 
-    .uploadResult ul li img {
-        width: 100px;
-    }
+    /*.uploadResult ul li img {*/
+    /*    width: 100px;*/
+    /*}*/
 
-    .uploadResult ul li span {
-        color: black;
-    }
+    /*.uploadResult ul li span {*/
+    /*    color: black;*/
+    /*}*/
 
     /*.uploadResult2 {*/
     /*    width: 100%;*/

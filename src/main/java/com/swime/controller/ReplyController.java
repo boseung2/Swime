@@ -29,15 +29,27 @@ public class ReplyController {
     public ResponseEntity<Integer> create(@RequestBody ReplyVO vo){
 
         log.info("ReplyVO: " + vo);
+        log.info("service getReplyCnt"+service.getReplyCnt(vo.getBrdSn()));
 
-        int insertCount = service.register(vo);
+        try{
+            service.register(vo);
+            return new ResponseEntity<>(service.getReplyCnt(vo.getBrdSn()), HttpStatus.OK);
 
-        log.info("Reply InsertCount: " + insertCount);
-        log.info("registerReplyCnt : "+service.getReplyCnt(vo.getBrdSn()));
-        //string success
-        return insertCount == 1
-                ? new ResponseEntity<>(service.getReplyCnt(vo.getBrdSn()), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e){
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+//        log.info("ReplyVO: " + vo);
+//
+//        int insertCount = service.register(vo);
+//
+//        log.info("Reply InsertCount: " + insertCount);
+//        log.info("registerReplyCnt : "+service.getReplyCnt(vo.getBrdSn()));
+//        //string success
+//        return insertCount == 1
+//                ? new ResponseEntity<>(service.getReplyCnt(vo.getBrdSn()), HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     //댓글 삭제
@@ -47,15 +59,17 @@ public class ReplyController {
 
         log.info("remove");
         log.info("removeUserId : " + reply.getUserId());
-
-        //댓글 개수를 보낼 거임.
-        //ReplyVO reply = new ReplyVO();
-
         log.info("replyCnt: " + service.getReplyCnt(brdSn));
 
-        return service.remove(sn) == 1
-                ? new ResponseEntity<>(service.getReplyCnt(brdSn), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        try{
+            service.remove(sn);
+            return new ResponseEntity<>(service.getReplyCnt(brdSn), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+//        return service.remove(sn) == 1
+//                ? new ResponseEntity<>(service.getReplyCnt(brdSn), HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     //특정 댓글 조회
     @GetMapping(value = "/{sn}")
@@ -86,10 +100,17 @@ public class ReplyController {
         vo.setSn(sn);
 
         log.info("sn: " + sn);
+        try{
+            service.modify(vo);
+            return new ResponseEntity<>("ModifySuccess", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        return service.modify(vo) == 1
-                ? new ResponseEntity<>("success", HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+//        return service.modify(vo) == 1
+//                ? new ResponseEntity<>("success", HttpStatus.OK)
+//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

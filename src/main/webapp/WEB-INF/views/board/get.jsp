@@ -12,113 +12,113 @@
 </sec:authorize>
 <link rel="stylesheet" href="/resources/css/board-get.css">
 <style>
-    #notice{
-        color: red;
-    }
-    .uploadResult {
-        width: 150%;
-        background-color: white;
-        display:flex;
-        margin-bottom: 25px;
-    }
+    /*#notice{*/
+    /*    color: red;*/
+    /*}*/
+    /*.uploadResult {*/
+    /*    width: 150%;*/
+    /*    background-color: white;*/
+    /*    display:flex;*/
+    /*    margin-bottom: 25px;*/
+    /*}*/
 
-    .uploadResult ul{
-        display:flex;
-        flex-flow: row;
-        justify-content: center;
-        align-items: center;
-    }
+    /*.uploadResult ul{*/
+    /*    display:flex;*/
+    /*    flex-flow: row;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .uploadResult ul li {
-        list-style: none;
-        padding: 10px;
-        align-items: center;
-    }
-    /*one -> none으로바꿈*/
-    .uploadResult ul li {
-        list-style: none;
-        padding: 10px;
-        align-content: center;
-        text-align: center;
-    }
+    /*.uploadResult ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-items: center;*/
+    /*}*/
+    /*!*one -> none으로바꿈*!*/
+    /*.uploadResult ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-content: center;*/
+    /*    text-align: center;*/
+    /*}*/
 
-    ul.uploadResult > li > img{
-        width: 100px;
-    }
+    /*ul.uploadResult > li > img{*/
+    /*    width: 100px;*/
+    /*}*/
 
-    ul.uploadResult > li > div> img{
-        width: 100px;
-        margin-right:1em;
-        height: 100px;
-    }
+    /*ul.uploadResult > li > div> img{*/
+    /*    width: 100px;*/
+    /*    margin-right:1em;*/
+    /*    height: 100px;*/
+    /*}*/
 
-    .uploadResult ul li span {
-        color: white;
-    }
+    /*.uploadResult ul li span {*/
+    /*    color: white;*/
+    /*}*/
 
-    .uploadResult2 {
-        width: 150%;
-        background-color: white;
-        display:flex;
-    }
+    /*.uploadResult2 {*/
+    /*    width: 150%;*/
+    /*    background-color: white;*/
+    /*    display:flex;*/
+    /*}*/
 
-    .uploadResult2 ul{
-        display:flex;
-        flex-flow: row;
-        justify-content: center;
-        align-items: center;
-    }
+    /*.uploadResult2 ul{*/
+    /*    display:flex;*/
+    /*    flex-flow: row;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .uploadResult2 ul li {
-        list-style: none;
-        padding: 10px;
-        align-items: center;
-    }
-    /*one -> none으로바꿈*/
-    .uploadResult2 ul li {
-        list-style: none;
-        padding: 10px;
-        align-content: center;
-        text-align: center;
-    }
+    /*.uploadResult2 ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-items: center;*/
+    /*}*/
+    /*!*one -> none으로바꿈*!*/
+    /*.uploadResult2 ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-content: center;*/
+    /*    text-align: center;*/
+    /*}*/
 
-    ul.uploadResult2 > li > img{
-        width: 100px;
-    }
+    /*ul.uploadResult2 > li > img{*/
+    /*    width: 100px;*/
+    /*}*/
 
-    ul.uploadResult2 > li > div> img{
-        width: 100px;
-        margin-right:1em;
-        height: 100px;
-    }
+    /*ul.uploadResult2 > li > div> img{*/
+    /*    width: 100px;*/
+    /*    margin-right:1em;*/
+    /*    height: 100px;*/
+    /*}*/
 
-    .uploadResult2 ul li span {
-        color: white;
-    }
+    /*.uploadResult2 ul li span {*/
+    /*    color: white;*/
+    /*}*/
 
-    .bigPictureWrapper {
-        position: absolute;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        top: 0%;
-        width: 100%;
-        height: 100%;
-        background-color: gray;
-        z-index: 100;
-        background:rgba(255,255,255,0.5);
-    }
+    /*.bigPictureWrapper {*/
+    /*    position: absolute;*/
+    /*    display: none;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*    top: 0%;*/
+    /*    width: 100%;*/
+    /*    height: 100%;*/
+    /*    background-color: gray;*/
+    /*    z-index: 100;*/
+    /*    background:rgba(255,255,255,0.5);*/
+    /*}*/
 
-    .bigPicture {
-        position: relative;
-        display:flex;
-        justify-content: center;
-        align-items: center;
-    }
+    /*.bigPicture {*/
+    /*    position: relative;*/
+    /*    display:flex;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .bigPicture img {
-        width: 400px;
-    }
+    /*.bigPicture img {*/
+    /*    width: 400px;*/
+    /*}*/
 </style>
 
 <div class="container">
@@ -761,8 +761,7 @@
 
         //좋아요 클릭 시
         $("#likeCnt1").on("click",function (e) {
-            //e.preventDefault();
-            //change(this);
+
             let isLogin = "";
             <sec:authorize access="isAuthenticated()">
                 isLogin = '<sec:authentication property="principal.username"/>'

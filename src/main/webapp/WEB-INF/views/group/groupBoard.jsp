@@ -7,6 +7,7 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+
 <!--regBtn-->
 <%--<h4>게시판--%>
 <%--    <c:set var="done" value="false"/>--%>
@@ -28,11 +29,8 @@
 
 <h4>게시판
     <sec:authorize access="isAuthenticated()">
-        <%--             로그인 유저id != 모임장    --%>
-        <c:if test="${pinfo.username ne group.userId}">
-            <button id="boardBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
-            style="float: right; margin-bottom: 5px">글쓰기</button>
-        </c:if>
+        <button id="boardBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
+        style="float: right; margin-bottom: 5px">글쓰기</button>
     </sec:authorize>
 </h4>
 
