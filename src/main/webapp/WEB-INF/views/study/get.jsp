@@ -240,7 +240,14 @@
                 for(let i = 0 ; i < result.length; i++) {
 
                     str += '<li>';
-                    str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+
+                    if(result[i].picture !== null && result[i].picture !== 'myPicture.jpeg') {
+                        str += '<img src="' + '/display/fileName=' + result[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                    }else {
+                        str += '<img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
+                    }
+
+                    // str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
                     str += '<strong> ' + result[i].userName + '</strong>';
                     if ("${study.representation}" === result[i].userId) str += '<span> 스터디장</span>';
                     if ("GRRO01" === result[i].grpRole) str += '<span> 모임장</span>';
@@ -252,7 +259,7 @@
                     if("${pinfo.username}" !== "" && result[i].userId !== "${pinfo.username}") {
                         str += '<div style="float:right">';
                         str += '<a href="http://localhost/chat/register?userId=' + result[i].userId + '">';
-                        str += '<img src="../../../resources/img/chat.png">';
+                        str += '<img src="../../../resources/img/chat.png" class="listChatBtn">';
                         str += '</a>';
                         str += '</div>';
                     }
@@ -280,7 +287,7 @@
             $('#capacity').html(str);
 
             // 참여멤버 제목 구성
-            let str2 = '<div><h4 style="display:inline;">참여멤버 (' + result.attendants + '명)</h4>';
+            let str2 = '<div style="margin-bottom: 30px"><h4 style="display:inline;">참여멤버 (' + result.attendants + '명)</h4>';
             str2 += '<a href="/study/members?pageNum=${cri.pageNum}&amount=${cri.amount}&stdSn=${study.sn}&representation=${study.representation}"> 모두 보기</a></div>';
 
             $('#attendants').html(str2)

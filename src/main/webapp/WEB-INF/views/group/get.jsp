@@ -30,7 +30,7 @@
                 <input type="hidden" name="order" value="<c:out value="${cri.order}"/>">
             </form>
             <span style="color:gray;font-size:20px;"><c:out value="${group.category}"/></span>
-            <h1 class="font-weight-light"><b><c:out value="${group.name}"/></b></h1>
+            <h3 class="font-weight-light"><b><c:out value="${group.name}"/></b></h3>
             <div class="ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></div>
             <div class="flex-container" style="display: flex;">
                 <c:forEach items="${group.tags}" var="tag">
@@ -375,7 +375,7 @@
 
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
                     else str += "<p class='card-text'><i class='fas fa-users'></i> 참석인원 " + list[i].attendants + "명 / 모집인원 " +  list[i].capacity + "명</p>";
-                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    <%--str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";--%>
                     str += "</div>";
                     str += "<div class='card-footer'>";
 
@@ -424,7 +424,7 @@
 
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
                     else str += "<p class='card-text'><i class='fas fa-users'></i> 참석인원 " + list[i].attendants + "명 / 모집인원 " +  list[i].capacity + "명</p>";
-                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    <%--str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";--%>
                     str += "</div>";
                     str += "<div class='card-footer'>";
 
@@ -660,7 +660,7 @@
 
             modalRegisterBtn.show();
 
-            // 사용자가 참여하고, 현재 후기에 없는 스터디를 가져오기
+            // 사용자가 참여한 지난 스터디중에 현재 후기에 없는 스터디를 가져오기
             studyService.getNoRatingStudies({grpSn : ${group.sn}, userId : "${pinfo.username}"}, function(result){
 
                 // 옵션 모두 지우기
@@ -1146,8 +1146,17 @@
                 }
 
                 for(let i=0, len=list.length || 0; i<len; i++) {
+
                     str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+
+                    if(list[i].picture !== null && list[i].picture !== 'myPicture.jpeg') {
+                        str += '<div><div class="header"><img src="' + '/display/fileName=' + list[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                    }else {
+                        str += '<div><div class="header"><img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
+                    }
+
+                    // str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+
                     str += "<span><b>"+list[i].name+"</b></span>\t";
                     str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
 
@@ -1155,7 +1164,7 @@
                     if("${pinfo.username}" !== "" && list[i].userId !== "${pinfo.username}") {
                         str += '<div style="float:right">';
                         str += '<a href="http://localhost/chat/register?userId=' + list[i].userId + '">';
-                        str += '<img src="../../../resources/img/chat.png">';
+                        str += '<img src="../../../resources/img/chat.png" class="listChatBtn">';
                         str += '</a>';
                         str += '</div>';
                     }

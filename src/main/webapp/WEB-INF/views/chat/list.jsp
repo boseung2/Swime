@@ -24,10 +24,10 @@
 
                         <c:if test="${room.yourPicture != null && room.yourPicture != 'myPicture.jpeg'}">
                             <c:set var="src" value="${fn:replace(('/display?fileName=' += room.yourPicture), 's_', '')}"/>
-                            <c:set var="style" value="style='width: 54px; height: 54px; border-radius: 27px; border: 4px solid #6a6a76;'"/>
+                            <c:set var="style" value="style='width: 60px; height: 60px; '"/>
                         </c:if>
                         <c:if test="${room.yourPicture == null || room.yourPicture == 'myPicture.jpeg'}">
-                            <c:set var="src" value="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg"/>
+                            <c:set var="src" value="https://image.flaticon.com/icons/png/512/3237/3237472.png"/>
                         </c:if>
                         <img src="${src}" ${style} alt="">
 
