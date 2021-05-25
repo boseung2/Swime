@@ -117,11 +117,11 @@
     <a href="/" class="logo"><img src="../../../resources/img/logo.png"></a>
     <a href="/group/list">모임찾기</a>
     <a href="/group/register">모임만들기</a>
-    <a href="/group/new/index">뉴 모임찾기(미적용)</a>
+<%--    <a href="/group/new/index">뉴 모임찾기(미적용)</a>--%>
 
     <div class="header-right">
         <sec:authorize access="isAuthenticated()">
-            <a href="/serviceCenter/list">고객센터</a>
+<%--            <a href="/serviceCenter/list">고객센터</a>--%>
             <div class="dropdown" style="position: absolute;">
                 <ul id="myDropdown" class="dropdown-content">
                     <li>알림이 없습니다.</li>
