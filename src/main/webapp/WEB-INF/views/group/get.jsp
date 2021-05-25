@@ -147,7 +147,7 @@
 
 
         <!-- 예정된 스터디 리스트 -->
-        <h4>예정된 스터디</h4>
+        <h4 style="clear:left;">예정된 스터디</h4>
         <div class="studyList row">
         </div>
 
