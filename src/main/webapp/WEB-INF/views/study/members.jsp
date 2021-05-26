@@ -442,7 +442,7 @@
                                     // 참석했다는 알림을 db에 저장하고 실시간 알림 전송
                                     noticeService.register(
                                         {sender : "${pinfo.username}", receiver : userId,
-                                            kind : "스터디", url : "http://localhost/study/get?sn=${stdSn}", content : "스터디 " + result.name + "에 참석되셨습니다."}, function(notice) {
+                                            kind : "스터디", url : "http://www.swime.kro.kr/study/get?sn=${stdSn}", content : "스터디 " + result.name + "에 참석되셨습니다."}, function(notice) {
                                             if(notice === 'success') {
 
                                                 alert('참석 승인 처리가 완료되었습니다.');

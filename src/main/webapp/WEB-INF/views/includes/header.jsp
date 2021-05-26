@@ -387,9 +387,9 @@
                 if(result[i].yourPicture != null && result[i].yourPicture != 'myPicture.jpeg') {
                     let temp = '/display?fileName=' + result[i].yourPicture;
                     temp.replace('s_', '');
-                    str += '<img src="' + temp + '" alt="" style="width: 54px; height: 54px; border-radius: 27px; border: 4px solid #6a6a76;">';
+                    str += '<img src="' + temp + '" alt="" style="width: 60px; height: 60px;">';
                 } else {
-                    str += '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt="">';
+                    str += '<img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="">';
                 }
 
                 str += '<div>';
