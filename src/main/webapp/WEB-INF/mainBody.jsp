@@ -81,7 +81,7 @@
                 <img src="/resources/assets/slideImage02.png" class="d-block w-100" alt="...">
             </div>
             <div class="carousel-item">
-                <img src="/resources/assets/slideImage03.png" class="d-block w-100" alt="...">
+                <a href="/group/register"><img src="/resources/assets/slideImage03.png" class="d-block w-100" alt="..."></a>
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">

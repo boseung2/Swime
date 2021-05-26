@@ -8,6 +8,22 @@
 
 <c:set var="cardTitleLength" value="9"/>
 
+<style>
+    .mb-5, .my-5 {
+        margin-bottom: 1rem!important;
+    }
+
+    .mini-card-tag {
+        background-color: #f1f1f1;
+        padding: 2px;
+        font-size: 15px;
+        border-radius: 0.5rem;
+        width: 80px;
+        height: 25px;
+        text-align: center;
+    }
+</style>
+
 
 <%--<h2>스터디</h2>--%>
 
@@ -198,8 +214,10 @@
         name = name.length > 9 ? name.slice(0,8) + '...' : name;
 
         startDate = startDate.slice(0, 10);
-        if(endDate !== null){
+        if(endDate.substring(0, 10) !== startDate.substring(0, 10)){
             endDate = endDate.slice(0, 10);
+        }else {
+            endDate = "";
         }
 
 
@@ -213,7 +231,7 @@
             "                </div>" +
             "                <div>" +
             "                    <div>" +
-            "                        <h2 class='card-title' style='font-size: 25px; margin-bottom: 0px;'>" +
+            "                        <h2 class='card-title' style='font-size: 20px; margin-bottom: 0px;'>" +
             "                            " + name +
             "                        </h2>" +
             "                        <span class='flex-container'>" +
@@ -227,7 +245,8 @@
             "            <div class='card-body-bottom' style='flex-direction: column;height: 70px;'>" +
             "                <p style='margin-bottom: 3px;'><i class='fas fa-users'></i> " + attendants + " / " + capacity + "명</p>" +
             "                <p style='margin-bottom: 3px;'><i class='far fa-calendar-check'></i> " + startDate + "</p>" +
-            (endDate !== null ? "<p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" : "<i class='far fa-calendar-times'> 종료일이 없습니다</i>") +
+            // (endDate !== null ? "<p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" : "<i class='far fa-calendar-times'> 종료일이 없습니다</i>") +
+            (endDate !== "" ? "<p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" : "") +
             // "                <p style='margin-bottom: 3px;'><i class='far fa-calendar-times'></i> " + endDate + "</p>" +
             // "                <p class='card-text ratingPlace' id='stars' data-rating='' data-ratingcount=''>(스타)</p>\n" +
             "            </div>" +
@@ -258,7 +277,7 @@
         // console.log("startNum = " + startNum + ", endNum = " + endNum + ", prev = " + prev + ", next = " + next);
         // console.log(pageNum + "/" + "5" + "*" + " 5 = " + (pageNum / 5.0 * 5));
 
-        let str = '<ul class="pagination">';
+        let str = '<ul class="pagination pagination-sm">';
 
         if(prev) {
             str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='#' data-type='" + kind + "' data-btn='prev'>Previous</a></li>"
