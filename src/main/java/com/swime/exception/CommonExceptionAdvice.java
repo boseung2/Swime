@@ -12,6 +12,13 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @Log4j
 public class CommonExceptionAdvice {
 
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handle404(NoHandlerFoundException ex) {
+
+        return "error/custom404";
+    }
+
     @ExceptionHandler(Exception.class)
     public String except(Exception ex, Model model) {
 
@@ -22,10 +29,5 @@ public class CommonExceptionAdvice {
         return "error/error_page";
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handle404(NoHandlerFoundException ex) {
 
-        return "error/custom404";
-    }
 }

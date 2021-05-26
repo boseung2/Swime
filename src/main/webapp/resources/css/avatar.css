@@ -3,6 +3,11 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    padding:5px;
+}
+
+.listChatBtn {
+    padding: 5px;
 }
 
 footer {
@@ -11,7 +16,10 @@ footer {
 
 * {
     box-sizing: border-box;
-    font-family: 'Roboto', sans-serif
+    /*font-family: 'Roboto', sans-serif*/
+
+    font-family : 'Noto Sans KR', sans-serif;
+
 }
 
 body {
@@ -341,6 +349,7 @@ span.st_on {
 }
 
 .card-body {
+    margin-bottom: 20px;
 
 }
 
@@ -370,7 +379,7 @@ span.st_on {
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
     z-index:10;
-    border-radius: 0.15rem;
+    border-radius: 1rem;
 }
 
 .move .caption p {
@@ -392,7 +401,7 @@ span.st_on {
 }
 
 #card-title-name {
-
+    font-size: 20px;
 
 }
 
@@ -458,19 +467,23 @@ span.st_on {
     float : right;
 }
 
+.card{
+    border-radius: 1rem;
+}
+
 .studyList .card{
     cursor : pointer;
-    border-radius: 0.3rem;
+    border-radius: 1rem;
     margin-right : auto;
 }
 
 .studyList .card-body p{
-    text-align: left;
-    color : #808080;
+    text-align: center;
+    color : #212529;
 }
 
 .studyList .card-body h2{
-    text-align: left;
+    text-align: center;
     font-weight: bold;
     font-size : 1.9em;
 }
@@ -487,6 +500,11 @@ span.st_on {
 
 .studyList .card-footer {
     background-color: rgba(0, 123, 255, 0.5);
+    border-radius: 0 0 1rem 1rem;
+}
+
+.pastStudyList .card-footer {
+    text-align: center;
 }
 
 .studyList .card:hover {
@@ -495,7 +513,7 @@ span.st_on {
     width:calc(100% - 1px);
     height:calc(100% - 1px);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius:5px;
+    /*border-radius:5px;*/
 
 }
 

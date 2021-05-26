@@ -373,6 +373,11 @@
     function initMap(oldPlaceId) {
         // 기존 place 정보가 있으면 placeId 사용
 
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: -33.866, lng: 151.196 },
+            zoom: 15,
+        });
+
         const request = {
             placeId: oldPlaceId,
             fields: ["name", "formatted_address", "place_id", "geometry", "url"],
@@ -380,6 +385,7 @@
 
         const infowindow = new google.maps.InfoWindow();
         const service = new google.maps.places.PlacesService(map);
+
 
         service.getDetails(request, (place, status) => { // 세부정보 가져오기
             if (
@@ -392,7 +398,7 @@
                 // 가져온 세부 정보로 지도 띄우기
                 const map = new google.maps.Map(document.getElementById("map"), {
                     center: place.geometry.location,
-                    zoom: 13,
+                    zoom: 15,
                 });
 
                 // 검색창
@@ -403,7 +409,6 @@
                 // 필요한 정보
                 autocomplete.setFields(["place_id", "geometry", "name", "formatted_address", "url"]);
                 map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
 
                 autocomplete.addListener("place_changed", () => { // 장소 선택시
                     infowindow.close();
@@ -435,7 +440,7 @@
                         "<span id='place-id' hidden='true'>" + place.place_id +"</span>" +
                         "<strong>주소: </strong><span>" + place.formatted_address + "</span><br>" +
                         "<strong>URL: </strong><a href='" + place.url + "'>구글맵 바로가기</a><br>" +
-                        "<input type='button' onclick='placeSelected()' value='선택'></input>" +
+                        "<div style='float:right'><input type='button' onclick='placeSelected()' value='선택'></input></div>" +
                         "</div>"
                     )
 
@@ -521,7 +526,7 @@
                 "<span id='place-id' hidden='true'>" + place.place_id +"</span>" +
                 "<strong>주소: </strong><span>" + place.formatted_address + "</span><br>" +
                 "<strong>URL: </strong><a href='" + place.url + "'>구글맵 바로가기</a><br>" +
-                "<input type='button' onclick='placeSelected()' value='선택'></input>" +
+                "<div style='float:right'><input type='button' onclick='placeSelected()' value='선택'></div>" +
                 "</div>"
             )
 

@@ -2,6 +2,7 @@ package com.swime.controller;
 
 
 import com.swime.domain.*;
+import com.swime.service.StudyListService;
 import com.swime.service.StudyService;
 import com.swime.service.StudySurveyService;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ public class StudyController {
 
     private StudyService service;
     private StudySurveyService surveyService;
+    private StudyListService studyListService;
 
     // 스터디 리스트 페이징처리
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -235,5 +237,13 @@ public class StudyController {
         // 그룹 페이징
         StudyCriteria newCri = new StudyCriteria(cri.getPageNum(), cri.getAmount());
         model.addAttribute("cri", newCri);
+    }
+
+    // ajax로 사용자가 참여한 스터디 보내주기
+    @GetMapping(value = "/getNoRatingStudies", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<StudyVO>> getNoRatingStudies(long grpSn, String userId) {
+
+        return new ResponseEntity<>(studyListService.getNoRatingStudies(grpSn, userId), HttpStatus.OK);
+
     }
 }

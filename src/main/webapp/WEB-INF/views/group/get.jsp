@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
@@ -29,7 +30,7 @@
                 <input type="hidden" name="order" value="<c:out value="${cri.order}"/>">
             </form>
             <span style="color:gray;font-size:20px;"><c:out value="${group.category}"/></span>
-            <h1 class="font-weight-light"><b><c:out value="${group.name}"/></b></h1>
+            <h3 class="font-weight-light"><b><c:out value="${group.name}"/></b></h3>
             <div class="ratingPlace" id="stars${group.sn}" data-rating='<c:out value="${group.rating}"/>' data-ratingcount="<c:out value="${group.ratingCount}"/>"></div>
             <div class="flex-container" style="display: flex;">
                 <c:forEach items="${group.tags}" var="tag">
@@ -246,9 +247,15 @@
                     <label for="review">후기</label>
                     <input type="text" class="form-control" name="review" id="review">
                 </div>
-                <div class="form-group">
-                    <label for="stdSn">스터디번호</label>
-                    <input type="number" class="form-control" name="stdSn" id="stdSn">
+                <div class="form-group" id="stdSnForm">
+                    <label for="stdSn">참여한 스터디</label>
+<%--                    <input type="number" class="form-control" name="stdSn" id="stdSn">--%>
+                    <select id="stdSn">
+                    </select>
+                </div>
+                <div class="form-group" id="modifyStdSnForm">
+                    <label for="modifyStdSn">참여한 스터디</label>
+                    <input class="form-control" name="modifyStdSn" id="modifyStdSn">
                 </div>
                 <label for="grpSn" hidden>그룹번호</label>
                 <input type="number" class="form-control" name="grpSn" id="grpSn" hidden>
@@ -286,6 +293,7 @@
 <script type="text/javascript" src="/resources/js/groupAttend.js"></script>
 <!-- StudyList Module -->
 <script type="text/javascript" src="/resources/js/studyList.js"></script>
+<script type="text/javascript" src="/resources/js/study.js"></script>
 <!-- GroupRating Module -->
 <script type="text/javascript" src="/resources/js/groupRating.js"></script>
 <!-- GroupWish Module -->
@@ -367,7 +375,7 @@
 
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
                     else str += "<p class='card-text'><i class='fas fa-users'></i> 참석인원 " + list[i].attendants + "명 / 모집인원 " +  list[i].capacity + "명</p>";
-                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    <%--str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";--%>
                     str += "</div>";
                     str += "<div class='card-footer'>";
 
@@ -416,7 +424,7 @@
 
                     if(list[i].attendants >= list[i].capacity) str += "<p class='card-text'>모집 마감</p>";
                     else str += "<p class='card-text'><i class='fas fa-users'></i> 참석인원 " + list[i].attendants + "명 / 모집인원 " +  list[i].capacity + "명</p>";
-                    str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";
+                    <%--str += "<a href='/study/get?userId=${pinfo.username}&pageNum=${cri.pageNum}&amount=${cri.amount}&sn=" + list[i].sn + "' class='move btn btn-primary btn-sm'>더보기</a>";--%>
                     str += "</div>";
                     str += "<div class='card-footer'>";
 
@@ -619,7 +627,8 @@
         let modalInputUserId = modal.find("input[name='userId']");
         let modalInputRating = modal.find("input[name='rating']");
         let modalInputReview = modal.find("input[name='review']");
-        let modalInputStdSn = modal.find("input[name='stdSn']");
+        // let modalInputStdSn = modal.find("input[name='stdSn']");
+        let modalInputStdSn = $('#stdSn');
         let modalInputGrpSn = modal.find("input[name='grpSn']");
 
         let modalModBtn = $('#modalModBtn');
@@ -646,7 +655,24 @@
             modal.find("input[name='stdSn']").attr("readonly", false);
             modal.find("button[id != 'modalCloseBtn']").hide();
 
+            $('#stdSnForm').removeAttr("hidden");
+            $('#modifyStdSnForm').attr("hidden", "true");
+
             modalRegisterBtn.show();
+
+            // 사용자가 참여한 지난 스터디중에 현재 후기에 없는 스터디를 가져오기
+            studyService.getNoRatingStudies({grpSn : ${group.sn}, userId : "${pinfo.username}"}, function(result){
+
+                // 옵션 모두 지우기
+                $('#stdSn').children('option').remove();
+
+                for(let i = 0; i < result.length; i++) {
+
+                    // 스터디 이름을 option에 넣고 그 안에 data로 sn을 넣는다.
+                    $('#stdSn').append('<option value="' + result[i].sn + '">' + result[i].name + '</option>');
+                    
+                }
+            })
 
             $('#groupModal').modal("show");
 
@@ -677,6 +703,7 @@
             })
         })
 
+        // 후기 클릭시
         $(".rating").on("click", "li", function(e) {
 
             let sn = $(this).data("sn");
@@ -686,8 +713,19 @@
             groupRatingService.get(sn, function(groupRating) {
                 modalInputReview.val(groupRating.review);
                 modalInputRating.val(groupRating.rating);
-                modalInputStdSn.val(groupRating.stdSn);
-                modalInputStdSn.attr("readonly", true);
+                // modalInputStdSn.val(groupRating.stdSn);
+
+                studyService.get(groupRating.stdSn, function(result){
+                    console.log("그룹 후기 수정하는 스터디 name= " + result.name);
+                    console.log("그룹 후기 수정하는 스터디 sn = " + result.sn);
+
+                    $('#stdSnForm').attr("hidden", true);
+                    $('#modifyStdSnForm').removeAttr("hidden");
+                    $('#modifyStdSn').val(result.name);
+                    $('#modifyStdSn').data('sn', result.sn);
+                    $('#modifyStdSn').attr("readonly", true);
+                })
+
                 modalInputUserId.val(groupRating.userId);
                 modalInputUserId.attr("readonly", true);
                 modalInputGrpSn.val(groupRating.grpSn);
@@ -706,7 +744,7 @@
             let originalUserId = modalInputUserId.val();
 
             let groupRating = {sn:modal.data("sn"), userId: originalUserId, rating: modalInputRating.val(),
-                                review: modalInputReview.val(), stdSn: modalInputStdSn.val(), grpSn: modalInputGrpSn.val()};
+                                review: modalInputReview.val(), stdSn: $('#modifyStdSn').data('sn'), grpSn: modalInputGrpSn.val()};
 
             if(!userId) {
                 alert("로그인 후 수정이 가능합니다.");
@@ -935,8 +973,13 @@
             return false;
         }
 
-        if(isNaN($('#stdSn').val()) || $('#stdSn').val() == "" || $('#stdSn').val() <= 0) {
-            alert("스터디번호를 다시 입력해주세요");
+        if($('#stdSnForm')[0].hidden !== true && (isNaN($('#stdSn').val()) || $('#stdSn').val() == "" || $('#stdSn').val() <= 0)) {
+            alert("참여한 스터디가 선택되지않아 후기를 작성할 수 없습니다.");
+            return false;
+        }
+
+        if($('#stdSnForm')[0].hidden && isNaN($('#modifyStdSn').data('sn')) || $('#modifyStdSn').data('sn') == "" || $('#modifyStdSn').data('sn') <= 0) {
+            alert("참여한 스터디가 선택되지않아 후기를 작성할 수 없습니다.");
             return false;
         }
 
@@ -1103,8 +1146,17 @@
                 }
 
                 for(let i=0, len=list.length || 0; i<len; i++) {
+
                     str += "<li data-sn='"+list[i].sn+"'>";
-                    str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+
+                    if(list[i].picture !== null && list[i].picture !== 'myPicture.jpeg') {
+                        str += '<div><div class="header"><img src="' + '/display/fileName=' + list[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                    }else {
+                        str += '<div><div class="header"><img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
+                    }
+
+                    // str += "<div><div class='header'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+
                     str += "<span><b>"+list[i].name+"</b></span>\t";
                     str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
 
@@ -1112,7 +1164,7 @@
                     if("${pinfo.username}" !== "" && list[i].userId !== "${pinfo.username}") {
                         str += '<div style="float:right">';
                         str += '<a href="http://localhost/chat/register?userId=' + list[i].userId + '">';
-                        str += '<img src="../../../resources/img/chat.png">';
+                        str += '<img src="../../../resources/img/chat.png" class="listChatBtn">';
                         str += '</a>';
                         str += '</div>';
                     }
