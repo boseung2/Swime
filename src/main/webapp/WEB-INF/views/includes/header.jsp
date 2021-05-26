@@ -87,7 +87,8 @@
             padding: 12px 16px;
             text-decoration: none;
             display: block;
-            width: 330px;
+            /*width: 330px;*/
+            width: fit-content;
         }
 
         .dropdown a:hover {background-color: #ddd;}
@@ -107,6 +108,7 @@
             display: none;
 
         }
+
     </style>
 
 </head>
@@ -122,12 +124,15 @@
     <div class="header-right">
         <sec:authorize access="isAuthenticated()">
 <%--            <a href="/serviceCenter/list">고객센터</a>--%>
-            <div class="dropdown" style="position: absolute;">
-                <ul id="myDropdown" class="dropdown-content">
-                    <li>알림이 없습니다.</li>
+
+            <div id="myDropdown" class="dropdown" style="position: absolute;">
+                <ul id="myDropdownList" class="dropdown-content dropdown-menu">
+                    <li><a class="dropdown-item">알림이 없습니다.</a></li>
                 </ul>
             </div>
             <a><img id="notice" src="../../../resources/img/notice.png" style="width:18px; height: 18px;"></a>
+
+
             <a href="/chat/list">
                 <img id="chatBtn" src="../../../resources/img/chat.png" style="width:18px; height: 18px;">
                 <div class="red"></div>
@@ -147,16 +152,6 @@
     </div>
 </div>
 
-<sec:authorize access="isAuthenticated()">
-<%--    <div class="dropdown">--%>
-<%--        <ul id="myDropdown" class="dropdown-content">--%>
-<%--            <li>알림이 없습니다.</li>--%>
-<%--        </ul>--%>
-<%--    </div>--%>
-</sec:authorize>
-
-<%--toast 알림--%>
-<%--<div id="msgStack"></div>--%>
 
 <form id="logout" action="/user/logout" method="post" hidden>
     <%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
@@ -264,7 +259,9 @@
     }
 
     // 알림버튼 눌리면
-    $('#notice').on("click", function() {
+    $('#notice').on("click", function(event) {
+        event.stopPropagation();
+        $('#myDropdownList').toggle();
 
         // 안읽은 알림을 가져와서 드롭다운 리스트에 띄워준다.
         noticeService.getList("${pinfo.username}", function(data) {
@@ -277,7 +274,7 @@
 
             for(let i = 0; i < data.length; i++) {
                 str += '<li class="noticeList" data-sn="' + data[i].sn + '">';
-                str += '<a href="' + data[i].url +'">';
+                str += '<a href="' + data[i].url +'" class="dropdown-item">';
                 str += '<strong>[' + data[i].kind + ']</strong> ';
                 str += data[i].content;
                 str += '<br>';
@@ -303,14 +300,19 @@
                 str += '</li>';
             }
 
-            $('#myDropdown').html(str);
+            $('#myDropdownList').html(str);
         })
 
-        $("#myDropdown")[0].classList.toggle("show");
+        // $("#myDropdownList")[0].classList.toggle("show");
+
+        // 외부영역 클릭시 알림창 닫기
+        $(document).click(function(){
+            $('#myDropdownList').hide();
+        });
     })
 
     // 알림 리스트가 눌리면
-    $('#myDropdown').on("click", "li", function(e){
+    $('#myDropdownList').on("click", "li", function(e){
 
         if($(this).attr("class") === undefined) {
             return;
@@ -344,10 +346,10 @@
     }
 
     $(document).ready(function (){
-        let noti = $("#notice")[0];
-        let drop = $(".dropdown");
+        // let noti = $("#notice")[0];
+        let drop = $("#myDropdown");
         drop.offset({
-            top: $("#notice").offsetTop + 30,
+            top: $("#notice")[0].offsetTop + 30,
         });
     })
 

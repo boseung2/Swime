@@ -147,7 +147,7 @@
 
 
         <!-- 예정된 스터디 리스트 -->
-        <h4>예정된 스터디</h4>
+        <h4 style="clear:left;">예정된 스터디</h4>
         <div class="studyList row">
         </div>
 
@@ -469,7 +469,7 @@
             console.log("prev = " + prev);
             console.log("next = " + next);
 
-            let str = "<ul class ='pagination'>";
+            let str = "<ul class ='pagination pagination-sm'>";
 
             if(prev) {
                 str += "<li id='study-item' class = 'page-item'><a id='study-link' class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";
@@ -821,7 +821,7 @@
                 next = true;
             }
 
-            let str = '<ul class="pagination">';
+            let str = '<ul class="pagination pagination-sm">';
 
             if(prev) {
                 str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='"+(startNum - 1)+"'>Previous</a></li>"
@@ -1150,7 +1150,7 @@
                     str += "<li data-sn='"+list[i].sn+"'>";
 
                     if(list[i].picture !== null && list[i].picture !== 'myPicture.jpeg') {
-                        str += '<div><div class="header"><img src="' + '/display/fileName=' + list[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                        str += '<div><div class="header"><img src="' + '/display?fileName=' + list[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
                     }else {
                         str += '<div><div class="header"><img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
                     }

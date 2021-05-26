@@ -10,65 +10,89 @@
 
 <link href="../webapp/resources/assets">
 
-<div class="main-container">
-    <main class="main-wrapper">
-        <section>
-            <h1 style="display: none;">Main</h1>
-            <div class="main-left">
-                <h2 style="font-weight: bold">어떤 프로그래밍 언어를<br>공부하시나요?</h2>
-                <div class="search-form">
-                    <form action="#" method="get">
-                        <label>
-                            <input type="text" name="search" maxlength="20" placeholder="언어를 입력하세요"/>
-                        </label>
-                    </form>
-                    <div class="flex-flow"></div>
-                    <a href="#"><i class="fab fa-sistrix"></i></a>
-                </div>
+<%--<div class="main-container">--%>
+<%--    <main class="main-wrapper">--%>
+<%--        <section>--%>
+<%--            <h1 style="display: none;">Main</h1>--%>
+<%--            <div class="main-left">--%>
+<%--                <h2 style="font-weight: bold">어떤 프로그래밍 언어를<br>공부하시나요?</h2>--%>
+<%--                <div class="search-form">--%>
+<%--                    <form action="#" method="get">--%>
+<%--                        <label>--%>
+<%--                            <input type="text" name="search" maxlength="20" placeholder="언어를 입력하세요"/>--%>
+<%--                        </label>--%>
+<%--                    </form>--%>
+<%--                    <div class="flex-flow"></div>--%>
+<%--                    <a href="#"><i class="fab fa-sistrix"></i></a>--%>
+<%--                </div>--%>
 
-                <div class="language-list">
-                    <ul class="language-top">
-                        <li>
-                            <a href="#"><i class="fab fa-java"></i><br><span class="language-icon">JAVA</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fab fa-python"></i><br><span class="language-icon">PYTHON</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fab fa-js-square"></i><br><span class="language-icon">JAVASCRIPT</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fab fa-react"></i><br><span class="language-icon">REACT</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fab fa-css3-alt"></i><br><span class="language-icon">CSS3</span></a>
-                        </li>
-                    </ul>
-                    <ul class="language-bottom">
-                        <li>
-                            <a href="#"><i class="fab fa-vuejs"></i><br><span class="language-icon">VUE.JS</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fab fa-sass"></i><br><span class="language-icon">SASS</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fab fa-php"></i><br><span class="language-icon">PHP</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fab fa-node"></i><br><span class="language-icon">NODE.JS</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fas fa-ellipsis-h"></i><br><span class="language-icon">ETC</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="main-right">
-                <img src="/resources/assets/Main03.png" alt="메인 이미지">
-            </div>
+<%--                <div class="language-list">--%>
+<%--                    <ul class="language-top">--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-java"></i><br><span class="language-icon">JAVA</span></a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-python"></i><br><span class="language-icon">PYTHON</span></a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-js-square"></i><br><span class="language-icon">JAVASCRIPT</span></a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-react"></i><br><span class="language-icon">REACT</span></a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-css3-alt"></i><br><span class="language-icon">CSS3</span></a>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
+<%--                    <ul class="language-bottom">--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-vuejs"></i><br><span class="language-icon">VUE.JS</span></a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-sass"></i><br><span class="language-icon">SASS</span></a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-php"></i><br><span class="language-icon">PHP</span></a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fab fa-node"></i><br><span class="language-icon">NODE.JS</span></a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a href="#"><i class="fas fa-ellipsis-h"></i><br><span class="language-icon">ETC</span></a>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--            <div class="main-right">--%>
+<%--                <img src="/resources/assets/Main03.png" alt="메인 이미지">--%>
+<%--            </div>--%>
+<%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+<%--        </section>--%>
+<%--    </main>--%>
 <%--</div>--%>
-        </section>
-    </main>
+
+<div>
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/resources/assets/slideImage01.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="/resources/assets/slideImage02.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <a href="/group/register"><img src="/resources/assets/slideImage03.png" class="d-block w-100" alt="..."></a>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
 </div>
 
 <!-- 인기있는 모임 -->

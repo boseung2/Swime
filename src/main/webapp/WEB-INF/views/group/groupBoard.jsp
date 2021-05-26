@@ -179,7 +179,7 @@
             console.log("next = " + next);
 
 
-            let str = "<ul class ='pagination'>";
+            let str = "<ul class ='pagination pagination-sm'>";
 
             if (prev) {
                 str += "<li id='board-item' class = 'page-item'><a id='board-link' class='page-link' href='" + (startNum - 1) + "'>Previous</a></li>";

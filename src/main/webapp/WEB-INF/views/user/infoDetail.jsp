@@ -3,7 +3,6 @@
 
 <%@include file="../includes/header.jsp" %>
 
-
 <link href="/resources/css/UserProfileDefault.css" rel="stylesheet">
 
 
