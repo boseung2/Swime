@@ -102,7 +102,7 @@
                         let dat = "";
                         let notice = "";
                         let role = "";
-
+                        let userPicture = list[i].picture;
                         //제목 글자가40이상이면 ...찍는다. 글자가 너무 길면 칸을 초과함
                         if(list[i].title.length >= 40 || list[i].content.length >=40){
                             dat = "...";
@@ -124,9 +124,13 @@
                         str += "<div class='boardHeader' onclick=location.href='/board/get?sn="+list[i].sn+"&userId=${pinfo.username}&grpSn=${group.sn}';>";
                         //str += "<span>"+list[i].sn+"번"+"</span>";
                         str += "<div id='boardNotice'>"+notice+"</div>";
-                        //str += "<br>";
+                        //
                         str += "<div id='boardDivBox'>";
-                        str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
+                        if (userPicture !== null){
+                            str += "<span><img class='avatar' src='"+ "/display?fileName=" + list[i].picture.replace('s_','')+"' alt='error'></span>";
+                        }else{
+                            str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
+                        }
                         str += "<span id='boardName'>"+list[i].name+"</span>";
                         str += "<span style='color:gray'> "+role+"</span>";
                         str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";

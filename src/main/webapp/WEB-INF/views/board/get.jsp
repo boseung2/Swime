@@ -131,6 +131,7 @@
                 <div id="notice">[공지사항]</div>
             </c:if>
             <div id="inline3">
+                <!--사진 이거 div만 냅기고 for문 돌고 가져와야하나..-->
                 <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>
                 <div class="inline" id="name"><c:out value="${board.name}" /></div>
                 <div class="inline" id="role"></div>
@@ -680,15 +681,7 @@
                     return;
                 }
                 for (let i = 0, len = list.length || 0; i < len; i++) {
-                    // str += "<img class='profile' src='../../../resources/image/img_avatar2.png' data-sn='"+list[i].picture+"'>"
-                    // str += "<ul class='chat'><li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
-                    // str += "<div><div class='header2'><strong id='userName' class='primary-" +
-                    //     "font'>"+list[i].name+"</strong>";
-                    // str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
-                    // str += "<button id='replyDeleteBtn' class='replyDelete'>삭제</button>";
-                    // str += "<button id='replyModifyBtn' class='replyModify'>수정</button></div>";
-                    // str += "<p id='replyContent'>"+list[i].content+"</p>";
-                    // str += "<button class='replySubmit'>답글 쓰기</button></div></li></ul>"
+
                     str += "<li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
                     str += "<div><div class='header2'><strong id='userName' class='primary-" +
                         "font'>"+list[i].name+"</strong>";
