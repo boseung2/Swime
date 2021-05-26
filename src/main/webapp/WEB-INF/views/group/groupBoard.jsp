@@ -126,6 +126,7 @@
                         str += "<div id='boardNotice'>"+notice+"</div>";
                         //
                         str += "<div id='boardDivBox'>";
+
                         if (userPicture !== null){
                             str += "<span><img class='avatar' src='"+ "/display?fileName=" + list[i].picture.replace('s_','')+"' alt='error'></span>";
                         }else{
