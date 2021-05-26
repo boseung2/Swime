@@ -1,0 +1,93 @@
+#topFix{
+    width: 15px;
+    height: 15px;
+}
+.uploadResult {
+    width: 100%;
+    background-color: white;
+}
+
+.uploadResult ul{
+    display:flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.uploadResult ul li {
+    list-style: none;
+    padding: 10px;
+    align-items: center;
+}
+
+.uploadResult ul li {
+    list-style: one;
+    padding: 10px;
+    align-content: center;
+    text-align: center;
+}
+
+.uploadResult ul li img {
+    width: 100px;
+}
+
+.uploadResult ul li span {
+    color: black;
+}
+
+/*.uploadResult2 {*/
+/*    width: 100%;*/
+/*    background-color: white;*/
+/*}*/
+
+/*.uploadResult2 ul{*/
+/*    display:flex;*/
+/*    flex-flow: row;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.uploadResult2 ul li {*/
+/*    list-style: none;*/
+/*    padding: 10px;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.uploadResult2 ul li {*/
+/*    list-style: one;*/
+/*    padding: 10px;*/
+/*    align-content: center;*/
+/*    text-align: center;*/
+/*}*/
+
+/*.uploadResult2 ul li img {*/
+/*    width: 100px;*/
+/*}*/
+
+/*.uploadResult2 ul li span {*/
+/*    color: black;*/
+/*}*/
+
+/*.bigPictureWrapper {*/
+/*    position: absolute;*/
+/*    display: none;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    top: 0%;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    background-color: gray;*/
+/*    z-index: 100;*/
+/*    background:rgba(255,255,255,0.5);*/
+/*}*/
+
+/*.bigPicture {*/
+/*    position: relative;*/
+/*    display:flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.bigPicture img {*/
+/*    width: 400px;*/
+/*}*/

@@ -23,7 +23,7 @@ public class BoardVO {
     private Date regDate;
     private Date updDate;
 
-    private String sysRegDbId;
+    //private String sysRegDbId;
 
     //private String type;
 

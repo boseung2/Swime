@@ -12,113 +12,113 @@
 </sec:authorize>
 <link rel="stylesheet" href="/resources/css/board-get.css">
 <style>
-    #notice{
-        color: red;
-    }
-    .uploadResult {
-        width: 150%;
-        background-color: white;
-        display:flex;
-        margin-bottom: 25px;
-    }
+    /*#notice{*/
+    /*    color: red;*/
+    /*}*/
+    /*.uploadResult {*/
+    /*    width: 150%;*/
+    /*    background-color: white;*/
+    /*    display:flex;*/
+    /*    margin-bottom: 25px;*/
+    /*}*/
 
-    .uploadResult ul{
-        display:flex;
-        flex-flow: row;
-        justify-content: center;
-        align-items: center;
-    }
+    /*.uploadResult ul{*/
+    /*    display:flex;*/
+    /*    flex-flow: row;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .uploadResult ul li {
-        list-style: none;
-        padding: 10px;
-        align-items: center;
-    }
-    /*one -> none으로바꿈*/
-    .uploadResult ul li {
-        list-style: none;
-        padding: 10px;
-        align-content: center;
-        text-align: center;
-    }
+    /*.uploadResult ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-items: center;*/
+    /*}*/
+    /*!*one -> none으로바꿈*!*/
+    /*.uploadResult ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-content: center;*/
+    /*    text-align: center;*/
+    /*}*/
 
-    ul.uploadResult > li > img{
-        width: 100px;
-    }
+    /*ul.uploadResult > li > img{*/
+    /*    width: 100px;*/
+    /*}*/
 
-    ul.uploadResult > li > div> img{
-        width: 100px;
-        margin-right:1em;
-        height: 100px;
-    }
+    /*ul.uploadResult > li > div> img{*/
+    /*    width: 100px;*/
+    /*    margin-right:1em;*/
+    /*    height: 100px;*/
+    /*}*/
 
-    .uploadResult ul li span {
-        color: white;
-    }
+    /*.uploadResult ul li span {*/
+    /*    color: white;*/
+    /*}*/
 
-    .uploadResult2 {
-        width: 150%;
-        background-color: white;
-        display:flex;
-    }
+    /*.uploadResult2 {*/
+    /*    width: 150%;*/
+    /*    background-color: white;*/
+    /*    display:flex;*/
+    /*}*/
 
-    .uploadResult2 ul{
-        display:flex;
-        flex-flow: row;
-        justify-content: center;
-        align-items: center;
-    }
+    /*.uploadResult2 ul{*/
+    /*    display:flex;*/
+    /*    flex-flow: row;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .uploadResult2 ul li {
-        list-style: none;
-        padding: 10px;
-        align-items: center;
-    }
-    /*one -> none으로바꿈*/
-    .uploadResult2 ul li {
-        list-style: none;
-        padding: 10px;
-        align-content: center;
-        text-align: center;
-    }
+    /*.uploadResult2 ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-items: center;*/
+    /*}*/
+    /*!*one -> none으로바꿈*!*/
+    /*.uploadResult2 ul li {*/
+    /*    list-style: none;*/
+    /*    padding: 10px;*/
+    /*    align-content: center;*/
+    /*    text-align: center;*/
+    /*}*/
 
-    ul.uploadResult2 > li > img{
-        width: 100px;
-    }
+    /*ul.uploadResult2 > li > img{*/
+    /*    width: 100px;*/
+    /*}*/
 
-    ul.uploadResult2 > li > div> img{
-        width: 100px;
-        margin-right:1em;
-        height: 100px;
-    }
+    /*ul.uploadResult2 > li > div> img{*/
+    /*    width: 100px;*/
+    /*    margin-right:1em;*/
+    /*    height: 100px;*/
+    /*}*/
 
-    .uploadResult2 ul li span {
-        color: white;
-    }
+    /*.uploadResult2 ul li span {*/
+    /*    color: white;*/
+    /*}*/
 
-    .bigPictureWrapper {
-        position: absolute;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        top: 0%;
-        width: 100%;
-        height: 100%;
-        background-color: gray;
-        z-index: 100;
-        background:rgba(255,255,255,0.5);
-    }
+    /*.bigPictureWrapper {*/
+    /*    position: absolute;*/
+    /*    display: none;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*    top: 0%;*/
+    /*    width: 100%;*/
+    /*    height: 100%;*/
+    /*    background-color: gray;*/
+    /*    z-index: 100;*/
+    /*    background:rgba(255,255,255,0.5);*/
+    /*}*/
 
-    .bigPicture {
-        position: relative;
-        display:flex;
-        justify-content: center;
-        align-items: center;
-    }
+    /*.bigPicture {*/
+    /*    position: relative;*/
+    /*    display:flex;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
 
-    .bigPicture img {
-        width: 400px;
-    }
+    /*.bigPicture img {*/
+    /*    width: 400px;*/
+    /*}*/
 </style>
 
 <div class="container">
@@ -131,6 +131,7 @@
                 <div id="notice">[공지사항]</div>
             </c:if>
             <div id="inline3">
+                <!--사진 이거 div만 냅기고 for문 돌고 가져와야하나..-->
                 <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>
                 <div class="inline" id="name"><c:out value="${board.name}" /></div>
                 <div class="inline" id="role"></div>
@@ -680,15 +681,7 @@
                     return;
                 }
                 for (let i = 0, len = list.length || 0; i < len; i++) {
-                    // str += "<img class='profile' src='../../../resources/image/img_avatar2.png' data-sn='"+list[i].picture+"'>"
-                    // str += "<ul class='chat'><li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
-                    // str += "<div><div class='header2'><strong id='userName' class='primary-" +
-                    //     "font'>"+list[i].name+"</strong>";
-                    // str += "<small id='replyDate' class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small>";
-                    // str += "<button id='replyDeleteBtn' class='replyDelete'>삭제</button>";
-                    // str += "<button id='replyModifyBtn' class='replyModify'>수정</button></div>";
-                    // str += "<p id='replyContent'>"+list[i].content+"</p>";
-                    // str += "<button class='replySubmit'>답글 쓰기</button></div></li></ul>"
+
                     str += "<li id='sn' class='left clearfix' data-sn='"+list[i].sn+"'>"
                     str += "<div><div class='header2'><strong id='userName' class='primary-" +
                         "font'>"+list[i].name+"</strong>";
@@ -719,6 +712,7 @@
                 replyUL.html(str);
             });
         } // end showlist
+
 
         // 하트 초기화
         getBoardLike();
@@ -760,8 +754,7 @@
 
         //좋아요 클릭 시
         $("#likeCnt1").on("click",function (e) {
-            //e.preventDefault();
-            //change(this);
+
             let isLogin = "";
             <sec:authorize access="isAuthenticated()">
                 isLogin = '<sec:authentication property="principal.username"/>'

@@ -7,6 +7,7 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+
 <!--regBtn-->
 <%--<h4>게시판--%>
 <%--    <c:set var="done" value="false"/>--%>
@@ -28,11 +29,8 @@
 
 <h4>게시판
     <sec:authorize access="isAuthenticated()">
-        <%--             로그인 유저id != 모임장    --%>
-        <c:if test="${pinfo.username ne group.userId}">
-            <button id="boardBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
-            style="float: right; margin-bottom: 5px">글쓰기</button>
-        </c:if>
+        <button id="boardBtn" type="button" class="btn btn-xs pull-right btn btn-primary"
+        style="float: right; margin-bottom: 5px">글쓰기</button>
     </sec:authorize>
 </h4>
 
@@ -104,7 +102,7 @@
                         let dat = "";
                         let notice = "";
                         let role = "";
-
+                        let userPicture = list[i].picture;
                         //제목 글자가40이상이면 ...찍는다. 글자가 너무 길면 칸을 초과함
                         if(list[i].title.length >= 40 || list[i].content.length >=40){
                             dat = "...";
@@ -126,9 +124,15 @@
                         str += "<div class='boardHeader' onclick=location.href='/board/get?sn="+list[i].sn+"&userId=${pinfo.username}&grpSn=${group.sn}';>";
                         //str += "<span>"+list[i].sn+"번"+"</span>";
                         str += "<div id='boardNotice'>"+notice+"</div>";
-                        //str += "<br>";
+                        //
                         str += "<div id='boardDivBox'>";
-                        str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
+
+                        if (userPicture !== null){
+                            str += "<span><img class='avatar' src='"+ "/display?fileName=" + list[i].picture.replace('s_','')+"' alt='error'></span>";
+                        }else{
+                            str += "<span><img class='avatar' src='../../../resources/img/img_avatar2.png' alt='error'></span>";
+                        }
+
                         str += "<span id='boardName'>"+list[i].name+"</span>";
                         str += "<span style='color:gray'> "+role+"</span>";
                         str += "<span id='boardRegDate'>"+boardListService.boardDisplayTime(list[i].regDate)+"</span>";

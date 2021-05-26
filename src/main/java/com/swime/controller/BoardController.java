@@ -38,27 +38,6 @@ public class BoardController {
     private GroupAttendService groupAttendService;
 
 
-//    @GetMapping("/list")
-//    public void list(Model model) {
-//
-//        log.info("list");
-//
-//        model.addAttribute("list", service.getList());
-//    }
-
-//    @GetMapping("/list")
-//    public void list(BoardCriteria cri, Model model){
-//        log.info("list: " + cri);
-//
-//        model.addAttribute("list", service.getListWithPaging(cri));
-//        //model.addAttribute("pageMaker", new BoardDTO(cri,123));
-//        int total = service.getTotal(cri);
-//        log.info("total: " + total);
-//        model.addAttribute("pageMaker", new BoardPageDTO(cri, total));
-//
-//    }
-
-
     @GetMapping(value = "/list/{grpSn}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<GroupBoardPageDTO> getList(@PathVariable("grpSn") long grpSn, @PathVariable("page") int page) {
@@ -73,18 +52,10 @@ public class BoardController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-
-//    @GetMapping("/register")
-//    public void register(){
-//
-//    }
-
     //게시판 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
     public void register(@RequestParam("grpSn") long grpSn, String userId,Model model){
-        model.addAttribute("grpSn", grpSn);
-        model.addAttribute("userId", userId);
 
 
         //모임번호, 유저아이디로 groupAttend에 set해서 groupAttend에 저장하고
@@ -99,23 +70,14 @@ public class BoardController {
 
         log.info("groupAttend : "+groupAttendVO);
 
+        model.addAttribute("grpSn", grpSn);
+        model.addAttribute("userId", userId);
         model.addAttribute("group", groupAttendVO);
 
 
     }
 
 
-//    @PostMapping("/register")
-//    public String register(BoardVO board, RedirectAttributes rttr) {
-//
-//        log.info("register...." + board);
-//
-//        service.register(board);
-//
-//        rttr.addFlashAttribute("result", board.getSn());
-//
-//        return "redirect:/board/list";
-//    }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/register")
@@ -139,7 +101,7 @@ public class BoardController {
         //return "redirect:/board/get?sn="+board.getSn();
     }
 
-//
+    //게시판 조회
     @GetMapping("/get")
     public void get(@RequestParam("sn") Long sn, long grpSn, String userId,
                     Model model, @ModelAttribute("cri") BoardCriteria cri) {
@@ -149,22 +111,24 @@ public class BoardController {
         groupAttend.setUserId(userId);
 
         GroupAttendVO groupAttendVO = groupAttendService.readByGrpSnUserId(groupAttend);
-
-        //그룹을 가입한 리스트 출력 : 로그인 여부 / 모임가입 여부에 따라
-        //댓글 작성 할 수 있는지...
-        List<GroupAttendVO> groupList = groupAttendService.getList(grpSn);
-
-        model.addAttribute("groupAttendList", groupList);
         model.addAttribute("group", groupAttendVO);
-        model.addAttribute("board", service.get(sn));
-        //(x)
-        model.addAttribute("reply", replyService.get(sn));
 
+        //그룹을 가입한 리스트 출력 : 로그인 여부 / 모임가입 여부에 따라 댓글 작성 할 수 있는지
+        List<GroupAttendVO> groupList = groupAttendService.getList(grpSn);
+        model.addAttribute("groupAttendList", groupList);
+
+        BoardVO board = service.get(sn);
+        model.addAttribute("board", board);
+
+        //model.addAttribute("board", service.get(sn));
+        //(x)
+        //model.addAttribute("reply", replyService.get(sn));
+        log.info("/get");
         log.info("groupList>>>>>>>"+groupList);
         log.info("groupAttendVO : " + groupAttendVO);
-        log.info("/get");
         log.info("replyServiceGet : "+replyService.get(sn));
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>"+service.get(sn));
+        log.info("board : " + board);
+
 
     }
 
@@ -204,8 +168,7 @@ public class BoardController {
             if (service.modify(board)) {
                 rttr.addFlashAttribute("result", "success");
             }else{
-                //fail처리
-                //rttr.addFlashAttribute("result", "fail");
+                rttr.addFlashAttribute("result", "fail");
             }
         }catch (Exception e){
             e.getMessage();
@@ -326,20 +289,6 @@ public class BoardController {
 
        }
 
-       //좋아요가 존재하면 삭제한다.
-//       if(boardLikeService.read(getBoardLike) != null){
-//
-//           return boardLikeService.remove(boardLike.getBrdSn(), boardLike.getUserId()) == 1
-//                   //좋아요 개수를 보낸다.
-//                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
-//                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//       }else{
-//           //좋아요가 존재하지 않으면 등록한다.
-//           return boardLikeService.register(boardLike) == 1
-//                   ? new ResponseEntity<>(boardLikeService.getBoardLikeCnt(boardLike.getBrdSn()),HttpStatus.OK)
-//                   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//       }
-
     }
 
     @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -380,63 +329,11 @@ public class BoardController {
 
     }
 
+    // 에러페이지
+    @GetMapping("/error")
+    public void error() {
+
+    }
+
 }
 
-
-
-
-
-
-
-//    @PostMapping(value = "/new")
-//    public ResponseEntity<String> create(@RequestBody BoardVO vo) {
-//
-//        ResponseEntity<String> entity = null;
-//        log.info("BoardVO: " + vo);
-//
-//        try {
-//            int insertCount = service.register(vo);
-//            log.info("Board INSERT COUNT: " + insertCount);
-//            new ResponseEntity<>("success", HttpStatus.OK);
-//
-//        }catch(Exception e){
-//            e.printStackTrace();
-//            entity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-//
-//        }
-//        return entity;
-//
-////        return insertCount == 1
-////                ? new ResponseEntity<>("success", HttpStatus.OK)
-////                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//
-//    @GetMapping(value = "/list")
-//    public ResponseEntity<List<BoardVO>> getList(@RequestBody BoardCriteria cri) {
-//        return new ResponseEntity<>(service.getListWithPaging(cri), HttpStatus.OK);
-//    }
-//
-//
-//    @GetMapping(value = "/{sn}")
-//    public ResponseEntity<BoardVO> get(
-//            @PathVariable("sn") Long sn) {
-//        return new ResponseEntity<>(service.get(sn), HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH},
-//            value = "/{sn}")
-//    public ResponseEntity<String> modify(
-//            @RequestBody BoardVO vo,
-//            @PathVariable("sn") Long sn) {
-//
-//        vo.setSn(sn);
-//
-//        log.info("sn: " + sn);
-//        log.info("modify: " + vo);
-//
-//        return service.modify(vo)
-//                ? new ResponseEntity<>("success", HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
-//}
