@@ -8,6 +8,22 @@
 
 <c:set var="cardTitleLength" value="9"/>
 
+<style>
+    .mb-5, .my-5 {
+        margin-bottom: 1rem!important;
+    }
+
+    .mini-card-tag {
+        background-color: #f1f1f1;
+        padding: 2px;
+        font-size: 15px;
+        border-radius: 0.5rem;
+        width: 80px;
+        height: 25px;
+        text-align: center;
+    }
+</style>
+
 
 <%--<h2>스터디</h2>--%>
 
@@ -189,7 +205,7 @@
             "                </div>" +
             "                <div>" +
             "                    <div>" +
-            "                        <h2 class='card-title' style='font-size: 25px; margin-bottom: 0px;'>" +
+            "                        <h2 class='card-title' style='font-size: 20px; margin-bottom: 0px;'>" +
             "                            " + name +
             "                        </h2>" +
             "                        <span class='flex-container'>" +
@@ -231,7 +247,7 @@
         // console.log("startNum = " + startNum + ", endNum = " + endNum + ", prev = " + prev + ", next = " + next);
         // console.log(pageNum + "/" + "5" + "*" + " 5 = " + (pageNum / 5.0 * 5));
 
-        let str = '<ul class="pagination">';
+        let str = '<ul class="pagination pagination-sm">';
 
         if(prev) {
             str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='#' data-type='" + kind + "' data-btn='prev'>Previous</a></li>"

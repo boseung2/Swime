@@ -159,7 +159,7 @@
         // console.log("startNum = " + startNum + ", endNum = " + endNum + ", prev = " + prev + ", next = " + next);
         // console.log(pageNum + "/" + "5" + "*" + " 5 = " + (pageNum / 5.0 * 5));
 
-        let str = '<ul class="pagination">';
+        let str = '<ul class="pagination pagination-sm">';
 
         if(prev) {
             str += "<li id='rating-item' class='page-item'><a id='rating-link' class='page-link' href='#' data-type='" + kind + "' data-btn='prev'>Previous</a></li>"

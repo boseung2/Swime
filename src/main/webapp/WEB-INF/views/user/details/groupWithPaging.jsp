@@ -54,7 +54,7 @@
                 </div>
             </c:forEach>
         </div>
-        <div class="pagination">
+        <div class="pagination pagination-sm">
             <c:if test="${pageMaker1.prev}">
                 <li class="paginate_button previous">
                     <a href="${pageMaker1.startPage - 1}">&laquo;</a>
@@ -112,7 +112,7 @@
                 </div>
             </c:forEach>
         </div>
-        <div class="pagination">
+        <div class="pagination pagination-sm">
             <c:if test="${pageMaker2.prev}">
                 <li class="paginate_button previous">
                     <a href="${pageMaker2.startPage - 1}">&laquo;</a>
@@ -170,7 +170,7 @@
                 </div>
             </c:forEach>
         </div>
-        <div class="pagination">
+        <div class="pagination pagination-sm">
             <c:if test="${pageMaker3.prev}">
                 <li class="paginate_button previous">
                     <a href="${pageMaker3.startPage - 1}">&laquo;</a>
