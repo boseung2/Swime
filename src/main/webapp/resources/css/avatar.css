@@ -137,6 +137,7 @@ body {
     isplay: flex;
     justify-content: center;
     /*margin-bottom: 60px;*/
+    float: right;
 }
 
 /* Pagination links */
@@ -309,8 +310,8 @@ span.st_on {
 }
 
 .board-body img {
-    width : 21px;
-    height : 21px;
+    /*width : 21px;*/
+    /*height : 21px;*/
 
 }
 
@@ -451,6 +452,7 @@ span.st_on {
 
 .get-body h4 {
     margin-bottom : 30px;
+    clear: right;
 }
 
 .get-body #info pre{

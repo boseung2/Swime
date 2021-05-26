@@ -372,7 +372,7 @@
         e.preventDefault();
 
         console.log("userId = " + e.target.className);
-        console.log("userId = " + e.target.id);
+        console.log("method = " + e.target.id);
 
         let userId = e.target.className;
         let method = e.target.id;
@@ -424,7 +424,7 @@
         if(confirm('선택한 신청자의 스터디 참석을 승인하시겠습니까?')) {
             $('#answerModal').modal("hide");
 
-            let userId = $('#permitBtn').data('userid');
+            let userId = $('#permitBtn').attr('data-userId');
 
             // 해당 신청자의 답변을 모두 삭제
             studyAnswerService.remove({stdSn : ${stdSn}, userId : userId}, function (answer) {
@@ -482,7 +482,7 @@
         if(confirm('선택한 신청자의 스터디 참석을 거절하시겠습니까?')) {
             $('#answerModal').modal("hide");
 
-            let userId = $('#rejectBtn').data('userid');
+            let userId = $('#rejectBtn').attr('data-userId');
 
             // reject ajax 호출 - 선택한 신청자를 참여명단에서 지우고, 답변도 모두 삭제
             studyAttendService.reject({stdSn : ${stdSn}, userId : userId}, function(result) {
