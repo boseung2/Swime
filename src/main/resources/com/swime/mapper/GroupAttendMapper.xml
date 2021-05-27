@@ -22,7 +22,7 @@
     </select>
 
     <select id="getListWithBan" resultType="com.swime.domain.GroupAttendVO">
-        select l.sn, l.grp_sn, l.user_id, u.name, l.grp_role, l.status, to_char(l.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date, to_char(l.upd_date, 'yyyy-mm-dd hh24:mi:ss') as upd_date, l.upd_user_id
+        select l.sn, l.grp_sn, l.user_id, u.name, u.picture, l.grp_role, l.status, to_char(l.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date, to_char(l.upd_date, 'yyyy-mm-dd hh24:mi:ss') as upd_date, l.upd_user_id
         from tgrp_list l, tuser u
         where l.user_id = u.id
           and l.grp_sn = #{grpSn}
