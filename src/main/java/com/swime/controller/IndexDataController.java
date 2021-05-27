@@ -40,5 +40,7 @@ public class IndexDataController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    // 인기있는 스터디
+    
 
 }

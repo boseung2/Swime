@@ -193,9 +193,18 @@
             let str = "";
 
             for(let i = 0; i < result.length; i++) {
+
                 str += '<li>';
                 str += '<div class="attendCard">';
-                str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+
+                // str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+
+                if(result[i].picture !== null && result[i].picture !== 'myPicture.jpeg') {
+                    str += '<img src="' + '/display?fileName=' + result[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                }else {
+                    str += '<img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
+                }
+
                 str += '<strong> ' + result[i].userName + '</strong>';
 
                 if("${representation}" === result[i].userId) str += '<span style="color:gray;"> 스터디장</span>';
@@ -241,7 +250,13 @@
             for(let i = 0; i < result.length; i++) {
                 str += '<li>';
                 str += '<div class="attendCard">';
-                str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+                // str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+
+                if(result[i].picture !== null && result[i].picture !== 'myPicture.jpeg') {
+                    str += '<img src="' + '/display?fileName=' + result[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                }else {
+                    str += '<img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
+                }
                 str += '<strong> ' + result[i].userName + '</strong>';
 
                 if(result[i].grpRole === 'GRRO01') str += '<span style="color:gray;"> 모임장</span>';
@@ -283,7 +298,12 @@
             for(let i = 0; i < result.length; i++) {
                 str += '<li>';
                 str += '<div class="attendCard">';
-                str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+                // str += '<img src="../../../resources/img/img_avatar2.png" alt="Avatar" class="avatar">';
+                if(result[i].picture !== null && result[i].picture !== 'myPicture.jpeg') {
+                    str += '<img src="' + '/display?fileName=' + result[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                }else {
+                    str += '<img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
+                }
                 str += '<strong> ' + result[i].userName + '</strong>';
 
                 if("${representation}" === result[i].userId) str += '<span style="color:gray;"> 스터디장</span>';
@@ -439,10 +459,13 @@
 
                                 if(result != null) {
 
+                                    // console.log("context = " + getContextPath(document.location.href));
+                                    let context = getContextPath(document.location.href);
+
                                     // 참석했다는 알림을 db에 저장하고 실시간 알림 전송
                                     noticeService.register(
                                         {sender : "${pinfo.username}", receiver : userId,
-                                            kind : "스터디", url : "http://www.swime.kro.kr/study/get?sn=${stdSn}", content : "스터디 " + result.name + "에 참석되셨습니다."}, function(notice) {
+                                            kind : "스터디", url : context + "/get?sn=${stdSn}", content : "스터디 " + result.name + "에 참석되셨습니다."}, function(notice) {
                                             if(notice === 'success') {
 
                                                 alert('참석 승인 처리가 완료되었습니다.');

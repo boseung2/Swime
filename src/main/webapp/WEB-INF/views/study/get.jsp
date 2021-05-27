@@ -256,9 +256,13 @@
 
 
                     // 로그인되어있으며, 해당사용자가 아니면 채팅버튼 띄우기
+
+                    // console.log("window.location.protocol = " + window.location.protocol);
+                    // console.log("domain = " + window.location.host);
+
                     if("${pinfo.username}" !== "" && result[i].userId !== "${pinfo.username}") {
                         str += '<div style="float:right">';
-                        str += '<a href="http://localhost/chat/register?userId=' + result[i].userId + '">';
+                        str += '<a href="http://' + window.location.host + '/chat/register?userId=' + result[i].userId + '">';
                         str += '<img src="../../../resources/img/chat.png" class="listChatBtn">';
                         str += '</a>';
                         str += '</div>';
@@ -652,10 +656,13 @@
 
             if(result === 'success') {
 
+                // console.log("context = " + getContextPath(document.location.href));
+                let context = getContextPath(document.location.href);
+
                 // 스터디장에게 참석했다는 알림을 db에 저장하고 실시간 알림 전송
                 noticeService.register(
                     {sender : "${pinfo.username}", receiver : "${study.representation}",
-                        kind : "스터디", url : "http://www.swime.kro.kr/study/get?sn=${study.sn}", content : "스터디 ${study.name}에 새로운 승인 대기멤버가 있습니다."}, function(notice) {
+                        kind : "스터디", url : context + "/get?sn=${study.sn}", content : "스터디 ${study.name}에 새로운 승인 대기멤버가 있습니다."}, function(notice) {
                         if(notice === 'success') {
 
                             console.log('알림 등록 완료 완료되었습니다.');

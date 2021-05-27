@@ -1161,9 +1161,11 @@
                     str += "<span style='color:gray'>"+list[i].grpRole+"</span>";
 
                     // 로그인되어있으며, 해당사용자가 아니면 채팅버튼 띄우기
+
+
                     if("${pinfo.username}" !== "" && list[i].userId !== "${pinfo.username}") {
                         str += '<div style="float:right">';
-                        str += '<a href="http://localhost/chat/register?userId=' + list[i].userId + '">';
+                        str += '<a href="http://' + window.location.host + '/chat/register?userId=' + list[i].userId + '">';
                         str += '<img src="../../../resources/img/chat.png" class="listChatBtn">';
                         str += '</a>';
                         str += '</div>';

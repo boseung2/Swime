@@ -197,7 +197,7 @@
 
         sock2.onmessage = onChatMessage;
 
-        console.log("context = " + getContextPath(document.location.href));
+        // console.log("context = " + getContextPath(document.location.href));
 
         function onChatMessage(e) {
             let data = e.data;
