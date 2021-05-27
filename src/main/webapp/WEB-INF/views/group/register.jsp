@@ -268,7 +268,7 @@
     $(document).ready(function(e) {
 
         let formObj = $("form[role='form']");
-        let regex = new RegExp("(.*?)\.(png|jpg|jpeg|bmp)$");
+        let regex = new RegExp("(.*?)\.(png|jpg|jpeg|bmp|gif)$");
         let maxSize = 5242880;
         let csrfHeaderName = "${_csrf.headerName}";
         let csrfTokenValue = "${_csrf.token}";

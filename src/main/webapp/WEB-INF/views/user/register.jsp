@@ -11,7 +11,7 @@
 <div class="full">
 
     <div class="content">
-        <div id="regdiv">
+        <div class="regdiv">
             <div id="errorMsgDiv"></div>
             <%--            <form id="regForm" action="/user/AuthSuccess">--%>
             <form id="regForm" action="/user/register" method="post">

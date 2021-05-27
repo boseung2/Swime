@@ -88,7 +88,7 @@
             text-decoration: none;
             display: block;
             /*width: 330px;*/
-            width: fit-content;
+            /*width: fit-content;*/
         }
 
         .dropdown a:hover {background-color: #ddd;}

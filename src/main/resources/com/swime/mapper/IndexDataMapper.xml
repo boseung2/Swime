@@ -33,7 +33,7 @@
             (
                 select rownum rn,
                        sn, grp_sn, name, representation, start_date, end_date, start_time, end_time, repeat_cycle,
-                       repeat_day, information, place_id, expense, capacity, status, reg_date, upd_date
+                       repeat_day, information, place_id, expense, capacity, status, reg_date, upd_date, on_off
                 from
                     (
                         select *
@@ -49,7 +49,7 @@
                                  group by std_sn, wish_count
                                  order by wish_count desc
                              ) w
-                        where s.sn = w.std_sn
+                        where s.sn = w.std_sn and (select current_date - (select start_date from tstd where sn = s.sn) from dual) < 0
                         order by wish_count desc
                     )
                 where rownum <= #{pageNum} * #{amount}
