@@ -324,7 +324,7 @@
                 let a = resultConvertHtml(result, 'study');
                 $(place).html(a);
                 slidertwo = new Slider('slider2', 3, 3, 1, 20);
-                // cardOnclick();
+                cardOnclick();
             })
             .fail(function () {
                 console.log("error");
@@ -359,7 +359,7 @@
                 }
 
                 str += "" +
-                    "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+                    "            <div class='index-card' data-type='" + type + "' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
                     "                <div class=\"cardCon\">\n" +
                     "                    <img src=\"" + picSrc + "\" style='height: 50%;'>\n" +
                     "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
@@ -377,18 +377,11 @@
                 onOff = onOff === "STOF01" ? "온라인" : "오프라인";
                 let startDate = result[i].startDate;
                 let sn = result[i].sn;
-                //
-                //
-                // if(sido === 'LODO01') {
-                //     sido = '서울';
-                // }else if(sido === 'LODO02') {
-                //     sido = '경기';
-                // }
-                //
+
                 let picSrc = "/resources/img/default_img.jpg";
 
                 str += "" +
-                    "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+                    "            <div class='index-card' data-type='" + type + "' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
                     "                <div class=\"cardCon\">\n" +
                     "                    <img src=\"" + picSrc + "\" style='height: 50%;'>\n" +
                     "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
@@ -410,8 +403,12 @@
 
 
     function cardOnclick() {
+
+        $(".index-card").off("click");
+
         $(".index-card").on("click", function () {
-            location.href = '/group/get?sn=' + this.dataset.sn;
+            if(this.dataset.type === 'group') location.href = '/group/get?sn=' + this.dataset.sn;
+            else if(this.dataset.type === 'study') location.href = '/study/get?sn=' + this.dataset.sn;
         })
     }
 </script>
