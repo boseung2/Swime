@@ -177,6 +177,8 @@
 
         name = name.length > 9 ? name.slice(0, 8) + '...' : name;
 
+        picture = picture === null ? defaultImg : '/display?fileName=' + picture;
+
         console.log(sn);
         console.log(tags);
         console.log(category);
@@ -201,7 +203,7 @@
             "        <div class='card-body' data-sn='" + sn + "'>" +
             "            <div class='card-body-top' style='display:flex;'>" +
             "                <div class='uploadResult'>" +
-            "                    <img class='img-fluid rounded mb-4 mb-lg-0' src='" + defaultImg +"' alt=''>" +
+            "                    <img class='img-fluid rounded mb-4 mb-lg-0' src='" + picture +"' alt=''>" +
             "                </div>" +
             "                <div>" +
             "                    <div>" +
