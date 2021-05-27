@@ -404,19 +404,58 @@
             let description = result[i].description;
             let name = result[i].name;
             let sn = result[i].sn;
+            let pic = result[i].picture;
+            let sido = result[i].sido;
+            let sigungu = result[i].sigungu;
 
 
-            str += "" +
-                "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
-                "                <div class=\"cardCon\">\n" +
-                "                    <div class=\"card-img1\" style='height: 50%;'></div>\n" +
-                "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
-                "                        <span>서울 강남</span>\n" +
-                "                        <h3>" + name + "</h3>\n" +
-                "                        <p>" + description + "</p>\n" +
-                "                    </div>\n" +
-                "                </div>\n" +
-                "            </div>";
+            if(sido === 'LODO01') {
+                sido = '서울';
+            }else if(sido === 'LODO02') {
+                sido = '경기';
+            }
+
+            if(pic !== null) {
+                str += "" +
+                    "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+                    "                <div class=\"cardCon\">\n" +
+                    "                    <img src=\"" + "/display?fileName=" + pic + "\" style='height: 50%;'>\n" +
+                    "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
+                    "                        <span>" + sido + " " + sigungu + "</span>\n" +
+                    "                        <h3>" + name + "</h3>\n" +
+                    "                        <p>" + description + "</p>\n" +
+                    "                    </div>\n" +
+                    "                </div>\n" +
+                    "            </div>";
+
+            }else {
+                str += "" +
+                    "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+                    "                <div class=\"cardCon\">\n" +
+                    "                    <img src=\"/resources/img/default_img.jpg\" style='height: 50%;'>\n" +
+                    "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
+                    "                        <span>" + sido + " " + sigungu + "</span>\n" +
+                    "                        <h3>" + name + "</h3>\n" +
+                    "                        <p>" + description + "</p>\n" +
+                    "                    </div>\n" +
+                    "                </div>\n" +
+                    "            </div>";
+            }
+
+
+            // str += "" +
+            //     "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+            //     "                <div class=\"cardCon\">\n" +
+            //     "                    <div class=\"card-img1\" style='height: 50%;'></div>\n" +
+            //     "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
+            //     "                        <span>서울 강남</span>\n" +
+            //     "                        <h3>" + name + "</h3>\n" +
+            //     "                        <p>" + description + "</p>\n" +
+            //     "                    </div>\n" +
+            //     "                </div>\n" +
+            //     "            </div>";
+
+
         }
         return str;
     }

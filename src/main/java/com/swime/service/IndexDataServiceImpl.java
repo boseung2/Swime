@@ -2,6 +2,7 @@ package com.swime.service;
 
 import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
+import com.swime.domain.StudyVO;
 import com.swime.mapper.IndexDataMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -23,8 +24,8 @@ public class IndexDataServiceImpl implements IndexDataService {
     }
 
     @Override
-    public List<GroupVO> popularStudyList() {
-        return null;
+    public List<StudyVO> popularStudyList(GroupCriteria cri) {
+        return mapper.popularStudyList(cri.getPageNum(), cri.getAmount());
     }
 
     @Override

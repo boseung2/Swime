@@ -1,6 +1,7 @@
 package com.swime.mapper;
 
 import com.swime.domain.GroupVO;
+import com.swime.domain.StudyVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.junit.Assert;
@@ -28,6 +29,14 @@ public class IndexDataMapperTest {
     @Test
     public void test1(){
         List<GroupVO> list = mapper.popularGroupList(1,6);
+        Assert.assertTrue(list != null);
+
+        list.forEach(log::info);
+    }
+
+    @Test
+    public void testPopularStuddyList(){
+        List<StudyVO> list = mapper.popularStudyList(1,6);
         Assert.assertTrue(list != null);
 
         list.forEach(log::info);
