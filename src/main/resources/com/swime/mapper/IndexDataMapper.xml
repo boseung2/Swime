@@ -49,7 +49,7 @@
                                  group by std_sn, wish_count
                                  order by wish_count desc
                              ) w
-                        where s.sn = w.std_sn
+                        where s.sn = w.std_sn and (select current_date - (select start_date from tstd where sn = s.sn) from dual) < 0
                         order by wish_count desc
                     )
                 where rownum <= #{pageNum} * #{amount}

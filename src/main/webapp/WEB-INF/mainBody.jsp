@@ -96,7 +96,7 @@
 </div>
 
 <!-- 인기있는 모임 -->
-<div class="card-container" id="card-container">
+<div class="card-container" id="card-container" style="margin-top: 50px;">
     <article>
         <h1 class="mainContainerTitle">인기있는 모임</h1>
         <div class="flex-flow"></div>
@@ -119,7 +119,7 @@
 </div>
 
 
-<div class="card-container">
+<div class="card-container" style="margin-top: -100px;">
     <article>
         <h1 class="mainContainerTitle">인기있는 스터디</h1>
         <div class="flex-flow"></div>
@@ -322,8 +322,8 @@
         })
             .done(function (result) {
                 let a = resultConvertHtml(result, 'study');
-                // $(place).html(a);
-                // slidertwo = new Slider('slider2', 3, 3, 1, 20);
+                $(place).html(a);
+                slidertwo = new Slider('slider2', 3, 3, 1, 20);
                 // cardOnclick();
             })
             .fail(function () {
@@ -374,11 +374,9 @@
 
                 let name = result[i].name;
                 let onOff = result[i].onOff;
-                // let name = result[i].name;
-                // let name = result[i].name;
-                // let name = result[i].name;
-                // let name = result[i].name;
-                // let name = result[i].name;
+                onOff = onOff === "STOF01" ? "온라인" : "오프라인";
+                let startDate = result[i].startDate;
+                let sn = result[i].sn;
                 //
                 //
                 // if(sido === 'LODO01') {
@@ -387,25 +385,19 @@
                 //     sido = '경기';
                 // }
                 //
-                // let picSrc;
-                //
-                // if(pic !== null) {
-                //     picSrc = "/display?fileName=" + pic;
-                // }else{
-                //     picSrc = "/resources/img/default_img.jpg";
-                // }
-                //
-                // str += "" +
-                //     "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
-                //     "                <div class=\"cardCon\">\n" +
-                //     "                    <img src=\"" + picSrc + "\" style='height: 50%;'>\n" +
-                //     "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
-                //     "                        <span>" + sido + " " + sigungu + "</span>\n" +
-                //     "                        <h3>" + name + "</h3>\n" +
-                //     "                        <p>" + description + "</p>\n" +
-                //     "                    </div>\n" +
-                //     "                </div>\n" +
-                //     "            </div>";
+                let picSrc = "/resources/img/default_img.jpg";
+
+                str += "" +
+                    "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+                    "                <div class=\"cardCon\">\n" +
+                    "                    <img src=\"" + picSrc + "\" style='height: 50%;'>\n" +
+                    "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
+                    "                        <span>" + onOff + "</span>\n" +
+                    "                        <h3>" + name + "</h3>\n" +
+                    "                        <p>" + startDate + "</p>\n" +
+                    "                    </div>\n" +
+                    "                </div>\n" +
+                    "            </div>";
 
 
 
