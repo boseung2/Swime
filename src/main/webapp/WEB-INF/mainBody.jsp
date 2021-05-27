@@ -123,9 +123,9 @@
     <article>
         <h1 class="mainContainerTitle">인기있는 스터디</h1>
         <div class="flex-flow"></div>
-        <h2>
-            <a href="#">전체보기 &#62;</a>
-        </h2>
+<%--        <h2>--%>
+<%--            <a href="#">전체보기 &#62;</a>--%>
+<%--        </h2>--%>
     </article>
     <div style="display: flex; justify-content: space-evenly">
 
@@ -387,7 +387,7 @@
                     "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
                     "                        <span>" + onOff + "</span>\n" +
                     "                        <h3>" + name + "</h3>\n" +
-                    "                        <p>" + startDate + "</p>\n" +
+                    "                        <p>" + startDate.substring(0, 11) + "</p>\n" +
                     "                    </div>\n" +
                     "                </div>\n" +
                     "            </div>";
