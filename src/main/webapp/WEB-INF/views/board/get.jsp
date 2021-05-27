@@ -11,131 +11,26 @@
     <sec:authentication property="principal.memberVO" var="mv"/>
 </sec:authorize>
 <link rel="stylesheet" href="/resources/css/board-get.css">
-<style>
-    /*#notice{*/
-    /*    color: red;*/
-    /*}*/
-    /*.uploadResult {*/
-    /*    width: 150%;*/
-    /*    background-color: white;*/
-    /*    display:flex;*/
-    /*    margin-bottom: 25px;*/
-    /*}*/
 
-    /*.uploadResult ul{*/
-    /*    display:flex;*/
-    /*    flex-flow: row;*/
-    /*    justify-content: center;*/
-    /*    align-items: center;*/
-    /*}*/
-
-    /*.uploadResult ul li {*/
-    /*    list-style: none;*/
-    /*    padding: 10px;*/
-    /*    align-items: center;*/
-    /*}*/
-    /*!*one -> none으로바꿈*!*/
-    /*.uploadResult ul li {*/
-    /*    list-style: none;*/
-    /*    padding: 10px;*/
-    /*    align-content: center;*/
-    /*    text-align: center;*/
-    /*}*/
-
-    /*ul.uploadResult > li > img{*/
-    /*    width: 100px;*/
-    /*}*/
-
-    /*ul.uploadResult > li > div> img{*/
-    /*    width: 100px;*/
-    /*    margin-right:1em;*/
-    /*    height: 100px;*/
-    /*}*/
-
-    /*.uploadResult ul li span {*/
-    /*    color: white;*/
-    /*}*/
-
-    /*.uploadResult2 {*/
-    /*    width: 150%;*/
-    /*    background-color: white;*/
-    /*    display:flex;*/
-    /*}*/
-
-    /*.uploadResult2 ul{*/
-    /*    display:flex;*/
-    /*    flex-flow: row;*/
-    /*    justify-content: center;*/
-    /*    align-items: center;*/
-    /*}*/
-
-    /*.uploadResult2 ul li {*/
-    /*    list-style: none;*/
-    /*    padding: 10px;*/
-    /*    align-items: center;*/
-    /*}*/
-    /*!*one -> none으로바꿈*!*/
-    /*.uploadResult2 ul li {*/
-    /*    list-style: none;*/
-    /*    padding: 10px;*/
-    /*    align-content: center;*/
-    /*    text-align: center;*/
-    /*}*/
-
-    /*ul.uploadResult2 > li > img{*/
-    /*    width: 100px;*/
-    /*}*/
-
-    /*ul.uploadResult2 > li > div> img{*/
-    /*    width: 100px;*/
-    /*    margin-right:1em;*/
-    /*    height: 100px;*/
-    /*}*/
-
-    /*.uploadResult2 ul li span {*/
-    /*    color: white;*/
-    /*}*/
-
-    /*.bigPictureWrapper {*/
-    /*    position: absolute;*/
-    /*    display: none;*/
-    /*    justify-content: center;*/
-    /*    align-items: center;*/
-    /*    top: 0%;*/
-    /*    width: 100%;*/
-    /*    height: 100%;*/
-    /*    background-color: gray;*/
-    /*    z-index: 100;*/
-    /*    background:rgba(255,255,255,0.5);*/
-    /*}*/
-
-    /*.bigPicture {*/
-    /*    position: relative;*/
-    /*    display:flex;*/
-    /*    justify-content: center;*/
-    /*    align-items: center;*/
-    /*}*/
-
-    /*.bigPicture img {*/
-    /*    width: 400px;*/
-    /*}*/
-</style>
 
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"> 게시판</h1>
-            <hr/>
+
 
             <c:if test="${board.topFix == 'BOFI02'}">
                 <div id="notice">[공지사항]</div>
             </c:if>
             <div id="inline3">
-                <!--사진 이거 div만 냅기고 for문 돌고 가져와야하나..-->
-                <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>
+                <!--사진 이거 div만 냅기고 for문 돌고 가져와야하나..
+                src='"+ "/display?fileName=" + list[i].picture.replace('s_','')+"'
+                -->
+<%--                <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>--%>
+                <div class="inline" id="img"><img class="profile" src="/display?fileName=${board.picture}" alt="error"></div>
                 <div class="inline" id="name"><c:out value="${board.name}" /></div>
                 <div class="inline" id="role"></div>
             </div>
+
 
 
             <div id="inline2">
@@ -397,29 +292,13 @@
             operForm.attr("action", "/board/modify").submit();
 
         })
-        //취소 -> 그룹 리스트
-        <%--$("button[data-oper='list']").on("click",function(){--%>
-        <%--    operForm.attr("action","/group/get");--%>
-        <%--    operForm.find("input[name='sn']").remove();--%>
-        <%--    operForm.append("<input type='hidden' name = 'sn' value='" + ${board.grpSn} + "'>");--%>
-        <%--    operForm.submit();--%>
-        <%--})--%>
-        //
+
+
         // http://localhost/group/get?sn=720
         $("button[data-oper='list']").on("click",function(){
             console.log("return list");
             $(location).attr('href', '/group/get?sn=' + '${board.grpSn}');
         });
-
-
-        // <!--유효성 검사-->
-        // $('button[id="replyRegisterBtn"]').on("click", function(e) {
-        //
-        //
-        //     }
-
-        //})
-
 
     });
 
@@ -789,50 +668,8 @@
         });
 
 
-
     });// end ready
 
-
-
-    // //댓글 생성
-    // replyService.add(
-    //     {brdSn:snValue, userId:"toywar1@naver.com",content:"댓글 테스트2", status:"RPST01"}
-    //     , function(result){
-    //
-    //         alert("댓글이 달렸습니다");
-    //     }
-    // )
-    // //댓글 조회
-    // replyService.getList({brdSn:snValue, page:1}, function(list){
-    //
-    //     for(let i = 0, len = list.length||0; i < len; i++){
-    //         console.log(list[i]);
-    //     }
-    // });
-    // //댓글 삭제
-    // replyService.remove(43, function(count) {
-    //     console.log(count);
-    //
-    //     if(count === "success") {
-    //         alert("REMOVE");
-    //     }
-    // }, function(err) {
-    //     alert("Errer!!")
-    // });
-    // //댓글 수정
-    // replyService.update({
-    //     sn : 66,
-    //     brdSn : snValue,
-    //     content : "댓글 테스트>>>>",
-    //     status : "RPST01"
-    // },function(result){
-    //     alert('수정');
-    // });
-    //
-    // //특정 댓글 조회
-    // replyService.get(65, function(data){
-    //     console.log(data);
-    // });
 
 </script>
 

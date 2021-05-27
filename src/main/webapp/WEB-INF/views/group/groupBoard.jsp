@@ -103,6 +103,8 @@
                         let notice = "";
                         let role = "";
                         let userPicture = list[i].picture;
+                        console.log("userPicture");
+                        console.log(userPicture);
                         //제목 글자가40이상이면 ...찍는다. 글자가 너무 길면 칸을 초과함
                         if(list[i].title.length >= 40 || list[i].content.length >=40){
                             dat = "...";
@@ -126,7 +128,7 @@
                         str += "<div id='boardNotice'>"+notice+"</div>";
                         //
                         str += "<div id='boardDivBox'>";
-
+                        // || userPicture.length !== 0
                         if (userPicture !== null){
                             str += "<span><img class='avatar' src='"+ "/display?fileName=" + list[i].picture.replace('s_','')+"' alt='error'></span>";
                         }else{
