@@ -19,7 +19,7 @@
                         from tgrp g, tuser u
                         where g.user_id = u.id
                         and g.status = 'GRST01'
-                        order by rating desc
+                        order by rating desc, rating_count desc
                 )
                 where rownum <= #{pageNum} * #{amount}
             )
