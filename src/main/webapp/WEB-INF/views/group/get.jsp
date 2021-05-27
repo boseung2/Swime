@@ -68,11 +68,14 @@
 <!-- container -->
 
 <div class="gray-background">
+
+
+<%--    <div id="nav-background" style="width: 100%;height: 100px; background-color: black;"></div>--%>
     <!-- container -->
     <div class="container">
 
         <!-- nav -->
-        <div class="topnav">
+        <div class="topnav" style="position: sticky;top: 0;">
             <a href="#groupInfo" class="active">정보</a>
             <a href="#study">스터디</a>
             <a href="#board">게시판</a>
@@ -1010,7 +1013,9 @@
         })
     })
 
-    window.onscroll = function() {myFunction()};
+    window.onscroll = function() {
+        // myFunction();
+    };
 
     function myFunction() {
         if(window.pageYOffset >= sticky) {

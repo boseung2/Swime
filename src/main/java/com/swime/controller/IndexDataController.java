@@ -3,6 +3,7 @@ package com.swime.controller;
 import com.swime.domain.CodeTable;
 import com.swime.domain.GroupCriteria;
 import com.swime.domain.GroupVO;
+import com.swime.domain.StudyVO;
 import com.swime.mapper.IndexDataMapper;
 import com.swime.service.IndexDataService;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,14 @@ public class IndexDataController {
     }
 
     // 인기있는 스터디
+    @GetMapping(value = "/getPopularStudyList",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<List<StudyVO>> getPopularStudyList(GroupCriteria cri){
+        return new ResponseEntity<>(service.popularStudyList(cri), HttpStatus.OK);
+    }
     
 
 }

@@ -33,7 +33,7 @@
             (
                 select rownum rn,
                        sn, grp_sn, name, representation, start_date, end_date, start_time, end_time, repeat_cycle,
-                       repeat_day, information, place_id, expense, capacity, status, reg_date, upd_date
+                       repeat_day, information, place_id, expense, capacity, status, reg_date, upd_date, on_off
                 from
                     (
                         select *
