@@ -2,6 +2,8 @@ img.profile{
     border-radius: 70%;
     width: 40px;
     height: 40px;
+    margin-top: 20px;
+    /*border: solid 1px;*/
 }
 /*img #attach{*/
 /*    width: 200px;*/
@@ -10,6 +12,10 @@ img.profile{
 .inline{
     display: inline-block;
 }
+#inline3{
+    margin-top: 15px;
+}
+
 
 div #date{
     margin-left: 60px;
