@@ -20,7 +20,8 @@
 
 ## 화면정의서
 
-[이곳](./documents/story-board)을 눌러주세요.
+[이곳](./documents/story-board2)을 눌러주세요.
+
 
 
 ## 프로젝트 소개
@@ -127,4 +128,6 @@ Swime 프로젝트 DB는 코드 테이블을 포함한 29개의 테이블로 이
 * 이민재(<a href="https://github.com/toywar94"/>https://github.com/toywar94)
 * 신성권(<a href="https://github.com/seonggwonshin"/>https://github.com/seonggwonshin)
 * 정재웅()
+
+
 
