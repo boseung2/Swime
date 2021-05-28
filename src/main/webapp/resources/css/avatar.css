@@ -271,7 +271,7 @@ span.st_on {
 .attendBtn {
     display : inline-block;
     float : right;
-    margin-top : 12px;
+    /*margin-top : 12px;*/
 }
 
 .attendBtn a {

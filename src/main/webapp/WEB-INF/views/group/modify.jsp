@@ -258,7 +258,17 @@
 
                         for(let i=0, len=list.length || 0; i<len; i++) {
                             str += "<li data-sn='"+list[i].sn+"'>";
-                            str += "<div><div class='attendCard'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+
+                            // str += "<div><div class='attendCard'><img src='../../../resources/img/img_avatar2.png' alt='Avatar' class='avatar'>";
+
+                            console.log("pic=" + list[i].picture);
+                            if(list[i].picture !== null && list[i].picture !== 'myPicture.jpeg') {
+
+                                str += '<div><div class="attendCard"><img src="' + '/display?fileName=' + list[i].picture.replace('s_', '') + '" alt="Avatar" class="avatar">';
+                            }else {
+                                str += '<div><div class="attendCard"><img src="https://image.flaticon.com/icons/png/512/3237/3237472.png" alt="Avatar" class="avatar">';
+                            }
+
                             str += "<b>"+list[i].name+"</b>\t";
                             str += "<span style='color:gray'>"+ (list[i].status !== "GRUS03" ? list[i].grpRole : '영구추방회원') +"</span></div><div class='attendBtn' data-sn='"+list[i].sn+"' style='text-decoration: underline; color: red;'>"
                             if(list[i].status === "GRUS03") {

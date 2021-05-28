@@ -68,17 +68,20 @@
 <!-- container -->
 
 <div class="gray-background">
+
+
+<%--    <div id="nav-background" style="width: 100%;height: 100px; background-color: black;"></div>--%>
+<!-- nav -->
+<div class="topnav" style="position: sticky;top: 0;transition: background-color 0.5s;">
+    <a href="#groupInfo" class="active">정보</a>
+    <a href="#study">스터디</a>
+    <a href="#board">게시판</a>
+    <a href="#groupRating">후기</a>
+</div>
+<!-- /nav -->
+
     <!-- container -->
     <div class="container">
-
-        <!-- nav -->
-        <div class="topnav">
-            <a href="#groupInfo" class="active">정보</a>
-            <a href="#study">스터디</a>
-            <a href="#board">게시판</a>
-            <a href="#groupRating">후기</a>
-        </div>
-        <!-- /nav -->
 
         <div class="main-contents get-body">
         <!-- 멤버 리스트 -->
@@ -1000,6 +1003,7 @@
 <!-- topnav javascript -->
 <script>
     let topnav = document.getElementsByClassName("topnav")[0];
+    $(".topnav").css( "padding-left", $(".container")[0].offsetLeft + 15);
     let sticky = topnav.offsetTop;
 
     $(document).ready(function() {
@@ -1008,15 +1012,27 @@
             console.dir(e.target);
             $(this).attr("class", "active");
         })
+
+
     })
 
-    window.onscroll = function() {myFunction()};
+
+    $(window).resize( function() {
+        $(".topnav").css( "padding-left", $(".container")[0].offsetLeft + 15);
+    })
+
+    window.onscroll = function() {
+        myFunction();
+    };
 
     function myFunction() {
-        if(window.pageYOffset >= sticky) {
-            topnav.classList.add("sticky");
+        let topnav = $(".topnav")[0];
+        if(window.pageYOffset >= topnav.offsetTop) {
+            $(".topnav").css("background-color", "white");
+            // topnav.classList.add("sticky");
         } else {
-            topnav.classList.remove("sticky");
+            $(".topnav").css("background-color", "#ffffff00");
+            // topnav.classList.remove("sticky");
         }
     }
 </script>

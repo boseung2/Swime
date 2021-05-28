@@ -96,7 +96,7 @@
 </div>
 
 <!-- 인기있는 모임 -->
-<div class="card-container" id="card-container">
+<div class="card-container" id="card-container" style="margin-top: 50px;">
     <article>
         <h1 class="mainContainerTitle">인기있는 모임</h1>
         <div class="flex-flow"></div>
@@ -108,122 +108,36 @@
     <div style="display: flex; justify-content: space-evenly">
 
         <a onclick="slider.prev()" class="button-box"><i class="fas fa-chevron-left"></i></a>
+
         <div class="card-wrap" id="slider">
-
-<%--            <div>--%>
-<%--                <div class="cardCon">--%>
-<%--                    <div class="card-img1"></div>--%>
-<%--                    <div class="card-content">--%>
-<%--                        <span>서울 강남</span>--%>
-<%--                        <h3>자바의 정석</h3>--%>
-<%--                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-
-<%--            <a href="#">--%>
-<%--                <div class="cardCon">--%>
-<%--                    <div class="card-img1"></div>--%>
-<%--                    <div class="card-content">--%>
-<%--                        <span>서울 강남</span>--%>
-<%--                        <h3>자바의 정석</h3>--%>
-<%--                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </a>--%>
-
-<%--            <a href="#">--%>
-<%--                <div class="cardCon">--%>
-<%--                    <div class="card-img1"></div>--%>
-<%--                    <div class="card-content">--%>
-<%--                        <span>서울 종로</span>--%>
-<%--                        <h3>파이썬의 고수</h3>--%>
-<%--                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </a>--%>
-
-<%--            <a href="#">--%>
-<%--                <div class="cardCon">--%>
-<%--                    <div class="card-img1"></div>--%>
-<%--                    <div class="card-content">--%>
-<%--                        <span>서울 시청</span>--%>
-<%--                        <h3>JAVA DESIGN PATTERNS</h3>--%>
-<%--                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </a>--%>
 
         </div>
 
-        <a onclick="slider.next(this)" class="button-box"><i class="fas fa-chevron-right"></i></a>
+        <a onclick="slider.next()" class="button-box"><i class="fas fa-chevron-right"></i></a>
 
     </div>
 </div>
 
-<%--<script>--%>
-<%--    $("#nextBtn").on("click", function (e) {--%>
-<%--        e.preventDefault();--%>
-<%--        slider.next();--%>
-<%--    })--%>
-<%--</script>--%>
 
-<%--<div class="card-container">--%>
-<%--    <article>--%>
-<%--        <h1 class="mainContainerTitle">인기있는 스터디</h1>--%>
-<%--        <div class="flex-flow"></div>--%>
+<div class="card-container" style="margin-top: -100px;">
+    <article>
+        <h1 class="mainContainerTitle">인기있는 스터디</h1>
+        <div class="flex-flow"></div>
 <%--        <h2>--%>
 <%--            <a href="#">전체보기 &#62;</a>--%>
 <%--        </h2>--%>
-<%--    </article>--%>
-<%--    <div style="display: flex; justify-content: space-evenly">--%>
+    </article>
+    <div style="display: flex; justify-content: space-evenly">
 
-<%--    <a onclick="slidertwo.prev()" class="button-box"><i class="fas fa-chevron-left"></i></a>--%>
-<%--    <div class="card-wrap" id="slider2">--%>
-<%--        <a href="#">--%>
-<%--            <div class="cardCon">--%>
-<%--                <div class="card-img1"></div>--%>
-<%--                <div class="card-content">--%>
-<%--                    <span>자바의 정석</span>--%>
-<%--                    <h3>객체지향</h3>--%>
-<%--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </a>--%>
-<%--        <a href="#">--%>
-<%--            <div class="cardCon">--%>
-<%--                <div class="card-img1"></div>--%>
-<%--                <div class="card-content">--%>
-<%--                    <span>JAVA DESIGN PATTERNS</span>--%>
-<%--                    <h3>디자인 패턴 기초</h3>--%>
-<%--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </a>--%>
-<%--        <a href="#">--%>
-<%--            <div class="cardCon">--%>
-<%--                <div class="card-img1"></div>--%>
-<%--                <div class="card-content">--%>
-<%--                    <span>MODERN JAVASCRIPT</span>--%>
-<%--                    <h3>함수와 클래스</h3>--%>
-<%--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </a>--%>
-<%--        <a href="#">--%>
-<%--            <div class="cardCon">--%>
-<%--                <div class="card-img1"></div>--%>
-<%--                <div class="card-content">--%>
-<%--                    <span>MODERN JAVASCRIPT22</span>--%>
-<%--                    <h3>함수와 클래스</h3>--%>
-<%--                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<br> Voluptates, quos enim.</p>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </a>--%>
-<%--    </div>--%>
-<%--    <a onclick="slidertwo.next(this)" class="button-box"><i class="fas fa-chevron-right"></i></a>--%>
-<%--    </div>--%>
-<%--</div>--%>
+    <a onclick="slidertwo.prev()" class="button-box"><i class="fas fa-chevron-left"></i></a>
+
+    <div class="card-wrap" id="slider2">
+
+    </div>
+
+    <a onclick="slidertwo.next(this)" class="button-box"><i class="fas fa-chevron-right"></i></a>
+    </div>
+</div>
 
 <script>
     const Slider = function (id, _web, _tab, _mobile, spacingParam) {
@@ -367,7 +281,7 @@
     };
 
     let slider = undefined;
-    // let slidertwo = new Slider('slider2',3,3,1,20);
+    let slidertwo = undefined;
     // slider.auto();
 
 </script>
@@ -375,6 +289,7 @@
 
 <script>
     requestAjax($("#slider"));
+    requestAjax2($("#slider2"));
 
     function requestAjax(place) {
         $.ajax({
@@ -386,7 +301,7 @@
             }
         })
             .done(function (result) {
-                let a = resultConvertHtml(result);
+                let a = resultConvertHtml(result,'group');
                 $(place).html(a);
                 slider = new Slider('slider', 3, 3, 1, 20);
                 cardOnclick();
@@ -395,31 +310,58 @@
                 console.log("error");
             })
     }
+
+    function requestAjax2(place) {
+        $.ajax({
+            url : "/getPopularStudyList",
+            dataType: "json",
+            data : {
+                pageNum : 1,
+                amount : 6
+            }
+        })
+            .done(function (result) {
+                let a = resultConvertHtml(result, 'study');
+                $(place).html(a);
+                slidertwo = new Slider('slider2', 3, 3, 1, 20);
+                cardOnclick();
+            })
+            .fail(function () {
+                console.log("error");
+            })
+    }
     
-    function resultConvertHtml(result) {
-        console.log(result);
+    function resultConvertHtml(result, type) {
         let str = "";
 
         for (let i = 0; i < result.length; i++) {
-            let description = result[i].description;
-            let name = result[i].name;
-            let sn = result[i].sn;
-            let pic = result[i].picture;
-            let sido = result[i].sido;
-            let sigungu = result[i].sigungu;
+            if(type === 'group'){
+                let description = result[i].description;
+                let name = result[i].name;
+                let sn = result[i].sn;
+                let pic = result[i].picture;
+                let sido = result[i].sido;
+                let sigungu = result[i].sigungu;
 
 
-            if(sido === 'LODO01') {
-                sido = '서울';
-            }else if(sido === 'LODO02') {
-                sido = '경기';
-            }
+                if(sido === 'LODO01') {
+                    sido = '서울';
+                }else if(sido === 'LODO02') {
+                    sido = '경기';
+                }
 
-            if(pic !== null) {
+                let picSrc;
+
+                if(pic !== null) {
+                    picSrc = "/display?fileName=" + pic;
+                }else{
+                    picSrc = "/resources/img/default_img.jpg";
+                }
+
                 str += "" +
-                    "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+                    "            <div class='index-card' data-type='" + type + "' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
                     "                <div class=\"cardCon\">\n" +
-                    "                    <img src=\"" + "/display?fileName=" + pic + "\" style='height: 50%;'>\n" +
+                    "                    <img src=\"" + picSrc + "\" style='height: 50%;'>\n" +
                     "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
                     "                        <span>" + sido + " " + sigungu + "</span>\n" +
                     "                        <h3>" + name + "</h3>\n" +
@@ -427,42 +369,46 @@
                     "                    </div>\n" +
                     "                </div>\n" +
                     "            </div>";
+            }else if(type === 'study'){
+                console.log(result[i]);
 
-            }else {
+                let name = result[i].name;
+                let onOff = result[i].onOff;
+                onOff = onOff === "STOF01" ? "온라인" : "오프라인";
+                let startDate = result[i].startDate;
+                let sn = result[i].sn;
+
+                let picSrc = "/resources/img/default_img.jpg";
+
                 str += "" +
-                    "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
+                    "            <div class='index-card' data-type='" + type + "' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
                     "                <div class=\"cardCon\">\n" +
-                    "                    <img src=\"/resources/img/default_img.jpg\" style='height: 50%;'>\n" +
+                    "                    <img src=\"" + picSrc + "\" style='height: 50%;'>\n" +
                     "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
-                    "                        <span>" + sido + " " + sigungu + "</span>\n" +
+                    "                        <span>" + onOff + "</span>\n" +
                     "                        <h3>" + name + "</h3>\n" +
-                    "                        <p>" + description + "</p>\n" +
+                    "                        <p>" + startDate.substring(0, 11) + "</p>\n" +
                     "                    </div>\n" +
                     "                </div>\n" +
                     "            </div>";
+
+
+
             }
-
-
-            // str += "" +
-            //     "            <div class='index-card' data-sn='" + sn + "' style='cursor: pointer;'>\n" +
-            //     "                <div class=\"cardCon\">\n" +
-            //     "                    <div class=\"card-img1\" style='height: 50%;'></div>\n" +
-            //     "                    <div class=\"card-content\" style='height: 50%; overflow: hidden;'>\n" +
-            //     "                        <span>서울 강남</span>\n" +
-            //     "                        <h3>" + name + "</h3>\n" +
-            //     "                        <p>" + description + "</p>\n" +
-            //     "                    </div>\n" +
-            //     "                </div>\n" +
-            //     "            </div>";
 
 
         }
         return str;
     }
 
+
     function cardOnclick() {
+
+        $(".index-card").off("click");
+
         $(".index-card").on("click", function () {
-            location.href = '/group/get?sn=' + this.dataset.sn;
+            if(this.dataset.type === 'group') location.href = '/group/get?sn=' + this.dataset.sn;
+            else if(this.dataset.type === 'study') location.href = '/study/get?sn=' + this.dataset.sn;
         })
     }
 </script>
