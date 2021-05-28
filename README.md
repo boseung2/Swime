@@ -20,7 +20,7 @@
 
 ## 화면정의서
 
-[이곳](./documents/story-board2)을 눌러주세요.
+[이곳](documents/story-board)을 눌러주세요.
 
 
 
