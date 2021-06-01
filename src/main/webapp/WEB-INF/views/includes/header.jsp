@@ -87,7 +87,7 @@
             padding: 12px 16px;
             text-decoration: none;
             display: block;
-            /*width: 330px;*/
+            width: 350px;
             /*width: fit-content;*/
         }
 
