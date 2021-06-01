@@ -46,7 +46,7 @@
           and s.sn not in (select std_sn
                            from tgrp_rating
                            where grp_sn=#{grpSn} and user_id=#{userId})
-          and (select (current_date - (select s.start_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) > 0
+          and (select (current_date - (select s.end_date from tstd where sn = s.sn)) * 24 * 60 as min_diff from dual) > 0
         order by s.start_date desc
     </select>
 
