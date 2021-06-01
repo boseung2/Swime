@@ -102,15 +102,17 @@
 
 <!-- Page Content -->
 <div class="gray-background">
-<div class="container">
-
     <!-- nav -->
-    <div class="topnav">
+    <div class="topnav" STYLE="position: sticky;
+    top: 0;
+    transition: background-color 0.5s ease 0s;
+    ">
         <a href="#info" class="active">스터디 정보</a>
         <c:if test="${study.onOff eq 'STOF01'}"><a href="#onOff">온라인 링크</a></c:if>
         <c:if test="${study.onOff eq 'STOF02'}"><a href="#onOff">장소</a></c:if>
     </div>
     <!-- /nav -->
+<div class="container">
 
     <div class="main-contents get-body">
 
@@ -748,6 +750,7 @@
 <!-- topnav javascript -->
 <script>
     let topnav = document.getElementsByClassName("topnav")[0];
+    $(".topnav").css( "padding-left", $(".container")[0].offsetLeft + 15);
     let sticky = topnav.offsetTop;
 
     $(document).ready(function() {
@@ -756,15 +759,27 @@
             console.dir(e.target);
             $(this).attr("class", "active");
         })
+
+
     })
 
-    window.onscroll = function() {myFunction()};
+
+    $(window).resize( function() {
+        $(".topnav").css( "padding-left", $(".container")[0].offsetLeft + 15);
+    })
+
+    window.onscroll = function() {
+        myFunction();
+    };
 
     function myFunction() {
-        if(window.pageYOffset >= sticky) {
-            topnav.classList.add("sticky");
+        let topnav = $(".topnav")[0];
+        if(window.pageYOffset >= topnav.offsetTop) {
+            $(".topnav").css("background-color", "white");
+            // topnav.classList.add("sticky");
         } else {
-            topnav.classList.remove("sticky");
+            $(".topnav").css("background-color", "#ffffff00");
+            // topnav.classList.remove("sticky");
         }
     }
 </script>
