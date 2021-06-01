@@ -26,7 +26,7 @@
                 src='"+ "/display?fileName=" + list[i].picture.replace('s_','')+"'
                 -->
 <%--                <div class="inline" id="img"><img class="profile" src="../../../resources/img/img_avatar2.png" alt="error"></div>--%>
-                userPicture !== null && list[i].picture !== 'myPicture.jpeg'
+
                 <c:if test="${board.picture ne null && board.picture ne 'myPicture.jpeg'}">
                     <div class="inline" id="img"><img class="profile" src="/display?fileName=${board.picture}" alt="error"></div>
                 </c:if>
