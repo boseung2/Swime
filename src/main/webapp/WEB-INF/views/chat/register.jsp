@@ -79,7 +79,7 @@
 
         </ul>
         <footer style="background-color:#eff3f7; margin-top: 0px;">
-            <textarea name="contents" placeholder="Type your message"></textarea>
+            <textarea name="contents" id = "contents" placeholder="Type your message"></textarea>
             <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_picture.png" alt="" style="visibility: hidden">
             <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_file.png" alt="" style="visibility: hidden">
             <a href="" id="sendBtn" style="margin-left: 490px;">Send</a>
@@ -100,6 +100,8 @@
         if($('#chat').length !== 0) {
             $('#chat').scrollTop($('#chat')[0].scrollHeight);
         }
+
+        enterKey();
 
     })
 </script>
@@ -146,5 +148,30 @@
         }
 
     })
+
+
+    function enterKey() {
+        $("#contents").focus(function () {
+            enterActive();
+        });
+        $("#contents").focusout(function () {
+            enterActiveOff();
+        });
+
+        function enterActive() {
+
+            $("#contents").on("keyup", function (key) {
+                key.preventDefault();
+                let msg = $("#contents")[0];
+                if(key.keyCode === 13 && !key.shiftKey) {
+                    $("#sendBtn").click();
+                }
+            });
+        }
+
+        function enterActiveOff() {
+            $("#contents").off("keyup");
+        }
+    }
 
 </script>
