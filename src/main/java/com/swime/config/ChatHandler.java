@@ -69,6 +69,7 @@ public class ChatHandler extends TextWebSocketHandler {
         String msg = message.getPayload();
         ChatMessageVO chatMessage = new ObjectMapper().readValue(msg, ChatMessageVO.class);
         log.info("받은 메시지 = " + chatMessage);
+        
 
         // 사용자가 로그인된 경우
         if(session.getPrincipal()!= null) {
@@ -138,6 +139,45 @@ public class ChatHandler extends TextWebSocketHandler {
                     users.get(chatMessage.getReceiverId()).sendMessage(new TextMessage("reload chatList"));
                 }
 
+            }else if(MessageType.REGISTER.equals(chatMessage.getType())) { // 메시지 타입이 REGISTER인 경우
+
+                // 현재 rooms에 없는 채팅방 가져와서 넣어주기
+                List<ChatRoomVO> chatRoomList= chatRoomService.getRoomList();
+
+                for(int i= 0; i < chatRoomList.size(); i++) {
+
+                    if(!rooms.containsKey(chatRoomList.get(i).getId())) {
+                        rooms.put(chatRoomList.get(i).getId(), chatRoomList.get(i));
+                    }
+                }
+
+                // 해당 채팅방
+                ChatRoomVO room = rooms.get(chatMessage.getChatRoomId());
+                // 해당 채팅방의 세션맵
+                Map<String, WebSocketSession> userSession = room.getSessions();
+
+
+                // 2. 해당 채팅방의 세션에 메시지 전달
+                for(WebSocketSession target : userSession.values()) {
+
+                    // 채팅방id, 보낸사람, 내용, 상태
+                    TextMessage tmpMsg = new TextMessage(chatMessage.getChatRoomId() + ","
+                            + chatMessage.getSenderId() + "," + chatMessage.getContents() + "," + chatMessage.getStatus());
+
+                    log.info("register 메시지 = " + tmpMsg.toString());
+
+                    if(target.isOpen()) {
+                        target.sendMessage(tmpMsg);
+                    }
+
+                }
+
+                // 3. 해당 채팅방에 세션은 없지만 다른 곳에서 채팅중인 경우
+                if(!userSession.containsKey(chatMessage.getReceiverId()) &&
+                        users.containsKey(chatMessage.getReceiverId())) {
+
+                    users.get(chatMessage.getReceiverId()).sendMessage(new TextMessage("reload chatList"));
+                }
             }
         }
 
