@@ -13,7 +13,15 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>인증을 마쳤습니다</h1>
-    study with me~!
+
+    <div class="container" style="display: flex; flex-direction: column; align-items: center; margin-top: 3em">
+    <img src="../../../resources/img/logo.png" style="width: 10rem; margin-bottom: 1rem">
+
+    <h3 style="margin:0; ">인증이 완료되었습니다 :D </h3>
+        <img src="../../../resources/assets/cutewhale.png" width="200rem">
+
+    </div>
 </body>
 </html>
+
+<%@include file="../includes/footer.jsp" %>
