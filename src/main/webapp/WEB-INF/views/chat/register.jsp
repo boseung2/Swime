@@ -129,6 +129,14 @@
             //ajax - register
             chatService.registerRoom({senderId : "${pinfo.username}", receiverId : "${member.id}", contents : contents}, function(result) {
 
+                console.log("만들어진 chatRoomId = " + result);
+
+                chatSocket.send(JSON.stringify(
+                    {chatRoomId : result, senderId : "${pinfo.username}", receiverId : "${member.id}",
+                        contents : contents, type : "REGISTER", status:"MSST02"}
+                    )
+                );
+
                 // 해당 채팅방으로 이동
                 $('#toChatRoom').attr("action", "/chat/room/" + result);
                 $('#toChatRoom').submit();
