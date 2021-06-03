@@ -136,7 +136,7 @@
 
         <div class="buttonForm" >
             <a class="loginButton2" href="${gitLogin}">
-                <i class="fab fa-google" style="margin-right: 10px"></i>
+                <i class="fab fa-github" style="margin-right: 10px"></i>
 <%--                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png">--%>
                 <span class="git">GitHub 아이디로 로그인</span></a>
         </div>
