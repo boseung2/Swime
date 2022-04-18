@@ -68,7 +68,7 @@ public class RootConfig {
         if(true) {
             hikariConfig.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@swime_tp");
             hikariConfig.setUsername("ADMIN");
-            hikariConfig.setPassword("1q2w3e4r5t6Y");
+            hikariConfig.setPassword("1q2w3e4r5t6Y!@#");
             if(checkOS().isLinux()){
                 hikariConfig.setMaximumPoolSize(5);
             }else{
