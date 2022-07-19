@@ -104,12 +104,12 @@
       <version>2.3.0</version>
     </dependency>
 
-<!--    &lt;!&ndash; spring websocket &ndash;&gt;-->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework</groupId>-->
-<!--      <artifactId>spring-websocket</artifactId>-->
-<!--      <version>${org.springframework-version}</version>-->
-<!--    </dependency>-->
+    <!--    &lt;!&ndash; spring websocket &ndash;&gt;-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework</groupId>-->
+    <!--      <artifactId>spring-websocket</artifactId>-->
+    <!--      <version>${org.springframework-version}</version>-->
+    <!--    </dependency>-->
 
 
     <!-- security -->
@@ -134,17 +134,25 @@
       <version>5.0.6.RELEASE</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.9.1</version>
+    </dependency>
+
+
     <!--  social login  -->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.security</groupId>-->
-<!--      <artifactId>spring-security-oauth2-client</artifactId>-->
-<!--      <version>5.0.6.RELEASE</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.security</groupId>-->
-<!--      <artifactId>spring-security-oauth2-jose</artifactId>-->
-<!--      <version>5.0.6.RELEASE</version>-->
-<!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.security</groupId>-->
+    <!--      <artifactId>spring-security-oauth2-client</artifactId>-->
+    <!--      <version>5.0.6.RELEASE</version>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.security</groupId>-->
+    <!--      <artifactId>spring-security-oauth2-jose</artifactId>-->
+    <!--      <version>5.0.6.RELEASE</version>-->
+    <!--    </dependency>-->
 
     <!-- Mail https://mvnrepository.com/artifact/javax.mail/mail -->
     <dependency>
@@ -285,12 +293,12 @@
       <version>RELEASE</version>
       <scope>compile</scope>
     </dependency>
-      <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter</artifactId>
-          <version>RELEASE</version>
-          <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>RELEASE</version>
+      <scope>test</scope>
+    </dependency>
 
     <!-- url 유효성 검사-->
     <dependency>
