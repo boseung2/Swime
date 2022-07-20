@@ -1,10 +1,15 @@
 package com.swime.security;
 
+import com.swime.domain.MemberVO;
+import com.swime.util.JwtUtil;
 import lombok.extern.log4j.Log4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,33 +19,20 @@ import java.util.List;
 @Log4j
 //로그인 성공시 할 행동
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
+//    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws IOException, ServletException {
-        // 권한체크용 배열
-        List<String> roleNames = new ArrayList<>();
+        CustomUser customUser = (CustomUser) auth.getPrincipal();
 
-        //유저가 가진 권한을 하나 하나 빼서 배열에 넣는다
-        auth.getAuthorities().forEach(grantedAuthority -> {
-            roleNames.add(grantedAuthority.getAuthority());
-        });
+        JwtUtil jwtUtil = new JwtUtil("aaa", 154654105L,3423432L);
+        String value = jwtUtil.createToken(customUser.getMemberVO(), "accessToken", 213213L);
 
-        // 대상이 어드민이면
-        if(roleNames.contains("ADMIN")){
-//            log.info("ADMIN LOGIN");
-        }
-        // 대상이 멤버이면
-        if(roleNames.contains("MEMBER")){
-//            log.info("MEMBER LOGIN");
-//            response.sendRedirect("/sample/member");
-        }
+        Cookie kc = new Cookie(JwtUtil.ACCESS_TOKEN, value);
+        kc.setMaxAge(1000);
+        kc.setPath("/");
+        response.addCookie(kc);
 
-//        example
-//        로그인에 성공했고 그 대상이 어드민이라면 어드민 페이지로 보내준다
-//        if(roleNames.contains("ADMIN")){
-//            response.sendRedirect("/adminPage");
-//            return;
-//        }
-
-//        response.sendRedirect("/index");
+        response.sendRedirect("/");
     }
 }
