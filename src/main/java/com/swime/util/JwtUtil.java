@@ -54,10 +54,10 @@ public class JwtUtil {
                     .signWith(SignatureAlgorithm.HS256, secretKey)
                     .compact();
         }
-//
-//        private Claims getClaims(String token) {
-//            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-//        }
+
+        private Claims getClaims(String token) {
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        }
 //
 //        public UserTokenDto getUserTokenDto(String token) {
 //            Claims claims = getClaims(token);

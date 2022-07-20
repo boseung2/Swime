@@ -2,6 +2,8 @@ package com.swime.config;
 
 import com.swime.security.CustomLoginSuccessHandler;
 import com.swime.security.CustomUserDetailsService;
+import com.swime.util.CookieUtils;
+import com.swime.util.JwtAuthenticationFilter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -35,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Setter(onMethod_ = @Autowired)
     private DataSource dataSource;
 
+    @Setter(onMethod_ = @Autowired)
+    private CookieUtils cookieUtils;
 
     @Override
     public void configure(HttpSecurity http) throws Exception{
@@ -42,6 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
+
+        //        app.js 에서 로그인이 필요한지 토큰이 있는지 확인하고 없으면 auth로 토큰을 발행하고 api를 요청할때마다 토큰을 실어보내고 있으면 필터로 로그인 처리
+
+        http.addFilterBefore(new JwtAuthenticationFilter(cookieUtils, dataSource), UsernamePasswordAuthenticationFilter.class);
 
         http
             .cors()
