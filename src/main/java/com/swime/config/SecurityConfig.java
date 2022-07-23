@@ -4,6 +4,7 @@ import com.swime.security.CustomLoginSuccessHandler;
 import com.swime.security.CustomUserDetailsService;
 import com.swime.util.CookieUtils;
 import com.swime.util.JwtAuthenticationFilter;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,11 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 @Log4j
-//@AllArgsConstructor
+@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Setter(onMethod_ = @Autowired)
-    private DataSource dataSource;
-
-    @Setter(onMethod_ = @Autowired)
-    private CookieUtils cookieUtils;
+    final private DataSource dataSource;
+    final private CookieUtils cookieUtils;
 
     @Override
     public void configure(HttpSecurity http) throws Exception{
@@ -50,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //        app.js 에서 로그인이 필요한지 토큰이 있는지 확인하고 없으면 auth로 토큰을 발행하고 api를 요청할때마다 토큰을 실어보내고 있으면 필터로 로그인 처리
 
-        http.addFilterBefore(new JwtAuthenticationFilter(cookieUtils, dataSource), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http
             .cors()
@@ -106,8 +104,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(cookieUtils, dataSource);
     }
 
     @Bean
@@ -126,6 +124,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         repo.setDataSource(dataSource);
         return repo;
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

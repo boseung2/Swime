@@ -25,7 +25,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws IOException, ServletException {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
 
-        JwtUtil jwtUtil = new JwtUtil("aaa", 154654105L,3423432L);
+        JwtUtil jwtUtil = new JwtUtil(154654105L,3423432L);
         String value = jwtUtil.createToken(customUser.getMemberVO(), "accessToken", 213213L);
 
         Cookie kc = new Cookie(JwtUtil.ACCESS_TOKEN, value);

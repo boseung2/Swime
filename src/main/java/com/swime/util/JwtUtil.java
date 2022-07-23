@@ -1,13 +1,9 @@
 package com.swime.util;
 
 import com.swime.domain.MemberVO;
-import com.swime.security.CustomUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.Builder;
-import lombok.Data;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.Base64;
 import java.util.Date;
@@ -18,14 +14,13 @@ public class JwtUtil {
         public static final String REFRESH_TOKEN = "REFRESH_TOKEN";
         public final Long accessValidity;
         public final Long refreshValidity;
-        private final String secretKey;
+        private final String SECRET_KEY = "a831a6ee";
+        private final String ENCODE_SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
 
         public JwtUtil(
-                String secretKey,
                Long accessValidity,
                Long refreshValidity
         ) {
-            this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
             this.accessValidity = accessValidity;
             this.refreshValidity = refreshValidity;
         }
@@ -51,12 +46,12 @@ public class JwtUtil {
                     .setClaims(claims)
                     .setIssuedAt(now)
                     .setExpiration(expiration)
-                    .signWith(SignatureAlgorithm.HS256, secretKey)
+                    .signWith(SignatureAlgorithm.HS256, ENCODE_SECRET_KEY)
                     .compact();
         }
 
         private Claims getClaims(String token) {
-            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+            return Jwts.parser().setSigningKey(ENCODE_SECRET_KEY).parseClaimsJws(token).getBody();
         }
 //
 //        public UserTokenDto getUserTokenDto(String token) {
@@ -80,7 +75,7 @@ public class JwtUtil {
 //
 //        public void validateToken(String token) {
 //            try {
-//                Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+//                Jwts.parser().setSigningKey(encodeSecretKey).parseClaimsJws(token);
 //            } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
 //                throw new InvalidTokenException("유효하지 않은 토큰입니다.");
 //            } catch (ExpiredJwtException e) {
