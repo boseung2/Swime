@@ -1,9 +1,6 @@
 package com.swime.config;
 
-import com.swime.util.CheckOS;
-import com.swime.util.CookieUtils;
-import com.swime.util.GmailSend;
-import com.swime.util.MakeRandomValue;
+import com.swime.util.*;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -103,5 +100,7 @@ public class RootConfig {
     @Bean
     public CheckOS checkOS() { return new CheckOS(); }
 
+    @Bean
+    public JwtUtil JwtUtil() { return new JwtUtil(); }
 
 }

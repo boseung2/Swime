@@ -1,43 +1,44 @@
 package com.swime.util;
 
 import com.swime.domain.MemberVO;
+import com.swime.security.CustomUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.log4j.Log4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Base64;
 import java.util.Date;
 
+@Log4j
 public class JwtUtil {
 
         public static final String ACCESS_TOKEN = "ACCESS_TOKEN";
         public static final String REFRESH_TOKEN = "REFRESH_TOKEN";
-        public final Long accessValidity;
-        public final Long refreshValidity;
+        public final Long ACCESS_VALIDITY = 1000L * 60 * 60 * 24;
+        public final Long REFRESH_VALIDITY = 1000L * 60 * 30;
         private final String SECRET_KEY = "a831a6ee";
         private final String ENCODE_SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
 
-        public JwtUtil(
-               Long accessValidity,
-               Long refreshValidity
-        ) {
-            this.accessValidity = accessValidity;
-            this.refreshValidity = refreshValidity;
+        public String createAccessToken() {
+            return createToken(ACCESS_TOKEN, ACCESS_VALIDITY);
         }
 
-        public String createAccessToken(MemberVO vo) {
-            return createToken(vo, ACCESS_TOKEN, accessValidity);
+        public String createRefreshToken() {
+            return createToken(REFRESH_TOKEN, REFRESH_VALIDITY);
         }
-//
-//        public String createRefreshToken(UserTokenDto userTokenDto) {
-//            return createToken(userTokenDto, REFRESH_TOKEN, refreshValidity);
-//        }
-//
-        public String createToken(MemberVO vo, String tokenType, Long validity) {
+
+        public String createToken(String tokenType, Long validity) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            CustomUser customUser = (CustomUser) authentication.getPrincipal();
+            MemberVO memberVO = customUser.getMemberVO();
+
             Claims claims = Jwts.claims();
-            claims.put("tokenType", tokenType);
-            claims.put("userId", vo.getId().toString());
-//            claims.put("role", vo.getRole());
+            claims.put("userId", memberVO.getId());
 
             Date now = new Date();
             Date expiration = new Date(now.getTime() + validity);

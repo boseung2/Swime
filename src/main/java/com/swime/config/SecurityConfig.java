@@ -4,6 +4,7 @@ import com.swime.security.CustomLoginSuccessHandler;
 import com.swime.security.CustomUserDetailsService;
 import com.swime.util.CookieUtils;
 import com.swime.util.JwtAuthenticationFilter;
+import com.swime.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -38,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     final private DataSource dataSource;
     final private CookieUtils cookieUtils;
+    private final JwtUtil jwtUtil;
 
     @Override
     public void configure(HttpSecurity http) throws Exception{
@@ -110,7 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationSuccessHandler loginSuccessHandler(){
-        return new CustomLoginSuccessHandler();
+        return new CustomLoginSuccessHandler(jwtUtil);
     }
 
     @Bean
